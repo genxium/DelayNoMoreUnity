@@ -21,7 +21,7 @@ public class WebSocketController : ControllerBase {
 
     [HttpGet] // Adding this Attribute just for Swagger recognition :)
     [Route("/Ws")]
-    public async Task Get([FromQuery] string authToken, [FromQuery] int playerId, [FromQuery] uint speciesId, [FromQuery] int roomId, [FromQuery] bool forReentry) {
+    public async Task Get([FromQuery] string authToken, [FromQuery] string playerId, [FromQuery] uint speciesId, [FromQuery] int roomId, [FromQuery] bool forReentry) {
         if (HttpContext.WebSockets.IsWebSocketRequest) {
             _logger.LogInformation("Got a websocket connection request#1 [ authToken={0}, playerId={1}, roomId={2}, forReentry={3}]", authToken, playerId, roomId, forReentry);
             if (_tokenCache.ValidateToken(authToken, playerId)) {
@@ -38,7 +38,7 @@ public class WebSocketController : ControllerBase {
         }
     }
 
-    private async Task HandleNewPlayerPrimarySession(WebSocket session, int playerId, uint speciesId, int targetRoomId, bool forReentry) {
+    private async Task HandleNewPlayerPrimarySession(WebSocket session, string playerId, uint speciesId, int targetRoomId, bool forReentry) {
 
         using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource()) {
 
@@ -47,7 +47,7 @@ public class WebSocketController : ControllerBase {
             string? closeReason = null;
 
             int addPlayerToRoomResult = ErrCode.UnknownError;
-            Player player = new Player(new CharacterDownsync());
+            Player player = new Player(playerId, new CharacterDownsync());
             int roomId = shared.Battle.ROOM_ID_NONE;
             int effJoinIndex = shared.Battle.MAGIC_JOIN_INDEX_INVALID;
             Room? room = null;

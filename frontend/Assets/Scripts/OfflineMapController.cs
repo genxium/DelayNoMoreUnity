@@ -89,7 +89,7 @@ public class OfflineMapController : AbstractMapController {
                 cutsceneCamera.transform.position = new Vector3(-effectivelyInfinitelyFar, -effectivelyInfinitelyFar, 1024);
                 initSeqNo++;
             } else if (2 == initSeqNo) {
-                selfPlayerInfo = new CharacterDownsync();
+                selfPlayerInfo = new PlayerMetaInfo();
                 roomCapacity = 1;
                 resetCurrentMatch(PlayerStoryProgressManager.Instance.GetCachedLevelName());
                 calcCameraCaps();

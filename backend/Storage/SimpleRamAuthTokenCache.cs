@@ -29,7 +29,7 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
         return string.Join("", Enumerable.Repeat(0, 32).Select(n => tokenAllowedChars[_randGenerator.Next(0, tokenAllowedChars.Length)]));
     }
 
-    public bool GenerateNewLoginRecord(int playerId, out string? newToken, out DateTimeOffset absoluteExpiryTime) {
+    public bool GenerateNewLoginRecord(string playerId, out string? newToken, out DateTimeOffset absoluteExpiryTime) {
         newToken = null;
         //if (_environment.IsDevelopment()) {
             newToken = genToken();
@@ -42,21 +42,21 @@ public class SimpleRamAuthTokenCache : IAuthTokenCache {
         return (null != newToken);
     }
 
-    public bool ValidateToken(string token, int proposedPlayerId) {
-        int? cachedPlayerId = null;
-        string proposedKey = (token + "/" + proposedPlayerId.ToString());
+    public bool ValidateToken(string token, string proposedPlayerId) {
+        string? cachedPlayerId;
+        string proposedKey = (token + "/" + proposedPlayerId);
         bool res = inRamCache.TryGetValue(proposedKey, out cachedPlayerId);
-        return (res && cachedPlayerId == proposedPlayerId);
+        return (res && proposedPlayerId.Equals(cachedPlayerId));
     }
 
-    public (bool, string?) ValidateTokenAndRetrieveUname(string token, int proposedPlayerId) {
+    public (bool, string?) ValidateTokenAndRetrieveUname(string token, string proposedPlayerId) {
         bool res = ValidateToken(token, proposedPlayerId);
         if (!res) return (false, null);
 
         //if (_environment.IsDevelopment()) {
             using (var scope = _scopeFactory.CreateScope()) {
                 var db = scope.ServiceProvider.GetRequiredService<DevEnvResourcesSqliteContext>();
-                SqlitePlayer? testPlayer = db.Players.Where(p => p.id == proposedPlayerId).First();
+                SqlitePlayer? testPlayer = db.Players.Where(p => proposedPlayerId.Equals($"tst_{p.id}")).First();
                 if (null != testPlayer) {
                     return (true, testPlayer.name);
                 }

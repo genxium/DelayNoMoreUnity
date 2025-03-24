@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="208" nextobjectid="612">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="208" nextobjectid="617">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="1800"/>
@@ -110,50 +110,6 @@
   </data>
  </layer>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="372" name="BoarWarrior" x="592" y="400">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="initGoal" value="Nidle"/>
-    <property name="killedToDropConsumableSpeciesId" value="1"/>
-    <property name="speciesId" value="4102"/>
-    <property name="teamId" value="3"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="600" name="Archer" x="672" y="400">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="initGoal" value="Nidle"/>
-    <property name="killedToDropConsumableSpeciesId" value="3"/>
-    <property name="publishingEvtMaskUponKilled" value="1"/>
-    <property name="publishingEvtSubIdUponKilled" value="6"/>
-    <property name="speciesId" value="4098"/>
-    <property name="teamId" value="3"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="584" name="BoarWarrior" x="896" y="176">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="initGoal" value="Nidle"/>
-    <property name="publishingEvtMaskUponKilled" value="4"/>
-    <property name="publishingEvtSubIdUponKilled" value="6"/>
-    <property name="speciesId" value="4102"/>
-    <property name="teamId" value="3"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="585" name="Boar" x="832" y="192">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="initGoal" value="Nidle"/>
-    <property name="publishingEvtMaskUponKilled" value="2"/>
-    <property name="publishingEvtSubIdUponKilled" value="6"/>
-    <property name="speciesId" value="4103"/>
-    <property name="teamId" value="3"/>
-   </properties>
-   <point/>
-  </object>
   <object id="586" name="FireSwordMan" x="736" y="304">
    <properties>
     <property name="dirX" value="+2"/>
@@ -173,6 +129,46 @@
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="teamId" value="3"/>
+   </properties>
+  </object>
+  <object id="612" gid="2147486320" x="672" y="416" width="41" height="41">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
+    <property name="killedToDropConsumableSpeciesId" value="3"/>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="teamId" value="3"/>
+   </properties>
+  </object>
+  <object id="613" gid="2147486316" x="560" y="416" width="96" height="64">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
+    <property name="speciesId" value="4102"/>
+    <property name="teamId" value="3"/>
+   </properties>
+  </object>
+  <object id="615" gid="2147486316" x="864" y="192" width="96" height="64">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
+    <property name="publishingEvtMaskUponKilled" value="4"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="speciesId" value="4102"/>
+    <property name="teamId" value="3"/>
+   </properties>
+  </object>
+  <object id="616" gid="2147486315" x="800" y="192" width="63" height="48">
+   <properties>
+    <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
+    <property name="publishingEvtMaskUponKilled" value="2"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="speciesId" value="4103"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -312,32 +308,6 @@
   <object id="599" name="Floor" x="352" y="304" width="80" height="16"/>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
-  <object id="496" name="Floor2R" x="560" y="272">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="498" name="Floor2L" x="480" y="272">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
   <object id="566" name="ElevatorCue1" x="96" y="304" width="32" height="144">
    <properties>
     <property name="collisionTypeMask" value="1024"/>
@@ -363,58 +333,6 @@
     <property name="fuAct" value="4"/>
     <property name="fuCaptureFrames" value="120"/>
    </properties>
-  </object>
-  <object id="587" name="Floor2R" x="912" y="288">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="588" name="Floor2L" x="608" y="288">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="591" name="Floor2R" x="1008" y="240">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="592" name="Floor2L" x="704" y="240">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-   <point/>
   </object>
  </objectgroup>
  <objectgroup id="204" name="Pickable">

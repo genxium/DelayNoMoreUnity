@@ -41,6 +41,8 @@ namespace shared {
         public const uint SPECIES_STONE_GOLEM = 4111;
         public const uint SPECIES_BOMBERGOBLIN = 4112;
         public const uint SPECIES_ARCHERGUARD_RED = 4113;
+        public const uint SPECIES_FLYING_DEMON = 4114;
+        public const uint SPECIES_SUCCUBUS = 4115;
 
         // Non-interauctive
         public const uint SPECIES_VIL_MALE1 = 8192;
@@ -986,10 +988,10 @@ namespace shared {
                         InAirIdleFrameIdxTurnedCycle = 1,
                         Speed = (int)(0.8f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 4,
-                        VisionOffsetX = (int)(15.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetY = (int)(-10.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeX = (int)(35.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionSizeY = (int)(5.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(-32.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeX = (int)(60.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionSizeY = (int)(96.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSearchIntervalPow2Minus1U = (1u << 3) - 1,
                         VisionSearchIntervalPow2Minus1 = (int)((1u << 3) - 1),
                         DefaultSizeX = (int)(16.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -1021,8 +1023,8 @@ namespace shared {
                         InAirIdleFrameIdxTurnedCycle = 1,
                         Speed = (int)(1.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         InertiaFramesToRecover = 4,
-                        VisionOffsetX = (int)(40.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                        VisionOffsetY = (int)(-64.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetX = (int)(24.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                        VisionOffsetY = (int)(-32.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeX = (int)(60.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSizeY = (int)(96.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         VisionSearchIntervalPow2Minus1U = (1u << 3) - 1,

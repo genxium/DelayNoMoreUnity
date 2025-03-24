@@ -264,13 +264,24 @@ namespace shared {
             }
 
             if (PATTERN_ID_NO_OP == patternId) {
-                if (0 < decodedInputHolder.BtnCLevel && 0 >= currCharacterDownsync.BtnCHoldingRdfCount) {
-                    patternId = PATTERN_INVENTORY_SLOT_C;
-                    if (0 < decodedInputHolder.BtnBLevel) {
-                        patternId = PATTERN_INVENTORY_SLOT_BC;
+                if (0 < decodedInputHolder.BtnCLevel) {
+                    if (0 >= currCharacterDownsync.BtnCHoldingRdfCount) {
+                        patternId = PATTERN_INVENTORY_SLOT_C;
+                        if (0 < decodedInputHolder.BtnBLevel) {
+                            patternId = PATTERN_INVENTORY_SLOT_BC;
+                        }
+                    } else {
+                        patternId = PATTERN_HOLD_INVENTORY_SLOT_C;
+                        if (0 < decodedInputHolder.BtnBLevel && 0 >= currCharacterDownsync.BtnBHoldingRdfCount) {
+                            patternId = PATTERN_INVENTORY_SLOT_BC;
+                        }
                     }
-                } else if (0 < decodedInputHolder.BtnDLevel && 0 >= currCharacterDownsync.BtnDHoldingRdfCount) {
-                    patternId = PATTERN_INVENTORY_SLOT_D;
+                } else if (0 < decodedInputHolder.BtnDLevel) {
+                    if (0 >= currCharacterDownsync.BtnDHoldingRdfCount) {
+                        patternId = PATTERN_INVENTORY_SLOT_D;
+                    } else {
+                        patternId = PATTERN_HOLD_INVENTORY_SLOT_D;
+                    }
                 }
             }
 
@@ -702,6 +713,7 @@ namespace shared {
                 thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
                 thatCharacterInNextFrame.FramesInChState = 0;
                 thatCharacterInNextFrame.VelX = 0;
+                //logger.LogInfo($"_processSingleCharacterInput/end, currRdfId={rdfId}, setting InAirIdle1NoJump after AntiGravityFramesLingering currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, VelX: {currCharacterDownsync.VelX}, VelY: {currCharacterDownsync.VelY}, DirX: {currCharacterDownsync.DirX}, DirY: {currCharacterDownsync.DirY}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState})");
             } else if (slowDownToAvoidOverlap) {
                 thatCharacterInNextFrame.VelX >>= 2;
                 thatCharacterInNextFrame.VelY >>= 2;
@@ -1007,6 +1019,9 @@ namespace shared {
                 if (shouldIgnoreInertia) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0;
                     if (0 != effDx || 0 != effDy) {
+                        if (SPECIES_FIREBAT == currCharacterDownsync.SpeciesId && InAirIdle1NoJump == currCharacterDownsync.CharacterState) {
+                            logger.LogInfo($"_processInertiaFlying/start, currRdfId={rdfId}, setting InAirIdle1NoJump to Walking currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, DirX: {currCharacterDownsync.DirX}, DirY: {currCharacterDownsync.DirY}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState})");
+                        }
                         thatCharacterInNextFrame.DirX = (0 == effDx ? currCharacterDownsync.DirX : (0 > effDx ? -2 : +2));
                         thatCharacterInNextFrame.DirY = (0 == effDy ? currCharacterDownsync.DirY : (0 > effDy ? -1 : +1));
                         int xfac = 0 == effDx ? 0 : 0 > effDx ? -1 : +1;
@@ -1463,7 +1478,8 @@ namespace shared {
                 Bullet? primaryBlHardPushbackProvider;
                 var hardPushbackNormsOfSingleCh = hardPushbackNormsArr[i];
                 var effPushback = effPushbacks[i];
-                int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currRenderFrame, chConfig, currCharacterDownsync, thatCharacterInNextFrame, aCollider, aShape, hardPushbackNormsOfSingleCh, collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, out primaryTrap, out primaryTrapColliderAttr, out primaryBlHardPushbackProvider, residueCollided, logger);
+                bool isCharacterFlying = (currCharacterDownsync.OmitGravity || chConfig.OmitGravity);
+                int hardPushbackCnt = calcHardPushbacksNormsForCharacter(currRenderFrame, chConfig, currCharacterDownsync, thatCharacterInNextFrame, isCharacterFlying, aCollider, aShape, hardPushbackNormsOfSingleCh, collision, ref overlapResult, ref primaryOverlapResult, out primaryHardOverlapIndex, out primaryTrap, out primaryTrapColliderAttr, out primaryBlHardPushbackProvider, residueCollided, logger);
 
                 if (pushbackFrameLogEnabled && null != currPushbackFrameLog) {
                     currPushbackFrameLog.ResetJoinIndex(currCharacterDownsync.JoinIndex);
@@ -2472,11 +2488,15 @@ namespace shared {
                 var triggerConfigFromTiled = triggerEditorIdToTiledConfig[trigger.EditorId];
                 var dst = nextRenderFrameNpcs[i];
                 var chConfig = characters[dst.SpeciesId];
-                if (0 != triggerConfigFromTiled.InitDirX || 0 != triggerConfigFromTiled.InitDirY) {
+                if (0 != triggerConfigFromTiled.InitDirX) { 
                     dst.DirX = triggerConfigFromTiled.InitDirX;
-                    dst.DirY = triggerConfigFromTiled.InitDirY;
                 } 
+                if (0 != triggerConfigFromTiled.InitDirY) {
+                    dst.DirY = triggerConfigFromTiled.InitDirY;
+                }
                 dst.SubscribesToTriggerLocalId = TERMINATING_TRIGGER_ID;
+                //logger.LogInfo($"Awaking NPC@currRdfId={currRenderFrame.Id}, srcChd = (id:{src.Id}, spId: {src.SpeciesId}, jidx: {src.JoinIndex}, VelX: {src.VelX}, VelY: {src.VelY}, DirX: {src.DirX}, DirY: {src.DirY}, fchs:{src.FramesInChState}, inAir:{src.InAir}, onWall: {src.OnWall}, chS: {src.CharacterState})\n\tdstChd = (id:{dst.Id}, spId: {dst.SpeciesId}, jidx: {dst.JoinIndex}, VelX: {dst.VelX}, VelY: {dst.VelY}, DirX: {dst.DirX}, DirY: {dst.DirY})");
+                
                 if (chConfig.HasDimmedAnim) {
                     if (chConfig.HasAwakingAnim) {
                         dst.CharacterState = Awaking;

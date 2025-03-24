@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="26" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="594">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="26" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="595">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="1800"/>
-  <property name="levelId" value="6"/>
+  <property name="levelId" value="3"/>
   <property name="missionEvtSubId" value="6"/>
-  <property name="npcPreallocCapDict" value="15:1;16:1;4097:8;4098:4;4099:4;4100:4;4102:4;4096:1;4101:1;4103:4"/>
+  <property name="npcPreallocCapDict" value="4096:1"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="11" source="../triggers/switch/triggers_switch.tsx"/>
@@ -18,7 +18,7 @@
  <tileset firstgid="1150" source="../shared_comps/deep_cave16.tsx"/>
  <tileset firstgid="1345" source="../shared_comps/pickable.tsx"/>
  <tileset firstgid="1777" source="../towers/towers.tsx"/>
- <tileset firstgid="1792" source="../traps/machinery/traps_machinery.tsx"/>
+ <tileset firstgid="1800" source="../traps/machinery/traps_machinery.tsx"/>
  <layer id="160" name="Background2" width="64" height="26">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -49,9 +49,9 @@
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos" opacity="0.96">
-  <object id="135" name="Player1St" x="272" y="176">
+  <object id="135" name="Player1St" x="304" y="192">
    <properties>
-    <property name="dirX" value="-2"/>
+    <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>
    </properties>
    <point/>
@@ -81,16 +81,13 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="561" name="Boss" x="624" y="352">
+  <object id="594" gid="2147485428" x="688" y="384" width="18" height="27">
    <properties>
-    <property name="dirX" value="-2"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
-    <property name="speciesId" value="4101"/>
     <property name="subscriptionId" value="5"/>
     <property name="teamId" value="3"/>
    </properties>
-   <point/>
   </object>
  </objectgroup>
  <objectgroup id="9" name="TrapStartingPos">
@@ -113,8 +110,8 @@
    </properties>
   </object>
   <object id="544" gid="1042" x="448" y="64" width="96" height="64"/>
-  <object id="578" gid="1793" x="256" y="272" width="21" height="16"/>
-  <object id="579" gid="1793" x="780" y="272" width="21" height="16"/>
+  <object id="578" gid="1801" x="256" y="272" width="21" height="16"/>
+  <object id="579" gid="1801" x="780" y="272" width="21" height="16"/>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
@@ -144,72 +141,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="PatrolCue">
-  <object id="573" name="Floor2FlyingCue" x="64" y="352" width="896" height="32">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="5"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="5"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="8"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="8"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="570" name="Floor2FlyingCue" x="64" y="80" width="896" height="16">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="2"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="7"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="6"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="2"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="571" name="Floor12FlyingCueL" x="0" y="80" width="64" height="304">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="572" name="Floor12FlyingCueR" x="960" y="80" width="64" height="304">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="582" x="432" y="0" width="32" height="32">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-   </properties>
-  </object>
-  <object id="583" x="528" y="0" width="32" height="32">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="5" name="PatrolCue"/>
  <objectgroup id="164" name="Pickable">
   <object id="556" gid="1524" x="144" y="288" width="32" height="32">
    <properties>

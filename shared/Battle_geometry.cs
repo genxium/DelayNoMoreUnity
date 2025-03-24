@@ -42,19 +42,21 @@ namespace shared {
 
         public static (float, float, float, float) calcForwardDiffOfBoundaries(int xfac, int yfac, float aColliderLeft, float aColliderRight, float aColliderTop, float aColliderBottom, float bColliderLeft, float bColliderRight, float bColliderTop, float bColliderBottom) {
             float dx = 0f, dy = 0f, dxFar = 0, dyFar = 0;
+            float aColliderXCenter = (aColliderLeft+aColliderRight)*0.5f;
             if (0 < xfac) {
-                dx = bColliderLeft - aColliderRight;
+                dx = bColliderLeft - aColliderXCenter;
                 dxFar = bColliderRight - aColliderRight;
             } else if (0 > xfac) {
-                dx = bColliderRight - aColliderLeft;
+                dx = bColliderRight - aColliderXCenter;
                 dxFar = bColliderLeft - aColliderLeft;
             }
 
+            float aColliderYCenter = (aColliderTop + aColliderBottom) * 0.5f;
             if (0 < yfac) {
-                dy = bColliderBottom - aColliderTop;
+                dy = bColliderBottom - aColliderYCenter;
                 dyFar = bColliderTop - aColliderTop;
             } else if (0 > yfac) {
-                dy = bColliderTop - aColliderBottom;
+                dy = bColliderTop - aColliderYCenter;
                 dyFar = bColliderBottom - aColliderBottom;
             }
 
@@ -85,7 +87,7 @@ namespace shared {
             return (0 < (trapCollider.OnlyAllowsAlignedVelX*velX + trapCollider.OnlyAllowsAlignedVelY*velY)); 
         }
 
-        public static int calcHardPushbacksNormsForCharacter(RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, out Trap? primaryTrap, out TrapColliderAttr? primaryTrapColliderAttr, out Bullet? primaryBlHardPushbackProvider, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
+        public static int calcHardPushbacksNormsForCharacter(RoomDownsyncFrame currRenderFrame, CharacterConfig chConfig, CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, bool isCharacterFlying, Collider aCollider, ConvexPolygon aShape, Vector[] hardPushbacks, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, out int primaryOverlapIndex, out Trap? primaryTrap, out TrapColliderAttr? primaryTrapColliderAttr, out Bullet? primaryBlHardPushbackProvider, FrameRingBuffer<Collider> residueCollided, ILoggerBridge logger) {
             primaryTrap = null;
             primaryTrapColliderAttr = null;
             primaryBlHardPushbackProvider = null;
@@ -101,7 +103,7 @@ namespace shared {
             int retCnt = 0;
             primaryOverlapIndex = -1;
             float primaryOverlapMag = float.MinValue;
-            bool primaryIsWall = true; // Initialized to "true" to be updated even if there's only 1 vertical wall 
+            bool primaryIsGround = false; 
             float primaryNonWallTop = -MAX_FLOAT32, primaryWallTop = -MAX_FLOAT32;
             residueCollided.Clear();
             bool collided = aCollider.CheckAllWithHolder(virtualGripToWall, 0, collision, COLLIDABLE_PAIRS);
@@ -122,7 +124,6 @@ namespace shared {
                 }
                 int trapLocalId = TERMINATING_TRAP_ID;
                 TrapColliderAttr? trapColliderAttr = null;
-                bool isCharacterFlying = (currCharacterDownsync.OmitGravity || chConfig.OmitGravity);
                 bool isBarrier = false;
                 bool onTrap = false;
                 bool onBullet = false;
@@ -221,10 +222,12 @@ namespace shared {
                     continue;
                 }
 
+                bool isCeiling = (0 < overlapResult.OverlapY);
+                bool isGround = (0 > overlapResult.OverlapY);
                 float barrierTop = bCollider.Y + bCollider.H;
                 float characterBottom = aCollider.Y;
 
-                if (forcesCrouching && chConfig.CrouchingEnabled) {
+                if (isCeiling && forcesCrouching && chConfig.CrouchingEnabled) {
                     // [WARNING] If "forcesCrouching" but "false == chConfig.CrouchingEnabled", then the current "bCollider" should be deemed as a regular barrier!
                     float characterTop = aCollider.Y + aCollider.H;
                     if (characterTop < barrierTop && 0 < overlapResult.OverlapY) {
@@ -277,12 +280,12 @@ namespace shared {
                     largestNormAlignmentWithHorizon2 = normAlignmentWithHorizon2;
                 }
                 // [WARNING] At a corner with 1 vertical edge and 1 horizontal edge, make sure that the HORIZONTAL edge is chosen as primary!
-                if (!isWall && primaryIsWall) {
+                if (isGround && !primaryIsGround) {
                     // Initial non-wall transition
                     primaryOverlapIndex = retCnt;
                     primaryOverlapMag = overlapResult.OverlapMag;
                     overlapResult.cloneInto(ref primaryOverlapResult);
-                    primaryIsWall = isWall;
+                    primaryIsGround = isGround;
                     if (0 > overlapResult.OverlapY) {
                         primaryNonWallTop = barrierTop;
                     }
@@ -303,81 +306,83 @@ namespace shared {
                         primaryTrapColliderAttr = null;
                         primaryTrap = null; // Don't forget to reset to null if the primary is not a trap
                     }
-                } else if (isWall && !primaryIsWall) {
-                    // Just skip, once the character is checked to collide with a non-wall, any parasitic wall collision would be ignored...
+                } else if (!isGround && primaryIsGround) {
+                    // Just skip, once a character is checked to collide with a ground, any parasitic non-ground collision would be ignored...
                 } else {
-                    // Same polarity
-                    if (overlapResult.OverlapMag > primaryOverlapMag) {
-                        primaryOverlapIndex = retCnt;
-                        primaryOverlapMag = overlapResult.OverlapMag;
-                        overlapResult.cloneInto(ref primaryOverlapResult);
-                        primaryIsWall = isWall;
-                        if (onBullet) {
-                            primaryBlHardPushbackProvider = bl;
-                            primaryTrapColliderAttr = null;
-                            primaryTrap = null;
-                        } else if (onTrap) {
-                            primaryTrapColliderAttr = trapColliderAttr;
-                            if (TERMINATING_TRAP_ID != trapLocalId) {
-                                primaryTrap = currRenderFrame.TrapsArr[trapLocalId-1];
-                            } else {
-                                primaryTrap = null;
-                            }
-                            primaryBlHardPushbackProvider = null;
-                        } else {
-                            primaryBlHardPushbackProvider = null;
-                            primaryTrapColliderAttr = null;
-                            primaryTrap = null; // Don't forget to reset to null if the primary is not a trap
-                        }
-                    } else if (overlapResult.OverlapMag == primaryOverlapMag) {
-                        // [WARNING] Here's an important block for guaranteeing determinism regardless of traversal order.
-                        if (onTrap && null == primaryTrapColliderAttr) {       
-                            // If currently straddling across a trap and a non-trap, with equal overlapMap, then the trap takes higher priority!
+                    bool samePolarity = 0 < (overlapResult.OverlapX*primaryOverlapResult.OverlapX + overlapResult.OverlapY*primaryOverlapResult.OverlapY); 
+                    if (samePolarity || -1 == primaryOverlapIndex) {
+                        if (overlapResult.OverlapMag > primaryOverlapMag || -1 == primaryOverlapIndex) {
                             primaryOverlapIndex = retCnt;
                             primaryOverlapMag = overlapResult.OverlapMag;
                             overlapResult.cloneInto(ref primaryOverlapResult);
-                            primaryIsWall = isWall;
-                            primaryTrapColliderAttr = trapColliderAttr;
-                            primaryBlHardPushbackProvider = null;
-                            if (TERMINATING_TRAP_ID != trapLocalId) {
-                                primaryTrap = currRenderFrame.TrapsArr[trapLocalId-1];
-                            } else {
+                            primaryIsGround = isGround;
+                            if (onBullet) {
+                                primaryBlHardPushbackProvider = bl;
+                                primaryTrapColliderAttr = null;
                                 primaryTrap = null;
+                            } else if (onTrap) {
+                                primaryTrapColliderAttr = trapColliderAttr;
+                                if (TERMINATING_TRAP_ID != trapLocalId) {
+                                    primaryTrap = currRenderFrame.TrapsArr[trapLocalId-1];
+                                } else {
+                                    primaryTrap = null;
+                                }
+                                primaryBlHardPushbackProvider = null;
+                            } else {
+                                primaryBlHardPushbackProvider = null;
+                                primaryTrapColliderAttr = null;
+                                primaryTrap = null; // Don't forget to reset to null if the primary is not a trap
                             }
-                            primaryBlHardPushbackProvider = null;
-                        } else {
-                            if ((overlapResult.AxisX < primaryOverlapResult.AxisX) || (overlapResult.AxisX == primaryOverlapResult.AxisX && overlapResult.AxisY < primaryOverlapResult.AxisY)) {
+                        } else if (overlapResult.OverlapMag == primaryOverlapMag) {
+                            // [WARNING] Here's an important block for guaranteeing determinism regardless of traversal order.
+                            if (onTrap && null == primaryTrapColliderAttr) {       
+                                // If currently straddling across a trap and a non-trap, with equal overlapMap, then the trap takes higher priority!
                                 primaryOverlapIndex = retCnt;
                                 primaryOverlapMag = overlapResult.OverlapMag;
                                 overlapResult.cloneInto(ref primaryOverlapResult);
-                                primaryIsWall = isWall;
-                                if (onBullet) {
-                                    primaryBlHardPushbackProvider = bl;
-                                    primaryTrapColliderAttr = null;
-                                    primaryTrap = null;
-                                } else if (onTrap) {
-                                    primaryTrapColliderAttr = trapColliderAttr;
-                                    if (TERMINATING_TRAP_ID != trapLocalId) {
-                                        primaryTrap = currRenderFrame.TrapsArr[trapLocalId-1];
-                                    } else {
-                                        primaryTrap = null;
-                                    }
-                                    primaryBlHardPushbackProvider = null;
+                                primaryIsGround = isGround;
+                                primaryTrapColliderAttr = trapColliderAttr;
+                                primaryBlHardPushbackProvider = null;
+                                if (TERMINATING_TRAP_ID != trapLocalId) {
+                                    primaryTrap = currRenderFrame.TrapsArr[trapLocalId-1];
                                 } else {
-                                    primaryBlHardPushbackProvider = null;
-                                    primaryTrapColliderAttr = null;
-                                    primaryTrap = null; // Don't forget to reset to null if the primary is not a trap
+                                    primaryTrap = null;
+                                }
+                                primaryBlHardPushbackProvider = null;
+                            } else {
+                                if ((overlapResult.AxisX < primaryOverlapResult.AxisX) || (overlapResult.AxisX == primaryOverlapResult.AxisX && overlapResult.AxisY < primaryOverlapResult.AxisY)) {
+                                    primaryOverlapIndex = retCnt;
+                                    primaryOverlapMag = overlapResult.OverlapMag;
+                                    overlapResult.cloneInto(ref primaryOverlapResult);
+                                    primaryIsGround = isGround;
+                                    if (onBullet) {
+                                        primaryBlHardPushbackProvider = bl;
+                                        primaryTrapColliderAttr = null;
+                                        primaryTrap = null;
+                                    } else if (onTrap) {
+                                        primaryTrapColliderAttr = trapColliderAttr;
+                                        if (TERMINATING_TRAP_ID != trapLocalId) {
+                                            primaryTrap = currRenderFrame.TrapsArr[trapLocalId-1];
+                                        } else {
+                                            primaryTrap = null;
+                                        }
+                                        primaryBlHardPushbackProvider = null;
+                                    } else {
+                                        primaryBlHardPushbackProvider = null;
+                                        primaryTrapColliderAttr = null;
+                                        primaryTrap = null; // Don't forget to reset to null if the primary is not a trap
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (primaryOverlapIndex == retCnt) {
-                        if (isWall) {
-                            primaryWallTop = barrierTop;
-                        } else {
-                            if (0 > overlapResult.OverlapY) {
-                                primaryNonWallTop = barrierTop;
+                        if (primaryOverlapIndex == retCnt) {
+                            if (isWall) {
+                                primaryWallTop = barrierTop;
+                            } else {
+                                if (0 > overlapResult.OverlapY) {
+                                    primaryNonWallTop = barrierTop;
+                                }
                             }
                         }
                     }
@@ -575,7 +580,7 @@ namespace shared {
                         }
                     }
 
-                    // Same polarity
+                    // bool samePolarity = 0 < (overlapResult.OverlapX*primaryOverlapResult.OverlapX + overlapResult.OverlapY*primaryOverlapResult.OverlapY); 
                     if (overlapResult.OverlapMag < primaryOverlapMag) {
                         // [WARNING] Just add to "hardPushbacks[*]", don't touch primary markers
                     } else {
@@ -1510,16 +1515,16 @@ namespace shared {
                         if (!isAnotherHardPushbackTrap) {
                             continue;
                         }
-                        _updateStandingColliderAndMvBlockerCollider(rdfId, currCharacterDownsync, chConfig, entityCollider, visionShape, entityColliderTop, entityColliderBottom, entityColliderLeft, entityColliderRight, bCollider, bColliderTop, bColliderBottom, bColliderLeft, bColliderRight, v5, ref overlapResult, ref mvBlockerOverlapResult, ref minAbsColliderDxForMvBlocker, ref minAbsColliderDyForMvBlocker, ref res4, ref res4Tpc, ref standingOnCollider, logger);
+                        _updateStandingColliderAndMvBlockerCollider(rdfId, currCharacterDownsync, chConfig, isCharacterFlying, entityCollider, visionShape, entityColliderTop, entityColliderBottom, entityColliderLeft, entityColliderRight, bCollider, bColliderTop, bColliderBottom, bColliderLeft, bColliderRight, v5, ref overlapResult, ref mvBlockerOverlapResult, ref minAbsColliderDxForMvBlocker, ref minAbsColliderDyForMvBlocker, ref res4, ref res4Tpc, ref standingOnCollider, logger);
                         break;
                     default:
-                        _updateStandingColliderAndMvBlockerCollider(rdfId, currCharacterDownsync, chConfig, entityCollider, visionShape, entityColliderTop, entityColliderBottom, entityColliderLeft, entityColliderRight, bCollider, bColliderTop, bColliderBottom, bColliderLeft, bColliderRight, null, ref overlapResult, ref mvBlockerOverlapResult, ref minAbsColliderDxForMvBlocker, ref minAbsColliderDyForMvBlocker, ref res4, ref res4Tpc, ref standingOnCollider, logger);
+                        _updateStandingColliderAndMvBlockerCollider(rdfId, currCharacterDownsync, chConfig, isCharacterFlying, entityCollider, visionShape, entityColliderTop, entityColliderBottom, entityColliderLeft, entityColliderRight, bCollider, bColliderTop, bColliderBottom, bColliderLeft, bColliderRight, null, ref overlapResult, ref mvBlockerOverlapResult, ref minAbsColliderDxForMvBlocker, ref minAbsColliderDyForMvBlocker, ref res4, ref res4Tpc, ref standingOnCollider, logger);
                         break;
                 }
             }
         }
 
-        private static bool _updateStandingColliderAndMvBlockerCollider(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, Collider entityCollider, ConvexPolygon visionShape, float entityColliderTop, float entityColliderBottom, float entityColliderLeft, float entityColliderRight, Collider bCollider, float bColliderTop, float bColliderBottom, float bColliderLeft, float bColliderRight, TrapColliderAttr? v5, ref SatResult overlapResult, ref SatResult mvBlockerOverlapResult, ref float minAbsColliderDxForMvBlocker, ref float minAbsColliderDyForMvBlocker, ref Collider? res4, ref TrapColliderAttr? res4Tpc, ref Collider? standingOnCollider, ILoggerBridge logger) {
+        private static bool _updateStandingColliderAndMvBlockerCollider(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, bool isCharacterFlying, Collider entityCollider, ConvexPolygon visionShape, float entityColliderTop, float entityColliderBottom, float entityColliderLeft, float entityColliderRight, Collider bCollider, float bColliderTop, float bColliderBottom, float bColliderLeft, float bColliderRight, TrapColliderAttr? v5, ref SatResult overlapResult, ref SatResult mvBlockerOverlapResult, ref float minAbsColliderDxForMvBlocker, ref float minAbsColliderDyForMvBlocker, ref Collider? res4, ref TrapColliderAttr? res4Tpc, ref Collider? standingOnCollider, ILoggerBridge logger) {
             ConvexPolygon entityShape = entityCollider.Shape;
             ConvexPolygon bShape = bCollider.Shape;
             bool potentiallyStandingOnCollider = (!chConfig.OmitGravity && !currCharacterDownsync.OmitGravity && !currCharacterDownsync.InAir && (bColliderLeft + SNAP_INTO_PLATFORM_OVERLAP < entityColliderRight && bColliderRight > entityColliderLeft + SNAP_INTO_PLATFORM_OVERLAP));
@@ -1555,6 +1560,16 @@ namespace shared {
             bool isAlongForwardMv = (0 < effDx * dxFar) || (0 < effDy * dyFar);
             if (!isAlongForwardMv) {
                 return false;
+            }
+
+            if (!isCharacterFlying) {
+                bool strictlyUp = (bColliderBottom >= entityColliderTop);
+                bool holdableForRight = (bColliderRight > entityColliderRight);
+                bool holdableForLeft = (bColliderLeft < entityColliderLeft);
+                bool strictlyUpAndHoldableOnBothSides = (strictlyUp && holdableForLeft && holdableForRight);
+                if (strictlyUpAndHoldableOnBothSides) {
+                    return false;
+                }
             }
            
             var absColliderDx = Math.Abs(colliderDx);

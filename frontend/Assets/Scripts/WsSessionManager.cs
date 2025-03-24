@@ -58,12 +58,12 @@ public class WsSessionManager {
     public Queue<WsResp> recvBuffer;
     private string uname;
     private string authToken; // cached for auto-login (TODO: link "save/load" of this value with persistent storage)
-    private int playerId = Battle.TERMINATING_PLAYER_ID;
+    private string playerId = null;
     private uint speciesId = Battle.SPECIES_NONE_CH;
     private int roomId = Battle.ROOM_ID_NONE;
     private bool forReentry = false;
 
-    public int GetPlayerId() {
+    public string GetPlayerId() {
         return playerId;
     }
 
@@ -82,7 +82,7 @@ public class WsSessionManager {
         recvBuffer = new Queue<WsResp>();
     }
 
-    public void SetCredentials(string theUname, string theAuthToken, int thePlayerId) {
+    public void SetCredentials(string theUname, string theAuthToken, string thePlayerId) {
         uname = theUname; 
         authToken = theAuthToken;
         playerId = thePlayerId;
@@ -117,18 +117,18 @@ public class WsSessionManager {
     }
 
     public void ClearCredentials() {
-        SetCredentials(null, null, Battle.TERMINATING_PLAYER_ID);
+        SetCredentials(null, null, null);
         speciesId = Battle.SPECIES_NONE_CH;
         roomId = Battle.ROOM_ID_NONE;
         forReentry = false;
     }
 
     public bool IsPossiblyLoggedIn() {
-        return (Battle.TERMINATING_PLAYER_ID != playerId);
+        return (null != playerId);
     }
 
     public async Task ConnectWsAsync(string wsEndpoint, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource, CancellationTokenSource guiCanProceedSignalSource) {
-        if (null == authToken || Battle.TERMINATING_PLAYER_ID == playerId) {
+        if (null == authToken || null == playerId) {
             string errMsg = String.Format("ConnectWs not having enough credentials, authToken={0}, playerId={1}, please go back to LoginPage!", authToken, playerId);
             throw new Exception(errMsg);
         }
@@ -255,7 +255,7 @@ public class WsSessionManager {
     }
 
 #nullable enable
-    public delegate void OnLoginResult(int retCode, string? uname, int? playerId, string? authToken);
+    public delegate void OnLoginResult(int retCode, string? uname, string? playerId, string? authToken);
     public IEnumerator doCachedAutoTokenLoginAction(string httpHost, OnLoginResult? onLoginCallback) {
         string uri = httpHost + String.Format("/Auth/Token/Login");
         WWWForm form = new WWWForm();

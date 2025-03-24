@@ -221,7 +221,6 @@
   </object>
   <object id="439" name="Bat" x="336" y="480">
    <properties>
-    <property name="dirX" value="0"/>
     <property name="speciesId" value="4099"/>
     <property name="subscriptionId" value="4"/>
     <property name="teamId" value="3"/>
@@ -239,7 +238,6 @@
   </object>
   <object id="441" name="FireBat" x="704" y="144">
    <properties>
-    <property name="dirX" value="0"/>
     <property name="speciesId" value="4100"/>
     <property name="subscriptionId" value="1"/>
     <property name="teamId" value="3"/>
@@ -248,7 +246,6 @@
   </object>
   <object id="444" name="FireBat" x="304" y="112">
    <properties>
-    <property name="dirX" value="0"/>
     <property name="speciesId" value="4100"/>
     <property name="subscriptionId" value="1"/>
     <property name="teamId" value="3"/>

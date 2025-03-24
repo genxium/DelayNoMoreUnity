@@ -42,7 +42,7 @@ public class AuthController : Controller {
         _logger.LogInformation("{0}#1 [ uname={1}, captcha={2} ]", apiPath, uname, captcha);
         string? newAuthToken = null;
         DateTimeOffset absoluteExpiryTime;
-        int playerId = shared.Battle.INVALID_DEFAULT_PLAYER_ID;
+        string playerId;
         bool res1 = _captchaCache.ValidateUnameCaptchaPair(uname, captcha, out playerId);
         bool res2 = false;
         if (res1) {
@@ -59,7 +59,7 @@ public class AuthController : Controller {
     [HttpPost]
     [Produces("application/json")]
     [Route("Token/Login")]
-    public JsonResult Login([FromForm] string token, [FromForm] int playerId) {
+    public JsonResult TokenLogin([FromForm] string token, [FromForm] string playerId) {
         string apiPath = "/Auth/Token/Login";
         _logger.LogInformation("{0}#1 [ token={1}, playerId={2} ]", apiPath, token, playerId);
         var (res, uname) = _tokenCache.ValidateTokenAndRetrieveUname(token, playerId);

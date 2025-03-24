@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="113" height="48" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="601">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="113" height="48" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="602">
  <properties>
   <property name="battleDurationSeconds" value="1600"/>
   <property name="levelId" value="2"/>
@@ -25,10 +25,10 @@
  <tileset firstgid="11926" source="../shared_comps/bkg-shrinked/gh_bg_4.tsx"/>
  <tileset firstgid="13270" source="../shared_comps/bkg-shrinked/gh_bg_5.tsx"/>
  <tileset firstgid="14614" source="../towers/towers.tsx"/>
- <tileset firstgid="14629" source="../shared_comps/CastlePrisonProps16.tsx"/>
- <tileset firstgid="14734" source="../decoration/Swayable/Campfire.tsx"/>
- <tileset firstgid="14774" source="../decoration/Swayable/CampfireWithFood.tsx"/>
- <tileset firstgid="14814" source="../decoration/Swayable/GhWater.tsx"/>
+ <tileset firstgid="14637" source="../shared_comps/CastlePrisonProps16.tsx"/>
+ <tileset firstgid="14742" source="../decoration/Swayable/Campfire.tsx"/>
+ <tileset firstgid="14782" source="../decoration/Swayable/CampfireWithFood.tsx"/>
+ <tileset firstgid="14822" source="../decoration/Swayable/GhWater.tsx"/>
  <layer id="45" name="Background1" width="113" height="48">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -82,7 +82,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztlztPFGEUhr8Cq9mKZpfIRVpu1lvaYGNiIhdbQfwXUIILiqFS0YTbT4CC1U1AobUAteYiXlgWTUy80fkYQtzg5zILk2FO8j7Jk509mTk7yZudN+OcEEIIIYQQQgghqqUz7dzV9HnfhTgLg+Q3pAxNM09+C8rQNLvkV1SGJqnPONeAjdiEl7A5c953JarhBnl1YTf2YC/eVIamyJHXKI7hPbyP48rQFEvktYwv8CWu4KoyNMU38vqOP/An/sIDZWiKljrnWrEN27EDL9f9//wH2fjuLckMB86N4F3M4Wjgn8XBLfLqw368jQN4p0KG4pAp8pnGGZzFucA/iwM9S0/HIvnk8Rk+x0Lgn8VBtc9Sccga+azja3yDbwP/LA70LD0dRfLZwxLu4+fAP4uDh+T1CB/jJD7Bp8rwRC6mnKvHhtS/x+Xf40B9aB/1oX3Uh/ZRH9pHfWgf9aF91If2UR/aR31oH/WhfdSH9lEf2kd9aB/1YfRcqIlmT5o9mRC71IfRcyWiDLvY0x1iV5g+vFb79/h6rRMnMBRRhn+YCLFLfZhsXoXIMEwf5sv+ewX9DxNHmD78UpbbV2WYOPR+aB/1oX30fmgfvR/aJ8l9uJF1bhO3cBvfZSvPd/h8jx/wI37K+s89PvNd5zuv0sy3I+y1cc52sYh7WML9CH7Dt/PovN8rbjDT
+   eJztlztPFGEUhr8CqqGi2SWAQAsC9ZY20pCYAGILiP8CSrlqQoWACaA/AQtAEq4thSi/AVnud6XjIYS40c9lFibDnOR9kic7ezJzdpI3O2/GOSGEEEIIIYQQQhTK85RzTanHvgvxEHrIr1cZmmaG/L4oQ9Nsk19WGZqkIu1cJT7BKqzGmvRj35UohBbyasU2fInt+EoZmmKAvAZxCIfxHb5XhqZYJK8lXMYVXMU1ZWiKM/I6xwv8hb/xUhmaorbMuTp8ivXYgI1l/z9/NBPfvSWZt4FzfdiPAzgY+Gdx0EFendiFr7Eb3+TJUNwwST5TOI2f8HPgn8WBnqX3Y5Z85nAev+JC4J/FQaHPUnHDN/LZwO/4AzcD/ywO9Cy9H1ny2cFd3MP9wD+Lg1Hy+oBjOI4T+FEZ3kl5iXMVWFny73Hu9zhQH9pHfWgf9aF91If2UR/aR31oH/WhfdSH9lEf2kd9aB/1oX3Uh/ZRH9pHfRg9xUXR7EmxJx1il/owep5FlGEre9pC7ArTh82lf45flDpxB70RZXjNSIhd6sNksx4iwzB9OJfz31vQ/zBxhOnDg5zcjpVh4tD7oX3Uh/bR+6F99H5onyT34VbGuZ+4jVncyeSf7/K5h/t4gIcZ/7l/z3zX+c7LN/PtCHttnLMjPMYTPMWzCH7Dt/P2vCvhqjRT
   </data>
  </layer>
  <layer id="20" name="Ground1" width="113" height="48">
@@ -90,7 +90,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer id="15" name="Ground" width="113" height="48">
@@ -291,17 +291,6 @@
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="587" name="SwordmanBoss" x="1552" y="240">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="publishingEvtMaskUponKilled" value="1"/>
-    <property name="publishingEvtSubIdUponKilled" value="6"/>
-    <property name="speciesId" value="4104"/>
-    <property name="subscriptionId" value="9"/>
-    <property name="teamId" value="3"/>
-   </properties>
-   <point/>
-  </object>
   <object id="589" gid="14623" x="592" y="256" width="42" height="42">
    <properties>
     <property name="dirX" value="+2"/>
@@ -329,6 +318,14 @@
   <object id="594" gid="2147498270" x="1376" y="672" width="40" height="41">
    <properties>
     <property name="dirX" value="-2"/>
+    <property name="teamId" value="3"/>
+   </properties>
+  </object>
+  <object id="601" gid="2147498279" x="1536" y="288" width="34" height="50">
+   <properties>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="subscriptionId" value="9"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -535,32 +532,6 @@
     <property name="fuCaptureFrames" value="0"/>
    </properties>
   </object>
-  <object id="553" name="Floor12FlyingCueR" x="1104" y="112" width="80" height="560">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="554" name="Floor12FlyingCueR" x="1520" y="112" width="80" height="560">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
   <object id="555" name="FloorL" x="384" y="368" width="32" height="256">
    <properties>
     <property name="fdAct" value="3"/>
@@ -583,158 +554,6 @@
     <property name="frCaptureFrames" value="60"/>
     <property name="fuAct" value="4"/>
     <property name="fuCaptureFrames" value="60"/>
-   </properties>
-  </object>
-  <object id="557" name="FloorL" x="736" y="512" width="32" height="192">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-  </object>
-  <object id="558" name="FloorR" x="1120" y="224" width="32" height="208">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-  </object>
-  <object id="559" name="FloorR" x="1552" y="464" width="32" height="208">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-  </object>
-  <object id="560" name="FloorL" x="1088" y="512" width="32" height="160">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-  </object>
-  <object id="563" x="752" y="288" width="32" height="48">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="flAct" value="4"/>
-    <property name="frAct" value="4"/>
-    <property name="fuAct" value="4"/>
-   </properties>
-  </object>
-  <object id="564" x="624" y="288" width="32" height="48">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="flAct" value="3"/>
-    <property name="frAct" value="3"/>
-    <property name="fuAct" value="3"/>
-   </properties>
-  </object>
-  <object id="565" x="752" y="352" width="32" height="48">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="flAct" value="4"/>
-    <property name="frAct" value="4"/>
-    <property name="fuAct" value="4"/>
-   </properties>
-  </object>
-  <object id="566" x="624" y="352" width="32" height="48">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="flAct" value="3"/>
-    <property name="frAct" value="3"/>
-    <property name="fuAct" value="3"/>
-   </properties>
-  </object>
-  <object id="568" x="624" y="416" width="32" height="48">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="flAct" value="3"/>
-    <property name="frAct" value="3"/>
-    <property name="fuAct" value="3"/>
-   </properties>
-  </object>
-  <object id="571" name="FloorR" x="1568" y="112" width="32" height="176">
-   <properties>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-  </object>
-  <object id="572" name="FloorL" x="1296" y="464" width="32" height="208">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="60"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="60"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="60"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="60"/>
-   </properties>
-  </object>
-  <object id="578" x="1072" y="688" width="16" height="16">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-   </properties>
-  </object>
-  <object id="582" name="Floor12FlyingCueL" x="592" y="128" width="80" height="80">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="3"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="3"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="3"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="3"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="583" name="Floor12FlyingCueR" x="720" y="128" width="80" height="80">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="4"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="4"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="4"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="4"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="600" x="1056" y="112" width="144" height="176">
-   <properties>
-    <property name="fdAct" value="3"/>
-    <property name="flAct" value="3"/>
-    <property name="frAct" value="3"/>
-    <property name="fuAct" value="3"/>
    </properties>
   </object>
  </objectgroup>

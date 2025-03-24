@@ -15,7 +15,7 @@ message AuthResult {
     string uname = 2;
     string captcha = 3;
     int64 expiresAt = 4;
-    int32 playerId = 5;
+    string playerId = 5;
     string newAuthToken = 6;
 }
 /*
@@ -283,7 +283,7 @@ message InputFrameDownsync {
 }
 
 message WsReq {
-    int32 playerId = 1;
+    string playerId = 1;
     int32 act = 2;
     int32 joinIndex = 3;
     int32 ackingFrameId = 4;
@@ -1197,4 +1197,12 @@ message Trigger {
 
     int32 offenderJoinIndex = 19; 
     int32 offenderBulletTeamId = 20; 
+}
+
+message PlayerMetaInfo {
+    string playerId = 1;
+    int32 joinIndex = 2; 
+    int32 bulletTeamId = 3;
+    uint32 speciesId = 4;
+    int32 roomId = 5;
 }

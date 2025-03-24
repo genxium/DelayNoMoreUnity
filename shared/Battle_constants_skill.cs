@@ -76,6 +76,7 @@ namespace shared {
 
         public static HashSet<int> btnCActivatePatternSet = new HashSet<int>() {
             PATTERN_INVENTORY_SLOT_C,
+            PATTERN_INVENTORY_SLOT_BC,
         };
 
         public static HashSet<int> btnDHoldingPatternSet = new HashSet<int>() {
@@ -2341,6 +2342,7 @@ namespace shared {
         };
 
         public static Skill bouncingTouchExplosionBomb = new Skill {
+            Id = 59,
             RecoveryFrames = 21,
             RecoveryFramesOnBlock = 21,
             RecoveryFramesOnHit = 21,
@@ -5776,7 +5778,7 @@ namespace shared {
                     )),
 
                     new KeyValuePair<uint, Skill>(58, timedBouncingBomb),
-                    new KeyValuePair<uint, Skill>(59, bouncingTouchExplosionBomb),
+                    new KeyValuePair<uint, Skill>(bouncingTouchExplosionBomb.Id, bouncingTouchExplosionBomb),
                     new KeyValuePair<uint, Skill>(60, new Skill {
                             RecoveryFrames = 20,
                             RecoveryFramesOnBlock = 20,

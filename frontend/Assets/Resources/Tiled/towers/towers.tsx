@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="towers" tilewidth="128" tileheight="111" tilecount="15" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="towers" tilewidth="128" tileheight="111" tilecount="23" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
-   <property name="dirX" value="+2"/>
    <property name="speciesId" value="4106"/>
   </properties>
   <image source="Brick1-0.png" width="16" height="16"/>
@@ -18,7 +17,7 @@
   <properties>
    <property name="speciesId" value="4107"/>
   </properties>
-  <image source="DarkBeamerTower_1.png" width="64" height="96"/>
+  <image source="DarkBeamerTower_1.png" width="32" height="70"/>
  </tile>
  <tile id="3">
   <properties>
@@ -30,25 +29,25 @@
   <properties>
    <property name="speciesId" value="4100"/>
   </properties>
-  <image source="FireBat.png" width="32" height="23"/>
+  <image source="FireBat.png" width="12" height="9"/>
  </tile>
  <tile id="5">
   <properties>
    <property name="speciesId" value="4099"/>
   </properties>
-  <image source="Bat.png" width="32" height="23"/>
+  <image source="Bat.png" width="12" height="9"/>
  </tile>
  <tile id="6">
   <properties>
    <property name="speciesId" value="4103"/>
   </properties>
-  <image source="Boar.png" width="63" height="48"/>
+  <image source="Boar.png" width="51" height="38"/>
  </tile>
  <tile id="7">
   <properties>
    <property name="speciesId" value="4102"/>
   </properties>
-  <image source="BoarWarrior.png" width="96" height="64"/>
+  <image source="BoarWarrior.png" width="79" height="63"/>
  </tile>
  <tile id="8">
   <properties>
@@ -66,7 +65,7 @@
   <properties>
    <property name="speciesId" value="4110"/>
   </properties>
-  <image source="RiderGuardRed.png" width="128" height="111"/>
+  <image source="RiderGuardRed.png" width="78" height="103"/>
  </tile>
  <tile id="11">
   <properties>
@@ -91,5 +90,53 @@
    <property name="speciesId" value="4112"/>
   </properties>
   <image source="BomberGoblin.png" width="40" height="37"/>
+ </tile>
+ <tile id="15">
+  <properties>
+   <property name="speciesId" value="15"/>
+  </properties>
+  <image source="SwordMan-0.png" width="27" height="47"/>
+ </tile>
+ <tile id="16">
+  <properties>
+   <property name="speciesId" value="16"/>
+  </properties>
+  <image source="FireSwordMan-0.png" width="28" height="47"/>
+ </tile>
+ <tile id="17">
+  <properties>
+   <property name="speciesId" value="4104"/>
+  </properties>
+  <image source="SwordManBoss.png" width="34" height="50"/>
+ </tile>
+ <tile id="18">
+  <properties>
+   <property name="speciesId" value="4114"/>
+  </properties>
+  <image source="FlyingDemon.png" width="65" height="60"/>
+ </tile>
+ <tile id="19">
+  <properties>
+   <property name="speciesId" value="4111"/>
+  </properties>
+  <image source="StoneGolem.png" width="48" height="46"/>
+ </tile>
+ <tile id="20">
+  <properties>
+   <property name="speciesId" value="4115"/>
+  </properties>
+  <image source="Succubus-0.png" width="51" height="49"/>
+ </tile>
+ <tile id="21">
+  <properties>
+   <property name="speciesId" value="4101"/>
+  </properties>
+  <image source="Ridley.png" width="61" height="74"/>
+ </tile>
+ <tile id="22">
+  <properties>
+   <property name="speciesId" value="18"/>
+  </properties>
+  <image source="Angel-0.png" width="50" height="47"/>
  </tile>
 </tileset>

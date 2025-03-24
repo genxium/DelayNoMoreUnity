@@ -136,13 +136,12 @@ public class CaptchaLoginFormController : MonoBehaviour {
                     toggleUIInteractability(true);
                     break;
                 case UnityWebRequest.Result.Success:
-                    var res = JsonConvert.DeserializeObject<JObject>(webRequest.downloadHandler.text);
-                    int retCode = res["retCode"].Value<int>();
+                    var res = JsonConvert.DeserializeObject<AuthResult>(webRequest.downloadHandler.text);
                     Debug.Log(String.Format("Received: {0}", res));
-                    if (ErrCode.Ok == retCode) {
-                        var authToken = res["newAuthToken"].Value<string>();
-                        var playerId = res["playerId"].Value<int>();
-                        Debug.Log(String.Format("newAuthToken: {0}, playerId: {1}", authToken, playerId));
+                    if (ErrCode.Ok == res.RetCode) {
+                        var authToken = res.NewAuthToken;
+                        var playerId = res.PlayerId;
+                        Debug.Log($"newAuthResult: {res}");
                         WsSessionManager.Instance.SetCredentials(uname, authToken, playerId);
                         if (null != onLoginResultCallback) {
                             onLoginResultCallback(ErrCode.Ok, uname, playerId, authToken);

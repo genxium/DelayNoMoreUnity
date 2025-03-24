@@ -25,7 +25,7 @@
  <tileset firstgid="11926" source="../shared_comps/bkg-shrinked/gh_bg_4.tsx"/>
  <tileset firstgid="13270" source="../shared_comps/bkg-shrinked/gh_bg_5.tsx"/>
  <tileset firstgid="14614" source="../towers/towers.tsx"/>
- <tileset firstgid="14629" source="../shared_comps/CastlePrisonProps16.tsx"/>
+ <tileset firstgid="14637" source="../shared_comps/CastlePrisonProps16.tsx"/>
  <layer id="45" name="Background5" width="144" height="48">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -95,7 +95,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1VdPUwEAhuGTNtEfgHLvQBygQssoQwVnvDPRxBsEHIADuhBw1/EPvHLvwcY9cP0J9x5sHLjXhe8FF6UXbQ6kC783edLTnHTlfOkxDKWUUkoppZRSSimllFJKKaWUUkoppZRSSimllFJKKaWUUkoppZRSSimllFJKKaWU+r9bYjF8i7EIC7EA81GIAszDXMxBPsy8d5rFMNJhgx0ZyEQWsuFADnKRZwnTD1RhbR+b2Is92A0fdmEndmA7tmErtpjcTyWbqIITLrjhgRfV2Iwa1KJO+4nL7rGJu7iD27iFdtzEDVzHNVzFFZP7qWcTDWhEE5rRgla04QIu4hIuaz8hW55gGCsSov0thvaXTfzBb/zCT/zAd3zDV3zBZwyY3E8Hm+hEF7rRg170oR/v8QEf8Un7icuyrYYvC5nIgB02pCMNszELM5FqNbefCVbDmIhJmIwkTEEypmIapmMGUqxh+oEqrFWzCS88cMMFJ6pQiU3YiA1Yb3I/RWxiFYpRglKsxhqsxTqUoRwVUdpPkoNNO6Lz2aOhNjbRihY0owmNaEA9zuMczuKMyf0cYBMHcQiHcQRHcQzHcQIncQqno7SfFLaTqv0Mu3420Yde9KAbXehEB97hLd7gtcn93GcTD/AQj/AYT/AUz/AcL/ASr4a5n6UjvPY2Xm+P0f20jwt+fkyiYYxNjMx3Ga0tG7z2Th5dcPttoZjjEpQG2UcO53JjdD8DIfaTx3bytZ8RtXLw2tfwWIs6vy2UcVyOiiD7KOBcYYzuJ3n80OeB/zfaT2wV6n4R6YoC9hO4Fw/HXu0nZgp1v4h0+7WfuCrwfhHttJ/4KvB+4d8/mQu4Uw==
+   eJzt1cdSU2EAhuF/khm9AJS9FRsokACRYAH70tGFCxQroBKqAhaI5Q5c2XuhY0ex3YS9FzoW7G3hu2ARsiBzYNLwe2eeycmcSZvzTY4xSimllFJKKaWUUkoppZRSSimllFJKKaWUUkoppZRSSimllFJKKaWUUkoppZRSSin1f7fEZryLsQgLsQBZyMR8zMNczEEGrLx3os2YJCTDASdSkIo0uDAb6XDbgvQDVVDbzyb2YS/2wItqVGE3dmEndqDS4n4K2IQHhShCMUpQijJsw3aUo0L7icrusYm7uIPbuIVW3MQNtOA6ruGqxf3UsIla1KEeDWhEE5pxEZdwGVe0n4CtiDFmZUy4v8XA/rKJP/iNX/iJH/iOb/iKL/iMPov7aWMT7ehAJ7rQjR704j0+4CM+aT9RWZrdeFORAiccSEYSEjELM5GAeLu1/YyzGzMeEzARkzAZcZiCqZiG6ZhhD9IPVEGtjE2UogTFKEIhPCjAVmzBZuRb3E82m1iNNcjBWqzDemzARmxCLvLCtJ94lzEJrvB89kiomU00oRENqEcdalGDCziPczhrcT8H2cQhHMYRHMUxHMcJnMQpnMaZMO3HwXac2s+Q62UTPehGFzrRgXa04R3e4g1eW9zPfTbxAA/xCI/xBE/xDM/xAi/xaoj7WT7Ma5/O690Rup/WMYOfHxVrzOjY0HyXkdqq/mtfzmMFKn22kMtxHvIH2Ucm57IidD99AfbjZjsZ2s+wyum/9lU8VsPrswUPx4UoGmQfSzm3LEL3Ezd24HP//xvtJ7IKdL8Iddl++/HfSwnHpdpPxBTofhHqDmg/UZX//SLcaT/Rlf/9wrd/3/K5Gw==
   </data>
  </layer>
  <layer id="43" name="Foreground" width="144" height="48">
@@ -103,7 +103,7 @@
    <property name="unity:SortingLayer" value="Foreground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt0kkNgEAURMHvYdQgBjPAeGIxR99QQMiQquTd+9BVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAiObpCXjP0qrWtKXevl7DaPZ85khnuvwH4DducsMHTw==
+   eJzt0kkNgEAURMHvYdQgCCPAeGIxR99QQMiQquTd+9BVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAiObpCXjP0qrWtKXevl7DaPZ85khnuvwH4Dduh5IHZw==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -328,7 +328,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="445" gid="9" x="1856" y="720" width="16" height="64">
+  <object id="445" gid="2147483657" x="1856" y="720" width="16" height="64">
    <properties>
     <property name="subscribesToId" value="10"/>
    </properties>

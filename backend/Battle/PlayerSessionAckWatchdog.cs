@@ -7,10 +7,10 @@ public class PlayerSessionAckWatchdog {
     private readonly int interval; // in milliseconds
     private readonly string onTickMsg;
     private readonly ILogger _logger;
-    public delegate void OnPlayerDisconnectedCbType(int playerId);
+    public delegate void OnPlayerDisconnectedCbType(string playerId);
     private int waiveCnt;
 
-    public PlayerSessionAckWatchdog(int aInterval, OnPlayerDisconnectedCbType cb, int playerId, string aOnTickMsg, ILoggerFactory loggerFactory) {
+    public PlayerSessionAckWatchdog(int aInterval, OnPlayerDisconnectedCbType cb, string playerId, string aOnTickMsg, ILoggerFactory loggerFactory) {
         interval = aInterval;
         onTickMsg = aOnTickMsg;
         _logger = loggerFactory.CreateLogger<PlayerSessionAckWatchdog>();

@@ -80,7 +80,7 @@ public class OnlineMapController : AbstractMapController {
                     Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_BATTLE_COLLIDER_INFO in main thread"));
                     battleDurationFrames = (int)wsRespHolder.BciFrame.BattleDurationFrames;
                     inputFrameUpsyncDelayTolerance = wsRespHolder.BciFrame.InputFrameUpsyncDelayTolerance;
-                    selfPlayerInfo.Id = WsSessionManager.Instance.GetPlayerId();
+                    selfPlayerInfo.PlayerId = WsSessionManager.Instance.GetPlayerId();
                     roomCapacity = wsRespHolder.BciFrame.BoundRoomCapacity;
                     roomId = wsRespHolder.BciFrame.BoundRoomId;
                     frameLogEnabled = wsRespHolder.BciFrame.FrameLogEnabled;
@@ -108,13 +108,13 @@ public class OnlineMapController : AbstractMapController {
 
                     var initialPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
                     var serverHolePuncher = new WsReq {
-                        PlayerId = selfPlayerInfo.Id,
+                        PlayerId = selfPlayerInfo.PlayerId,
                         Act = UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL,
                         JoinIndex = selfPlayerInfo.JoinIndex,
                         AuthKey = clientAuthKey
                     };
                     var peerHolePuncher = new WsReq {
-                        PlayerId = selfPlayerInfo.Id,
+                        PlayerId = selfPlayerInfo.PlayerId,
                         Act = UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR,
                         JoinIndex = selfPlayerInfo.JoinIndex,
                         AuthKey = clientAuthKey
@@ -126,7 +126,7 @@ public class OnlineMapController : AbstractMapController {
 
                     // The following "Act=UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK" sets player battle state to PLAYER_BATTLE_STATE_ACTIVE on the backend Room. 
                     var reqData = new WsReq {
-                        PlayerId = selfPlayerInfo.Id,
+                        PlayerId = selfPlayerInfo.PlayerId,
                         Act = UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK,
                         JoinIndex = selfPlayerInfo.JoinIndex,
                         SelfParsedRdf = thatStartRdf,
@@ -437,7 +437,7 @@ public class OnlineMapController : AbstractMapController {
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
-        selfPlayerInfo = new CharacterDownsync();
+        selfPlayerInfo = new PlayerMetaInfo();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = Battle.BATTLE_DYNAMICS_FPS;
         isOnlineMode = true;
@@ -672,7 +672,7 @@ public class OnlineMapController : AbstractMapController {
         }
 
         var reqData = new WsReq {
-            PlayerId = selfPlayerInfo.Id,
+            PlayerId = selfPlayerInfo.PlayerId,
             Act = Battle.UPSYNC_MSG_ACT_PLAYER_CMD,
             JoinIndex = selfPlayerInfo.JoinIndex,
             AckingInputFrameId = lastAllConfirmedInputFrameId,

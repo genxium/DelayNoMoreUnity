@@ -2,6 +2,7 @@
 using Google.Protobuf.Collections;
 using shared;
 using SuperTiled2Unity;
+using SuperTiled2Unity.Editor;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -76,7 +77,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected int[] lastIndividuallyConfirmedInputFrameId;
     protected ulong[] lastIndividuallyConfirmedInputList;
-    protected CharacterDownsync selfPlayerInfo = null;
+    protected PlayerMetaInfo selfPlayerInfo = null;
     protected FrameRingBuffer<RoomDownsyncFrame> renderBuffer = null;
     protected FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer = null;
     protected FrameRingBuffer<InputFrameDownsync> inputBuffer = null;
@@ -1987,8 +1988,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
                         }
                         
-                        CustomProperty dirX, dirY, speciesId, teamId, initGoal, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId, killedToDropPickupSkillId;
-                        tileProps.TryGetCustomProperty("dirX", out dirX);
+                        CustomProperty dirY, speciesId, teamId, initGoal, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId, killedToDropPickupSkillId;
                         tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("teamId", out teamId);
@@ -2011,9 +2011,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                             Enum.TryParse(initGoalStr, out initGoalVal);
                         }
 
+                        bool xFlipped = isXFlipped(tileObj.m_TileId);
+
                         npcsStartingCposList.Add((
                                                     new Vector(cx, cy),
-                                                    null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt(),
+                                                    xFlipped ? -2 : +2,
                                                     null == dirY || dirY.IsEmpty ? 0 : dirY.GetValueAsInt(),
                                                     speciesIdVal,
                                                     null == teamId || teamId.IsEmpty ? DEFAULT_BULLET_TEAM_ID : teamId.GetValueAsInt(),
@@ -2084,7 +2086,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = trapChild.GetComponent<SuperObject>();
                         var tileProps = trapChild.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, prohibitsWallGrabbing, subscribesToId, subscribesToIdAfterInitialFire, subscribesToIdAlt, onlyAllowsAlignedVelX, onlyAllowsAlignedVelY, initNoAngularVel;
+                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirY, speed, prohibitsWallGrabbing, subscribesToId, subscribesToIdAfterInitialFire, subscribesToIdAlt, onlyAllowsAlignedVelX, onlyAllowsAlignedVelY, initNoAngularVel;
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
                         tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
@@ -2092,7 +2094,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("providesSlipJump", out providesSlipJump);
                         tileProps.TryGetCustomProperty("forcesCrouching", out forcesCrouching);
                         tileProps.TryGetCustomProperty("static", out isCompletelyStatic);
-                        tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speed", out speed);
                         tileProps.TryGetCustomProperty("prohibitsWallGrabbing", out prohibitsWallGrabbing);
@@ -2112,7 +2113,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         bool isCompletelyStaticVal = (null != isCompletelyStatic && !isCompletelyStatic.IsEmpty && 1 == isCompletelyStatic.GetValueAsInt()) ? true : false;
                         bool prohibitsWallGrabbingVal = (null != prohibitsWallGrabbing && !prohibitsWallGrabbing.IsEmpty && 1 == prohibitsWallGrabbing.GetValueAsInt()) ? true : false;
 
-                        int dirXVal = (null == dirX || dirX.IsEmpty ? 0 : dirX.GetValueAsInt());
+                        bool xFlipped = isXFlipped(tileObj.m_TileId);
+                        int dirXVal = xFlipped ? -2 : +2;
                         int dirYVal = (null == dirY || dirY.IsEmpty ? 0 : dirY.GetValueAsInt());
                         int speedVal = (null == speed || speed.IsEmpty ? 0 : speed.GetValueAsInt());
                         int subscribesToIdVal = (null == subscribesToId || subscribesToId.IsEmpty ? TERMINATING_EVTSUB_ID_INT : subscribesToId.GetValueAsInt());
@@ -2312,7 +2314,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform triggerChild in child) {
                         var tileObj = triggerChild.GetComponent<SuperObject>();
                         var tileProps = triggerChild.GetComponent<SuperCustomProperties>();
-                        CustomProperty id, bulletTeamId, delayedFrames, quota, recoveryFrames, speciesId, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, pickableSpawnerTimeSeq, subscribesToIdList, subscribesToExhaustedIdList, newRevivalX, newRevivalY, storyPointId, bgmId, demandedEvtMaskProp, publishingEvtMaskUponExhausted, dirX, initDirX, initDirY, isBossSavepoint, bossSpeciesIds, forceCtrlRdfCount, forceCtrlCmd;
+                        CustomProperty id, bulletTeamId, delayedFrames, quota, recoveryFrames, speciesId, subCycleTriggerFrames, subCycleQuota, characterSpawnerTimeSeq, pickableSpawnerTimeSeq, subscribesToIdList, subscribesToExhaustedIdList, newRevivalX, newRevivalY, storyPointId, bgmId, demandedEvtMaskProp, publishingEvtMaskUponExhausted, initDirX, initDirY, isBossSavepoint, bossSpeciesIds, forceCtrlRdfCount, forceCtrlCmd;
 
                         tileProps.TryGetCustomProperty("id", out id);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
@@ -2332,7 +2334,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("bgmId", out bgmId);
                         tileProps.TryGetCustomProperty("demandedEvtMask", out demandedEvtMaskProp);
                         tileProps.TryGetCustomProperty("publishingEvtMaskUponExhausted", out publishingEvtMaskUponExhausted);
-                        tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("initDirX", out initDirX);
                         tileProps.TryGetCustomProperty("initDirY", out initDirY);
                         tileProps.TryGetCustomProperty("isBossSavepoint", out isBossSavepoint);
@@ -2347,7 +2348,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         int editorId = id.GetValueAsInt();
                         int targetTriggerLocalId = serializedTriggerEditorIdToLocalId.Dict[editorId];
-                        int dirXVal = (null != dirX && !dirX.IsEmpty ? dirX.GetValueAsInt() : +2);
+                        bool xFlipped = isXFlipped(tileObj.m_TileId);
+                        int dirXVal = xFlipped ? -2 : +2;
                         int initDirXVal = (null != initDirX && !initDirX.IsEmpty ? initDirX.GetValueAsInt() : 0);
                         int initDirYVal = (null != initDirY && !initDirY.IsEmpty ? initDirY.GetValueAsInt() : 0);
 
@@ -2499,7 +2501,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 pickableSpawnerConfig.PickupTypeList.Add(pickupTypeVal);
                             }
                             configFromTiled.PickableSpawnerTimeSeq.Add(pickableSpawnerConfig);
-                            Debug.Log("Added pickableSpawnerConfig=" + pickableSpawnerConfig);
+                            // Debug.Log("Added pickableSpawnerConfig=" + pickableSpawnerConfig);
                         }
 
                         var bossSpeciesIdsStrParts = bossSpeciesIdsStr.Split(',', StringSplitOptions.RemoveEmptyEntries);
@@ -2719,6 +2721,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             startRdf.NpcsArr[i] = npcInRdf;
+            
             npcLocalId++;
         }
         startRdf.NpcLocalIdCounter = npcLocalId;
@@ -3950,5 +3953,10 @@ public abstract class AbstractMapController : MonoBehaviour {
         } else {
             return (!currCd.OmitGravity && !chConfig.OmitGravity) ? characterZ : flyingCharacterZ;
         }
+    }
+
+    private bool isXFlipped(uint superTileId) {
+        TileIdMath v = new TileIdMath(superTileId);
+        return v.HasHorizontalFlip;
     }
 }

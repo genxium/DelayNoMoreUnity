@@ -15,6 +15,9 @@ namespace shared {
                 int newVx = src.VirtualGridX + src.VelX, newVy = src.VirtualGridY + src.VelY;
 
                 bool spinFlipX = (0 > src.DirX);
+                if (0 < (src.PatrolCueAngularVelFlipMark & 1)) {
+                    spinFlipX = !spinFlipX;
+                }
                 var dst = nextRenderFrameTraps[i];
                 int dstVelX = src.VelX, dstVelY = src.VelY;
                 float dstSpinCos = src.SpinCos, dstSpinSin = src.SpinSin;
@@ -39,7 +42,7 @@ namespace shared {
                 dst.VirtualGridY = newVy;
 
                 var srcConfig = trapConfigs[src.ConfigFromTiled.SpeciesId];
-                bool isTrapRotary = (0 != srcConfig.AngularFrameVelCos);
+                bool isTrapRotary = srcConfig.IsRotary;
                 List<TrapColliderAttr> colliderAttrs = trapLocalIdToColliderAttrs[src.TrapLocalId];
                 for (int j = 0; j < colliderAttrs.Count; j++) {
                     var colliderAttr = colliderAttrs[j];
@@ -48,7 +51,7 @@ namespace shared {
                     effPushbacks[colliderCnt].Y = 0;
                     float boxCx, boxCy, boxCw, boxCh;
                     calcTrapBoxInCollisionSpace(colliderAttr, newVx, newVy, out boxCx, out boxCy, out boxCw, out boxCh);
-                    if (0 != src.SpinCos || 0 != src.SpinSin) {
+                    if (isTrapRotary) {
                         // [WARNING] "colliderAttr.HitboxOffsetX" is from trap tile object center to collider center, thus is half the left edge offset. Same applies to "colliderAttr.HitboxOffsetY".
                         var (anchorOffsetCx, anchorOffsetCy) = VirtualGridToPolygonColliderCtr((colliderAttr.HitboxOffsetX << 1), (colliderAttr.HitboxOffsetY << 1));
                         UpdateRectCollider(trapCollider, boxCx, boxCy, boxCw, boxCh, 0, 0, 0, 0, 0, 0, colliderAttr, colliderAttr.CollisionTypeMask, spinFlipX, isRotary: isTrapRotary, srcConfig.SpinAnchorX - anchorOffsetCx, srcConfig.SpinAnchorY - anchorOffsetCy, src.SpinCos, src.SpinSin); // [WARNING] Deliberately NOT using "dstSpinCos & dstSpinSin" to allow initial frame stopping by a patrol cue.
@@ -330,15 +333,11 @@ namespace shared {
                 nextTrap.CapturedByPatrolCue = true;
                 nextTrap.FramesInPatrolCue = targetFramesInPatrolCue;
                 nextTrap.WaivingPatrolCueId = patrolCue.Id;
-                if (0 != decodedInputHolder.Dx || 0 != decodedInputHolder.Dy) {
-                    nextTrap.DirX = decodedInputHolder.Dx;
-                    nextTrap.DirY = decodedInputHolder.Dy;
-                }
                 nextTrap.VelX = 0;
                 nextTrap.VelY = 0;
                 nextTrap.AngularFrameVelCos = 0;
                 nextTrap.AngularFrameVelSin = 0;
-                if ((0 != trapConfig.AngularFrameVelCos || 0 != trapConfig.AngularFrameVelSin) && 0 < decodedInputHolder.BtnALevel) {
+                if (trapConfig.IsRotary && 0 < decodedInputHolder.BtnALevel) {
                     ++nextTrap.PatrolCueAngularVelFlipMark;
                 }
                 return;
@@ -717,13 +716,15 @@ namespace shared {
                         trapInNextFrame.VelY = (int)(speedYfac * speedVal);
                     }
                     var currTrap = currRenderFrame.TrapsArr[i];
-                    if (0 != trapConfig.AngularFrameVelCos || 0 != trapConfig.AngularFrameVelSin) {
+                    if (trapConfig.IsRotary) {
                         if (0 < (currTrap.PatrolCueAngularVelFlipMark & 1)) {
                             trapInNextFrame.AngularFrameVelCos = trapConfig.AngularFrameVelCos;
                             trapInNextFrame.AngularFrameVelSin = -trapConfig.AngularFrameVelSin;
+                            logger.LogInfo($"@rdfId={currRenderFrame.Id}, rotary trapLocalId={trapInNextFrame.TrapLocalId} gained flipped angular vels = ({trapInNextFrame.AngularFrameVelCos}, {trapInNextFrame.AngularFrameVelSin})");
                         } else {
                             trapInNextFrame.AngularFrameVelCos = trapConfig.AngularFrameVelCos;
                             trapInNextFrame.AngularFrameVelSin = trapConfig.AngularFrameVelSin;
+                            logger.LogInfo($"@rdfId={currRenderFrame.Id}, rotary trapLocalId={trapInNextFrame.TrapLocalId} gained regular angular vels = ({trapInNextFrame.AngularFrameVelCos}, {trapInNextFrame.AngularFrameVelSin})");
                         }
                     }
                 }

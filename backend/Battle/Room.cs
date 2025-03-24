@@ -45,7 +45,6 @@ public class Room {
 
     private int FORCE_RESYNC_INTERVAL_THRESHOLD = 5*BATTLE_DYNAMICS_FPS;
 
-    Dictionary<int, Player> players;
     Player[] playersArr; // ordered by joinIndex
 
     ILoggerBridge loggerBridge;
@@ -53,7 +52,6 @@ public class Room {
     int localPlayerWsDownsyncQueBattleReadTimeoutMillis = 2000; 
 
     int localPlayerWsDownsyncQueClearingReadTimeoutMillis = 800; // [WARNING] By reaching "clearPlayerNetworkSession(playerId)", no more elements will be enqueing "playerWsDownsyncQueDict[playerId]", yet the "playerSignalToCloseDict[playerId]" could've already been cancelled -- hence if the queue has been empty for several hundred milliseconds, we see it as truly empty. 
-    Dictionary<int, PlayerSessionAckWatchdog> playerActiveWatchdogDict;
     public long state;
     int effectivePlayerCount;
     int participantChangeId;
@@ -114,6 +112,8 @@ public class Room {
     UdpClient? battleUdpTunnel;
     CancellationTokenSource? battleUdpTunnelCancellationTokenSource;
 
+    Dictionary<string, Player> players;
+    Dictionary<string, PlayerSessionAckWatchdog> playerActiveWatchdogDict;
     /**
      * The following `CharacterDownsyncSessionDict` is NOT individually put
      * under `type Player struct` for a reason.
@@ -132,10 +132,10 @@ public class Room {
      *
      * Moreover, during the invocation of `PlayerSignalToCloseDict`, the `Player` instance is supposed to be deallocated (though not synchronously).
 */
-    Dictionary<int, WebSocket> playerDownsyncSessionDict;
-    Dictionary<int, (CancellationTokenSource, CancellationToken)> playerSignalToCloseDict;
-    Dictionary<int, BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>> playerWsDownsyncQueDict;
-    Dictionary<int, Task> playerDownsyncLoopDict;
+    Dictionary<string, WebSocket> playerDownsyncSessionDict;
+    Dictionary<string, (CancellationTokenSource, CancellationToken)> playerSignalToCloseDict;
+    Dictionary<string, BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>> playerWsDownsyncQueDict;
+    Dictionary<string, Task> playerDownsyncLoopDict;
     //////////////////////////////Battle lifecycle disposables////////////////////////////////// 
 
     //////////////////////////////Room lifecycle disposables////////////////////////////////// 
@@ -206,14 +206,14 @@ public class Room {
         residueCollided = new FrameRingBuffer<Collider>(0);
         
         // Preallocate network management fields
-        players = new Dictionary<int, Player>();
+        players = new Dictionary<string, Player>();
         playersArr = new Player[capacity];
 
-        playerActiveWatchdogDict = new Dictionary<int, PlayerSessionAckWatchdog>();
-        playerDownsyncSessionDict = new Dictionary<int, WebSocket>();
-        playerSignalToCloseDict = new Dictionary<int, (CancellationTokenSource, CancellationToken)>();
-        playerWsDownsyncQueDict = new Dictionary<int, BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>>();
-        playerDownsyncLoopDict = new Dictionary<int, Task>();
+        playerActiveWatchdogDict = new Dictionary<string, PlayerSessionAckWatchdog>();
+        playerDownsyncSessionDict = new Dictionary<string, WebSocket>();
+        playerSignalToCloseDict = new Dictionary<string, (CancellationTokenSource, CancellationToken)>();
+        playerWsDownsyncQueDict = new Dictionary<string, BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>>();
+        playerDownsyncLoopDict = new Dictionary<string, Task>();
 
         lastAllConfirmedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
         latestPlayerUpsyncedInputFrameId = MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED;
@@ -246,7 +246,7 @@ public class Room {
         return ((inputBuffer.N - 1) << 1);
     }
 
-    public int AddPlayerIfPossible(Player pPlayerFromDbInit, int playerId, uint speciesId, WebSocket session, CancellationTokenSource signalToCloseConnOfThisPlayer, CancellationToken signalToCloseConnOfThisPlayerToken) {
+    public int AddPlayerIfPossible(Player pPlayerFromDbInit, string playerId, uint speciesId, WebSocket session, CancellationTokenSource signalToCloseConnOfThisPlayer, CancellationToken signalToCloseConnOfThisPlayerToken) {
         joinerLock.WaitOne();
         try {
             long nowRoomState = Interlocked.Read(ref state); 
@@ -265,7 +265,7 @@ public class Room {
             pPlayerFromDbInit.BattleState = PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK;
 
             pPlayerFromDbInit.CharacterDownsync = new CharacterDownsync();
-            pPlayerFromDbInit.CharacterDownsync.Id = playerId;
+            pPlayerFromDbInit.Id = playerId;
             pPlayerFromDbInit.CharacterDownsync.SpeciesId = speciesId;
             pPlayerFromDbInit.CharacterDownsync.InAir = true;
 
@@ -315,7 +315,7 @@ public class Room {
         }
     }
 
-    public (int, Player?) ReAddPlayerIfPossible(int playerId, uint speciesId, WebSocket session, CancellationTokenSource signalToCloseConnOfThisPlayer, CancellationToken signalToCloseConnOfThisPlayerToken) {
+    public (int, Player?) ReAddPlayerIfPossible(string playerId, uint speciesId, WebSocket session, CancellationTokenSource signalToCloseConnOfThisPlayer, CancellationToken signalToCloseConnOfThisPlayerToken) {
         joinerLock.WaitOne();
         try {
             long nowRoomState = Interlocked.Read(ref state); 
@@ -367,7 +367,7 @@ public class Room {
         }
     }
 
-    public async void OnPlayerDisconnected(int playerId) {
+    public async void OnPlayerDisconnected(string playerId) {
         // [WARNING] Unlike the Golang version, Room.OnDisconnected here is only triggered AFTER "signalToCloseConnOfThisPlayerCapture.Cancel()".
         bool shouldDismiss = false;
         joinerLock.WaitOne();
@@ -437,7 +437,7 @@ public class Room {
         }
     }
 
-    private async void clearPlayerNetworkSession(int playerId) {
+    private async void clearPlayerNetworkSession(string playerId) {
         if (playerDownsyncSessionDict.ContainsKey(playerId)) {
             // [WARNING] No need to close "pR.CharacterDownsyncChanDict[playerId]" immediately!
             if (playerActiveWatchdogDict.ContainsKey(playerId)) {
@@ -509,7 +509,7 @@ public class Room {
         return ret;
     }
 
-    public async Task<bool> OnPlayerBattleColliderAcked(int targetPlayerId, RoomDownsyncFrame selfParsedRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerEditorIdToLocalId serializedTriggerEditorIdToLocalId, int spaceOffsetX, int spaceOffsetY, int battleDurationSeconds) {
+    public async Task<bool> OnPlayerBattleColliderAcked(string targetPlayerId, RoomDownsyncFrame selfParsedRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerEditorIdToLocalId serializedTriggerEditorIdToLocalId, int spaceOffsetX, int spaceOffsetY, int battleDurationSeconds) {
         Player? targetPlayer;
         if (!players.TryGetValue(targetPlayerId, out targetPlayer)) {
             return false;
@@ -612,7 +612,7 @@ public class Room {
         return true;
     }
 
-    private async Task downsyncToSinglePlayerAsyncLoop(int playerId, Player player) {
+    private async Task downsyncToSinglePlayerAsyncLoop(string playerId, Player player) {
         WebSocket? wsSession;
         BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>? genOrderPreservedMsgs;
         int joinIndex = player.CharacterDownsync.JoinIndex;
@@ -923,7 +923,7 @@ public class Room {
         }
     }
 
-    public void OnBattleCmdReceived(WsReq pReq, int playerId, bool fromUDP, bool fromReentryWsSession=false) {
+    public void OnBattleCmdReceived(WsReq pReq, string playerId, bool fromUDP, bool fromReentryWsSession=false) {
         /*
 		   [WARNING] This function "OnBattleCmdReceived" could be called by different ws sessions and thus from different threads!
 
@@ -987,7 +987,7 @@ public class Room {
         }
     }
 
-    private InputBufferSnapshot? markConfirmationIfApplicable(Pbc.RepeatedField<InputFrameUpsync> inputFrameUpsyncBatch, int playerId, Player player, bool fromUDP, bool fromReentryWsSession=false) {
+    private InputBufferSnapshot? markConfirmationIfApplicable(Pbc.RepeatedField<InputFrameUpsync> inputFrameUpsyncBatch, string playerId, Player player, bool fromUDP, bool fromReentryWsSession=false) {
         // [WARNING] This function MUST BE called while "inputBufferLock" is locked!
         // Step#1, put the received "inputFrameUpsyncBatch" into "inputBuffer"
         int joinIndex = player.CharacterDownsync.JoinIndex;
@@ -1324,7 +1324,7 @@ public class Room {
 
             // Method "downsyncToAllPlayers" is called very frequently during active battle, thus deliberately tweaked websocket downsync sending for better throughput.
             BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>? playerWsDownsyncQue;
-            if (!playerWsDownsyncQueDict.TryGetValue(player.CharacterDownsync.Id, out playerWsDownsyncQue)) {
+            if (!playerWsDownsyncQueDict.TryGetValue(player.Id, out playerWsDownsyncQue)) {
                 _logger.LogWarning("playerWsDownsyncQue for (roomId: {0}, playerId: {1}) doesn't exist! #3", id, playerId);
                 return;
             }
@@ -1369,7 +1369,7 @@ public class Room {
         return new ArraySegment<byte>(resp.ToByteArray());
     }
 
-    private async Task sendSafelyAsync(RoomDownsyncFrame? roomDownsyncFrame, RepeatedField<InputFrameDownsync>? toSendInputFrameDownsyncs, RepeatedField<PeerUdpAddr>? peerUdpAddrList, int act, int playerId, Player player, int peerJoinIndex) {
+    private async Task sendSafelyAsync(RoomDownsyncFrame? roomDownsyncFrame, RepeatedField<InputFrameDownsync>? toSendInputFrameDownsyncs, RepeatedField<PeerUdpAddr>? peerUdpAddrList, int act, string playerId, Player player, int peerJoinIndex) {
         var thatPlayerBattleState = Interlocked.Read(ref player.BattleState); // Might be changed in "OnPlayerDisconnected/OnPlayerLost" from other threads
 
         // [WARNING] DON'T try to send any message to an inactive player!
@@ -1484,7 +1484,7 @@ public class Room {
                 var recvResult = await battleUdpTunnel.ReceiveAsync(battleUdpTunnelCancellationToken);
                 WsReq pReq = WsReq.Parser.ParseFrom(recvResult.Buffer);
                 // _logger.LogInformation("`battleUdpTunnel` received for roomId={0}: pReq={1}", id, pReq);
-                int playerId = pReq.PlayerId;
+                string playerId = pReq.PlayerId;
                 Player? player;
                 if (players.TryGetValue(playerId, out player)) {
                     int reqAuthKey = pReq.AuthKey;
@@ -1524,7 +1524,7 @@ public class Room {
                     // Broadcast to every other player in the same room/battle
                     // TODO: Can I apply some early filters ("inputFrameId" v.s. "lastAllConfirmedInputFrameId" or "inputBuffer.StFrameId" or "inputBuffer.EdFrameId") here like those at the very beginning of "markConfirmationIfApplicable(...)"?
                     foreach (var (otherPlayerId, otherPlayer) in players) {
-                        if (otherPlayerId == playerId) {
+                        if (String.Equals(otherPlayerId, playerId)) {
                             continue;
                         }
                         if (null == otherPlayer.BattleUdpTunnelAddr) {

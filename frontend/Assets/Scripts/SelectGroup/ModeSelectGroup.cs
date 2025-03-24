@@ -82,7 +82,7 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
     }
 
 #nullable enable
-    private WsSessionManager.OnLoginResult onLoggedInPerAdhocRequirement = (int retCode, string? uname, int? playerId, string? authToken) => {
+    private WsSessionManager.OnLoginResult onLoggedInPerAdhocRequirement = (int retCode, string? uname, string? playerId, string? authToken) => {
         if (ErrCode.Ok != retCode) {
             // TODO: Popup dismissible error message prompt!
             return;

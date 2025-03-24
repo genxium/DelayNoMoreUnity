@@ -40,16 +40,16 @@ public class SimpleRamCaptchaCache : ICaptchaCache {
                     newCaptcha = _randGenerator.Next(10000, 99999).ToString();
                     var slidingExpiration = _cacheEntryOptions.SlidingExpiration.GetValueOrDefault(new TimeSpan(0, 30, 0));
                     absoluteExpiryTime = DateTimeOffset.UtcNow.AddTicks(slidingExpiration.Ticks);
-                    inRamCache.Set(uname, new CaptchaCacheEntry(newCaptcha, testPlayer.id), _cacheEntryOptions);
+                    inRamCache.Set(uname, new CaptchaCacheEntry(newCaptcha, $"tst_{testPlayer.id}"), _cacheEntryOptions);
                 }
             }
         //}
         return (null != newCaptcha);
     }
 
-    public bool ValidateUnameCaptchaPair(string uname, string captcha, out int playerId) {
+    public bool ValidateUnameCaptchaPair(string uname, string captcha, out string playerId) {
         CaptchaCacheEntry? entry = null;
-        playerId = shared.Battle.INVALID_DEFAULT_PLAYER_ID;
+        playerId = "";
         bool res1 = inRamCache.TryGetValue(uname, out entry);
         if (res1 && null != entry && captcha.Equals(entry.Captcha)) {
             playerId = entry.PlayerId;

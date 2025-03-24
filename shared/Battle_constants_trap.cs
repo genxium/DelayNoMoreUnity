@@ -184,7 +184,7 @@ namespace shared {
             SpinAnchorX = 0.0f,
             SpinAnchorY = 0.0f,
             IsRotary = true,
-            Atk1SkillId = SmallBallEmitterBeamSkill.Id,
+            Atk1SkillId = 130,
         };
 
         public static ImmutableDictionary<int, TrapConfig> trapConfigs = ImmutableDictionary.Create<int, TrapConfig>().AddRange(
