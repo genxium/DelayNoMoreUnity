@@ -122,9 +122,9 @@ namespace shared {
                     shouldPredictBtnEHold = true;
                 }
                 
+                var chDownsync = currRdf.PlayersArr[i];
                 if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 32UL)) {
-                    var chDownsync = currRdf.PlayersArr[i];
-                    if (BTN_B_HOLDING_RDF_CNT_THRESHOLD_1 < chDownsync.BtnBHoldingRdfCount) {       
+                    if (1 < chDownsync.BtnBHoldingRdfCount) {       
                         shouldPredictBtnBHold = true;
                     }
                 }

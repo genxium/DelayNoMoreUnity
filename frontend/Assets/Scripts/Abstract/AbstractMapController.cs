@@ -303,6 +303,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             return (previousSelfInput, existingInputFrame.InputList[joinIndex - 1]);
         }
 
+        var (_, rdf) = renderBuffer.GetByFrameId(playerRdfId);
         Array.Fill<ulong>(prefabbedInputList, 0);
         for (int k = 0; k < roomCapacity; ++k) {
             /**
@@ -328,13 +329,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                 if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 256UL) && BTN_E_HOLDING_IFD_CNT_THRESHOLD_1 > inputFrameId-lastIndividuallyConfirmedInputFrameId[k]) {
                     shouldPredictBtnEHold = true;
                 } 
+                var chDownsync = null == rdf ? null : rdf.PlayersArr[k];;
                 if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 32UL)) {
-                    var (_, rdf) = renderBuffer.GetByFrameId(playerRdfId);
-                    if (null != rdf) {
-                        var chDownsync = rdf.PlayersArr[k];
-                        if (BTN_B_HOLDING_RDF_CNT_THRESHOLD_1 < chDownsync.BtnBHoldingRdfCount) {       
-                            shouldPredictBtnBHold = true;
-                        }
+                    if (1 < chDownsync.BtnBHoldingRdfCount) {       
+                        shouldPredictBtnBHold = true;
                     }
                 }
                 if (shouldPredictBtnAHold) prefabbedInputList[k] |= (lastIndividuallyConfirmedInputList[k] & 16UL); 
