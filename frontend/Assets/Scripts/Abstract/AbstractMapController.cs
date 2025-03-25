@@ -331,7 +331,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 } 
                 var chDownsync = null == rdf ? null : rdf.PlayersArr[k];;
                 if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 32UL)) {
-                    if (1 < chDownsync.BtnBHoldingRdfCount) {       
+                    if (null != chDownsync && 1 < chDownsync.BtnBHoldingRdfCount) {       
                         shouldPredictBtnBHold = true;
                     }
                 }

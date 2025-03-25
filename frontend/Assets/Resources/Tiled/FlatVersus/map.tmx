@@ -16,7 +16,7 @@
  <tileset firstgid="1087" source="../decoration/Statics/DW_bg_1.tsx"/>
  <tileset firstgid="1591" source="../traps/machinery/traps_machinery.tsx"/>
  <tileset firstgid="1598" source="../towers/towers.tsx"/>
- <tileset firstgid="1613" source="../shared_comps/CastlePrisonProps16.tsx"/>
+ <tileset firstgid="1621" source="../shared_comps/CastlePrisonProps16.tsx"/>
  <layer id="197" name="Background3" width="160" height="33" opacity="0.5" parallaxx="0.6">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -38,7 +38,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmE1OwzAQhZMUcQdKuQQF1hwBuAWwZYfUTsvPFULDzyXKz7ZrFhS4AgsKXILn4EiGBU1cV4nT90lPMwukzIwfdu0gIIQQQgghhBBCCCGEEEIIIYQQQvyhHwXBSVR2Ff9zivrOoPOK17koPIVBMIaejfhikStdYk2voOuc2nPogZ0C372J0loFNadCDzK2yLP4GrrrY9F4x+wm0IcRPy1ypVus6x10n1OHDv23X+C7D1Faq6DmVOhBJhZ5Fr/oP3uwFiEUGbFhkSsteXSmoVZpaKEHCS3yLPrUd9VYweya0KoRWxa50ppH64BapaWFHqRpkWfRp76rxvofH71FwfYmYhvagPLmSlserQNqlU0t9CDtAjlmNDJ96FPfVWSA+cVQB3qE/8qup+pgRiPMSjAzweyk7Hp8p6u9dwH1HP8vq3vpriGXd96yvokZCWYlyoNd+m9mBob/Esdrpe6lB4Zc3nnL+mZi+I/73+x09Pkbz2H/qyM9ffbG2oNl1+M7seE/1/tfHUkM/8X038xk+1+H+18uenrf4/7nBvW7T6Kfewj3v+kk+t4h+ndg2fX4Tmy8+w1z+O9oef41lQV6k2l/MzTeAXn+zk7Rd7/jGvuvSG/ZO+DcilkQir779WvsvyK99Xj+EkIIIYQQQsgvvgHmUuxR
+   eJztmE1OwzAQhdMUcQdKuQQF1hwBuAVwBdROKbDgAqHh5xLlZ9s1CwpcgQUFLsFzcCTDgiauK8ft+6SnmQVSZsYPu3YUEUIIIYQQQgghhBBCCCGEEEIIIeFwHEdRL/Zdxf+coL5T6KzidS4KT7UoGkHPRnyxyJUusaZX0HVB7Tn0wE6J797EWa2CmjOhBxlZ5Hl8rbnrY9F4x+zG0IcRPy1ypVus6x10X1CHDv23X+K7D3FWq6DmTOhBxhZ5Hr/oP3uwFjUoNmLdIldaCuhMQ61S10IPUrPI8xhS31VjBbNrQKtGbFrkSmsBrQNqlaYWepCGRZ7HkPquGut/fPQWR9ubiC1oAyqaK20FtA6oVTa10IO0SuSY0dD0YUh9V5E+5pdAbegR/vNdT9XBjIaYlWBmgtmJ73pCp6O9dwF1Hf8vq3vpriGXd15f38SMBLMS5cEO/Tc1fcN/qeO1UvfSA0Mu77y+vpka/uP+Nz1tff4mM9j/5pGuPnsT7UHf9YROYvjP9f43j6SG/xL6b2ry/a/N/a8QXb3vcf9zg/rdJ/HPPYT732RSfe8Q/TvQdz2hkxjvfoMC/jtann1NvkBvMulvBsY7IM/f6Sn77tebY/+V6S1/B5xZMQtC2Xe/8zn2X5neujx/CSGEEEIIIeQX3/Lf7IE=
   </data>
  </layer>
  <layer id="194" name="Ground2" width="160" height="33">
@@ -46,7 +46,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmU1OwzAQheNEFI5AmgjOQGmPAOx6BGDXA3AB34JjFZbcoLBCLGHDmCRS6pimtsf1T2ekT06b2B05Ly/juiyybApUwMySskX+XO7Xn8+Ba0AcXwFL+P6WsGLZzOXfHMPcZnPP91lc0+mtlj6XfuGQA4dcuDg+B96Y//sXOzCHYi5Dus/B6k/2vy/SnzUwhwP/C0l/teQ7Y8x67HO9DrL/0fvXnmXh3v9U72ZT/c1GUGlRpU0TZP9bBXD/YmcVeP2n638uIf/D5xD+p0uo+sP2v+88yx6KuPnJ8f0vZv3FVP/dAS7jaeJ2fBE3lnNA9Z+/+o/0R/Uf+Z9dxOB/uoSqP5X/2dROjwno795yDlKr/1yi8r+Q4xD6s43Q/S+gvJT7HxTm8clo/yNl/4shaP1rt/6lsAta/5L/+YzQ67+Q9Ef+hx+prX+p/osrqP6j+s9nUP1H/uczqP6j+s9npFb/uYT8Dz9C97+F5DsmusFaj5D/4YcL/9NZa6j6dnksyP+Sj9D9LyT9kf/hxzHUf1j6Jf/DDxf+ZztOqPoj/8MPF/6Xqv5U/vfCtlm37SsbnjMBezwT4Lc5tHzdtKO56uRP/mfnf+9sm03bfrDhuTFO8iybAM8IXACXSGMJToGzfHf+mx3f/Tcfqfmfai/Olf+J5zbPt2FtW+TDcyaYjtfpDyMH+G0OLWdNO5qrTv7dPLr0P5v9X/n/P5P9X53+Ovu/4rmd5g0VUEvH1Z7Uvb4Y41U9/en02ZEfh5ZDLrx/rMpVN/9uHjH3f+Vx+trS6Y/1/x/533H73yHfv6prXdV/5H9u/M+F/nQ02dffL1KXIUI=
+   eJztmU1OwzAQheNEFI5AmgjOQGmPAOx6BGDXQ7DxLThWYckNCivEEjaMSSKljmlqe1z/dEb65LSJ3ZHz8jKuyyLLpkAFzCwpW+TP5X79+Ry4BsTxFbCE728JK5bNXP7NMcxtNvd8n8U1nd5q6XPpFw45cMiFi+Nz4I35v3+xA3Mo5jKk+xys/mT/+yL9WQNzOPC/kPRXS74zxqzHPtfrIPsfvX/tWRbu/U/1bjbV32wElRZV2jRB9r9VAPcvdlaB13+6/ucS8j98DuF/uoSqP2z/+86z7KGIm58c3/9i1l9M9d8d4DKeJm7HF3FjOQdU//mr/0h/VP+R/9lFDP6nS6j6U/mfTe30mID+7i3nILX6zyUq/ws5DqE/2wjd/wLKS7n/QWEen4z2P1L2vxiC1r92618Ku6D1L/mfzwi9/gtJf+R/+JHa+pfqv7iC6j+q/3wG1X/kfz6D6j+q/3xGavWfS8j/8CN0/1tIvmOiG6z1CPkffrjwP521hqpvl8eC/C/5CN3/QtIf+R9+HEP9h6Vf8j/8cOF/tuOEqj/yP/xw4X+p6k/lfy9sm3XbvrLhOROwxzMBfptDy9dNO5qrTv7kf3b+98622bTtBxueG+Mkz7IJ8IzABXCJNJbgFDjLd+e/2fHdf/ORmv+p9uJc+Z94bvN8G9a2RT48Z4LpeJ3+MHKA3+bQcta0o7nq5N/No0v/s9n/lf//M9n/1emvs/8rnttp3lABtXRc7Und64sxXtXTn06fHflxaDnkwvvHqlx18+/mEXP/Vx6nry2d/lj//5H/Hbf/HfL9q7rWVf1H/ufG/1zoT0eTff39AoG+IWo=
   </data>
  </layer>
  <layer id="198" name="Ground1" width="160" height="33">
@@ -54,7 +54,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1MEJgEAQA8AF4WrQMrSf049ah6W7XSx6M5B/HiERAAAAAAAAALV6i9gzR6tuwojO3N2Vue0PAAAAAAAAAAAAgJ9YpnjmTHUPxrTl9lb7o4j/o9IX/u8FHnoHrg==
+   eJzt1MEJgEAQA8AF4WrQMrSn049ag6W7XSx6M5B/HiERAAAAAAAAALV6i9gzR6tuwojO3N2Vue0PAAAAAAAAAAAAgJ9YpnjmTHUPxrTl9lb7o4j/o9IX/u8F98EH3g==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -303,9 +303,8 @@
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="768" gid="1600" x="1840" y="472" width="64" height="96">
+  <object id="768" gid="2147485248" x="1840" y="472" width="64" height="96">
    <properties>
-    <property name="dirX" value="-2"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="5"/>
     <property name="teamId" value="2"/>
@@ -313,7 +312,6 @@
   </object>
   <object id="769" gid="1600" x="656" y="472" width="64" height="96">
    <properties>
-    <property name="dirX" value="+2"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="5"/>
     <property name="teamId" value="1"/>

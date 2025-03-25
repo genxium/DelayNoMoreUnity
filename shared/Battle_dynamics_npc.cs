@@ -1406,7 +1406,7 @@ namespace shared {
                 decodedInputHolder.Dx = 0;
                 decodedInputHolder.Dy = -2;
                 decodedInputHolder.BtnALevel = 1;
-                logger.LogInfo($"handleOppoCh/end, rdfId={rdfId}, about to slip jump, currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, VelX: {currCharacterDownsync.VelX}, VelY: {currCharacterDownsync.VelY}, DirX: {currCharacterDownsync.DirX}, DirY: {currCharacterDownsync.DirY}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState}, jhrdfc:{currCharacterDownsync.JumpHoldingRdfCnt})");
+                //logger.LogInfo($"handleOppoCh/end, rdfId={rdfId}, about to slip jump, currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, VelX: {currCharacterDownsync.VelX}, VelY: {currCharacterDownsync.VelY}, DirX: {currCharacterDownsync.DirX}, DirY: {currCharacterDownsync.DirY}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState}, jhrdfc:{currCharacterDownsync.JumpHoldingRdfCnt})");
             } else if (TARGET_CH_REACTION_JUMP_TOWARDS_CH == newVisionReaction) {
                 decodedInputHolder.Dy = 0;
                 decodedInputHolder.BtnALevel = 1;

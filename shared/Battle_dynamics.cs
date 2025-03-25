@@ -756,6 +756,10 @@ namespace shared {
                 return;
             }
 
+            if (0 == chConfig.JumpingInitVelY) {
+                return;
+            }
+
             if (isInJumpStartup(thatCharacterInNextFrame, chConfig)) {
                 return;
             }
@@ -833,8 +837,8 @@ namespace shared {
             
             if (IsInBlockStun(currCharacterDownsync)) { 
                 return; 
-            } 
-            
+            }
+
             bool currFreeFromInertia = (0 == currCharacterDownsync.FramesCapturedByInertia); bool currBreakingFromInertia = (1 == currCharacterDownsync.FramesCapturedByInertia);
             /* 
                [WARNING] 
@@ -857,6 +861,7 @@ namespace shared {
                 exactTurningAround = true;
             }
 
+            bool hasNonZeroSpeed = !(0 == chConfig.Speed && 0 == currCharacterDownsync.Speed);
             if (0 == currCharacterDownsync.FramesToRecover || (WalkingAtk1 == currCharacterDownsync.CharacterState || WalkingAtk4 == currCharacterDownsync.CharacterState)) {
                 var oldNextChState = thatCharacterInNextFrame.CharacterState;
                 bool isOldNextChStateDimmed = (Dimmed == thatCharacterInNextFrame.CharacterState);
@@ -867,7 +872,7 @@ namespace shared {
                 }
                 if (shouldIgnoreInertia) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0;
-                    if (0 != effDx) {
+                    if (0 != effDx && hasNonZeroSpeed) {
                         int xfac = (0 < effDx ? 1 : -1);
                         thatCharacterInNextFrame.DirX = effDx;
                         thatCharacterInNextFrame.DirY = effDy;
@@ -882,7 +887,7 @@ namespace shared {
                             }
                         }
                     } else {
-                        // 0 == effDx
+                        // 0 == effDx or speed is zero
                         _processInertiaWalkingHandleZeroEffDx(rdfId, currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig, recoveredFromAirAtk, isParalyzed, logger);
                     }
                 } else {
@@ -892,7 +897,7 @@ namespace shared {
                             thatCharacterInNextFrame.FramesCapturedByInertia = 0;
                         }
 
-                        if (0 != effDx) {
+                        if (0 != effDx && hasNonZeroSpeed) {
                             int xfac = (0 < effDx ? 1 : -1);
                             thatCharacterInNextFrame.DirX = effDx;
                             thatCharacterInNextFrame.DirY = effDy;
@@ -907,7 +912,7 @@ namespace shared {
                                 }
                             }
                         } else {
-                            // 0 == effDx
+                            // 0 == effDx or speed is zero
                             _processInertiaWalkingHandleZeroEffDx(rdfId, currCharacterDownsync, thatCharacterInNextFrame, effDy, chConfig, recoveredFromAirAtk, isParalyzed, logger);
                         }
                     } else if (currFreeFromInertia) {
@@ -1012,13 +1017,14 @@ namespace shared {
                 exactTurningAround = true;
             }
 
+            bool hasNonZeroSpeed = !(0 == chConfig.Speed && 0 == currCharacterDownsync.Speed);
             if (0 == currCharacterDownsync.FramesToRecover) {
                 var defaultInAirIdleChState = chConfig.UseIdle1AsFlyingIdle ? Idle1 : Walking;
                 thatCharacterInNextFrame.CharacterState = ((Idle1 == currCharacterDownsync.CharacterState || InAirIdle1NoJump == currCharacterDownsync.CharacterState) && chConfig.AntiGravityWhenIdle) ? currCharacterDownsync.CharacterState : defaultInAirIdleChState; // When reaching here, the character is at least recovered from "Atked{N}" or "Atk{N}" state, thus revert back to a default action
                 
                 if (shouldIgnoreInertia) {
                     thatCharacterInNextFrame.FramesCapturedByInertia = 0;
-                    if (0 != effDx || 0 != effDy) {
+                    if ((0 != effDx || 0 != effDy) && hasNonZeroSpeed) {
                         if (SPECIES_FIREBAT == currCharacterDownsync.SpeciesId && InAirIdle1NoJump == currCharacterDownsync.CharacterState) {
                             logger.LogInfo($"_processInertiaFlying/start, currRdfId={rdfId}, setting InAirIdle1NoJump to Walking currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, DirX: {currCharacterDownsync.DirX}, DirY: {currCharacterDownsync.DirY}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState})");
                         }
@@ -1030,7 +1036,7 @@ namespace shared {
                         thatCharacterInNextFrame.VelY = isParalyzed ? 0 : yfac * currCharacterDownsync.Speed;
                         thatCharacterInNextFrame.CharacterState = Walking;
                     } else {
-                        // 0 == effDx && 0 == effDy
+                        // (0 == effDx && 0 == effDy) or speed is zero
                         _processInertiaFlyingHandleZeroEffDxAndDy(rdfId, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, logger);
                     }
                 } else {
@@ -1040,7 +1046,7 @@ namespace shared {
                             thatCharacterInNextFrame.FramesCapturedByInertia = 0;
                         }
 
-                        if (0 != effDx || 0 != effDy) {
+                        if ((0 != effDx || 0 != effDy) && hasNonZeroSpeed) {
                             thatCharacterInNextFrame.DirX = (0 == effDx ? currCharacterDownsync.DirX : (0 > effDx ? -2 : +2));
                             thatCharacterInNextFrame.DirY = (0 == effDy ? currCharacterDownsync.DirY : (0 > effDy ? -1 : +1));
                             int xfac = 0 == effDx ? 0 : 0 > effDx ? -1 : +1;
@@ -1049,7 +1055,7 @@ namespace shared {
                             thatCharacterInNextFrame.VelY = isParalyzed ? 0 : yfac * currCharacterDownsync.Speed;
                             thatCharacterInNextFrame.CharacterState = Walking;
                         } else {
-                            // 0 == effDx && 0 == effDy
+                            // (0 == effDx && 0 == effDy) or speed is zero
                             _processInertiaFlyingHandleZeroEffDxAndDy(rdfId, currCharacterDownsync, thatCharacterInNextFrame, chConfig, isParalyzed, logger);
                         }
                     } else if (currFreeFromInertia) {
