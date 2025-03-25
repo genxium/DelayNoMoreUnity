@@ -46,25 +46,47 @@ namespace shared {
 
                 s0 = frontAllyReachableByIvSlot(currCharacterDownsync, effInAir, chConfig, aCollider, v5, allyConfig, allyChCollider, allyChColliderDx, absColliderDx, allyChColliderDy, absColliderDy, allyBoxLeft, allyBoxRight, allyBoxBottom, allyBoxTop); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
                 if (TARGET_CH_REACTION_USE_SLOT_C == s0) {
+                    decodedInputHolder.Dx = 0;
+                    decodedInputHolder.Dy = 0;
+                    decodedInputHolder.BtnALevel = 0;
+                    decodedInputHolder.BtnBLevel = 0;
                     decodedInputHolder.BtnCLevel = 1;
+                    decodedInputHolder.BtnDLevel = 0;
+                    decodedInputHolder.BtnELevel = 0;
                     visionReaction = s0;
                 } else {
                     s1 = frontAllyReachableByDragonPunch(currCharacterDownsync, effInAir, chConfig, canJumpWithinInertia, aCollider, v5, allyConfig, allyChCollider, allyChColliderDx, absColliderDx, allyChColliderDy, absColliderDy, allyBoxLeft, allyBoxRight, allyBoxBottom, allyBoxTop); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
                     visionReaction = s1;
                     if (TARGET_CH_REACTION_USE_DRAGONPUNCH == s1) {
+                        decodedInputHolder.Dx = 0;
+                        decodedInputHolder.Dy = +2;
+                        decodedInputHolder.BtnALevel = 0;
                         decodedInputHolder.BtnBLevel = 1;
-                        decodedInputHolder.Dy = 2;
+                        decodedInputHolder.BtnCLevel = 0;
+                        decodedInputHolder.BtnDLevel = 0;
+                        decodedInputHolder.BtnELevel = 0;
                     } else {
                         s2 = frontAllyReachableByMelee1(currCharacterDownsync, effInAir, aCollider, v5, allyConfig, allyChCollider, allyChColliderDx, absColliderDx, allyChColliderDy, absColliderDy, allyBoxLeft, allyBoxRight, allyBoxBottom, allyBoxTop);
                         visionReaction = s2;
                         if (TARGET_CH_REACTION_USE_MELEE == s2) {
+                            decodedInputHolder.Dx = 0;
+                            decodedInputHolder.Dy = 0;
+                            decodedInputHolder.BtnALevel = 0;
                             decodedInputHolder.BtnBLevel = 1;
+                            decodedInputHolder.BtnCLevel = 0;
+                            decodedInputHolder.BtnDLevel = 0;
+                            decodedInputHolder.BtnELevel = 0;
                         } else {
                             s3 = frontAllyReachableByFireball(currCharacterDownsync, chConfig, aCollider, v5, allyConfig, allyChCollider, allyChColliderDx, allyChColliderDy, absColliderDy, allyBoxLeft, allyBoxRight, allyBoxBottom, allyBoxTop);
                             visionReaction = s3;
                             if (TARGET_CH_REACTION_USE_FIREBALL == s3) {
-                                decodedInputHolder.BtnBLevel = 1;
+                                decodedInputHolder.Dx = 0;
                                 decodedInputHolder.Dy = -2;
+                                decodedInputHolder.BtnALevel = 0;
+                                decodedInputHolder.BtnBLevel = 1;
+                                decodedInputHolder.BtnCLevel = 0;
+                                decodedInputHolder.BtnDLevel = 0;
+                                decodedInputHolder.BtnELevel = 0;
                             } else {
                                 if (chConfig.NpcPrioritizeAllyHealing && v5.Hp < allyConfig.Hp) {
                                     visionReaction = TARGET_CH_REACTION_FOLLOW; 
@@ -177,25 +199,47 @@ namespace shared {
 
                 s0 = frontOpponentReachableByIvSlot(currCharacterDownsync, effInAir, chConfig, aCollider, oppoChCollider, oppoChColliderDx, absColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
                 if (TARGET_CH_REACTION_USE_SLOT_C == s0) {
+                    decodedInputHolder.Dx = 0;
+                    decodedInputHolder.Dy = 0;
+                    decodedInputHolder.BtnALevel = 0;
+                    decodedInputHolder.BtnBLevel = 0;
                     decodedInputHolder.BtnCLevel = 1;
+                    decodedInputHolder.BtnDLevel = 0;
+                    decodedInputHolder.BtnELevel = 0;
                     visionReaction = s0;
                 } else {
                     s1 = frontOpponentReachableByDragonPunch(currCharacterDownsync, effInAir, chConfig, canJumpWithinInertia, aCollider, oppoChCollider, oppoChColliderDx, absColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, false); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
                     visionReaction = s1;
                     if (TARGET_CH_REACTION_USE_DRAGONPUNCH == s1) {
+                        decodedInputHolder.Dx = 0;
+                        decodedInputHolder.Dy = +2;
+                        decodedInputHolder.BtnALevel = 0;
                         decodedInputHolder.BtnBLevel = 1;
-                        decodedInputHolder.Dy = 2;
+                        decodedInputHolder.BtnCLevel = 0;
+                        decodedInputHolder.BtnDLevel = 0;
+                        decodedInputHolder.BtnELevel = 0;
                     } else {
                         s2 = frontOpponentReachableByMelee1(currCharacterDownsync, effInAir, aCollider, oppoChCollider, oppoChColliderDx, absColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop);
                         visionReaction = s2;
                         if (TARGET_CH_REACTION_USE_MELEE == s2) {
+                            decodedInputHolder.Dx = 0;
+                            decodedInputHolder.Dy = 0;
+                            decodedInputHolder.BtnALevel = 0;
                             decodedInputHolder.BtnBLevel = 1;
+                            decodedInputHolder.BtnCLevel = 0;
+                            decodedInputHolder.BtnDLevel = 0;
+                            decodedInputHolder.BtnELevel = 0;
                         } else {
                             s3 = frontOpponentReachableByFireball(currCharacterDownsync, chConfig, aCollider, oppoChCollider, oppoChColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop);
                             visionReaction = s3;
                             if (TARGET_CH_REACTION_USE_FIREBALL == s3) {
-                                decodedInputHolder.BtnBLevel = 1;
+                                decodedInputHolder.Dx = 0;
                                 decodedInputHolder.Dy = -2;
+                                decodedInputHolder.BtnALevel = 0;
+                                decodedInputHolder.BtnBLevel = 1;
+                                decodedInputHolder.BtnCLevel = 0;
+                                decodedInputHolder.BtnDLevel = 0;
+                                decodedInputHolder.BtnELevel = 0;
                             } else {
                                 visionReaction = TARGET_CH_REACTION_FOLLOW;
                             }
@@ -243,6 +287,7 @@ namespace shared {
 
                 if (shouldSlipJumpTowardsTarget) {
                     visionReaction = TARGET_CH_REACTION_SLIP_JUMP_TOWARDS_CH;
+                    //logger.LogInfo($"handleOppoCh/end, rdfId={rdfId}, should slip jump towards oppoCh=(jidx:{v3.JoinIndex}), currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, VelX: {currCharacterDownsync.VelX}, VelY: {currCharacterDownsync.VelY}, DirX: {currCharacterDownsync.DirX}, DirY: {currCharacterDownsync.DirY}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState})");
                 } else if (shouldJumpTowardsTarget) {
                     visionReaction = TARGET_CH_REACTION_JUMP_TOWARDS_CH;
                 }
@@ -251,10 +296,13 @@ namespace shared {
             if (TARGET_CH_REACTION_JUMP_TOWARDS_CH == visionReaction) {
                 if (0 != oppoChColliderDx) {
                     decodedInputHolder.Dx = (0 < oppoChColliderDx ? +2 : -2);
+                    decodedInputHolder.Dy = 0;
                 }
             } else if (TARGET_CH_REACTION_FOLLOW == visionReaction) {
                 if (0 != oppoChColliderDx) {
                     decodedInputHolder.Dx = (0 < oppoChColliderDx ? +2 : -2);
+                    decodedInputHolder.Dy = 0;
+                    decodedInputHolder.BtnALevel = 0;
                 }
                 if (isCharacterFlying) {
                     if (0 >= currCharacterDownsync.FramesToRecover) {
@@ -265,11 +313,14 @@ namespace shared {
                         var (effDx, effDy, _) = DiscretizeDirection(normX, normY);
                         decodedInputHolder.Dx = effDx;
                         decodedInputHolder.Dy = effDy;
+                        decodedInputHolder.BtnALevel = 0;
                     }
                 } else {
                     if (opponentBehindMe) {
                         if (0 >= currCharacterDownsync.FramesToRecover) {
                             decodedInputHolder.Dx = -currCharacterDownsync.DirX;
+                            decodedInputHolder.Dy = 0;
+                            decodedInputHolder.BtnALevel = 0;
                         }
                     } else {
                         float visionThresholdPortion = 0.95f;
@@ -277,10 +328,14 @@ namespace shared {
                         if (notDashing && veryFarAway) {
                             if (chConfig.SlidingEnabled && !effInAir) {
                                 decodedInputHolder.Dx = currCharacterDownsync.DirX;
+                                decodedInputHolder.Dy = 0;
                                 decodedInputHolder.BtnELevel = 1;
+                                decodedInputHolder.BtnALevel = 0;
                             } else if (chConfig.DashingEnabled && (!effInAir || 0 < currCharacterDownsync.RemainingAirDashQuota)) {
                                 decodedInputHolder.Dx = currCharacterDownsync.DirX;
+                                decodedInputHolder.Dy = 0;
                                 decodedInputHolder.BtnELevel = 1;
+                                decodedInputHolder.BtnALevel = 0;
                             }
                         }
                     }
@@ -288,6 +343,8 @@ namespace shared {
             } else if (TARGET_CH_REACTION_FLEE_OPPO == visionReaction) {
                 if (0 != oppoChColliderDx) {
                     decodedInputHolder.Dx = (0 < oppoChColliderDx ? -2 : +2);
+                    decodedInputHolder.Dy = 0;
+                    decodedInputHolder.BtnALevel = 0;
                 }
                 if (SPECIES_ANGEL == currCharacterDownsync.SpeciesId) {
                     if (opponentBehindMe) {
@@ -295,13 +352,18 @@ namespace shared {
                         if (notDashing && currCharacterDownsync.Mp >= AngelDashing.MpDelta) {
                             if (!effInAir || 0 < currCharacterDownsync.RemainingAirDashQuota) {
                                 decodedInputHolder.Dx = currCharacterDownsync.DirX;
+                                decodedInputHolder.Dy = 0;
                                 decodedInputHolder.BtnELevel = 1;
+                                decodedInputHolder.BtnALevel = 0;
                             }
                         }
                     } else {
                         bool notBackDashing = (BackDashing != currCharacterDownsync.CharacterState);
                         if (notBackDashing && currCharacterDownsync.Mp >= AngelBackDashing.MpDelta) {
+                            decodedInputHolder.Dx = 0;
+                            decodedInputHolder.Dy = 0;
                             decodedInputHolder.BtnELevel = 1;
+                            decodedInputHolder.BtnALevel = 0;
                         }
                     }
                 } if (isCharacterFlying) {
@@ -313,6 +375,7 @@ namespace shared {
                         var (effDx, effDy, _) = DiscretizeDirection(normX, normY);
                         decodedInputHolder.Dx = effDx;
                         decodedInputHolder.Dy = effDy;
+                        decodedInputHolder.BtnALevel = 0;
                     }
                 } else {
                     bool isBackDashingSpecies = (SPECIES_WITCHGIRL == currCharacterDownsync.SpeciesId || SPECIES_BRIGHTWITCH == currCharacterDownsync.SpeciesId || SPECIES_BOUNTYHUNTER == currCharacterDownsync.SpeciesId);
@@ -322,16 +385,23 @@ namespace shared {
                         if (notDashing && notBackDashingSpecies) {
                             if (chConfig.SlidingEnabled && !effInAir) {
                                 decodedInputHolder.Dx = currCharacterDownsync.DirX;
+                                decodedInputHolder.Dy = 0;
                                 decodedInputHolder.BtnELevel = 1;
+                                decodedInputHolder.BtnALevel = 0;
                             } else if (chConfig.DashingEnabled && (!effInAir || 0 < currCharacterDownsync.RemainingAirDashQuota)) {
                                 decodedInputHolder.Dx = currCharacterDownsync.DirX;
+                                decodedInputHolder.Dy = 0;
                                 decodedInputHolder.BtnELevel = 1;
+                                decodedInputHolder.BtnALevel = 0;
                             }
                         }
                     } else {
                         bool notBackDashing = (BackDashing != currCharacterDownsync.CharacterState);
                         if (!effInAir && notBackDashing && isBackDashingSpecies) {
+                            decodedInputHolder.Dx = 0;
+                            decodedInputHolder.Dy = 0;
                             decodedInputHolder.BtnELevel = 1;
+                            decodedInputHolder.BtnALevel = 0;
                         }
                     }
                 }
@@ -380,6 +450,11 @@ namespace shared {
                 } else {
                     decodedInputHolder.Dx = 0;
                     decodedInputHolder.Dy = +2;
+                    decodedInputHolder.BtnALevel = 0;
+                    decodedInputHolder.BtnBLevel = 0;
+                    decodedInputHolder.BtnCLevel = 0;
+                    decodedInputHolder.BtnDLevel = 0;
+                    decodedInputHolder.BtnELevel = 0;
                     visionReaction = TARGET_CH_REACTION_DEF1;
                     /*
                     if (SPECIES_LIGHTGUARD_RED == currCharacterDownsync.SpeciesId) {
@@ -400,6 +475,11 @@ namespace shared {
                     } else if (!effInAir && canJumpWithinInertia && chConfig.HasDef1) {
                         decodedInputHolder.Dx = 0;
                         decodedInputHolder.Dy = +2;
+                        decodedInputHolder.BtnALevel = 0;
+                        decodedInputHolder.BtnBLevel = 0;
+                        decodedInputHolder.BtnCLevel = 0;
+                        decodedInputHolder.BtnDLevel = 0;
+                        decodedInputHolder.BtnELevel = 0;
                         visionReaction = TARGET_CH_REACTION_DEF1;
                     } else {
                         visionReaction = TARGET_CH_REACTION_FOLLOW;
@@ -411,12 +491,21 @@ namespace shared {
                         visionReaction = frontOpponentReachableByDragonPunch(currCharacterDownsync, effInAir, chConfig, canJumpWithinInertia, aCollider, oppoChCollider, oppoChColliderDx, absColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop, true); // [WARNING] When just transited from GetUp1 to Idle1, dragonpunch might be triggered due to the delayed virtualGridY bouncing back.
                     }
                     if (TARGET_CH_REACTION_USE_DRAGONPUNCH == visionReaction) {
-                        decodedInputHolder.BtnBLevel = 1;
                         decodedInputHolder.Dx = 0;
                         decodedInputHolder.Dy = +2;
+                        decodedInputHolder.BtnALevel = 0;
+                        decodedInputHolder.BtnBLevel = 1;
+                        decodedInputHolder.BtnCLevel = 0;
+                        decodedInputHolder.BtnDLevel = 0;
+                        decodedInputHolder.BtnELevel = 0;
                     } else if (!effInAir && canJumpWithinInertia && chConfig.HasDef1) {
                         decodedInputHolder.Dx = 0;
                         decodedInputHolder.Dy = +2;
+                        decodedInputHolder.BtnALevel = 0;
+                        decodedInputHolder.BtnBLevel = 0;
+                        decodedInputHolder.BtnCLevel = 0;
+                        decodedInputHolder.BtnDLevel = 0;
+                        decodedInputHolder.BtnELevel = 0;
                         visionReaction = TARGET_CH_REACTION_DEF1;
                     } else {
                         // Just don't jump if it's melee incoming bullet
@@ -1106,7 +1195,7 @@ namespace shared {
                     DecodeInput(thatCharacterInNextFrame.CachedCueCmd, decodedInputHolder);
                 }
                 
-                // [WARNING] Without proper release of "BtnA", an NPC might be stuck at holding it and increasing "chd.JumpHoldingRdfCount" forever but NOT ABLE TO JUMP when needed!
+                // [WARNING] Without proper release of "BtnA", an NPC might be stuck at holding it and increasing "chd.JumpHoldingRdfCnt" forever but NOT ABLE TO JUMP when needed!
                 if (chConfig.JumpHoldingToFly && (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= currCharacterDownsync.JumpHoldingRdfCnt || (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 << 1) < currCharacterDownsync.FramesInChState || !inProactiveJumpOrJumpStartupOrJumpEnd)) {
                     decodedInputHolder.BtnALevel = 0;
                     ulong newCachedCueCmd = EncodeInput(decodedInputHolder);
@@ -1165,7 +1254,7 @@ namespace shared {
                 thatCharacterInNextFrame.CachedCueCmd = newCachedCueCmd;
             }
 
-            var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy) = _deriveCharacterOpPattern(rdfId, currCharacterDownsync, decodedInputHolder, chConfig, currEffInAir, currNotDashing, logger); ;
+            var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy) = _deriveCharacterOpPattern(rdfId, currCharacterDownsync, decodedInputHolder, chConfig, currEffInAir, currNotDashing, logger);
 
             return (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy, slowDownToAvoidOverlap);
         }
@@ -1314,9 +1403,12 @@ namespace shared {
             visionCollider.Data = null;
     
             if (TARGET_CH_REACTION_SLIP_JUMP_TOWARDS_CH == newVisionReaction) {
-                decodedInputHolder.BtnALevel = 1;
+                decodedInputHolder.Dx = 0;
                 decodedInputHolder.Dy = -2;
+                decodedInputHolder.BtnALevel = 1;
+                logger.LogInfo($"handleOppoCh/end, rdfId={rdfId}, about to slip jump, currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, VelX: {currCharacterDownsync.VelX}, VelY: {currCharacterDownsync.VelY}, DirX: {currCharacterDownsync.DirX}, DirY: {currCharacterDownsync.DirY}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState}, jhrdfc:{currCharacterDownsync.JumpHoldingRdfCnt})");
             } else if (TARGET_CH_REACTION_JUMP_TOWARDS_CH == newVisionReaction) {
+                decodedInputHolder.Dy = 0;
                 decodedInputHolder.BtnALevel = 1;
             } else {
                 // It's important to unset "BtnALevel" if no proactive jump is implied by vision reaction, otherwise its value will remain even after execution and sanitization
@@ -1655,6 +1747,11 @@ namespace shared {
             bool mvBlockerStrictlyDown = false;
             bool mvBlockerStrictlyUp = false;
 
+            bool mvBlockerOverlapForRight = false;
+            bool mvBlockerOverlapForLeft = false;
+            bool mvBlockerOverlapForUp = false;
+            bool mvBlockerOverlapForDown = false;
+
             if (null != mvBlockerCollider) {
                 mvBlockerColliderLeft = mvBlockerCollider.X;
                 mvBlockerColliderRight = mvBlockerCollider.X + mvBlockerCollider.W;
@@ -1662,18 +1759,25 @@ namespace shared {
                 mvBlockerColliderTop = mvBlockerCollider.Y + mvBlockerCollider.H;
 
                 mvBlockerHoldableForRight = mvBlockerColliderRight > aBoxRight;
+                mvBlockerOverlapForRight = (0 < mvBlockerOverlapResult.OverlapX || 0 < mvBlockerOverlapResult.SecondaryOverlapX);
+
                 mvBlockerHoldableForLeft = mvBlockerColliderLeft < aBoxLeft;
-                mvBlockerStrictlyToTheRight = (mvBlockerColliderLeft + STANDING_COLLIDER_CHECK_EPS >= aBoxRight) || 0 < mvBlockerOverlapResult.OverlapX || (mvBlockerHoldableForRight && !isCharacterFlying && 0 < mvBlockerOverlapResult.OverlapY);
+                mvBlockerOverlapForLeft = (0 > mvBlockerOverlapResult.OverlapX || 0 > mvBlockerOverlapResult.SecondaryOverlapX);
+
+                mvBlockerStrictlyToTheRight = (mvBlockerColliderLeft + STANDING_COLLIDER_CHECK_EPS >= aBoxRight) || (mvBlockerHoldableForRight && mvBlockerOverlapForRight);
                 if (0 < effVelX) {
                     mvBlockerStrictlyToTheRight |= (mvBlockerColliderLeft + STANDING_COLLIDER_CHECK_EPS + effVelX >= aBoxRight);
                 }
-                mvBlockerStrictlyToTheLeft = (mvBlockerColliderRight <= aBoxLeft + STANDING_COLLIDER_CHECK_EPS) || 0 > mvBlockerOverlapResult.OverlapX || (mvBlockerHoldableForLeft && !isCharacterFlying && 0 < mvBlockerOverlapResult.OverlapY);
+                mvBlockerStrictlyToTheLeft = (mvBlockerColliderRight <= aBoxLeft + STANDING_COLLIDER_CHECK_EPS) || (mvBlockerHoldableForLeft && mvBlockerOverlapForLeft);
                 if (0 > effVelX) {
                     mvBlockerStrictlyToTheLeft |= (mvBlockerColliderRight + effVelX <= aBoxLeft + STANDING_COLLIDER_CHECK_EPS);
                 }
 
+                mvBlockerOverlapForUp = (0 < mvBlockerOverlapResult.OverlapY || 0 < mvBlockerOverlapResult.SecondaryOverlapY);
+                mvBlockerOverlapForDown = (0 > mvBlockerOverlapResult.OverlapY || 0 > mvBlockerOverlapResult.SecondaryOverlapY);
+
                 mvBlockerStrictlyDown = isCharacterFlying ? (mvBlockerColliderTop <= aBoxBottom + 3*STANDING_COLLIDER_CHECK_EPS) : (mvBlockerColliderTop <= aBoxBottom + STANDING_COLLIDER_CHECK_EPS);
-                mvBlockerStrictlyUp = mvBlockerColliderBottom >= aBoxTop || 0 < mvBlockerOverlapResult.OverlapY; 
+                mvBlockerStrictlyUp = (mvBlockerColliderBottom >= aBoxTop || mvBlockerOverlapForUp); 
 
                 hasBlockerInYForward = (0 < effDyByFar && 0 < currCharacterDownsync.VelY && mvBlockerStrictlyUp) || (0 > effDyByFar && 0 > currCharacterDownsync.VelY && mvBlockerStrictlyDown);
                 hasBlockerInXForward = (0 < effVelX && (mvBlockerStrictlyToTheRight || (mvBlockerHoldableForRight && mvBlockerStrictlyDown))) || (0 > effVelX && (mvBlockerStrictlyToTheLeft || (mvBlockerHoldableForLeft && mvBlockerStrictlyDown)));
@@ -1737,10 +1841,12 @@ namespace shared {
                                 newVisionReaction = TARGET_CH_REACTION_JUMP_TOWARDS_MV_BLOCKER;
                                 decodedInputHolder.BtnALevel = 1;
                                 decodedInputHolder.Dx = effDxByFar;
+                                decodedInputHolder.Dy = 0;
                             } else {
                                 newVisionReaction = TARGET_CH_REACTION_JUMP_TOWARDS_CH;
                                 decodedInputHolder.BtnALevel = 1;
                                 decodedInputHolder.Dx = effDxByFar;
+                                decodedInputHolder.Dy = 0;
                             }
                         } else if (canTurnaroundOrStopOrStartWalking) {
                             if (null != mvBlockerTpc && mvBlockerTpc.ProvidesSlipJump) {
@@ -1748,10 +1854,12 @@ namespace shared {
                             } else if (0 < diffCyApprox && TURNAROUND_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD > diffCxApprox) {
                                 newVisionReaction = TARGET_CH_REACTION_TURNAROUND_MV_BLOCKER;
                                 decodedInputHolder.Dx = -currCharacterDownsync.DirX;
+                                decodedInputHolder.Dy = 0;
                                 decodedInputHolder.BtnALevel = 0;
                             } else if (currBlockCanStillHoldMeIfWalkOn) {
                                 newVisionReaction = TARGET_CH_REACTION_WALK_ALONG;
                                 decodedInputHolder.Dx = effDxByFar;
+                                decodedInputHolder.Dy = 0;
                                 decodedInputHolder.BtnALevel = 0;
                             }
                         }
@@ -1760,6 +1868,7 @@ namespace shared {
                         //logger.LogInfo($"\t@rdfId={rdfId}, walking along NPC\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, inAir:{currCharacterDownsync.InAir}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, speciesId:{thatCharacterInNextFrame.SpeciesId}, inAir: {thatCharacterInNextFrame.InAir}, dirX:{thatCharacterInNextFrame.DirX}, velX:{thatCharacterInNextFrame.VelX}, goal:{thatCharacterInNextFrame.GoalAsNpc})\n\taBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop})\n\tmvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}\n\tstandingOnCollider={(null == standingOnCollider ? "null" : standingOnCollider.Shape.ToString(true))}\n\ttemptingToMove:{temptingToMove}");
                         newVisionReaction = TARGET_CH_REACTION_WALK_ALONG;
                         decodedInputHolder.Dx = effDxByFar;
+                        decodedInputHolder.Dy = 0;
                         decodedInputHolder.BtnALevel = 0;
                     } else {
                         // Otherwise "mvBlockerCollider" sits lower than "currCharacterDownsync" and "false == currBlockCanStillHoldMeIfWalkOn", a next but lower platform in the direction of movement, might still need jumping but the estimated dx movable by jumping is longer in this case
@@ -1773,10 +1882,12 @@ namespace shared {
                             newVisionReaction = (canTurnaroundOrStopOrStartWalking ? TARGET_CH_REACTION_JUMP_TOWARDS_MV_BLOCKER : TARGET_CH_REACTION_JUMP_TOWARDS_CH); // MvBlocker is found in the direction of hunting even if "false == canTurnaroundOrStopOrStartWalking", can jump anyway
                             decodedInputHolder.BtnALevel = 1;
                             decodedInputHolder.Dx = effDxByFar;
+                            decodedInputHolder.Dy = 0;
                         } else if (canTurnaroundOrStopOrStartWalking) {                            
                             //logger.LogInfo($"\t@rdfId={rdfId}, stopping NPC\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, inAir:{currCharacterDownsync.InAir}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, speciesId:{thatCharacterInNextFrame.SpeciesId}, inAir: {thatCharacterInNextFrame.InAir}, dirX:{thatCharacterInNextFrame.DirX}, velX:{thatCharacterInNextFrame.VelX}, goal:{thatCharacterInNextFrame.GoalAsNpc})\n\taBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop})\n\tmvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}\n\tstandingOnCollider={(null == standingOnCollider ? "null" : standingOnCollider.Shape.ToString(true))}\n\ttemptingToMove:{temptingToMove}");
                             newVisionReaction = TARGET_CH_REACTION_STOP_BY_MV_BLOCKER;
                             decodedInputHolder.Dx = 0;
+                            decodedInputHolder.Dy = 0;
                             decodedInputHolder.BtnALevel = 0;
                         }
                     }
@@ -1785,11 +1896,13 @@ namespace shared {
                     if (currBlockCanStillHoldMeIfWalkOn) {
                         newVisionReaction = TARGET_CH_REACTION_WALK_ALONG;
                         decodedInputHolder.Dx = effDxByFar;
+                        decodedInputHolder.Dy = 0;
                         decodedInputHolder.BtnALevel = 0;
                     } else {
                         //logger.LogInfo($"\t@rdfId={rdfId}, stopping NPC\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, inAir:{currCharacterDownsync.InAir}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, goal:{currCharacterDownsync.GoalAsNpc})\n\tthatCharacterInNextFrame=(Id:{thatCharacterInNextFrame.Id}, speciesId:{thatCharacterInNextFrame.SpeciesId}, inAir: {thatCharacterInNextFrame.InAir}, dirX:{thatCharacterInNextFrame.DirX}, velX:{thatCharacterInNextFrame.VelX}, goal:{thatCharacterInNextFrame.GoalAsNpc})\n\taBox=(left:{aBoxLeft}, right:{aBoxRight}, bottom:{aBoxBottom}, top:{aBoxTop})\n\tmvBlockerCollider=(left:{mvBlockerColliderLeft}, right:{mvBlockerColliderRight}, bottom:{mvBlockerColliderBottom}, top:{mvBlockerColliderTop})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}\n\tstandingOnCollider={(null == standingOnCollider ? "null" : standingOnCollider.Shape.ToString(true))}\n\ttemptingToMove:{temptingToMove}");
                         newVisionReaction = TARGET_CH_REACTION_STOP_BY_MV_BLOCKER;
                         decodedInputHolder.Dx = 0;
+                        decodedInputHolder.Dy = 0;
                         decodedInputHolder.BtnALevel = 0;
                     }
                 }
@@ -1814,7 +1927,7 @@ namespace shared {
                 hasBlockerInYForward &= (null != mvBlockerCollider);
                 hasBlockerInXForward &= (null != mvBlockerCollider);
 
-                if (hasBlockerInXForward && mvBlockerColliderTop >= aBoxBottom && mvBlockerColliderBottom <= aBoxTop) {
+                if (hasBlockerInXForward) {
                     float diffCxApprox = 0f;
                     if (0 < currCharacterDownsync.DirX) {
                         diffCxApprox = (mvBlockerColliderLeft - aBoxRight);
@@ -1825,10 +1938,11 @@ namespace shared {
                     if (TURNAROUND_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD * TURNAROUND_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD > (diffCxApprox * diffCxApprox)) {
                         newVisionReaction = TARGET_CH_REACTION_TURNAROUND_MV_BLOCKER;
                         decodedInputHolder.Dx = -currCharacterDownsync.DirX;
+                        decodedInputHolder.BtnALevel = 0;
                     }
                 }
 
-                if (hasBlockerInYForward && mvBlockerColliderLeft <= aBoxRight && mvBlockerColliderRight >= aBoxLeft) {
+                if (hasBlockerInYForward) {
                     float diffCyApprox = 0f;
                     if (0 < currCharacterDownsync.DirY) {
                         diffCyApprox = (mvBlockerColliderBottom - aBoxTop);
@@ -1839,13 +1953,14 @@ namespace shared {
                     if (TURNAROUND_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD * TURNAROUND_FROM_MV_BLOCKER_DX_COLLISION_SPACE_THRESHOLD > (diffCyApprox * diffCyApprox)) {
                         newVisionReaction = TARGET_CH_REACTION_TURNAROUND_MV_BLOCKER;
                         decodedInputHolder.Dy = -currCharacterDownsync.DirY;
+                        decodedInputHolder.BtnALevel = 0;
                     }
                 }
-    
-                if (TARGET_CH_REACTION_UNKNOWN == newVisionReaction) {
-                    decodedInputHolder.Dx = effDxByFar;
-                    decodedInputHolder.Dy = effDyByFar;
-                }
+            }
+
+            if (TARGET_CH_REACTION_UNKNOWN == newVisionReaction) {
+                decodedInputHolder.Dx = effDxByFar;
+                decodedInputHolder.Dy = effDyByFar;
             }
 
             return newVisionReaction; 
