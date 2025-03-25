@@ -2,7 +2,6 @@
 using Google.Protobuf.Collections;
 using shared;
 using SuperTiled2Unity;
-using SuperTiled2Unity.Editor;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -3955,8 +3954,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
+    private const uint TiledHorizontalFlipFlag = 0x80000000;
     private bool isXFlipped(uint superTileId) {
-        TileIdMath v = new TileIdMath(superTileId);
-        return v.HasHorizontalFlip;
+        return 0 < (superTileId & TiledHorizontalFlipFlag);
     }
 }
