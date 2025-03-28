@@ -1527,7 +1527,7 @@ namespace shared {
         private static bool _updateStandingColliderAndMvBlockerCollider(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, bool isCharacterFlying, Collider entityCollider, ConvexPolygon visionShape, float entityColliderTop, float entityColliderBottom, float entityColliderLeft, float entityColliderRight, Collider bCollider, float bColliderTop, float bColliderBottom, float bColliderLeft, float bColliderRight, TrapColliderAttr? v5, ref SatResult overlapResult, ref SatResult mvBlockerOverlapResult, ref float minAbsColliderDxForMvBlocker, ref float minAbsColliderDyForMvBlocker, ref Collider? res4, ref TrapColliderAttr? res4Tpc, ref Collider? standingOnCollider, ILoggerBridge logger) {
             ConvexPolygon entityShape = entityCollider.Shape;
             ConvexPolygon bShape = bCollider.Shape;
-            bool potentiallyStandingOnCollider = (!chConfig.OmitGravity && !currCharacterDownsync.OmitGravity && !currCharacterDownsync.InAir && (bColliderLeft + SNAP_INTO_PLATFORM_OVERLAP < entityColliderRight && bColliderRight > entityColliderLeft + SNAP_INTO_PLATFORM_OVERLAP));
+            bool potentiallyStandingOnCollider = (!isCharacterFlying && !currCharacterDownsync.InAir && (bColliderLeft + SNAP_INTO_PLATFORM_OVERLAP < entityColliderRight && bColliderRight > entityColliderLeft + SNAP_INTO_PLATFORM_OVERLAP && bColliderBottom < entityColliderBottom));
             // TODO: It's quite a waste to re-calculate "entityOverlapped" as we already have "calcHardPushbacksForCharacter", should find a way to reuse the results.
             if (potentiallyStandingOnCollider) {
                 var (entityOverlapped, _, _) = calcPushbacks(0, 0, entityShape, bShape, false, false, ref overlapResult, logger);
