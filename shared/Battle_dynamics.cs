@@ -86,9 +86,11 @@ namespace shared {
             return true;
         }
 
-        public static bool UpdateInputFrameInPlaceUponDynamics(RoomDownsyncFrame currRdf, FrameRingBuffer<InputFrameDownsync> inputBuffer, int inputFrameId, int roomCapacity, ulong confirmedList, RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex, HashSet<int> disconnectedPeerJoinIndices) {
+        public static bool UpdateInputFrameInPlaceUponDynamics(RoomDownsyncFrame currRdf, FrameRingBuffer<InputFrameDownsync> inputBuffer, int inputFrameId, int lastAllConfirmedInputFrameId, int roomCapacity, ulong confirmedList, RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex, HashSet<int> disconnectedPeerJoinIndices) {
             bool hasInputFrameUpdatedOnDynamics = false;
-            var (_, prevInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId-1);
+            if (inputFrameId <= lastAllConfirmedInputFrameId) {
+                return hasInputFrameUpdatedOnDynamics;
+            }
             for (int i = 0; i < roomCapacity; i++) {
                 int joinIndex = (i + 1); 
                 if (joinIndex == toExcludeJoinIndex) {
@@ -100,58 +102,34 @@ namespace shared {
                     // This in-place update is only valid when "delayed input for this player is not yet confirmed"
                     continue;
                 }
-                if (lastIndividuallyConfirmedInputFrameId[i] >= inputFrameId) {
+
+                ulong newVal = inputList[i];
+                if (lastIndividuallyConfirmedInputFrameId[i] == inputFrameId) {
                     // Already confirmed, no need to predict.
-                    continue;
-                }
+                    newVal = lastIndividuallyConfirmedInputList[i];
+                } else {
+                    ulong refCmd = 0;
+                    var (_, previousInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId - 1);
+                    if (lastIndividuallyConfirmedInputFrameId[i] < inputFrameId) {
+                        refCmd = lastIndividuallyConfirmedInputList[i];
+                    } else if (null != previousInputFrameDownsync) {
+                        // lastIndividuallyConfirmedInputFrameId[i] > inputFrameId
+                        refCmd = previousInputFrameDownsync.InputList[i];
+                    }
 
-                // lastIndividuallyConfirmedInputFrameId[i] < inputFrameId
-
-                ulong newVal = 0;
-                if (!disconnectedPeerJoinIndices.Contains(joinIndex)) {
-                    // [WARNING] DON'T predict a rising edge of any critical button on frontend!
-                    ulong encodedIdx = (lastIndividuallyConfirmedInputList[i] & 15UL);
-                    newVal = encodedIdx;
+                    newVal = (refCmd & 15UL);
                     var chDownsync = currRdf.PlayersArr[i];
-                    bool shouldPredictBtnAHold = false;
-                    bool shouldPredictBtnBHold = false;
-                    bool shouldPredictBtnCHold = false;
-                    bool shouldPredictBtnDHold = false;
-                    bool shouldPredictBtnEHold = false;
-                    bool isChDownsyncTemptingToHoldBtnA = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.JumpHoldingRdfCnt) || (0 < chDownsync.JumpHoldingRdfCnt);
-                    if (isChDownsyncTemptingToHoldBtnA && null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 16UL)) {
-                        shouldPredictBtnAHold = true;
-                        if (2 == encodedIdx || 6 == encodedIdx || 7 == encodedIdx) {
-                            // Don't predict slip-jump!
-                            shouldPredictBtnAHold = false;
-                        }
-                    }
-                    
-                    bool isChDownsyncTemptingToHoldBtnB = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnBHoldingRdfCount) || (0 < chDownsync.BtnBHoldingRdfCount);
-                    if (isChDownsyncTemptingToHoldBtnB && (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 32UL))) {
-                        shouldPredictBtnBHold = true;
-                    }
-
-                    bool isChDownsyncTemptingToHoldBtnC = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnCHoldingRdfCount) || (0 < chDownsync.BtnCHoldingRdfCount);
-                    if (isChDownsyncTemptingToHoldBtnC && (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 64UL))) {
-                        shouldPredictBtnCHold = true;
-                    }
-
-                    bool isChDownsyncTemptingToHoldBtnD = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnDHoldingRdfCount) || (0 < chDownsync.BtnDHoldingRdfCount);
-                    if (isChDownsyncTemptingToHoldBtnD && (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 128UL))) {
-                        shouldPredictBtnDHold = true;
-                    }
-
-                    bool isChDownsyncTemptingToHoldBtnE = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnEHoldingRdfCount) || (0 < chDownsync.BtnEHoldingRdfCount);
-                    if (isChDownsyncTemptingToHoldBtnE && null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 256UL)) {
-                        shouldPredictBtnEHold = true;
-                    }
-
-                    if (shouldPredictBtnAHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 16UL); 
-                    if (shouldPredictBtnBHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 32UL); 
-                    if (shouldPredictBtnCHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 64UL); 
-                    if (shouldPredictBtnDHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 128UL); 
-                    if (shouldPredictBtnEHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 256UL); 
+                    // [WARNING] Try not to predict either a "rising edge" or a "falling edge" of any critical button on frontend.
+                    bool shouldPredictBtnAHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.JumpHoldingRdfCnt) || (0 < chDownsync.JumpHoldingRdfCnt);
+                    bool shouldPredictBtnBHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnBHoldingRdfCount) || (0 < chDownsync.BtnBHoldingRdfCount);
+                    bool shouldPredictBtnCHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnCHoldingRdfCount) || (0 < chDownsync.BtnCHoldingRdfCount);
+                    bool shouldPredictBtnDHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnDHoldingRdfCount) || (0 < chDownsync.BtnDHoldingRdfCount);
+                    bool shouldPredictBtnEHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnEHoldingRdfCount) || (0 < chDownsync.BtnEHoldingRdfCount);
+                    if (shouldPredictBtnAHold) newVal |= (refCmd & 16UL); 
+                    if (shouldPredictBtnBHold) newVal |= (refCmd & 32UL); 
+                    if (shouldPredictBtnCHold) newVal |= (refCmd & 64UL); 
+                    if (shouldPredictBtnDHold) newVal |= (refCmd & 128UL); 
+                    if (shouldPredictBtnEHold) newVal |= (refCmd & 256UL); 
                 }
 
                 if (newVal != inputList[i]) {

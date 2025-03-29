@@ -373,7 +373,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             bool allowUpdateInputFrameInPlaceUponDynamics = (!isChasing);
             if (allowUpdateInputFrameInPlaceUponDynamics) {
-                bool hasInputBeenMutated = UpdateInputFrameInPlaceUponDynamics(currRdf, inputBuffer, j, roomCapacity, delayedInputFrame.ConfirmedList, delayedInputFrame.InputList, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, selfPlayerInfo.JoinIndex, disconnectedPeerJoinIndices);
+                bool hasInputBeenMutated = UpdateInputFrameInPlaceUponDynamics(currRdf, inputBuffer, j, lastAllConfirmedInputFrameId, roomCapacity, delayedInputFrame.ConfirmedList, delayedInputFrame.InputList, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, selfPlayerInfo.JoinIndex, disconnectedPeerJoinIndices);
                 if (hasInputBeenMutated) {
                     int ii = ConvertToFirstUsedRenderFrameId(j);
                     if (ii < i) {
