@@ -768,7 +768,30 @@ namespace shared {
 
                         //logger.LogWarn(String.Format("MeleeBullet with collider:[blx:{0}, bly:{1}, w:{2}, h:{3}], bullet:{8} exploded on bCollider: [blx:{4}, bly:{5}, w:{6}, h:{7}], victimCurrFrame: {9}", bulletCollider.X, bulletCollider.Y, bulletCollider.W, bulletCollider.H, bCollider.X, bCollider.Y, bCollider.W, bCollider.H, bullet, victimCurrFrame));
 
-                        if (bulletConfig.RemainsUponHit && !shouldBeImmune) {
+                        CharacterState oldNextCharacterState = victimNextFrame.CharacterState;
+
+                        Skill? victimActiveSkill = null;
+                        BuffConfig? victimActiveSkillBuff = null;
+                        if (NO_SKILL != victimNextFrame.ActiveSkillId) {
+                            victimActiveSkill = skills[victimNextFrame.ActiveSkillId];
+                            victimActiveSkillBuff = victimActiveSkill.SelfNonStockBuff;
+                        }
+                        var effDamage = 0;
+                        bool successfulDef1 = false;
+                        if (!shouldBeImmune) {
+                            (effDamage, successfulDef1) = _calcEffDamage(currRenderFrame.Id, oldNextCharacterState, victimChConfig, victimNextFrame, victimActiveSkillBuff, bulletNextFrame, bulletConfig, isAllyTargetingBl, bulletCollider, bCollider, logger);
+                            if (successfulDef1) {
+                                if (bulletConfig.TakesDef1AsHardPushback) {
+                                    beamBlockedByHardPushback = true;
+                                } else {
+                                    accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT, null, victimNextFrame);
+                                    exploded = true;
+                                    explodedOnAnotherHarderBullet = true;
+                                }
+                            }
+                        }
+
+                        if (bulletConfig.RemainsUponHit && !shouldBeImmune && !(successfulDef1 && bulletConfig.TakesDef1AsHardPushback)) {
                             // [WARNING] Strictly speaking, I should re-traverse "victimNextFrame.BulletImmuneRecords" to determine "nextImmuneRcdI", but whatever...
                             int nextImmuneRcdI = immuneRcdI;
                             int terminatingImmuneRcdI = nextImmuneRcdI + 1;
@@ -783,24 +806,6 @@ namespace shared {
 
                             if (terminatingImmuneRcdI < victimNextFrame.BulletImmuneRecords.Count) victimNextFrame.BulletImmuneRecords[terminatingImmuneRcdI].BulletLocalId = TERMINATING_BULLET_LOCAL_ID;
                         }
-                        CharacterState oldNextCharacterState = victimNextFrame.CharacterState;
-
-                        Skill? victimActiveSkill = null;
-                        BuffConfig? victimActiveSkillBuff = null;
-                        if (NO_SKILL != victimNextFrame.ActiveSkillId) {
-                            victimActiveSkill = skills[victimNextFrame.ActiveSkillId];
-                            victimActiveSkillBuff = victimActiveSkill.SelfNonStockBuff;
-                        }
-                        var effDamage = 0;
-                        bool successfulDef1 = false;
-                        if (!shouldBeImmune) {
-                            (effDamage, successfulDef1) = _calcEffDamage(oldNextCharacterState, victimChConfig, victimNextFrame, victimActiveSkillBuff, bulletNextFrame, bulletConfig, isAllyTargetingBl, bulletCollider, bCollider);
-                            if (successfulDef1) {
-                                exploded = true;
-                                accumulateGauge(DEFAULT_GAUGE_INC_BY_HIT, null, victimNextFrame);
-                                explodedOnAnotherHarderBullet = true;
-                            }
-                        }
 
                         var origVictimInNextFrameHp = victimNextFrame.Hp;
                         victimNextFrame.Hp -= effDamage;
@@ -808,7 +813,7 @@ namespace shared {
                             victimNextFrame.Hp = victimChConfig.Hp;
                         }
                         if (0 >= hardPushbackCnt && bulletConfig.BeamCollision) {
-                            // [WARNING] In this case, "exploded = true" hence beam velocity will recover after victim death.
+                            // [WARNING] In this case, beam velocity will recover after victim death.
                             effPushback.X += (0 < bulletNextFrame.DirX ? overlapResult.OverlapMag : -overlapResult.OverlapMag);
                             bulletNextFrame.VelX = 0;
                             bulletNextFrame.VelY = 0;
@@ -856,7 +861,7 @@ namespace shared {
                             } else {
                                 // otherwise no need to change "VelY"
                             }
-                            resetJumpStartupOrHolding(victimNextFrame, true);
+                            resetJumpStartup(victimNextFrame, true);
                             if (victimNextFrame.JoinIndex <= roomCapacity) {
                                 if (null != offenderNextFrame) offenderNextFrame.BeatsCnt += 1;
                                 victimNextFrame.BeatenCnt += 1;
@@ -944,7 +949,7 @@ namespace shared {
                             var oldFramesToRecover = victimNextFrame.FramesToRecover;
                             bool shouldExtendDef1Broken = (!victimIsFrozen && !victimIsParalyzed && Def1Broken == oldNextCharacterState && bulletConfig.HitStunFrames <= oldFramesToRecover);
                             if (false == shouldOmitStun) {
-                                resetJumpStartupOrHolding(victimNextFrame, true);
+                                resetJumpStartup(victimNextFrame, true);
                                 CharacterState newNextCharacterState = Atked1;
                                 if (!victimIsFrozen && bulletConfig.BlowUp) {
                                     // [WARNING] Deliberately allowing "victimIsParalyzed" to be blown up!
@@ -980,11 +985,13 @@ namespace shared {
                                      */
                                 }
                             } else {
-                                exploded = true;
-                                explodedOnAnotherHarderBullet = true;
+                                if (!(successfulDef1 && bulletConfig.TakesDef1AsHardPushback)) {
+                                    exploded = true;
+                                    explodedOnAnotherHarderBullet = true;
+                                }
                             }
 
-                            if (victimNextFrame.FramesInvinsible < bulletConfig.HitInvinsibleFrames) {
+                            if (!successfulDef1 && victimNextFrame.FramesInvinsible < bulletConfig.HitInvinsibleFrames) {
                                 victimNextFrame.FramesInvinsible = bulletConfig.HitInvinsibleFrames;
                             }
 
@@ -1013,7 +1020,7 @@ namespace shared {
                                                         victimNextFrame.CharacterState = Atked1;
                                                     }
                                                     victimNextFrame.VelX = 0;
-                                                    resetJumpStartupOrHolding(victimNextFrame, true);
+                                                    resetJumpStartup(victimNextFrame, true);
                                                     switch (associatedDebuffConfig.StockType) {
                                                         case BuffStockType.Timed:
                                                             victimNextFrame.FramesToRecover = associatedDebuffConfig.Stock;
@@ -1029,7 +1036,7 @@ namespace shared {
                                                         victimNextFrame.CharacterState = Atked1;
                                                     }
                                                     victimNextFrame.VelX = 0;
-                                                    resetJumpStartupOrHolding(victimNextFrame, true);
+                                                    resetJumpStartup(victimNextFrame, true);
                                                     // [WARNING] Don't change "victimNextFrame.FramesToRecover" for paralyzer!
                                                     break;
                                             }
@@ -1059,7 +1066,7 @@ namespace shared {
                                                         victimNextFrame.CharacterState = Atked1;
                                                     }
                                                     victimNextFrame.VelX = 0;
-                                                    resetJumpStartupOrHolding(victimNextFrame, true);
+                                                    resetJumpStartup(victimNextFrame, true);
                                                     switch (associatedDebuffConfig.StockType) {
                                                         case BuffStockType.Timed:
                                                             victimNextFrame.FramesToRecover = associatedDebuffConfig.Stock;
@@ -1075,7 +1082,7 @@ namespace shared {
                                                         victimNextFrame.CharacterState = Atked1;
                                                     }
                                                     victimNextFrame.VelX = 0;
-                                                    resetJumpStartupOrHolding(victimNextFrame, true);
+                                                    resetJumpStartup(victimNextFrame, true);
                                                     break;
                                             }
                                         }
@@ -1640,7 +1647,7 @@ namespace shared {
             }
         }
 
-        public static (int, bool) _calcEffDamage(CharacterState origOffenderStateNextFrame, CharacterConfig victimChConfig, CharacterDownsync victimNextFrame, BuffConfig? victimActiveSkillBuff, Bullet bulletNextFrame, BulletConfig bulletConfig, bool isAllyTargetingBl, Collider bulletCollider, Collider victimCollider) {
+        public static (int, bool) _calcEffDamage(int rdfId, CharacterState origOffenderStateNextFrame, CharacterConfig victimChConfig, CharacterDownsync victimNextFrame, BuffConfig? victimActiveSkillBuff, Bullet bulletNextFrame, BulletConfig bulletConfig, bool isAllyTargetingBl, Collider bulletCollider, Collider victimCollider, ILoggerBridge logger) {
             if (isAllyTargetingBl) {
                 if (Dying == victimNextFrame.CharacterState) {
                     return (0, false);
@@ -1662,7 +1669,7 @@ namespace shared {
                 } else if (isSkillAutoDef1 && bulletInFrontOfVictim) {
                     successfulDef1 = true;
                 }
-            } 
+            }
             if (!bulletInFrontOfVictim) {
                 victimNextFrame.CachedCueCmd = EncodeInput(-victimNextFrame.DirX, -victimNextFrame.DirY, 0, 0, 0, 0, 0);
                 switch (victimNextFrame.GoalAsNpc) {
@@ -1674,6 +1681,10 @@ namespace shared {
                 }
             }
             if (successfulDef1) {
+                if (bulletConfig.TakesDef1AsHardPushback) {
+                    //logger.LogInfo($"At rdfId={rdfId}, bullet=(localId:{bulletNextFrame.BulletLocalId}) takes def1 of victim=(jidx:{victimNextFrame.JoinIndex},spid:{victimNextFrame.SpeciesId}) as hardpushback");
+                    return (0, true);
+                }
                 uint effDef1QuotaReduction = (1 + bulletConfig.GuardBreakerExtraHitCnt);
                 if (effDef1QuotaReduction > victimNextFrame.RemainingDef1Quota) {
                     effDef1QuotaReduction = victimNextFrame.RemainingDef1Quota;

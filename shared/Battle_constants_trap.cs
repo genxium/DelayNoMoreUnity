@@ -22,7 +22,8 @@ namespace shared {
         public static int MAGIC_FRAMES_FOR_TRAP_TO_WAIVE_PATROL_CUE = 45;
         public static TrapConfig TrapBarrier = new TrapConfig {
             SpeciesId = 1,
-            SpeciesName = "TrapBarrier"
+            SpeciesName = "TrapBarrier",
+            NoXFlipRendering = true,
         };
 
         public static TrapConfig LinearSpike = new TrapConfig {
@@ -51,7 +52,8 @@ namespace shared {
 
         public static TrapConfig VerticalTrapBarrier = new TrapConfig {
             SpeciesId = 4,
-            SpeciesName = "VerticalTrapBarrier"
+            SpeciesName = "VerticalTrapBarrier",
+            NoXFlipRendering = true,
         };
 
         public static TrapConfig SawSmall = new TrapConfig {
@@ -64,7 +66,8 @@ namespace shared {
             HitInvinsibleFrames = 45,
             SpeciesName = "SawSmall",
             Hardness = 8, 
-            PatrolCueRequiresFullContain = true, 
+            PatrolCueRequiresFullContain = true,
+            NoXFlipRendering = true,
         };
 
         public static TrapConfig SawBig = new TrapConfig {
@@ -77,7 +80,8 @@ namespace shared {
             HitInvinsibleFrames = 45,
             SpeciesName = "SawBig",
             Hardness = 9, 
-            PatrolCueRequiresFullContain = true, 
+            PatrolCueRequiresFullContain = true,
+            NoXFlipRendering = true,
         };
 
         public static TrapConfig EscapeDoor = new TrapConfig {
@@ -110,6 +114,7 @@ namespace shared {
             SpeciesId = 11,
             SpeciesName = "Fort",
             Atk1UponTriggered = true,
+            Atk1SkillId = FortLv1Fireball.Id,
         };
 
         public static TrapConfig LongConveyorToL = new TrapConfig {

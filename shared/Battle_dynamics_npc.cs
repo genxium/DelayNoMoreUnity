@@ -870,7 +870,7 @@ namespace shared {
                     }
                 case SPECIES_BAT:
                 case SPECIES_FIREBAT:
-                    if (currCharacterDownsync.Mp < BatMelee1PrimerSkill.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;         
+                    if (currCharacterDownsync.Mp < BatMelee1Primer.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;         
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * BatMelee1PrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + BatMelee1PrimerBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BatMelee1PrimerBullet.HitboxSizeX >> 1), (BatMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
@@ -1059,7 +1059,8 @@ namespace shared {
             return (0 >= currCharacterDownsync.Hp && DYING_FRAMES_TO_RECOVER == currCharacterDownsync.FramesToRecover);
         }
 
-        private static (int, bool, bool, int, int, int, bool) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, bool currEffInAir, bool currNotDashing, bool nextEffInAIr, bool nextNoDashing, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, ref SatResult mvBlockerOverlapResult, InputFrameDecoded decodedInputHolder, InputFrameDecoded tempInputHolder, ILoggerBridge logger) {
+        private static (int, bool, bool, int, int, bool) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, bool currEffInAir, bool currNotDashing, bool nextEffInAIr, bool nextNoDashing, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, ref SatResult mvBlockerOverlapResult, InputFrameDecoded decodedInputHolder, InputFrameDecoded tempInputHolder, ILoggerBridge logger) {
+            decodedInputHolder.Reset();
             /*
             [REMINDER FOR MYSELF]
             
@@ -1070,26 +1071,29 @@ namespace shared {
                 - cachedCueCmd is executed (which possibly holds jumping to fly if applicable)
             - Both "player" and "npc" input streamlined as 
                 - somehow gets "InputFrameDecoded", e.g. "player" from physical device and "npc" from vision reaction
-                - then "_deriveCharacterOpPattern(currCharacterDownsync, InputFrameDecoded) -> (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy)"
+                - then "_deriveCharacterOpPattern(currCharacterDownsync, InputFrameDecoded) -> (patternId, jumpedOrNot, slipJumpedOrNot, effectiveDx, effectiveDy)"
                 - then "_useInventory/Skill" from the result of "_deriveCharacterOpPattern"
                 - then "_processJumpStartup/InertiaWalking/InertiaFlying" from the result of "_deriveCharacterOpPattern"
             */
             if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0, false);
+                updateBtnHoldingByInput(currCharacterDownsync, decodedInputHolder, thatCharacterInNextFrame);
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, decodedInputHolder.Dx, decodedInputHolder.Dy, false);
             }
 
             bool interrupted = _processDebuffDuringInput(currCharacterDownsync);
             if (interrupted) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0, false);
+                updateBtnHoldingByInput(currCharacterDownsync, decodedInputHolder, thatCharacterInNextFrame);
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, decodedInputHolder.Dx, decodedInputHolder.Dy, false);
             }
 
             if (Def1 == currCharacterDownsync.CharacterState && NPC_DEF1_MIN_HOLDING_RDF_CNT > currCharacterDownsync.FramesInChState) {
                 // Such that Def1 is more visible
-                return (PATTERN_ID_NO_OP, false, false, 0, 0, +2, false);
+                decodedInputHolder.Dy = +2;
+                updateBtnHoldingByInput(currCharacterDownsync, decodedInputHolder, thatCharacterInNextFrame);
+                return (PATTERN_ID_NO_OP, false, false, decodedInputHolder.Dx, decodedInputHolder.Dy, false);
             }
             bool isCharacterFlying = (currCharacterDownsync.OmitGravity || chConfig.OmitGravity);
             int rdfId = currRenderFrame.Id;
-            decodedInputHolder.Reset();
 
             switch (currCharacterDownsync.GoalAsNpc) {
                 case NpcGoal.Nidle:
@@ -1254,9 +1258,9 @@ namespace shared {
                 thatCharacterInNextFrame.CachedCueCmd = newCachedCueCmd;
             }
 
-            var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy) = _deriveCharacterOpPattern(rdfId, currCharacterDownsync, decodedInputHolder, chConfig, currEffInAir, currNotDashing, logger);
+            var (patternId, jumpedOrNot, slipJumpedOrNot, effectiveDx, effectiveDy) = _deriveCharacterOpPattern(rdfId, currCharacterDownsync, decodedInputHolder, chConfig, currEffInAir, currNotDashing, logger);
 
-            return (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy, slowDownToAvoidOverlap);
+            return (patternId, jumpedOrNot, slipJumpedOrNot, effectiveDx, effectiveDy, slowDownToAvoidOverlap);
         }
 
         private static bool _executeCachedCueCmd(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, InputFrameDecoded decodedInputHolder) {
@@ -1461,9 +1465,9 @@ namespace shared {
                 bool currEffInAir = isEffInAir(currCharacterDownsync, currNotDashing);
                 bool nextNotDashing = isNotDashing(thatCharacterInNextFrame);
                 bool nextEffInAir = isEffInAir(thatCharacterInNextFrame, currNotDashing);
-                var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy, slowDownToAvoidOverlap) = deriveNpcOpPattern(currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, currNotDashing, nextNotDashing, nextEffInAir, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, ref mvBlockerOverlapResult, decodedInputHolder, tempInputHolder, logger);
+                var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy, slowDownToAvoidOverlap) = deriveNpcOpPattern(currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, currNotDashing, nextNotDashing, nextEffInAir, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, colliderCnt, collisionSys, collision, ref overlapResult, ref mvBlockerOverlapResult, decodedInputHolder, tempInputHolder, logger);
 
-                _processSingleCharacterInput(rdfId, patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy, slowDownToAvoidOverlap, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, true, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, MAGIC_JOIN_INDEX_INVALID, ref mockSelfNotEnoughMp, logger);
+                _processSingleCharacterInput(rdfId, patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy, slowDownToAvoidOverlap, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, true, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, MAGIC_JOIN_INDEX_INVALID, ref mockSelfNotEnoughMp, logger);
             }
         }
 

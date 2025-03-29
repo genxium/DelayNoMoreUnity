@@ -27,7 +27,7 @@ namespace shared {
                 chdNextFrame.VelX = 0;
             }
 
-            resetJumpStartupOrHolding(chdNextFrame, false);
+            resetJumpStartup(chdNextFrame);
         }
 
         public static bool ShouldGenerateInputFrameUpsync(int renderFrameId) {
@@ -86,11 +86,12 @@ namespace shared {
             return true;
         }
 
-        public static bool UpdateInputFrameInPlaceUponDynamics(RoomDownsyncFrame currRdf, FrameRingBuffer<InputFrameDownsync> inputBuffer, int inputFrameId, int roomCapacity, ulong confirmedList, RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex) {
+        public static bool UpdateInputFrameInPlaceUponDynamics(RoomDownsyncFrame currRdf, FrameRingBuffer<InputFrameDownsync> inputBuffer, int inputFrameId, int roomCapacity, ulong confirmedList, RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex, HashSet<int> disconnectedPeerJoinIndices) {
             bool hasInputFrameUpdatedOnDynamics = false;
             var (_, prevInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId-1);
             for (int i = 0; i < roomCapacity; i++) {
-                if ((i + 1) == toExcludeJoinIndex) {
+                int joinIndex = (i + 1); 
+                if (joinIndex == toExcludeJoinIndex) {
                     // On frontend, a "self input" is only confirmed by websocket downsync, which is quite late and might get the "self input" incorrectly overwritten if not excluded here
                     continue;
                 }
@@ -105,33 +106,53 @@ namespace shared {
                 }
 
                 // lastIndividuallyConfirmedInputFrameId[i] < inputFrameId
-                ulong encodedIdx = (lastIndividuallyConfirmedInputList[i] & 15UL);
-                ulong newVal = encodedIdx;
-                bool shouldPredictBtnAHold = false;
-                bool shouldPredictBtnBHold = false;
-                bool shouldPredictBtnEHold = false;
-                if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 16UL) && JUMP_HOLDING_IFD_CNT_THRESHOLD_1 > inputFrameId-lastIndividuallyConfirmedInputFrameId[i]) {
-                    shouldPredictBtnAHold = true;
-                    if (2 == encodedIdx || 6 == encodedIdx || 7 == encodedIdx) {
-                        // Don't predict slip-jump!
-                        shouldPredictBtnAHold = false;
-                    }
-                }
 
-                if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 256UL) && BTN_E_HOLDING_IFD_CNT_THRESHOLD_1 > inputFrameId-lastIndividuallyConfirmedInputFrameId[i]) {
-                    shouldPredictBtnEHold = true;
-                }
-                
-                var chDownsync = currRdf.PlayersArr[i];
-                if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 32UL)) {
-                    if (1 < chDownsync.BtnBHoldingRdfCount) {       
+                ulong newVal = 0;
+                if (!disconnectedPeerJoinIndices.Contains(joinIndex)) {
+                    // [WARNING] DON'T predict a rising edge of any critical button on frontend!
+                    ulong encodedIdx = (lastIndividuallyConfirmedInputList[i] & 15UL);
+                    newVal = encodedIdx;
+                    var chDownsync = currRdf.PlayersArr[i];
+                    bool shouldPredictBtnAHold = false;
+                    bool shouldPredictBtnBHold = false;
+                    bool shouldPredictBtnCHold = false;
+                    bool shouldPredictBtnDHold = false;
+                    bool shouldPredictBtnEHold = false;
+                    bool isChDownsyncTemptingToHoldBtnA = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.JumpHoldingRdfCnt) || (0 < chDownsync.JumpHoldingRdfCnt);
+                    if (isChDownsyncTemptingToHoldBtnA && null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 16UL)) {
+                        shouldPredictBtnAHold = true;
+                        if (2 == encodedIdx || 6 == encodedIdx || 7 == encodedIdx) {
+                            // Don't predict slip-jump!
+                            shouldPredictBtnAHold = false;
+                        }
+                    }
+                    
+                    bool isChDownsyncTemptingToHoldBtnB = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnBHoldingRdfCount) || (0 < chDownsync.BtnBHoldingRdfCount);
+                    if (isChDownsyncTemptingToHoldBtnB && (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 32UL))) {
                         shouldPredictBtnBHold = true;
                     }
-                }
 
-                if (shouldPredictBtnAHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 16UL); 
-                if (shouldPredictBtnEHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 256UL); 
-                if (shouldPredictBtnBHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 32UL); 
+                    bool isChDownsyncTemptingToHoldBtnC = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnCHoldingRdfCount) || (0 < chDownsync.BtnCHoldingRdfCount);
+                    if (isChDownsyncTemptingToHoldBtnC && (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 64UL))) {
+                        shouldPredictBtnCHold = true;
+                    }
+
+                    bool isChDownsyncTemptingToHoldBtnD = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnDHoldingRdfCount) || (0 < chDownsync.BtnDHoldingRdfCount);
+                    if (isChDownsyncTemptingToHoldBtnD && (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 128UL))) {
+                        shouldPredictBtnDHold = true;
+                    }
+
+                    bool isChDownsyncTemptingToHoldBtnE = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnEHoldingRdfCount) || (0 < chDownsync.BtnEHoldingRdfCount);
+                    if (isChDownsyncTemptingToHoldBtnE && null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 256UL)) {
+                        shouldPredictBtnEHold = true;
+                    }
+
+                    if (shouldPredictBtnAHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 16UL); 
+                    if (shouldPredictBtnBHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 32UL); 
+                    if (shouldPredictBtnCHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 64UL); 
+                    if (shouldPredictBtnDHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 128UL); 
+                    if (shouldPredictBtnEHold) newVal |= (lastIndividuallyConfirmedInputList[i] & 256UL); 
+                }
 
                 if (newVal != inputList[i]) {
                     inputList[i] = newVal;
@@ -163,15 +184,9 @@ namespace shared {
             }
         }
 
-        private static (int, bool, bool, int, int, int) _deriveCharacterOpPattern(int rdfId, CharacterDownsync currCharacterDownsync, InputFrameDecoded decodedInputHolder, CharacterConfig chConfig, bool currEffInAir, bool notDashing, ILoggerBridge logger) {
+        private static (int, bool, bool, int, int) _deriveCharacterOpPattern(int rdfId, CharacterDownsync currCharacterDownsync, InputFrameDecoded decodedInputHolder, CharacterConfig chConfig, bool currEffInAir, bool notDashing, ILoggerBridge logger) {
             bool jumpedOrNot = false;
             bool slipJumpedOrNot = false;
-            var jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt;
-            if (chConfig.JumpHoldingToFly) {
-                jumpHoldingRdfCnt = ((!currCharacterDownsync.OmitGravity && JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= currCharacterDownsync.JumpHoldingRdfCnt) ? JUMP_HOLDING_RDF_CNT_THRESHOLD_2 : 0);
-            } else {        
-                jumpHoldingRdfCnt = ((!currCharacterDownsync.OmitGravity && JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= currCharacterDownsync.JumpHoldingRdfCnt) ? JUMP_HOLDING_RDF_CNT_THRESHOLD_1 : 0);
-            }
             int effDx = 0, effDy = 0;
 
             // Jumping is partially allowed within "CapturedByInertia", but moving is only allowed when "0 == FramesToRecover" (constrained later in "Step")
@@ -193,33 +208,20 @@ namespace shared {
             int effFrontOrBack = (decodedInputHolder.Dx*currCharacterDownsync.DirX); // [WARNING] Deliberately using "decodedInputHolder.Dx" instead of "effDx (which could be 0 in block stun)" here!
             var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesCapturedByInertia)) || !notDashing;
             if (0 < decodedInputHolder.BtnALevel) {
-                if (0 >= currCharacterDownsync.JumpHoldingRdfCnt && canJumpWithinInertia) {
+                if (0 == currCharacterDownsync.JumpHoldingRdfCnt && canJumpWithinInertia) {
                     if ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (currCharacterDownsync.InAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && (0 > decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
                         slipJumpedOrNot = true;
-                        jumpHoldingRdfCnt = 0;
                     } else if ((!currEffInAir || 0 < currCharacterDownsync.RemainingAirJumpQuota) && (!isCrouching(currCharacterDownsync.CharacterState, chConfig) || !notDashing)) {
                         jumpedOrNot = true;
-                        jumpHoldingRdfCnt = 1;
                     } else if (OnWallIdle1 == currCharacterDownsync.CharacterState) {
                         jumpedOrNot = true;
-                        jumpHoldingRdfCnt = 1;
-                    }
-                } else {
-                    //logger.LogInfo("@currRdfId=" + currRenderFrame.Id + ", about to hold jumping at jumpHoldingRdfCnt=" + jumpHoldingRdfCnt + ", while currCharacterDownsync.ChState=" + currCharacterDownsync.CharacterState + ", currCharacterDownsync.JumpHoldingRdfCnt = " + currCharacterDownsync.JumpHoldingRdfCnt);
-                    jumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt+1;
-                    if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= jumpHoldingRdfCnt) {
-                        jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_2;
-                    } else if (!chConfig.JumpHoldingToFly && JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= jumpHoldingRdfCnt) {
-                        jumpHoldingRdfCnt = JUMP_HOLDING_RDF_CNT_THRESHOLD_1;
                     }
                 }
-            } else {
-                jumpHoldingRdfCnt = 0;
             }
 
             if (PATTERN_ID_NO_OP == patternId) {
                 if (0 < decodedInputHolder.BtnBLevel) {
-                    if (0 >= currCharacterDownsync.BtnBHoldingRdfCount) {
+                    if (0 == currCharacterDownsync.BtnBHoldingRdfCount) {
                         if (0 < decodedInputHolder.BtnCLevel) {
                             patternId = PATTERN_INVENTORY_SLOT_BC;
                         } else if (0 > decodedInputHolder.Dy) {
@@ -242,7 +244,7 @@ namespace shared {
 
             if (PATTERN_HOLD_B == patternId || PATTERN_ID_NO_OP == patternId) {
                 if (0 < decodedInputHolder.BtnELevel && (chConfig.DashingEnabled || chConfig.SlidingEnabled)) {
-                    if (0 >= currCharacterDownsync.BtnEHoldingRdfCount) {
+                    if (0 == currCharacterDownsync.BtnEHoldingRdfCount) {
                         if (notDashing) {
                             if (0 < effFrontOrBack) {
                                 patternId = (PATTERN_HOLD_B == patternId ? PATTERN_FRONT_E_HOLD_B : PATTERN_FRONT_E);
@@ -265,19 +267,19 @@ namespace shared {
 
             if (PATTERN_ID_NO_OP == patternId) {
                 if (0 < decodedInputHolder.BtnCLevel) {
-                    if (0 >= currCharacterDownsync.BtnCHoldingRdfCount) {
+                    if (0 == currCharacterDownsync.BtnCHoldingRdfCount) {
                         patternId = PATTERN_INVENTORY_SLOT_C;
                         if (0 < decodedInputHolder.BtnBLevel) {
                             patternId = PATTERN_INVENTORY_SLOT_BC;
                         }
                     } else {
                         patternId = PATTERN_HOLD_INVENTORY_SLOT_C;
-                        if (0 < decodedInputHolder.BtnBLevel && 0 >= currCharacterDownsync.BtnBHoldingRdfCount) {
+                        if (0 < decodedInputHolder.BtnBLevel && 0 == currCharacterDownsync.BtnBHoldingRdfCount) {
                             patternId = PATTERN_INVENTORY_SLOT_BC;
                         }
                     }
                 } else if (0 < decodedInputHolder.BtnDLevel) {
-                    if (0 >= currCharacterDownsync.BtnDHoldingRdfCount) {
+                    if (0 == currCharacterDownsync.BtnDHoldingRdfCount) {
                         patternId = PATTERN_INVENTORY_SLOT_D;
                     } else {
                         patternId = PATTERN_HOLD_INVENTORY_SLOT_D;
@@ -285,24 +287,15 @@ namespace shared {
                 }
             }
 
-            return (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy);
+            return (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy);
         }
 
-        private static (int, bool, bool, int, int, int) _derivePlayerOpPattern(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, bool currEffInAir, bool notDashing, ILoggerBridge logger) {
-            // returns (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effectiveDx, effectiveDy)
+        private static (int, bool, bool, int, int) _derivePlayerOpPattern(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, bool currEffInAir, bool notDashing, ILoggerBridge logger) {
+            // returns (patternId, jumpedOrNot, slipJumpedOrNot, effectiveDx, effectiveDy)
             int delayedInputFrameId = ConvertToDelayedInputFrameId(rdfId);
 
             if (0 >= delayedInputFrameId) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
-            }
-
-            if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
-            }
-
-            bool interrupted = _processDebuffDuringInput(currCharacterDownsync);
-            if (interrupted) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0, 0);
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
             }
 
             var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
@@ -311,6 +304,17 @@ namespace shared {
             }
             var delayedInputList = delayedInputFrameDownsync.InputList;
             DecodeInput(delayedInputList[currCharacterDownsync.JoinIndex - 1], decodedInputHolder);
+    
+            updateBtnHoldingByInput(currCharacterDownsync, decodedInputHolder, thatCharacterInNextFrame);
+
+            if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
+            }
+
+            bool interrupted = _processDebuffDuringInput(currCharacterDownsync);
+            if (interrupted) {
+                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
+            }
 
             return _deriveCharacterOpPattern(rdfId, currCharacterDownsync, decodedInputHolder, chConfig, currEffInAir, notDashing, logger);
         }
@@ -592,13 +596,12 @@ namespace shared {
             return (chd.InAir || (inAirSet.Contains(chd.CharacterState) && notDashing));
         }
         
-        private static void _processSingleCharacterInput(int rdfId, int patternId, bool jumpedOrNot, bool slipJumpedOrNot, int jumpHoldingRdfCnt, int effDx, int effDy, bool slowDownToAvoidOverlap, CharacterDownsync currCharacterDownsync, bool currEffInAir, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, bool shouldIgnoreInertia, RepeatedField<Bullet> nextRenderFrameBullets, ref int bulletLocalIdCounter, ref int bulletCnt, int selfPlayerJoinIndex, ref bool selfNotEnoughMp, ILoggerBridge logger) {
+        private static void _processSingleCharacterInput(int rdfId, int patternId, bool jumpedOrNot, bool slipJumpedOrNot, int effDx, int effDy, bool slowDownToAvoidOverlap, CharacterDownsync currCharacterDownsync, bool currEffInAir, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, bool shouldIgnoreInertia, RepeatedField<Bullet> nextRenderFrameBullets, ref int bulletLocalIdCounter, ref int bulletCnt, int selfPlayerJoinIndex, ref bool selfNotEnoughMp, ILoggerBridge logger) {
             // Prioritize use of inventory slot over skills
             var (slotUsed, slotLockedSkillId, dodgedInBlockStun) = _useInventorySlot(rdfId, patternId, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, logger);
 
             thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
             thatCharacterInNextFrame.SlipJumpTriggered |= slipJumpedOrNot;
-            thatCharacterInNextFrame.JumpHoldingRdfCnt = jumpHoldingRdfCnt;
     
             if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 > currCharacterDownsync.JumpHoldingRdfCnt && JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= thatCharacterInNextFrame.JumpHoldingRdfCnt && !thatCharacterInNextFrame.OmitGravity && chConfig.JumpHoldingToFly) {
                 thatCharacterInNextFrame.OmitGravity = true;
@@ -618,63 +621,16 @@ namespace shared {
             bool notEnoughMp = false;
             bool usedSkill = dodgedInBlockStun ? false : _useSkill(rdfId, effDx, effDy, patternId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, ref bulletLocalIdCounter, ref bulletCnt, nextRenderFrameBullets, slotUsed, slotLockedSkillId, ref notEnoughMp, isParalyzed, logger);
             Skill? skillConfig = null;
-
-            if (
-                    (null != chConfig.BtnBNonchargeableChStates && chConfig.BtnBNonchargeableChStates.Contains(thatCharacterInNextFrame.CharacterState))
-                    || 
-                    (!btnBHoldingPatternSet.Contains(patternId) && !btnBActivatePatternSet.Contains(patternId)) 
-               ) {
+            
+            if (null != chConfig.BtnBAutoUnholdChStates && chConfig.BtnBAutoUnholdChStates.Contains(thatCharacterInNextFrame.CharacterState)) {
+                // [WARNING] For "autofire" skills.
                 thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
-            } else {
-                thatCharacterInNextFrame.BtnBHoldingRdfCount = currCharacterDownsync.BtnBHoldingRdfCount+1;
-                if (thatCharacterInNextFrame.BtnBHoldingRdfCount > MAX_INT) {
-                    thatCharacterInNextFrame.BtnBHoldingRdfCount = MAX_INT;
-                }
-            }
-
-            if (
-                    (null != chConfig.BtnCNonchargeableChStates && chConfig.BtnCNonchargeableChStates.Contains(thatCharacterInNextFrame.CharacterState))
-                    || 
-                    (!btnCHoldingPatternSet.Contains(patternId) && !btnCActivatePatternSet.Contains(patternId)) 
-               ) {
-                thatCharacterInNextFrame.BtnCHoldingRdfCount = 0;
-            } else {
-                thatCharacterInNextFrame.BtnCHoldingRdfCount = currCharacterDownsync.BtnCHoldingRdfCount+1;
-                if (thatCharacterInNextFrame.BtnCHoldingRdfCount > MAX_INT) {
-                    thatCharacterInNextFrame.BtnCHoldingRdfCount = MAX_INT;
-                }
-            }
-
-            if (
-                    (null != chConfig.BtnDNonchargeableChStates && chConfig.BtnDNonchargeableChStates.Contains(thatCharacterInNextFrame.CharacterState))
-                    || 
-                    (!btnDHoldingPatternSet.Contains(patternId) && !btnDActivatePatternSet.Contains(patternId)) 
-               ) {
-                thatCharacterInNextFrame.BtnDHoldingRdfCount = 0;
-            } else {
-                thatCharacterInNextFrame.BtnDHoldingRdfCount = currCharacterDownsync.BtnDHoldingRdfCount+1;
-                if (thatCharacterInNextFrame.BtnDHoldingRdfCount > MAX_INT) {
-                    thatCharacterInNextFrame.BtnDHoldingRdfCount = MAX_INT;
-                }
-            }
-
-            if (
-                    (null != chConfig.BtnENonchargeableChStates && chConfig.BtnENonchargeableChStates.Contains(thatCharacterInNextFrame.CharacterState))
-                    || 
-                    (!btnEHoldingPatternSet.Contains(patternId) && !btnEActivatePatternSet.Contains(patternId)) 
-               ) {
-                thatCharacterInNextFrame.BtnEHoldingRdfCount = 0;
-            } else {
-                thatCharacterInNextFrame.BtnEHoldingRdfCount = currCharacterDownsync.BtnEHoldingRdfCount+1;
-                if (thatCharacterInNextFrame.BtnEHoldingRdfCount > MAX_INT) {
-                    thatCharacterInNextFrame.BtnEHoldingRdfCount = MAX_INT;
-                }
             }
 
             if (usedSkill) {
                 thatCharacterInNextFrame.FramesCapturedByInertia = 0; // The use of a skill should break "CapturedByInertia"
                 thatCharacterInNextFrame.CachedCueCmd = 0; // The use of a skill should clear "CachedCueCmd"
-                resetJumpStartupOrHolding(thatCharacterInNextFrame, false);
+                resetJumpStartup(thatCharacterInNextFrame);
                 skillConfig = skills[thatCharacterInNextFrame.ActiveSkillId];
                 /*
                 if (2 == thatCharacterInNextFrame.ActiveSkillId) {
@@ -728,9 +684,9 @@ namespace shared {
                 bool currEffInAir = isEffInAir(currCharacterDownsync, notDashing);
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy) = _derivePlayerOpPattern(rdfId, currCharacterDownsync, chConfig, inputBuffer, decodedInputHolder, currEffInAir, notDashing, logger);
+                var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(rdfId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, inputBuffer, decodedInputHolder, currEffInAir, notDashing, logger);
 
-                _processSingleCharacterInput(rdfId, patternId, jumpedOrNot, slipJumpedOrNot, jumpHoldingRdfCnt, effDx, effDy, false, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, false, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
+                _processSingleCharacterInput(rdfId, patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy, false, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, false, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
             }
         }
         
@@ -772,13 +728,11 @@ namespace shared {
                     thatCharacterInNextFrame.FramesToStartJump = (chConfig.ProactiveJumpStartupFrames >> 1);
                     thatCharacterInNextFrame.CharacterState = InAirIdle1ByWallJump;
                     thatCharacterInNextFrame.VelY = 0;
-                    thatCharacterInNextFrame.JumpHoldingRdfCnt = 1; // For continuity
                 } else if (currEffInAir && !currCharacterDownsync.OmitGravity) {
                     if (0 < currCharacterDownsync.RemainingAirJumpQuota) {
                         thatCharacterInNextFrame.FramesToStartJump = IN_AIR_JUMP_GRACE_PERIOD_RDF_CNT;
                         thatCharacterInNextFrame.CharacterState = InAirIdle2ByJump;
                         thatCharacterInNextFrame.VelY = 0;
-                        thatCharacterInNextFrame.JumpHoldingRdfCnt = 1; // For continuity
                         thatCharacterInNextFrame.RemainingAirJumpQuota = currCharacterDownsync.RemainingAirJumpQuota - 1; 
                         if (!chConfig.IsolatedAirJumpAndDashQuota && 0 < thatCharacterInNextFrame.RemainingAirDashQuota) {
                             thatCharacterInNextFrame.RemainingAirDashQuota -= 1;
@@ -788,7 +742,6 @@ namespace shared {
                     // [WARNING] Including "SlipJumpTriggered" here
                     thatCharacterInNextFrame.FramesToStartJump = chConfig.ProactiveJumpStartupFrames;
                     thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
-                    thatCharacterInNextFrame.JumpHoldingRdfCnt = 1; // For continuity
                 }
             }
         }
@@ -1155,7 +1108,7 @@ namespace shared {
                         thatCharacterInNextFrame.CharacterState = InAirIdle1ByJump;
                     }
 
-                    resetJumpStartupOrHolding(thatCharacterInNextFrame, false);
+                    resetJumpStartup(thatCharacterInNextFrame);
                 } else if (!chConfig.OmitGravity && chConfig.JumpHoldingToFly && currCharacterDownsync.OmitGravity && 0 >= currCharacterDownsync.FlyingRdfCountdown) {
                     thatCharacterInNextFrame.CharacterState = InAirIdle1NoJump;
                     thatCharacterInNextFrame.OmitGravity = false;
@@ -1666,7 +1619,7 @@ namespace shared {
                         }
                         bool fallStopping = (currCharacterDownsync.InAir && 0 >= currCharacterDownsync.VelY && !isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame, chConfig) && !isInJumpStartup(thatCharacterInNextFrame, chConfig));
                         if (fallStopping) {
-                            resetJumpStartupOrHolding(thatCharacterInNextFrame, false);
+                            resetJumpStartup(thatCharacterInNextFrame);
                             if (Dying == thatCharacterInNextFrame.CharacterState) {
                                 thatCharacterInNextFrame.VelX = 0;
                                 thatCharacterInNextFrame.VelY = 0;
@@ -1760,7 +1713,7 @@ namespace shared {
                         if (fallStopping) {
                             thatCharacterInNextFrame.VelX = 0;
                             thatCharacterInNextFrame.VelY = 0;
-                            resetJumpStartupOrHolding(thatCharacterInNextFrame, false);
+                            resetJumpStartup(thatCharacterInNextFrame);
                             if (Dying == thatCharacterInNextFrame.CharacterState) {
                                 // No update needed for Dying
                             } else {
@@ -1836,7 +1789,7 @@ namespace shared {
                                 bool hasBeenOnWallCollisionResultForSameChState = (chConfig.OnWallEnabled && currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatCharacterInNextFrame.FramesInChState);
                                 if (!isInJumpStartup(thatCharacterInNextFrame, chConfig) && !isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame, chConfig) && (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState)) {
                                     thatCharacterInNextFrame.CharacterState = OnWallIdle1;
-                                    resetJumpStartupOrHolding(thatCharacterInNextFrame, false);
+                                    resetJumpStartup(thatCharacterInNextFrame);
                                 }
                                 break;
                         }
@@ -1871,7 +1824,7 @@ namespace shared {
                     thatCharacterInNextFrame.VelX = 0;
                     thatCharacterInNextFrame.CharacterState = Dying;
                     thatCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
-                    resetJumpStartupOrHolding(thatCharacterInNextFrame, true);
+                    resetJumpStartup(thatCharacterInNextFrame);
                 }
             }
 
@@ -2645,13 +2598,78 @@ namespace shared {
             return ((InAirIdle1ByJump == currCd.CharacterState && InAirIdle1ByJump == nextCd.CharacterState) || (InAirIdle1ByWallJump == currCd.CharacterState && InAirIdle1ByWallJump == nextCd.CharacterState) || (InAirIdle2ByJump == currCd.CharacterState && InAirIdle2ByJump == nextCd.CharacterState)) && (1 == currCd.FramesToStartJump) && (0 == nextCd.FramesToStartJump);
         } 
 
-        public static void resetJumpStartupOrHolding(CharacterDownsync cd, bool resetHoldingRdfCnt) {
+        public static void resetJumpStartup(CharacterDownsync cd, bool putBtnHoldingJammed = false) {
             cd.JumpStarted = false;
             cd.JumpTriggered = false;
             cd.SlipJumpTriggered = false;
             cd.FramesToStartJump = 0;
-            if (resetHoldingRdfCnt) {
-                cd.JumpHoldingRdfCnt = 0;
+            if (putBtnHoldingJammed) {
+                jamBtnHolding(cd);
+            }
+        }
+
+        public static void jamBtnHolding(CharacterDownsync thatCharacterInNextFrame) {
+            if (0 < thatCharacterInNextFrame.JumpHoldingRdfCnt) {
+                thatCharacterInNextFrame.JumpHoldingRdfCnt = JAMMED_BTN_HOLDING_RDF_CNT;
+            }
+            if (0 < thatCharacterInNextFrame.BtnBHoldingRdfCount) {
+                thatCharacterInNextFrame.BtnBHoldingRdfCount = JAMMED_BTN_HOLDING_RDF_CNT;
+            }
+            if (0 < thatCharacterInNextFrame.BtnCHoldingRdfCount) {
+                thatCharacterInNextFrame.BtnCHoldingRdfCount = JAMMED_BTN_HOLDING_RDF_CNT;
+            } 
+            if (0 < thatCharacterInNextFrame.BtnDHoldingRdfCount) { 
+                thatCharacterInNextFrame.BtnDHoldingRdfCount = JAMMED_BTN_HOLDING_RDF_CNT;
+            }
+            if (0 < thatCharacterInNextFrame.BtnEHoldingRdfCount) { 
+                thatCharacterInNextFrame.BtnEHoldingRdfCount = JAMMED_BTN_HOLDING_RDF_CNT;
+            }
+        }
+
+        public static void updateBtnHoldingByInput(CharacterDownsync currCharacterDownsync, InputFrameDecoded decodedInputHolder, CharacterDownsync thatCharacterInNextFrame) {
+            if (0 == decodedInputHolder.BtnALevel) {
+                thatCharacterInNextFrame.JumpHoldingRdfCnt = 0;
+            } else if (JAMMED_BTN_HOLDING_RDF_CNT != currCharacterDownsync.JumpHoldingRdfCnt && 0 < decodedInputHolder.BtnALevel) {
+                thatCharacterInNextFrame.JumpHoldingRdfCnt = currCharacterDownsync.JumpHoldingRdfCnt+1;
+                if (thatCharacterInNextFrame.JumpHoldingRdfCnt > MAX_INT) {
+                    thatCharacterInNextFrame.JumpHoldingRdfCnt = MAX_INT;
+                }
+            }
+
+            if (0 == decodedInputHolder.BtnBLevel) {
+                thatCharacterInNextFrame.BtnBHoldingRdfCount = 0;
+            } else if (JAMMED_BTN_HOLDING_RDF_CNT != currCharacterDownsync.BtnBHoldingRdfCount && 0 < decodedInputHolder.BtnBLevel) {
+                thatCharacterInNextFrame.BtnBHoldingRdfCount = currCharacterDownsync.BtnBHoldingRdfCount+1;
+                if (thatCharacterInNextFrame.BtnBHoldingRdfCount > MAX_INT) {
+                    thatCharacterInNextFrame.BtnBHoldingRdfCount = MAX_INT;
+                }
+            }
+
+            if (0 == decodedInputHolder.BtnCLevel) {
+                thatCharacterInNextFrame.BtnCHoldingRdfCount = 0;
+            } else if (JAMMED_BTN_HOLDING_RDF_CNT != currCharacterDownsync.BtnCHoldingRdfCount && 0 < decodedInputHolder.BtnCLevel) {
+                thatCharacterInNextFrame.BtnCHoldingRdfCount = currCharacterDownsync.BtnCHoldingRdfCount+1;
+                if (thatCharacterInNextFrame.BtnCHoldingRdfCount > MAX_INT) {
+                    thatCharacterInNextFrame.BtnCHoldingRdfCount = MAX_INT;
+                }
+            }
+
+            if (0 == decodedInputHolder.BtnDLevel) {
+                thatCharacterInNextFrame.BtnDHoldingRdfCount = 0;
+            } else if (JAMMED_BTN_HOLDING_RDF_CNT != currCharacterDownsync.BtnDHoldingRdfCount && 0 < decodedInputHolder.BtnDLevel) {
+                thatCharacterInNextFrame.BtnDHoldingRdfCount = currCharacterDownsync.BtnDHoldingRdfCount+1;
+                if (thatCharacterInNextFrame.BtnDHoldingRdfCount > MAX_INT) {
+                    thatCharacterInNextFrame.BtnDHoldingRdfCount = MAX_INT;
+                }
+            }
+
+            if (0 == decodedInputHolder.BtnELevel) {
+                thatCharacterInNextFrame.BtnEHoldingRdfCount = 0;
+            } else if (JAMMED_BTN_HOLDING_RDF_CNT != currCharacterDownsync.BtnEHoldingRdfCount && 0 < decodedInputHolder.BtnELevel) {
+                thatCharacterInNextFrame.BtnEHoldingRdfCount = currCharacterDownsync.BtnEHoldingRdfCount+1;
+                if (thatCharacterInNextFrame.BtnEHoldingRdfCount > MAX_INT) {
+                    thatCharacterInNextFrame.BtnEHoldingRdfCount = MAX_INT;
+                }
             }
         }
 

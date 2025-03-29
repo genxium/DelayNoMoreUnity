@@ -28,64 +28,12 @@ namespace shared {
         public const int PATTERN_DOWN_E_HOLD_B = 17;
         public const int PATTERN_HOLD_E_HOLD_B = 18;
 
-        public static HashSet<int> btnBHoldingPatternSet = new HashSet<int>() {
-            PATTERN_HOLD_B,
-            PATTERN_E_HOLD_B,
-            PATTERN_FRONT_E_HOLD_B,
-            PATTERN_BACK_E_HOLD_B,
-            PATTERN_UP_E_HOLD_B,
-            PATTERN_DOWN_E_HOLD_B,
-            PATTERN_HOLD_E_HOLD_B
-        };
-
-        public static HashSet<int> btnBActivatePatternSet = new HashSet<int>() {
-            PATTERN_B,
-            PATTERN_UP_B,
-            PATTERN_DOWN_B,
-        };
-
-        public static HashSet<int> btnEHoldingPatternSet = new HashSet<int>() {
-            PATTERN_HOLD_E,
-            PATTERN_HOLD_E_HOLD_B,
-        };
-
-        public static HashSet<int> btnEActivatePatternSet = new HashSet<int>() {
-            PATTERN_E,
-            PATTERN_FRONT_E,
-            PATTERN_BACK_E,
-            PATTERN_UP_E,
-            PATTERN_DOWN_E,
-            
-            PATTERN_E_HOLD_B,
-            PATTERN_FRONT_E_HOLD_B,
-            PATTERN_BACK_E_HOLD_B,
-            PATTERN_UP_E_HOLD_B,
-            PATTERN_DOWN_E_HOLD_B,
-        };
-
         public const int PATTERN_INVENTORY_SLOT_C = 1024;
         public const int PATTERN_INVENTORY_SLOT_D = 1025;
         public const int PATTERN_INVENTORY_SLOT_BC = 1026;
 
         public const int PATTERN_HOLD_INVENTORY_SLOT_C = 1027;
         public const int PATTERN_HOLD_INVENTORY_SLOT_D = 1028;
-
-        public static HashSet<int> btnCHoldingPatternSet = new HashSet<int>() {
-            PATTERN_HOLD_INVENTORY_SLOT_C,
-        };
-
-        public static HashSet<int> btnCActivatePatternSet = new HashSet<int>() {
-            PATTERN_INVENTORY_SLOT_C,
-            PATTERN_INVENTORY_SLOT_BC,
-        };
-
-        public static HashSet<int> btnDHoldingPatternSet = new HashSet<int>() {
-            PATTERN_HOLD_INVENTORY_SLOT_D,
-        };
-
-        public static HashSet<int> btnDActivatePatternSet = new HashSet<int>() {
-            PATTERN_INVENTORY_SLOT_D,
-        };
 
         public const uint ELE_NONE = 0;
         public const uint ELE_FIRE = 1;
@@ -219,7 +167,7 @@ namespace shared {
             CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
         };
 
-        public static Skill BatMelee1PrimerSkill = new Skill {
+        public static Skill BatMelee1Primer = new Skill {
             Id = 260,
             RecoveryFrames = 60,
             RecoveryFramesOnBlock = 60,
@@ -2873,7 +2821,7 @@ namespace shared {
             ExplosionFrames = 25,
             DirX = 1,
             DirY = 0,
-            Hardness = 6,
+            Hardness = 32,
             BType = BulletType.Melee,
             CharacterEmitSfxName = "SlashEmitSpd1",
             ExplosionSfxName="Melee_Explosion2",
@@ -2903,7 +2851,7 @@ namespace shared {
             ElementalAttrs = ELE_ROCK,
             DirX = 1,
             DirY = 0,
-            Hardness = 7,
+            Hardness = 32,
             BType = BulletType.Melee,
             CharacterEmitSfxName = "SlashEmitSpd1",
             ExplosionSfxName="Melee_Explosion2",
@@ -3860,7 +3808,7 @@ namespace shared {
         public static BulletConfig StoneCrusherCastBullet1 = new BulletConfig { 
             StartupFrames = 60,
             StartupInvinsibleFrames = 20,
-            HitStunFrames = 45,
+            HitStunFrames = 20,
             ActiveFrames = 800,
             Damage = 30,
             Speed = (int)(3.5f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -4800,6 +4748,7 @@ namespace shared {
             ActiveVfxSpeciesId = VfxSmallBallEmitterBeam.SpeciesId,
             IsPixelatedActiveVfx = true,
             BeamCollision = true,
+            TakesDef1AsHardPushback = true,
             RemainsUponHit = true,
             InitSpinCos = (float)Math.Cos(0.5 * Math.PI), 
             InitSpinSin = (float)Math.Sin(0.5f * Math.PI),
@@ -4808,7 +4757,7 @@ namespace shared {
             CollisionTypeMask = COLLISION_B_FIREBALL_INDEX_PREFIX
         };
 
-        public static Skill SmallBallEmitterBeamSkill = new Skill{
+        public static Skill SmallBallEmitterBeam = new Skill{
             Id = 130
         }.AddHit(SmallBallEmitterBeamHit1);
 
@@ -5441,6 +5390,47 @@ namespace shared {
             BoundChState = OnWallAtk1 
         }
         .AddHit(MobileThunderCannonPrimerBulletAir);
+
+        public static BulletConfig FortLv1FireballHit1 = new BulletConfig {
+            StartupFrames = 55,
+            ActiveFrames = 600,
+            HitStunFrames = 12,
+            BlockStunFrames = 0, // Necessary for "TakesDef1AsHardPushback"
+            Damage = 12,
+            PushbackVelX = (int)(3.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            PushbackVelY = NO_LOCK_VEL,
+            SelfLockVelX = NO_LOCK_VEL,
+            SelfLockVelY = NO_LOCK_VEL,
+            SelfLockVelYWhenFlying = NO_LOCK_VEL,
+            HitboxOffsetX = (int)(12f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            ElementalAttrs = ELE_FIRE,
+            SpeciesId = 37,
+            ExplosionSpeciesId = 2,
+            Speed = (int)(11.0f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            DirX = +3,
+            DirY = +5,
+            Hardness = 32,
+            ExplosionFrames = 25,
+            BType = BulletType.Fireball,
+            CharacterEmitSfxName="FlameEmit1",
+            ExplosionSfxName="Explosion4",
+            RotatesAlongVelocity = true,
+            TakesGravity = true,
+            CollisionTypeMask = COLLISION_M_FIREBALL_INDEX_PREFIX,
+        };
+
+        public static Skill FortLv1Fireball = new Skill {
+            Id = 147,
+            RecoveryFrames = 60,
+            RecoveryFramesOnBlock = 60,
+            RecoveryFramesOnHit = 60,
+            TriggerType = SkillTriggerType.RisingEdge,
+            BoundChState = Atk1
+        }
+        .AddHit(FortLv1FireballHit1);
 
         public static ImmutableDictionary<uint, Skill> skills = ImmutableDictionary.Create<uint, Skill>().AddRange(
                 new[]
@@ -6194,14 +6184,14 @@ namespace shared {
                             .AddHit(LightRepPerforationBl9)
                             ),
 
-                    new KeyValuePair<uint,Skill>(SmallBallEmitterBeamSkill.Id, SmallBallEmitterBeamSkill),
+                    new KeyValuePair<uint,Skill>(SmallBallEmitterBeam.Id, SmallBallEmitterBeam),
                     new KeyValuePair<uint,Skill>(HunterBackDashing.Id, HunterBackDashing),
                     new KeyValuePair<uint,Skill>(HunterSliding.Id, HunterSliding),
                     new KeyValuePair<uint, Skill>(HunterPistolCrouch.Id, HunterPistolCrouch),
                     new KeyValuePair<uint, Skill>(BladeGirlAirSlash1.Id, BladeGirlAirSlash1),
                     new KeyValuePair<uint, Skill>(BladeGirlAirSlash2.Id, BladeGirlAirSlash2),
                     new KeyValuePair<uint, Skill>(BladeGirlDragonPunch.Id, BladeGirlDragonPunch),
-                    new KeyValuePair<uint, Skill>(BatMelee1PrimerSkill.Id, BatMelee1PrimerSkill),
+                    new KeyValuePair<uint, Skill>(BatMelee1Primer.Id, BatMelee1Primer),
                     new KeyValuePair<uint, Skill>(BasicHpHealer.Id, BasicHpHealer),
                     new KeyValuePair<uint, Skill>(AngelBasicAtk.Id, AngelBasicAtk),
                     new KeyValuePair<uint, Skill>(AngelBackDashing.Id, AngelBackDashing),
@@ -6212,6 +6202,7 @@ namespace shared {
                     new KeyValuePair<uint, Skill>(MobileThunderCannonPrimerAir.Id, MobileThunderCannonPrimerAir),
                     new KeyValuePair<uint, Skill>(MobileThunderCannonPrimerCrouch.Id, MobileThunderCannonPrimerCrouch),
                     new KeyValuePair<uint, Skill>(MobileThunderCannonPrimerWall.Id, MobileThunderCannonPrimerWall),
+                    new KeyValuePair<uint, Skill>(FortLv1Fireball.Id, FortLv1Fireball),
                 }
         );
         
@@ -7025,7 +7016,7 @@ namespace shared {
                         case PATTERN_DOWN_B:
                         case PATTERN_UP_B:
                             if (!notRecovered) {
-                                return BatMelee1PrimerSkill.Id;
+                                return BatMelee1Primer.Id;
                             } else {
                                 return NO_SKILL;
                             }
@@ -7037,7 +7028,7 @@ namespace shared {
                         case PATTERN_B:
                         case PATTERN_UP_B:
                             if (!notRecovered) {
-                                return BatMelee1PrimerSkill.Id;
+                                return BatMelee1Primer.Id;
                             } else {
                                 return NO_SKILL;
                             }

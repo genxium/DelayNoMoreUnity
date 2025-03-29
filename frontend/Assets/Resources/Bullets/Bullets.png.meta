@@ -132,8 +132,8 @@ TextureImporter:
       name: Explosion1_1
       rect:
         serializedVersion: 2
-        x: 690
-        y: 1125
+        x: 402
+        y: 1140
         width: 13
         height: 14
       alignment: 9
@@ -153,8 +153,8 @@ TextureImporter:
       name: Explosion1_2
       rect:
         serializedVersion: 2
-        x: 583
-        y: 1002
+        x: 705
+        y: 1207
         width: 16
         height: 16
       alignment: 9
@@ -174,8 +174,8 @@ TextureImporter:
       name: Fireball1_2
       rect:
         serializedVersion: 2
-        x: 250
-        y: 1184
+        x: 255
+        y: 1308
         width: 9
         height: 7
       alignment: 9
@@ -195,8 +195,8 @@ TextureImporter:
       name: Fireball1_3
       rect:
         serializedVersion: 2
-        x: 803
-        y: 1471
+        x: 289
+        y: 893
         width: 15
         height: 8
       alignment: 9
@@ -216,8 +216,8 @@ TextureImporter:
       name: Fireball1_4
       rect:
         serializedVersion: 2
-        x: 783
-        y: 1201
+        x: 289
+        y: 939
         width: 15
         height: 13
       alignment: 9
@@ -237,8 +237,8 @@ TextureImporter:
       name: Melee_Explosion1_1
       rect:
         serializedVersion: 2
-        x: 541
-        y: 549
+        x: 295
+        y: 535
         width: 43
         height: 43
       alignment: 9
@@ -258,8 +258,8 @@ TextureImporter:
       name: Melee_Explosion1_10
       rect:
         serializedVersion: 2
-        x: 803
-        y: 1344
+        x: 385
+        y: 609
         width: 46
         height: 35
       alignment: 9
@@ -279,8 +279,8 @@ TextureImporter:
       name: Melee_Explosion1_2
       rect:
         serializedVersion: 2
-        x: 891
-        y: 791
+        x: 677
+        y: 1055
         width: 44
         height: 37
       alignment: 9
@@ -300,8 +300,8 @@ TextureImporter:
       name: Melee_Explosion1_3
       rect:
         serializedVersion: 2
-        x: 308
-        y: 684
+        x: 894
+        y: 682
         width: 54
         height: 40
       alignment: 9
@@ -321,8 +321,8 @@ TextureImporter:
       name: Melee_Explosion1_4
       rect:
         serializedVersion: 2
-        x: 252
-        y: 699
+        x: 958
+        y: 705
         width: 54
         height: 46
       alignment: 9
@@ -342,8 +342,8 @@ TextureImporter:
       name: Melee_Explosion1_5
       rect:
         serializedVersion: 2
-        x: 939
-        y: 978
+        x: 723
+        y: 944
         width: 64
         height: 55
       alignment: 9
@@ -363,8 +363,8 @@ TextureImporter:
       name: Melee_Explosion1_6
       rect:
         serializedVersion: 2
-        x: 937
-        y: 783
+        x: 447
+        y: 792
         width: 61
         height: 48
       alignment: 9
@@ -384,8 +384,8 @@ TextureImporter:
       name: Melee_Explosion1_7
       rect:
         serializedVersion: 2
-        x: 828
-        y: 829
+        x: 384
+        y: 837
         width: 61
         height: 55
       alignment: 9
@@ -426,8 +426,8 @@ TextureImporter:
       name: Melee_Explosion1_9
       rect:
         serializedVersion: 2
-        x: 803
-        y: 1381
+        x: 51
+        y: 563
         width: 47
         height: 40
       alignment: 9
@@ -468,8 +468,8 @@ TextureImporter:
       name: Melee_Explosion2_10
       rect:
         serializedVersion: 2
-        x: 922
-        y: 1154
+        x: 289
+        y: 903
         width: 15
         height: 9
       alignment: 9
@@ -489,8 +489,8 @@ TextureImporter:
       name: Melee_Explosion2_2
       rect:
         serializedVersion: 2
-        x: 899
-        y: 936
+        x: 262
+        y: 754
         width: 36
         height: 36
       alignment: 9
@@ -510,8 +510,8 @@ TextureImporter:
       name: Melee_Explosion2_3
       rect:
         serializedVersion: 2
-        x: 743
-        y: 644
+        x: 670
+        y: 925
         width: 51
         height: 44
       alignment: 9
@@ -531,8 +531,8 @@ TextureImporter:
       name: Melee_Explosion2_4
       rect:
         serializedVersion: 2
-        x: 705
-        y: 1043
+        x: 1
+        y: 889
         width: 69
         height: 40
       alignment: 9
@@ -573,8 +573,8 @@ TextureImporter:
       name: Melee_Explosion2_6
       rect:
         serializedVersion: 2
-        x: 451
-        y: 1389
+        x: 731
+        y: 1265
         width: 86
         height: 28
       alignment: 9
@@ -595,7 +595,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 852
-        y: 1474
+        y: 1470
         width: 88
         height: 28
       alignment: 9
@@ -615,8 +615,8 @@ TextureImporter:
       name: Melee_Explosion2_8
       rect:
         serializedVersion: 2
-        x: 1005
-        y: 1006
+        x: 713
+        y: 1355
         width: 16
         height: 24
       alignment: 9
@@ -636,8 +636,8 @@ TextureImporter:
       name: Melee_Explosion2_9
       rect:
         serializedVersion: 2
-        x: 922
-        y: 1165
+        x: 289
+        y: 925
         width: 15
         height: 12
       alignment: 9
@@ -678,8 +678,8 @@ TextureImporter:
       name: Melee_Explosion3_10
       rect:
         serializedVersion: 2
-        x: 851
-        y: 599
+        x: 241
+        y: 471
         width: 42
         height: 83
       alignment: 9
@@ -825,8 +825,8 @@ TextureImporter:
       name: Melee_Explosion3_8
       rect:
         serializedVersion: 2
-        x: 705
-        y: 973
+        x: 850
+        y: 925
         width: 63
         height: 68
       alignment: 9
@@ -846,8 +846,8 @@ TextureImporter:
       name: Melee_Explosion3_9
       rect:
         serializedVersion: 2
-        x: 617
-        y: 1065
+        x: 161
+        y: 969
         width: 71
         height: 74
       alignment: 9
@@ -909,8 +909,8 @@ TextureImporter:
       name: Explosion4_3
       rect:
         serializedVersion: 2
-        x: 690
-        y: 1095
+        x: 289
+        y: 863
         width: 13
         height: 13
       alignment: 9
@@ -930,8 +930,8 @@ TextureImporter:
       name: Explosion4_4
       rect:
         serializedVersion: 2
-        x: 690
-        y: 1080
+        x: 369
+        y: 895
         width: 13
         height: 13
       alignment: 9
@@ -951,8 +951,8 @@ TextureImporter:
       name: Fireball4_0
       rect:
         serializedVersion: 2
-        x: 1004
-        y: 930
+        x: 714
+        y: 1515
         width: 19
         height: 9
       alignment: 9
@@ -972,8 +972,8 @@ TextureImporter:
       name: Fireball4_1
       rect:
         serializedVersion: 2
-        x: 1005
-        y: 1082
+        x: 713
+        y: 1431
         width: 17
         height: 9
       alignment: 9
@@ -993,8 +993,8 @@ TextureImporter:
       name: Fireball4_2
       rect:
         serializedVersion: 2
-        x: 1005
-        y: 1071
+        x: 713
+        y: 1420
         width: 17
         height: 9
       alignment: 9
@@ -1014,8 +1014,8 @@ TextureImporter:
       name: Fireball4_3
       rect:
         serializedVersion: 2
-        x: 1005
-        y: 1060
+        x: 713
+        y: 1409
         width: 17
         height: 9
       alignment: 9
@@ -1035,8 +1035,8 @@ TextureImporter:
       name: Fireball4_4
       rect:
         serializedVersion: 2
-        x: 1008
-        y: 1110
+        x: 205
+        y: 914
         width: 12
         height: 9
       alignment: 9
@@ -1056,8 +1056,8 @@ TextureImporter:
       name: Fireball8_1
       rect:
         serializedVersion: 2
-        x: 563
-        y: 1699
+        x: 141
+        y: 1853
         width: 6
         height: 6
       alignment: 9
@@ -1077,7 +1077,7 @@ TextureImporter:
       name: Fireball8_2
       rect:
         serializedVersion: 2
-        x: 571
+        x: 563
         y: 1699
         width: 6
         height: 6
@@ -1098,8 +1098,8 @@ TextureImporter:
       name: Fireball8_3
       rect:
         serializedVersion: 2
-        x: 445
-        y: 1720
+        x: 571
+        y: 1699
         width: 6
         height: 6
       alignment: 9
@@ -1119,7 +1119,7 @@ TextureImporter:
       name: Fireball8_4
       rect:
         serializedVersion: 2
-        x: 571
+        x: 563
         y: 1699
         width: 6
         height: 6
@@ -1140,8 +1140,8 @@ TextureImporter:
       name: Explosion9_1
       rect:
         serializedVersion: 2
-        x: 715
-        y: 1499
+        x: 714
+        y: 1460
         width: 17
         height: 23
       alignment: 9
@@ -1161,8 +1161,8 @@ TextureImporter:
       name: Explosion9_2
       rect:
         serializedVersion: 2
-        x: 715
-        y: 1543
+        x: 714
+        y: 1495
         width: 18
         height: 18
       alignment: 9
@@ -1182,8 +1182,8 @@ TextureImporter:
       name: Explosion9_3
       rect:
         serializedVersion: 2
-        x: 660
-        y: 829
+        x: 808
+        y: 1089
         width: 40
         height: 26
       alignment: 9
@@ -1203,8 +1203,8 @@ TextureImporter:
       name: Explosion9_4
       rect:
         serializedVersion: 2
-        x: 601
-        y: 895
+        x: 72
+        y: 871
         width: 58
         height: 24
       alignment: 9
@@ -1224,8 +1224,8 @@ TextureImporter:
       name: Explosion9_5
       rect:
         serializedVersion: 2
-        x: 596
-        y: 732
+        x: 787
+        y: 825
         width: 57
         height: 21
       alignment: 9
@@ -1245,8 +1245,8 @@ TextureImporter:
       name: Explosion9_6
       rect:
         serializedVersion: 2
-        x: 851
-        y: 684
+        x: 241
+        y: 556
         width: 43
         height: 15
       alignment: 9
@@ -1266,8 +1266,8 @@ TextureImporter:
       name: Explosion9_7
       rect:
         serializedVersion: 2
-        x: 655
-        y: 730
+        x: 767
+        y: 575
         width: 33
         height: 13
       alignment: 9
@@ -1287,8 +1287,8 @@ TextureImporter:
       name: Fireball11
       rect:
         serializedVersion: 2
-        x: 560
-        y: 790
+        x: 731
+        y: 593
         width: 35
         height: 5
       alignment: 9
@@ -1308,8 +1308,8 @@ TextureImporter:
       name: Explosion11_1
       rect:
         serializedVersion: 2
-        x: 891
-        y: 737
+        x: 402
+        y: 1085
         width: 43
         height: 52
       alignment: 0
@@ -1351,7 +1351,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 430
-        y: 1511
+        y: 1510
         width: 20
         height: 42
       alignment: 9
@@ -1389,389 +1389,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Explosion13_1
-      rect:
-        serializedVersion: 2
-        x: 943
-        y: 1613
-        width: 28
-        height: 19
-      alignment: 9
-      pivot: {x: 0.5, y: 0.84210527}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 00614bff2237d1240be13e48abec845a
-      internalID: -1699899336
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_10
-      rect:
-        serializedVersion: 2
-        x: 423
-        y: 1306
-        width: 24
-        height: 21
-      alignment: 9
-      pivot: {x: 0.5, y: 0.33333334}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 066b552b885cc064db4142c17213f51f
-      internalID: -669531434
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_11
-      rect:
-        serializedVersion: 2
-        x: 423
-        y: 1283
-        width: 24
-        height: 21
-      alignment: 9
-      pivot: {x: 0.5, y: 0.2857143}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c619ef93dbc666c4da057eae3b2ec864
-      internalID: -960184109
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_12
-      rect:
-        serializedVersion: 2
-        x: 421
-        y: 1260
-        width: 24
-        height: 21
-      alignment: 9
-      pivot: {x: 0.5, y: 0.2857143}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 00270e9a9bc8fd441938eeef62823454
-      internalID: 1410121410
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_13
-      rect:
-        serializedVersion: 2
-        x: 914
-        y: 1036
-        width: 23
-        height: 22
-      alignment: 9
-      pivot: {x: 0.47826087, y: 0.27272728}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d6f3d280b177b684a80d8aa09f4724eb
-      internalID: -1643605479
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_14
-      rect:
-        serializedVersion: 2
-        x: 1000
-        y: 794
-        width: 23
-        height: 22
-      alignment: 9
-      pivot: {x: 0.47826087, y: 0.27272728}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bb6935d86539fb74892789de41a30983
-      internalID: -694456131
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_15
-      rect:
-        serializedVersion: 2
-        x: 424
-        y: 1434
-        width: 25
-        height: 21
-      alignment: 9
-      pivot: {x: 0.44, y: 0.23809524}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1d83515472d0ad941820ee0a4d5679ce
-      internalID: 1232974723
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_16
-      rect:
-        serializedVersion: 2
-        x: 973
-        y: 1613
-        width: 10
-        height: 7
-      alignment: 9
-      pivot: {x: -0.5, y: -0.5714286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 982839296ba86cf499fc490b9b701182
-      internalID: -1287932577
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_17
-      rect:
-        serializedVersion: 2
-        x: 990
-        y: 1826
-        width: 5
-        height: 5
-      alignment: 9
-      pivot: {x: -1.6, y: -1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8c1f48a5f50a54f4aa4c2e372d304f41
-      internalID: 761487871
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_18
-      rect:
-        serializedVersion: 2
-        x: 748
-        y: 1937
-        width: 3
-        height: 3
-      alignment: 9
-      pivot: {x: 5.3333335, y: -4.3333335}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 794771da4c7789142873637ae4098903
-      internalID: -1985576093
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_2
-      rect:
-        serializedVersion: 2
-        x: 943
-        y: 1613
-        width: 28
-        height: 19
-      alignment: 9
-      pivot: {x: 0.5, y: 0.84210527}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4c9420f6afd2cab40bcc3986344ae44b
-      internalID: 891777805
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_3
-      rect:
-        serializedVersion: 2
-        x: 998
-        y: 756
-        width: 24
-        height: 18
-      alignment: 9
-      pivot: {x: 0.5, y: 0.8888889}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 336ffcb105dfba04b89aef4c25ed27d2
-      internalID: -672746494
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_4
-      rect:
-        serializedVersion: 2
-        x: 424
-        y: 1383
-        width: 24
-        height: 26
-      alignment: 9
-      pivot: {x: 0.5, y: 0.61538464}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c930bf32d4aa45a4ea20dc029d263071
-      internalID: -168004738
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_5
-      rect:
-        serializedVersion: 2
-        x: 423
-        y: 1355
-        width: 24
-        height: 26
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5769231}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 64c7274824ac9b042badc58fafaf7984
-      internalID: -655333396
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_6
-      rect:
-        serializedVersion: 2
-        x: 421
-        y: 1192
-        width: 24
-        height: 20
-      alignment: 9
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 226c2a20acfa71f40a58824f4f8825e7
-      internalID: 1548035876
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_7
-      rect:
-        serializedVersion: 2
-        x: 421
-        y: 1170
-        width: 24
-        height: 20
-      alignment: 9
-      pivot: {x: 0.5, y: 0.35}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4c2a9a6b9d8a01e45b5700de69f63a53
-      internalID: -551709478
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_8
-      rect:
-        serializedVersion: 2
-        x: 421
-        y: 1237
-        width: 24
-        height: 21
-      alignment: 9
-      pivot: {x: 0.5, y: 0.33333334}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1706a0c4fc7943c4a86e158a95f83fbe
-      internalID: -1467100775
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion13_9
-      rect:
-        serializedVersion: 2
-        x: 421
-        y: 1214
-        width: 24
-        height: 21
-      alignment: 9
-      pivot: {x: 0.5, y: 0.33333334}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fd656b9c6195fb9499bbdd449ff1d974
-      internalID: -165679423
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Explosion14_1
       rect:
         serializedVersion: 2
-        x: 852
-        y: 1504
+        x: 1
+        y: 1367
         width: 89
         height: 59
       alignment: 0
@@ -1833,8 +1455,8 @@ TextureImporter:
       name: Explosion14_12
       rect:
         serializedVersion: 2
-        x: 939
-        y: 1093
+        x: 608
+        y: 1090
         width: 67
         height: 60
       alignment: 0
@@ -1875,8 +1497,8 @@ TextureImporter:
       name: Explosion14_14
       rect:
         serializedVersion: 2
-        x: 443
-        y: 834
+        x: 388
+        y: 894
         width: 57
         height: 58
       alignment: 0
@@ -1896,8 +1518,8 @@ TextureImporter:
       name: Explosion14_2
       rect:
         serializedVersion: 2
-        x: 336
-        y: 1442
+        x: 451
+        y: 1376
         width: 86
         height: 67
       alignment: 0
@@ -1917,8 +1539,8 @@ TextureImporter:
       name: Explosion14_3
       rect:
         serializedVersion: 2
-        x: 714
-        y: 1322
+        x: 452
+        y: 1445
         width: 87
         height: 70
       alignment: 0
@@ -1939,7 +1561,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 1483
+        y: 1529
         width: 90
         height: 57
       alignment: 0
@@ -2002,7 +1624,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 129
-        y: 1796
+        y: 1797
         width: 53
         height: 53
       alignment: 0
@@ -2022,8 +1644,8 @@ TextureImporter:
       name: Explosion14_8
       rect:
         serializedVersion: 2
-        x: 776
-        y: 1025
+        x: 447
+        y: 908
         width: 64
         height: 56
       alignment: 0
@@ -2043,8 +1665,8 @@ TextureImporter:
       name: Explosion14_9
       rect:
         serializedVersion: 2
-        x: 705
-        y: 1174
+        x: 241
+        y: 1060
         width: 76
         height: 61
       alignment: 0
@@ -2064,8 +1686,8 @@ TextureImporter:
       name: Fireball12_1
       rect:
         serializedVersion: 2
-        x: 642
-        y: 619
+        x: 670
+        y: 887
         width: 51
         height: 36
       alignment: 9
@@ -2085,8 +1707,8 @@ TextureImporter:
       name: Fireball12_10
       rect:
         serializedVersion: 2
-        x: 169
-        y: 1109
+        x: 255
+        y: 1213
         width: 79
         height: 93
       alignment: 9
@@ -2106,8 +1728,8 @@ TextureImporter:
       name: Fireball12_11
       rect:
         serializedVersion: 2
-        x: 452
-        y: 1419
+        x: 852
+        y: 1372
         width: 87
         height: 96
       alignment: 9
@@ -2127,8 +1749,8 @@ TextureImporter:
       name: Fireball12_12
       rect:
         serializedVersion: 2
-        x: 86
-        y: 1121
+        x: 942
+        y: 1427
         width: 81
         height: 90
       alignment: 9
@@ -2148,8 +1770,8 @@ TextureImporter:
       name: Fireball12_13
       rect:
         serializedVersion: 2
-        x: 1
-        y: 801
+        x: 447
+        y: 1043
         width: 76
         height: 75
       alignment: 9
@@ -2169,8 +1791,8 @@ TextureImporter:
       name: Fireball12_14
       rect:
         serializedVersion: 2
-        x: 851
-        y: 1179
+        x: 336
+        y: 1383
         width: 86
         height: 80
       alignment: 9
@@ -2190,8 +1812,8 @@ TextureImporter:
       name: Fireball12_15
       rect:
         serializedVersion: 2
-        x: 714
-        y: 1394
+        x: 850
+        y: 1285
         width: 87
         height: 85
       alignment: 9
@@ -2211,8 +1833,8 @@ TextureImporter:
       name: Fireball12_16
       rect:
         serializedVersion: 2
-        x: 94
-        y: 1455
+        x: 852
+        y: 1545
         width: 88
         height: 87
       alignment: 9
@@ -2232,8 +1854,8 @@ TextureImporter:
       name: Fireball12_17
       rect:
         serializedVersion: 2
-        x: 625
-        y: 1493
+        x: 735
+        y: 1494
         width: 88
         height: 68
       alignment: 9
@@ -2253,8 +1875,8 @@ TextureImporter:
       name: Fireball12_18
       rect:
         serializedVersion: 2
-        x: 852
-        y: 1565
+        x: 92
+        y: 1362
         width: 89
         height: 67
       alignment: 9
@@ -2275,7 +1897,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 117
-        y: 1544
+        y: 1545
         width: 65
         height: 44
       alignment: 9
@@ -2295,8 +1917,8 @@ TextureImporter:
       name: Fireball12_2
       rect:
         serializedVersion: 2
-        x: 743
-        y: 690
+        x: 823
+        y: 619
         width: 52
         height: 36
       alignment: 9
@@ -2316,8 +1938,8 @@ TextureImporter:
       name: Fireball12_3
       rect:
         serializedVersion: 2
-        x: 803
-        y: 1308
+        x: 325
+        y: 599
         width: 46
         height: 34
       alignment: 9
@@ -2337,8 +1959,8 @@ TextureImporter:
       name: Fireball12_4
       rect:
         serializedVersion: 2
-        x: 594
-        y: 666
+        x: 660
+        y: 684
         width: 53
         height: 34
       alignment: 9
@@ -2358,8 +1980,8 @@ TextureImporter:
       name: Fireball12_5
       rect:
         serializedVersion: 2
-        x: 803
-        y: 1423
+        x: 674
+        y: 971
         width: 47
         height: 46
       alignment: 9
@@ -2400,8 +2022,8 @@ TextureImporter:
       name: Fireball12_7
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1281
+        x: 336
+        y: 1247
         width: 83
         height: 86
       alignment: 9
@@ -2422,7 +2044,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 941
-        y: 1349
+        y: 1331
         width: 82
         height: 94
       alignment: 9
@@ -2442,8 +2064,8 @@ TextureImporter:
       name: Fireball12_9
       rect:
         serializedVersion: 2
-        x: 541
-        y: 1334
+        x: 942
+        y: 1519
         width: 81
         height: 92
       alignment: 9
@@ -2463,8 +2085,8 @@ TextureImporter:
       name: Fireball14_1
       rect:
         serializedVersion: 2
-        x: 891
-        y: 830
+        x: 677
+        y: 1094
         width: 44
         height: 39
       alignment: 9
@@ -2484,8 +2106,8 @@ TextureImporter:
       name: Fireball14_2
       rect:
         serializedVersion: 2
-        x: 828
-        y: 784
+        x: 383
+        y: 792
         width: 61
         height: 43
       alignment: 9
@@ -2526,8 +2148,8 @@ TextureImporter:
       name: Fireball14_4
       rect:
         serializedVersion: 2
-        x: 447
-        y: 1014
+        x: 1
+        y: 931
         width: 70
         height: 45
       alignment: 9
@@ -2547,8 +2169,8 @@ TextureImporter:
       name: Fireball14_5
       rect:
         serializedVersion: 2
-        x: 735
-        y: 1481
+        x: 852
+        y: 1500
         width: 88
         height: 43
       alignment: 9
@@ -2568,8 +2190,8 @@ TextureImporter:
       name: Fireball14_6
       rect:
         serializedVersion: 2
-        x: 705
-        y: 1129
+        x: 319
+        y: 1073
         width: 75
         height: 43
       alignment: 9
@@ -2589,8 +2211,8 @@ TextureImporter:
       name: Fireball14_7
       rect:
         serializedVersion: 2
-        x: 336
-        y: 1397
+        x: 625
+        y: 1305
         width: 86
         height: 43
       alignment: 9
@@ -2610,8 +2232,8 @@ TextureImporter:
       name: Fireball14_8
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1542
+        x: 336
+        y: 1465
         width: 91
         height: 44
       alignment: 9
@@ -2631,8 +2253,8 @@ TextureImporter:
       name: Fireball14_9
       rect:
         serializedVersion: 2
-        x: 770
-        y: 985
+        x: 723
+        y: 904
         width: 63
         height: 38
       alignment: 9
@@ -2652,8 +2274,8 @@ TextureImporter:
       name: Explosion2_1
       rect:
         serializedVersion: 2
-        x: 322
-        y: 957
+        x: 234
+        y: 954
         width: 70
         height: 42
       alignment: 0
@@ -2673,8 +2295,8 @@ TextureImporter:
       name: Explosion2_2
       rect:
         serializedVersion: 2
-        x: 737
-        y: 591
+        x: 143
+        y: 452
         width: 42
         height: 51
       alignment: 0
@@ -2694,8 +2316,8 @@ TextureImporter:
       name: Explosion2_3
       rect:
         serializedVersion: 2
-        x: 800
-        y: 1250
+        x: 396
+        y: 1027
         width: 49
         height: 56
       alignment: 0
@@ -2757,8 +2379,8 @@ TextureImporter:
       name: Explosion2_6
       rect:
         serializedVersion: 2
-        x: 568
-        y: 887
+        x: 992
+        y: 910
         width: 31
         height: 59
       alignment: 0
@@ -2799,8 +2421,8 @@ TextureImporter:
       name: Fireball2_1
       rect:
         serializedVersion: 2
-        x: 978
-        y: 666
+        x: 676
+        y: 1019
         width: 45
         height: 34
       alignment: 9
@@ -2820,8 +2442,8 @@ TextureImporter:
       name: Fireball2_2
       rect:
         serializedVersion: 2
-        x: 60
-        y: 728
+        x: 787
+        y: 756
         width: 55
         height: 37
       alignment: 9
@@ -2841,8 +2463,8 @@ TextureImporter:
       name: Fireball2_3
       rect:
         serializedVersion: 2
-        x: 783
-        y: 1160
+        x: 525
+        y: 1036
         width: 65
         height: 39
       alignment: 9
@@ -2862,8 +2484,8 @@ TextureImporter:
       name: Fireball2_4
       rect:
         serializedVersion: 2
-        x: 268
-        y: 1262
+        x: 608
+        y: 1044
         width: 66
         height: 44
       alignment: 9
@@ -2946,8 +2568,8 @@ TextureImporter:
       name: Fireball13_12
       rect:
         serializedVersion: 2
-        x: 660
-        y: 805
+        x: 563
+        y: 586
         width: 35
         height: 22
       alignment: 9
@@ -2967,8 +2589,8 @@ TextureImporter:
       name: Fireball13_13
       rect:
         serializedVersion: 2
-        x: 601
-        y: 818
+        x: 203
+        y: 796
         width: 57
         height: 34
       alignment: 9
@@ -2988,8 +2610,8 @@ TextureImporter:
       name: Fireball13_14
       rect:
         serializedVersion: 2
-        x: 624
-        y: 1294
+        x: 731
+        y: 1295
         width: 86
         height: 83
       alignment: 9
@@ -3009,8 +2631,8 @@ TextureImporter:
       name: Fireball13_15
       rect:
         serializedVersion: 2
-        x: 261
-        y: 1113
+        x: 319
+        y: 986
         width: 73
         height: 85
       alignment: 9
@@ -3030,8 +2652,8 @@ TextureImporter:
       name: Fireball13_16
       rect:
         serializedVersion: 2
-        x: 92
-        y: 1285
+        x: 935
+        y: 971
         width: 83
         height: 95
       alignment: 9
@@ -3051,8 +2673,8 @@ TextureImporter:
       name: Fireball13_17
       rect:
         serializedVersion: 2
-        x: 447
-        y: 1152
+        x: 723
+        y: 1059
         width: 83
         height: 96
       alignment: 0
@@ -3072,8 +2694,8 @@ TextureImporter:
       name: Fireball13_18
       rect:
         serializedVersion: 2
-        x: 532
-        y: 1082
+        x: 850
+        y: 995
         width: 83
         height: 96
       alignment: 0
@@ -3094,7 +2716,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 620
-        y: 1141
+        y: 1152
         width: 83
         height: 105
       alignment: 9
@@ -3135,8 +2757,8 @@ TextureImporter:
       name: Fireball13_20
       rect:
         serializedVersion: 2
-        x: 177
-        y: 1204
+        x: 183
+        y: 1339
         width: 83
         height: 88
       alignment: 9
@@ -3156,8 +2778,8 @@ TextureImporter:
       name: Fireball13_21
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1006
+        x: 163
+        y: 1135
         width: 78
         height: 88
       alignment: 9
@@ -3177,8 +2799,8 @@ TextureImporter:
       name: Fireball13_22
       rect:
         serializedVersion: 2
-        x: 162
-        y: 1019
+        x: 81
+        y: 1093
         width: 78
         height: 88
       alignment: 9
@@ -3198,8 +2820,8 @@ TextureImporter:
       name: Fireball13_23
       rect:
         serializedVersion: 2
-        x: 162
-        y: 1019
+        x: 81
+        y: 1093
         width: 78
         height: 88
       alignment: 9
@@ -3219,8 +2841,8 @@ TextureImporter:
       name: Fireball13_24
       rect:
         serializedVersion: 2
-        x: 162
-        y: 1019
+        x: 81
+        y: 1093
         width: 78
         height: 88
       alignment: 9
@@ -3240,8 +2862,8 @@ TextureImporter:
       name: Fireball13_25
       rect:
         serializedVersion: 2
-        x: 250
-        y: 1022
+        x: 83
+        y: 1183
         width: 78
         height: 89
       alignment: 9
@@ -3261,8 +2883,8 @@ TextureImporter:
       name: Fireball13_26
       rect:
         serializedVersion: 2
-        x: 81
-        y: 940
+        x: 1
+        y: 1068
         width: 78
         height: 88
       alignment: 9
@@ -3282,8 +2904,8 @@ TextureImporter:
       name: Fireball13_27
       rect:
         serializedVersion: 2
-        x: 81
-        y: 940
+        x: 1
+        y: 1068
         width: 78
         height: 88
       alignment: 9
@@ -3304,7 +2926,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 336
-        y: 1092
+        y: 1156
         width: 79
         height: 89
       alignment: 9
@@ -3324,8 +2946,8 @@ TextureImporter:
       name: Fireball13_29
       rect:
         serializedVersion: 2
-        x: 1
-        y: 916
+        x: 243
+        y: 1123
         width: 78
         height: 88
       alignment: 9
@@ -3366,8 +2988,8 @@ TextureImporter:
       name: Fireball13_30
       rect:
         serializedVersion: 2
-        x: 1
-        y: 916
+        x: 243
+        y: 1123
         width: 78
         height: 88
       alignment: 9
@@ -3387,8 +3009,8 @@ TextureImporter:
       name: Fireball13_31
       rect:
         serializedVersion: 2
-        x: 330
-        y: 1001
+        x: 1
+        y: 1158
         width: 78
         height: 89
       alignment: 9
@@ -3408,8 +3030,8 @@ TextureImporter:
       name: Fireball13_32
       rect:
         serializedVersion: 2
-        x: 943
-        y: 1525
+        x: 92
+        y: 1274
         width: 80
         height: 86
       alignment: 9
@@ -3429,8 +3051,8 @@ TextureImporter:
       name: Fireball13_33
       rect:
         serializedVersion: 2
-        x: 943
-        y: 1445
+        x: 1
+        y: 1249
         width: 80
         height: 78
       alignment: 9
@@ -3450,8 +3072,8 @@ TextureImporter:
       name: Fireball13_34
       rect:
         serializedVersion: 2
-        x: 86
-        y: 1213
+        x: 447
+        y: 1211
         width: 83
         height: 70
       alignment: 9
@@ -3471,8 +3093,8 @@ TextureImporter:
       name: Fireball13_35
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1210
+        x: 532
+        y: 1168
         width: 83
         height: 69
       alignment: 9
@@ -3493,7 +3115,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 939
-        y: 1300
+        y: 1282
         width: 84
         height: 47
       alignment: 9
@@ -3513,8 +3135,8 @@ TextureImporter:
       name: Fireball13_37
       rect:
         serializedVersion: 2
-        x: 449
-        y: 1296
+        x: 535
+        y: 1285
         width: 84
         height: 44
       alignment: 9
@@ -3534,8 +3156,8 @@ TextureImporter:
       name: Fireball13_38
       rect:
         serializedVersion: 2
-        x: 535
-        y: 1288
+        x: 448
+        y: 1283
         width: 84
         height: 44
       alignment: 9
@@ -3555,8 +3177,8 @@ TextureImporter:
       name: Fireball13_39
       rect:
         serializedVersion: 2
-        x: 449
-        y: 1250
+        x: 621
+        y: 1259
         width: 84
         height: 44
       alignment: 9
@@ -3597,8 +3219,8 @@ TextureImporter:
       name: Fireball13_40
       rect:
         serializedVersion: 2
-        x: 621
-        y: 1248
+        x: 534
+        y: 1239
         width: 84
         height: 44
       alignment: 9
@@ -3618,8 +3240,8 @@ TextureImporter:
       name: Fireball13_41
       rect:
         serializedVersion: 2
-        x: 450
-        y: 1342
+        x: 449
+        y: 1329
         width: 84
         height: 45
       alignment: 9
@@ -3639,8 +3261,8 @@ TextureImporter:
       name: Fireball13_42
       rect:
         serializedVersion: 2
-        x: 939
-        y: 1203
+        x: 539
+        y: 1331
         width: 84
         height: 46
       alignment: 9
@@ -3660,8 +3282,8 @@ TextureImporter:
       name: Fireball13_43
       rect:
         serializedVersion: 2
-        x: 939
-        y: 1251
+        x: 539
+        y: 1379
         width: 84
         height: 47
       alignment: 9
@@ -3681,8 +3303,8 @@ TextureImporter:
       name: Fireball13_44
       rect:
         serializedVersion: 2
-        x: 939
-        y: 1155
+        x: 336
+        y: 1335
         width: 84
         height: 46
       alignment: 9
@@ -3702,8 +3324,8 @@ TextureImporter:
       name: Fireball13_45
       rect:
         serializedVersion: 2
-        x: 850
-        y: 1135
+        x: 154
+        y: 925
         width: 70
         height: 42
       alignment: 9
@@ -3723,8 +3345,8 @@ TextureImporter:
       name: Fireball13_46
       rect:
         serializedVersion: 2
-        x: 705
-        y: 1085
+        x: 73
+        y: 897
         width: 70
         height: 42
       alignment: 9
@@ -3870,8 +3492,8 @@ TextureImporter:
       name: Fireball3_1
       rect:
         serializedVersion: 2
-        x: 561
-        y: 829
+        x: 694
+        y: 592
         width: 35
         height: 22
       alignment: 9
@@ -3891,8 +3513,8 @@ TextureImporter:
       name: Fireball3_10
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1006
+        x: 163
+        y: 1135
         width: 78
         height: 88
       alignment: 9
@@ -3912,8 +3534,8 @@ TextureImporter:
       name: Fireball3_11
       rect:
         serializedVersion: 2
-        x: 162
-        y: 1019
+        x: 81
+        y: 1093
         width: 78
         height: 88
       alignment: 9
@@ -3933,8 +3555,8 @@ TextureImporter:
       name: Fireball3_12
       rect:
         serializedVersion: 2
-        x: 162
-        y: 1019
+        x: 81
+        y: 1093
         width: 78
         height: 88
       alignment: 9
@@ -3954,8 +3576,8 @@ TextureImporter:
       name: Fireball3_13
       rect:
         serializedVersion: 2
-        x: 162
-        y: 1019
+        x: 81
+        y: 1093
         width: 78
         height: 88
       alignment: 9
@@ -3975,8 +3597,8 @@ TextureImporter:
       name: Fireball3_14
       rect:
         serializedVersion: 2
-        x: 82
-        y: 1030
+        x: 528
+        y: 1077
         width: 78
         height: 89
       alignment: 9
@@ -3996,8 +3618,8 @@ TextureImporter:
       name: Fireball3_15
       rect:
         serializedVersion: 2
-        x: 242
-        y: 932
+        x: 161
+        y: 1045
         width: 78
         height: 88
       alignment: 9
@@ -4017,8 +3639,8 @@ TextureImporter:
       name: Fireball3_16
       rect:
         serializedVersion: 2
-        x: 161
-        y: 929
+        x: 81
+        y: 1003
         width: 78
         height: 88
       alignment: 9
@@ -4039,7 +3661,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 447
-        y: 1061
+        y: 1120
         width: 79
         height: 89
       alignment: 9
@@ -4059,8 +3681,8 @@ TextureImporter:
       name: Fireball3_18
       rect:
         serializedVersion: 2
-        x: 81
-        y: 850
+        x: 1
+        y: 978
         width: 78
         height: 88
       alignment: 9
@@ -4101,8 +3723,8 @@ TextureImporter:
       name: Fireball3_2
       rect:
         serializedVersion: 2
-        x: 502
-        y: 839
+        x: 144
+        y: 790
         width: 57
         height: 34
       alignment: 9
@@ -4332,8 +3954,8 @@ TextureImporter:
       name: Fireball3_3
       rect:
         serializedVersion: 2
-        x: 712
-        y: 1237
+        x: 850
+        y: 1200
         width: 86
         height: 83
       alignment: 9
@@ -4563,8 +4185,8 @@ TextureImporter:
       name: Fireball3_4
       rect:
         serializedVersion: 2
-        x: 851
-        y: 1261
+        x: 625
+        y: 1350
         width: 86
         height: 97
       alignment: 9
@@ -4584,8 +4206,8 @@ TextureImporter:
       name: Fireball3_5
       rect:
         serializedVersion: 2
-        x: 336
-        y: 1290
+        x: 938
+        y: 1175
         width: 85
         height: 105
       alignment: 9
@@ -4605,8 +4227,8 @@ TextureImporter:
       name: Fireball3_6
       rect:
         serializedVersion: 2
-        x: 535
-        y: 1180
+        x: 729
+        y: 1157
         width: 83
         height: 106
       alignment: 9
@@ -4626,8 +4248,8 @@ TextureImporter:
       name: Fireball3_7
       rect:
         serializedVersion: 2
-        x: 183
-        y: 1294
+        x: 850
+        y: 1093
         width: 83
         height: 105
       alignment: 9
@@ -4647,8 +4269,8 @@ TextureImporter:
       name: Fireball3_8
       rect:
         serializedVersion: 2
-        x: 336
-        y: 1183
+        x: 935
+        y: 1068
         width: 83
         height: 105
       alignment: 9
@@ -4668,8 +4290,8 @@ TextureImporter:
       name: Fireball3_9
       rect:
         serializedVersion: 2
-        x: 177
-        y: 1204
+        x: 183
+        y: 1339
         width: 83
         height: 88
       alignment: 9
@@ -4689,8 +4311,8 @@ TextureImporter:
       name: FireBall1_1
       rect:
         serializedVersion: 2
-        x: 690
-        y: 1065
+        x: 369
+        y: 880
         width: 13
         height: 13
       alignment: 9
@@ -4711,7 +4333,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 129
-        y: 1750
+        y: 1751
         width: 53
         height: 44
       alignment: 9
@@ -4731,8 +4353,8 @@ TextureImporter:
       name: Fireball2_6
       rect:
         serializedVersion: 2
-        x: 117
-        y: 690
+        x: 668
+        y: 848
         width: 53
         height: 37
       alignment: 9
@@ -4774,7 +4396,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 440
-        y: 1618
+        y: 1605
         width: 11
         height: 10
       alignment: 9
@@ -4794,8 +4416,8 @@ TextureImporter:
       name: Explosion15_2
       rect:
         serializedVersion: 2
-        x: 440
-        y: 1555
+        x: 541
+        y: 1505
         width: 10
         height: 10
       alignment: 0
@@ -4815,8 +4437,8 @@ TextureImporter:
       name: Explosion15_3
       rect:
         serializedVersion: 2
-        x: 1001
-        y: 843
+        x: 429
+        y: 1467
         width: 21
         height: 19
       alignment: 9
@@ -4836,8 +4458,8 @@ TextureImporter:
       name: Explosion15_4
       rect:
         serializedVersion: 2
-        x: 908
-        y: 974
+        x: 819
+        y: 1299
         width: 29
         height: 28
       alignment: 9
@@ -4878,8 +4500,8 @@ TextureImporter:
       name: Explosion15_6
       rect:
         serializedVersion: 2
-        x: 1001
-        y: 818
+        x: 707
+        y: 1260
         width: 20
         height: 23
       alignment: 9
@@ -4899,8 +4521,8 @@ TextureImporter:
       name: Explosion15_7
       rect:
         serializedVersion: 2
-        x: 914
-        y: 1060
+        x: 264
+        y: 847
         width: 23
         height: 25
       alignment: 9
@@ -4920,8 +4542,8 @@ TextureImporter:
       name: Explosion15_8
       rect:
         serializedVersion: 2
-        x: 424
-        y: 1483
+        x: 823
+        y: 1361
         width: 25
         height: 26
       alignment: 9
@@ -4941,8 +4563,8 @@ TextureImporter:
       name: Explosion15_9
       rect:
         serializedVersion: 2
-        x: 1008
-        y: 1121
+        x: 369
+        y: 834
         width: 12
         height: 17
       alignment: 9
@@ -4983,8 +4605,8 @@ TextureImporter:
       name: Fireball21_2
       rect:
         serializedVersion: 2
-        x: 1008
-        y: 1140
+        x: 369
+        y: 865
         width: 13
         height: 13
       alignment: 9
@@ -5004,8 +4626,8 @@ TextureImporter:
       name: Fireball21_3
       rect:
         serializedVersion: 2
-        x: 998
-        y: 702
+        x: 370
+        y: 968
         width: 16
         height: 16
       alignment: 0
@@ -5026,7 +4648,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 440
-        y: 1593
+        y: 1580
         width: 10
         height: 11
       alignment: 9
@@ -5046,8 +4668,8 @@ TextureImporter:
       name: Explosion5_0
       rect:
         serializedVersion: 2
-        x: 383
-        y: 854
+        x: 145
+        y: 867
         width: 58
         height: 56
       alignment: 9
@@ -5067,8 +4689,8 @@ TextureImporter:
       name: Explosion5_1
       rect:
         serializedVersion: 2
-        x: 322
-        y: 895
+        x: 789
+        y: 927
         width: 59
         height: 60
       alignment: 9
@@ -5088,8 +4710,8 @@ TextureImporter:
       name: Explosion5_10
       rect:
         serializedVersion: 2
-        x: 586
-        y: 531
+        x: 46
+        y: 441
         width: 42
         height: 50
       alignment: 9
@@ -5109,8 +4731,8 @@ TextureImporter:
       name: Explosion5_11
       rect:
         serializedVersion: 2
-        x: 630
-        y: 524
+        x: 1
+        y: 402
         width: 42
         height: 41
       alignment: 9
@@ -5130,8 +4752,8 @@ TextureImporter:
       name: Explosion5_12
       rect:
         serializedVersion: 2
-        x: 895
-        y: 634
+        x: 401
+        y: 545
         width: 41
         height: 34
       alignment: 9
@@ -5151,8 +4773,8 @@ TextureImporter:
       name: Explosion5_13
       rect:
         serializedVersion: 2
-        x: 665
-        y: 895
+        x: 563
+        y: 610
         width: 35
         height: 25
       alignment: 9
@@ -5193,8 +4815,8 @@ TextureImporter:
       name: Explosion5_2
       rect:
         serializedVersion: 2
-        x: 703
-        y: 908
+        x: 600
+        y: 763
         width: 62
         height: 63
       alignment: 9
@@ -5214,8 +4836,8 @@ TextureImporter:
       name: Explosion5_3
       rect:
         serializedVersion: 2
-        x: 442
-        y: 598
+        x: 769
+        y: 606
         width: 52
         height: 64
       alignment: 9
@@ -5256,8 +4878,8 @@ TextureImporter:
       name: Explosion5_5
       rect:
         serializedVersion: 2
-        x: 519
-        y: 954
+        x: 447
+        y: 842
         width: 62
         height: 64
       alignment: 9
@@ -5277,8 +4899,8 @@ TextureImporter:
       name: Explosion5_6
       rect:
         serializedVersion: 2
-        x: 842
-        y: 1000
+        x: 608
+        y: 986
         width: 64
         height: 56
       alignment: 9
@@ -5298,8 +4920,8 @@ TextureImporter:
       name: Explosion5_7
       rect:
         serializedVersion: 2
-        x: 496
-        y: 571
+        x: 356
+        y: 540
         width: 43
         height: 47
       alignment: 9
@@ -5319,8 +4941,8 @@ TextureImporter:
       name: Explosion5_8
       rect:
         serializedVersion: 2
-        x: 397
-        y: 648
+        x: 49
+        y: 493
         width: 43
         height: 49
       alignment: 9
@@ -5340,8 +4962,8 @@ TextureImporter:
       name: Explosion5_9
       rect:
         serializedVersion: 2
-        x: 397
-        y: 750
+        x: 148
+        y: 505
         width: 43
         height: 50
       alignment: 9
@@ -5403,8 +5025,8 @@ TextureImporter:
       name: Fireball5_10
       rect:
         serializedVersion: 2
-        x: 79
-        y: 808
+        x: 302
+        y: 798
         width: 57
         height: 40
       alignment: 9
@@ -5424,8 +5046,8 @@ TextureImporter:
       name: Fireball5_11
       rect:
         serializedVersion: 2
-        x: 1
-        y: 760
+        x: 60
+        y: 789
         width: 57
         height: 39
       alignment: 9
@@ -5445,8 +5067,8 @@ TextureImporter:
       name: Fireball5_12
       rect:
         serializedVersion: 2
-        x: 601
-        y: 854
+        x: 1
+        y: 765
         width: 57
         height: 39
       alignment: 9
@@ -5466,8 +5088,8 @@ TextureImporter:
       name: Fireball5_13
       rect:
         serializedVersion: 2
-        x: 174
-        y: 699
+        x: 950
+        y: 673
         width: 54
         height: 30
       alignment: 9
@@ -5487,8 +5109,8 @@ TextureImporter:
       name: Fireball5_14
       rect:
         serializedVersion: 2
-        x: 694
-        y: 760
+        x: 178
+        y: 728
         width: 57
         height: 32
       alignment: 9
@@ -5508,8 +5130,8 @@ TextureImporter:
       name: Fireball5_15
       rect:
         serializedVersion: 2
-        x: 197
-        y: 806
+        x: 60
+        y: 691
         width: 57
         height: 30
       alignment: 9
@@ -5529,8 +5151,8 @@ TextureImporter:
       name: Fireball5_16
       rect:
         serializedVersion: 2
-        x: 753
-        y: 758
+        x: 119
+        y: 722
         width: 57
         height: 32
       alignment: 9
@@ -5550,8 +5172,8 @@ TextureImporter:
       name: Fireball5_17
       rect:
         serializedVersion: 2
-        x: 596
-        y: 755
+        x: 850
+        y: 838
         width: 57
         height: 27
       alignment: 9
@@ -5571,8 +5193,8 @@ TextureImporter:
       name: Fireball5_18
       rect:
         serializedVersion: 2
-        x: 501
-        y: 718
+        x: 909
+        y: 824
         width: 57
         height: 27
       alignment: 9
@@ -5592,8 +5214,8 @@ TextureImporter:
       name: Fireball5_19
       rect:
         serializedVersion: 2
-        x: 442
-        y: 804
+        x: 915
+        y: 911
         width: 57
         height: 28
       alignment: 9
@@ -5613,8 +5235,8 @@ TextureImporter:
       name: Fireball5_2
       rect:
         serializedVersion: 2
-        x: 1004
-        y: 886
+        x: 705
+        y: 1225
         width: 16
         height: 20
       alignment: 9
@@ -5634,8 +5256,8 @@ TextureImporter:
       name: Fireball5_20
       rect:
         serializedVersion: 2
-        x: 749
-        y: 728
+        x: 904
+        y: 794
         width: 56
         height: 28
       alignment: 9
@@ -5676,8 +5298,8 @@ TextureImporter:
       name: Fireball5_4
       rect:
         serializedVersion: 2
-        x: 797
-        y: 682
+        x: 931
+        y: 600
         width: 52
         height: 32
       alignment: 9
@@ -5697,8 +5319,8 @@ TextureImporter:
       name: Fireball5_5
       rect:
         serializedVersion: 2
-        x: 117
-        y: 729
+        x: 901
+        y: 724
         width: 55
         height: 32
       alignment: 9
@@ -5718,8 +5340,8 @@ TextureImporter:
       name: Fireball5_6
       rect:
         serializedVersion: 2
-        x: 311
-        y: 726
+        x: 837
+        y: 721
         width: 55
         height: 32
       alignment: 9
@@ -5739,8 +5361,8 @@ TextureImporter:
       name: Fireball5_7
       rect:
         serializedVersion: 2
-        x: 864
-        y: 701
+        x: 903
+        y: 758
         width: 55
         height: 34
       alignment: 9
@@ -5760,8 +5382,8 @@ TextureImporter:
       name: Fireball5_8
       rect:
         serializedVersion: 2
-        x: 654
-        y: 691
+        x: 941
+        y: 634
         width: 53
         height: 37
       alignment: 9
@@ -5781,8 +5403,8 @@ TextureImporter:
       name: Fireball5_9
       rect:
         serializedVersion: 2
-        x: 138
-        y: 763
+        x: 968
+        y: 787
         width: 55
         height: 39
       alignment: 9
@@ -5823,8 +5445,8 @@ TextureImporter:
       name: AirExplosion-1
       rect:
         serializedVersion: 2
-        x: 423
-        y: 1329
+        x: 421
+        y: 1231
         width: 24
         height: 24
       alignment: 9
@@ -5887,7 +5509,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 417
-        y: 1078
+        y: 1139
         width: 28
         height: 26
       alignment: 9
@@ -5907,8 +5529,8 @@ TextureImporter:
       name: AirExplosion-5
       rect:
         serializedVersion: 2
-        x: 829
-        y: 553
+        x: 801
+        y: 536
         width: 31
         height: 21
       alignment: 9
@@ -5928,8 +5550,8 @@ TextureImporter:
       name: AirExplosion-6
       rect:
         serializedVersion: 2
-        x: 824
-        y: 576
+        x: 668
+        y: 535
         width: 32
         height: 21
       alignment: 9
@@ -5949,8 +5571,8 @@ TextureImporter:
       name: AirExplosion-7
       rect:
         serializedVersion: 2
-        x: 858
-        y: 576
+        x: 412
+        y: 485
         width: 32
         height: 21
       alignment: 9
@@ -5970,8 +5592,8 @@ TextureImporter:
       name: AirExplosion-8
       rect:
         serializedVersion: 2
-        x: 929
-        y: 582
+        x: 705
+        y: 540
         width: 32
         height: 23
       alignment: 9
@@ -5991,8 +5613,8 @@ TextureImporter:
       name: WaterSpike-0
       rect:
         serializedVersion: 2
-        x: 914
-        y: 1087
+        x: 575
+        y: 796
         width: 23
         height: 34
       alignment: 9
@@ -6033,8 +5655,8 @@ TextureImporter:
       name: WaterSpike-10
       rect:
         serializedVersion: 2
-        x: 702
-        y: 828
+        x: 226
+        y: 874
         width: 61
         height: 78
       alignment: 9
@@ -6075,8 +5697,8 @@ TextureImporter:
       name: WaterSpike-12
       rect:
         serializedVersion: 2
-        x: 765
-        y: 826
+        x: 306
+        y: 840
         width: 61
         height: 78
       alignment: 9
@@ -6096,8 +5718,8 @@ TextureImporter:
       name: WaterSpike-13
       rect:
         serializedVersion: 2
-        x: 939
-        y: 899
+        x: 605
+        y: 907
         width: 63
         height: 77
       alignment: 9
@@ -6117,8 +5739,8 @@ TextureImporter:
       name: WaterSpike-14
       rect:
         serializedVersion: 2
-        x: 782
-        y: 1083
+        x: 447
+        y: 966
         width: 64
         height: 75
       alignment: 9
@@ -6138,8 +5760,8 @@ TextureImporter:
       name: WaterSpike-15
       rect:
         serializedVersion: 2
-        x: 848
-        y: 1058
+        x: 513
+        y: 959
         width: 64
         height: 75
       alignment: 9
@@ -6160,7 +5782,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 825
-        y: 1471
+        y: 1514
         width: 25
         height: 48
       alignment: 9
@@ -6180,8 +5802,8 @@ TextureImporter:
       name: WaterSpike-2
       rect:
         serializedVersion: 2
-        x: 796
-        y: 615
+        x: 193
+        y: 457
         width: 42
         height: 65
       alignment: 9
@@ -6202,7 +5824,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 394
-        y: 912
+        y: 954
         width: 51
         height: 71
       alignment: 9
@@ -6222,8 +5844,8 @@ TextureImporter:
       name: WaterSpike-4
       rect:
         serializedVersion: 2
-        x: 508
-        y: 875
+        x: 510
+        y: 736
         width: 58
         height: 77
       alignment: 9
@@ -6243,8 +5865,8 @@ TextureImporter:
       name: WaterSpike-5
       rect:
         serializedVersion: 2
-        x: 936
-        y: 704
+        x: 788
+        y: 848
         width: 60
         height: 77
       alignment: 9
@@ -6264,8 +5886,8 @@ TextureImporter:
       name: WaterSpike-6
       rect:
         serializedVersion: 2
-        x: 770
-        y: 906
+        x: 604
+        y: 828
         width: 62
         height: 77
       alignment: 9
@@ -6285,8 +5907,8 @@ TextureImporter:
       name: WaterSpike-7
       rect:
         serializedVersion: 2
-        x: 601
-        y: 986
+        x: 513
+        y: 880
         width: 63
         height: 77
       alignment: 9
@@ -6307,7 +5929,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 118
-        y: 1670
+        y: 1671
         width: 64
         height: 78
       alignment: 9
@@ -6328,7 +5950,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 118
-        y: 1590
+        y: 1591
         width: 64
         height: 78
       alignment: 9
@@ -6349,7 +5971,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 150
-        y: 1885
+        y: 1886
         width: 32
         height: 32
       alignment: 0
@@ -6370,7 +5992,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 150
-        y: 1851
+        y: 1852
         width: 32
         height: 32
       alignment: 0
@@ -6390,8 +6012,8 @@ TextureImporter:
       name: Suriken-2
       rect:
         serializedVersion: 2
-        x: 560
-        y: 695
+        x: 637
+        y: 559
         width: 32
         height: 32
       alignment: 0
@@ -6411,8 +6033,8 @@ TextureImporter:
       name: Suriken-3
       rect:
         serializedVersion: 2
-        x: 554
-        y: 661
+        x: 600
+        y: 557
         width: 32
         height: 32
       alignment: 0
@@ -6432,8 +6054,8 @@ TextureImporter:
       name: Suriken-4
       rect:
         serializedVersion: 2
-        x: 709
-        y: 696
+        x: 558
+        y: 552
         width: 32
         height: 32
       alignment: 0
@@ -6453,8 +6075,8 @@ TextureImporter:
       name: Suriken-5
       rect:
         serializedVersion: 2
-        x: 709
-        y: 662
+        x: 512
+        y: 538
         width: 32
         height: 32
       alignment: 0
@@ -6474,8 +6096,8 @@ TextureImporter:
       name: Suriken-6
       rect:
         serializedVersion: 2
-        x: 552
-        y: 627
+        x: 671
+        y: 558
         width: 32
         height: 32
       alignment: 0
@@ -6495,8 +6117,8 @@ TextureImporter:
       name: Suriken-7
       rect:
         serializedVersion: 2
-        x: 703
-        y: 628
+        x: 634
+        y: 525
         width: 32
         height: 32
       alignment: 0
@@ -6516,8 +6138,8 @@ TextureImporter:
       name: TimedBomb-0
       rect:
         serializedVersion: 2
-        x: 783
-        y: 1216
+        x: 370
+        y: 910
         width: 15
         height: 19
       alignment: 9
@@ -6537,8 +6159,8 @@ TextureImporter:
       name: TimedBomb-1
       rect:
         serializedVersion: 2
-        x: 1005
-        y: 980
+        x: 713
+        y: 1329
         width: 16
         height: 24
       alignment: 9
@@ -6579,8 +6201,8 @@ TextureImporter:
       name: TimedBomb-3
       rect:
         serializedVersion: 2
-        x: 1005
-        y: 1032
+        x: 713
+        y: 1381
         width: 16
         height: 26
       alignment: 9
@@ -6600,7 +6222,7 @@ TextureImporter:
       name: TimedBomb-4
       rect:
         serializedVersion: 2
-        x: 94
+        x: 93
         y: 1564
         width: 21
         height: 22
@@ -6705,8 +6327,8 @@ TextureImporter:
       name: BombExplosion_1
       rect:
         serializedVersion: 2
-        x: 129
-        y: 1851
+        x: 714
+        y: 1485
         width: 18
         height: 8
       alignment: 9
@@ -6768,8 +6390,8 @@ TextureImporter:
       name: BombExplosion_4
       rect:
         serializedVersion: 2
-        x: 829
-        y: 512
+        x: 739
+        y: 508
         width: 30
         height: 39
       alignment: 9
@@ -6810,8 +6432,8 @@ TextureImporter:
       name: DashSlashExplosion_1
       rect:
         serializedVersion: 2
-        x: 666
-        y: 978
+        x: 264
+        y: 792
         width: 36
         height: 53
       alignment: 0
@@ -6852,8 +6474,8 @@ TextureImporter:
       name: DashSlashExplosion_3
       rect:
         serializedVersion: 2
-        x: 1
-        y: 878
+        x: 323
+        y: 1118
         width: 77
         height: 36
       alignment: 0
@@ -6873,8 +6495,8 @@ TextureImporter:
       name: GroundImpact_0
       rect:
         serializedVersion: 2
-        x: 300
-        y: 905
+        x: 370
+        y: 941
         width: 16
         height: 10
       alignment: 9
@@ -6894,8 +6516,8 @@ TextureImporter:
       name: GroundImpact_1
       rect:
         serializedVersion: 2
-        x: 300
-        y: 917
+        x: 370
+        y: 953
         width: 16
         height: 13
       alignment: 9
@@ -6915,8 +6537,8 @@ TextureImporter:
       name: BombExplosion_6
       rect:
         serializedVersion: 2
-        x: 826
-        y: 1521
+        x: 422
+        y: 1313
         width: 24
         height: 41
       alignment: 9
@@ -6999,8 +6621,8 @@ TextureImporter:
       name: FallingRock-0
       rect:
         serializedVersion: 2
-        x: 583
-        y: 984
+        x: 705
+        y: 1189
         width: 16
         height: 16
       alignment: 0
@@ -7020,8 +6642,8 @@ TextureImporter:
       name: FallingRock-1
       rect:
         serializedVersion: 2
-        x: 583
-        y: 966
+        x: 705
+        y: 1171
         width: 16
         height: 16
       alignment: 0
@@ -7041,8 +6663,8 @@ TextureImporter:
       name: FallingRock-10
       rect:
         serializedVersion: 2
-        x: 368
-        y: 715
+        x: 823
+        y: 1440
         width: 27
         height: 20
       alignment: 0
@@ -7062,8 +6684,8 @@ TextureImporter:
       name: FallingRock-2
       rect:
         serializedVersion: 2
-        x: 583
-        y: 948
+        x: 705
+        y: 1153
         width: 16
         height: 16
       alignment: 0
@@ -7083,8 +6705,8 @@ TextureImporter:
       name: FallingRock-3
       rect:
         serializedVersion: 2
-        x: 1000
-        y: 776
+        x: 705
+        y: 1135
         width: 16
         height: 16
       alignment: 0
@@ -7104,8 +6726,8 @@ TextureImporter:
       name: FallingRock-4
       rect:
         serializedVersion: 2
-        x: 998
-        y: 738
+        x: 915
+        y: 977
         width: 16
         height: 16
       alignment: 0
@@ -7125,8 +6747,8 @@ TextureImporter:
       name: FallingRock-5
       rect:
         serializedVersion: 2
-        x: 998
-        y: 720
+        x: 915
+        y: 959
         width: 16
         height: 16
       alignment: 0
@@ -7146,8 +6768,8 @@ TextureImporter:
       name: FallingRock-6
       rect:
         serializedVersion: 2
-        x: 715
-        y: 1524
+        x: 93
+        y: 1545
         width: 18
         height: 17
       alignment: 0
@@ -7189,7 +6811,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 424
-        y: 1411
+        y: 1379
         width: 25
         height: 21
       alignment: 0
@@ -7209,8 +6831,8 @@ TextureImporter:
       name: FallingRock-9
       rect:
         serializedVersion: 2
-        x: 368
-        y: 737
+        x: 823
+        y: 1462
         width: 27
         height: 21
       alignment: 0
@@ -7230,8 +6852,8 @@ TextureImporter:
       name: LightBall-0
       rect:
         serializedVersion: 2
-        x: 715
-        y: 1481
+        x: 714
+        y: 1442
         width: 17
         height: 16
       alignment: 9
@@ -7251,8 +6873,8 @@ TextureImporter:
       name: LightBall-1
       rect:
         serializedVersion: 2
-        x: 1004
-        y: 941
+        x: 714
+        y: 1526
         width: 19
         height: 15
       alignment: 9
@@ -7293,8 +6915,8 @@ TextureImporter:
       name: LightBall-3
       rect:
         serializedVersion: 2
-        x: 922
-        y: 1123
+        x: 592
+        y: 1030
         width: 14
         height: 13
       alignment: 9
@@ -7314,8 +6936,8 @@ TextureImporter:
       name: LightBall-4
       rect:
         serializedVersion: 2
-        x: 601
-        y: 1065
+        x: 677
+        y: 1135
         width: 14
         height: 15
       alignment: 9
@@ -7335,8 +6957,8 @@ TextureImporter:
       name: LightBall-5
       rect:
         serializedVersion: 2
-        x: 94
-        y: 1544
+        x: 714
+        y: 1543
         width: 19
         height: 18
       alignment: 9
@@ -7356,8 +6978,8 @@ TextureImporter:
       name: LightBall-6
       rect:
         serializedVersion: 2
-        x: 1001
-        y: 864
+        x: 429
+        y: 1488
         width: 21
         height: 20
       alignment: 9
@@ -7378,7 +7000,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 424
-        y: 1457
+        y: 1402
         width: 25
         height: 24
       alignment: 9
@@ -7399,7 +7021,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 417
-        y: 1106
+        y: 1167
         width: 28
         height: 28
       alignment: 9
@@ -7461,8 +7083,8 @@ TextureImporter:
       name: GoblinBomb-10
       rect:
         serializedVersion: 2
-        x: 394
-        y: 985
+        x: 592
+        y: 1061
         width: 14
         height: 14
       alignment: 0
@@ -7482,8 +7104,8 @@ TextureImporter:
       name: GoblinBomb-11
       rect:
         serializedVersion: 2
-        x: 922
-        y: 1138
+        x: 592
+        y: 1045
         width: 14
         height: 14
       alignment: 0
@@ -7545,8 +7167,8 @@ TextureImporter:
       name: GoblinBomb-14
       rect:
         serializedVersion: 2
-        x: 560
-        y: 758
+        x: 814
+        y: 1215
         width: 34
         height: 30
       alignment: 0
@@ -7566,8 +7188,8 @@ TextureImporter:
       name: GoblinBomb-15
       rect:
         serializedVersion: 2
-        x: 800
-        y: 1202
+        x: 459
+        y: 670
         width: 49
         height: 46
       alignment: 0
@@ -7629,8 +7251,8 @@ TextureImporter:
       name: GoblinBomb-18
       rect:
         serializedVersion: 2
-        x: 442
-        y: 696
+        x: 774
+        y: 672
         width: 54
         height: 48
       alignment: 0
@@ -7671,8 +7293,8 @@ TextureImporter:
       name: GoblinBomb-3
       rect:
         serializedVersion: 2
-        x: 541
-        y: 1472
+        x: 255
+        y: 1317
         width: 9
         height: 9
       alignment: 0
@@ -7692,8 +7314,8 @@ TextureImporter:
       name: GoblinBomb-4
       rect:
         serializedVersion: 2
-        x: 973
-        y: 1622
+        x: 541
+        y: 1493
         width: 10
         height: 10
       alignment: 0
@@ -7713,8 +7335,8 @@ TextureImporter:
       name: GoblinBomb-5
       rect:
         serializedVersion: 2
-        x: 541
-        y: 1472
+        x: 255
+        y: 1317
         width: 9
         height: 9
       alignment: 0
@@ -7734,8 +7356,8 @@ TextureImporter:
       name: GoblinBomb-6
       rect:
         serializedVersion: 2
-        x: 973
-        y: 1622
+        x: 541
+        y: 1493
         width: 10
         height: 10
       alignment: 0
@@ -7755,8 +7377,8 @@ TextureImporter:
       name: GoblinBomb-7
       rect:
         serializedVersion: 2
-        x: 541
-        y: 1472
+        x: 255
+        y: 1317
         width: 9
         height: 9
       alignment: 0
@@ -7776,8 +7398,8 @@ TextureImporter:
       name: GoblinBomb-8
       rect:
         serializedVersion: 2
-        x: 973
-        y: 1622
+        x: 541
+        y: 1493
         width: 10
         height: 10
       alignment: 0
@@ -7798,7 +7420,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 440
-        y: 1606
+        y: 1593
         width: 11
         height: 10
       alignment: 0
@@ -7818,8 +7440,8 @@ TextureImporter:
       name: Explosion12_1
       rect:
         serializedVersion: 2
-        x: 690
-        y: 1110
+        x: 289
+        y: 878
         width: 13
         height: 13
       alignment: 9
@@ -7839,8 +7461,8 @@ TextureImporter:
       name: Explosion12_2
       rect:
         serializedVersion: 2
-        x: 762
-        y: 529
+        x: 138
+        y: 423
         width: 31
         height: 27
       alignment: 9
@@ -7860,8 +7482,8 @@ TextureImporter:
       name: Explosion12_3
       rect:
         serializedVersion: 2
-        x: 660
-        y: 857
+        x: 808
+        y: 1117
         width: 40
         height: 36
       alignment: 9
@@ -7881,8 +7503,8 @@ TextureImporter:
       name: Explosion12_4
       rect:
         serializedVersion: 2
-        x: 781
-        y: 577
+        x: 467
+        y: 754
         width: 41
         height: 36
       alignment: 0
@@ -7923,8 +7545,8 @@ TextureImporter:
       name: Fireball5Red_10
       rect:
         serializedVersion: 2
-        x: 197
-        y: 765
+        x: 968
+        y: 828
         width: 55
         height: 39
       alignment: 9
@@ -7944,8 +7566,8 @@ TextureImporter:
       name: Fireball5Red_11
       rect:
         serializedVersion: 2
-        x: 161
-        y: 845
+        x: 205
+        y: 832
         width: 57
         height: 40
       alignment: 9
@@ -7965,8 +7587,8 @@ TextureImporter:
       name: Fireball5Red_12
       rect:
         serializedVersion: 2
-        x: 138
-        y: 804
+        x: 1
+        y: 806
         width: 57
         height: 39
       alignment: 9
@@ -7986,8 +7608,8 @@ TextureImporter:
       name: Fireball5Red_13
       rect:
         serializedVersion: 2
-        x: 79
-        y: 767
+        x: 144
+        y: 826
         width: 57
         height: 39
       alignment: 9
@@ -8007,8 +7629,8 @@ TextureImporter:
       name: Fireball5Red_14
       rect:
         serializedVersion: 2
-        x: 442
-        y: 664
+        x: 830
+        y: 657
         width: 54
         height: 30
       alignment: 9
@@ -8028,8 +7650,8 @@ TextureImporter:
       name: Fireball5Red_15
       rect:
         serializedVersion: 2
-        x: 697
-        y: 794
+        x: 60
+        y: 755
         width: 57
         height: 32
       alignment: 9
@@ -8049,8 +7671,8 @@ TextureImporter:
       name: Fireball5Red_16
       rect:
         serializedVersion: 2
-        x: 279
-        y: 822
+        x: 1
+        y: 699
         width: 57
         height: 30
       alignment: 9
@@ -8070,8 +7692,8 @@ TextureImporter:
       name: Fireball5Red_17
       rect:
         serializedVersion: 2
-        x: 756
-        y: 792
+        x: 1
+        y: 731
         width: 57
         height: 32
       alignment: 9
@@ -8091,8 +7713,8 @@ TextureImporter:
       name: Fireball5Red_18
       rect:
         serializedVersion: 2
-        x: 501
-        y: 747
+        x: 850
+        y: 867
         width: 57
         height: 27
       alignment: 9
@@ -8112,8 +7734,8 @@ TextureImporter:
       name: Fireball5Red_19
       rect:
         serializedVersion: 2
-        x: 442
-        y: 746
+        x: 909
+        y: 853
         width: 57
         height: 27
       alignment: 9
@@ -8154,8 +7776,8 @@ TextureImporter:
       name: Fireball5Red_20
       rect:
         serializedVersion: 2
-        x: 338
-        y: 794
+        x: 933
+        y: 941
         width: 57
         height: 28
       alignment: 9
@@ -8175,8 +7797,8 @@ TextureImporter:
       name: Fireball5Red_21
       rect:
         serializedVersion: 2
-        x: 596
-        y: 702
+        x: 787
+        y: 795
         width: 56
         height: 28
       alignment: 9
@@ -8196,8 +7818,8 @@ TextureImporter:
       name: Fireball5Red_3
       rect:
         serializedVersion: 2
-        x: 1004
-        y: 908
+        x: 713
+        y: 1285
         width: 16
         height: 20
       alignment: 9
@@ -8238,8 +7860,8 @@ TextureImporter:
       name: Fireball5Red_5
       rect:
         serializedVersion: 2
-        x: 588
-        y: 632
+        x: 823
+        y: 585
         width: 52
         height: 32
       alignment: 9
@@ -8259,8 +7881,8 @@ TextureImporter:
       name: Fireball5Red_6
       rect:
         serializedVersion: 2
-        x: 254
-        y: 747
+        x: 717
+        y: 720
         width: 55
         height: 32
       alignment: 9
@@ -8280,8 +7902,8 @@ TextureImporter:
       name: Fireball5Red_7
       rect:
         serializedVersion: 2
-        x: 195
-        y: 731
+        x: 960
+        y: 753
         width: 55
         height: 32
       alignment: 9
@@ -8301,8 +7923,8 @@ TextureImporter:
       name: Fireball5Red_8
       rect:
         serializedVersion: 2
-        x: 807
-        y: 716
+        x: 660
+        y: 720
         width: 55
         height: 34
       alignment: 9
@@ -8322,8 +7944,8 @@ TextureImporter:
       name: Fireball5Red_9
       rect:
         serializedVersion: 2
-        x: 1
-        y: 685
+        x: 886
+        y: 643
         width: 53
         height: 37
       alignment: 9
@@ -8343,8 +7965,8 @@ TextureImporter:
       name: BoltHead_0
       rect:
         serializedVersion: 2
-        x: 762
-        y: 558
+        x: 357
+        y: 478
         width: 32
         height: 17
       alignment: 9
@@ -8364,8 +7986,8 @@ TextureImporter:
       name: BoltHead_1
       rect:
         serializedVersion: 2
-        x: 895
-        y: 608
+        x: 285
+        y: 494
         width: 32
         height: 24
       alignment: 0
@@ -8385,8 +8007,8 @@ TextureImporter:
       name: BoltHead_2
       rect:
         serializedVersion: 2
-        x: 895
-        y: 582
+        x: 802
+        y: 559
         width: 32
         height: 24
       alignment: 0
@@ -8406,8 +8028,8 @@ TextureImporter:
       name: BoltHead_3
       rect:
         serializedVersion: 2
-        x: 972
-        y: 608
+        x: 767
+        y: 549
         width: 32
         height: 24
       alignment: 0
@@ -8427,8 +8049,8 @@ TextureImporter:
       name: BoltHead_4
       rect:
         serializedVersion: 2
-        x: 972
-        y: 582
+        x: 836
+        y: 559
         width: 32
         height: 24
       alignment: 0
@@ -8448,8 +8070,8 @@ TextureImporter:
       name: BoltHit_0
       rect:
         serializedVersion: 2
-        x: 862
-        y: 548
+        x: 570
+        y: 768
         width: 28
         height: 26
       alignment: 9
@@ -8469,8 +8091,8 @@ TextureImporter:
       name: BoltHit_1
       rect:
         serializedVersion: 2
-        x: 739
-        y: 468
+        x: 446
+        y: 463
         width: 30
         height: 27
       alignment: 9
@@ -8490,8 +8112,8 @@ TextureImporter:
       name: BoltHit_2
       rect:
         serializedVersion: 2
-        x: 364
-        y: 682
+        x: 319
+        y: 461
         width: 31
         height: 31
       alignment: 9
@@ -8511,8 +8133,8 @@ TextureImporter:
       name: BoltHit_3
       rect:
         serializedVersion: 2
-        x: 938
-        y: 638
+        x: 546
+        y: 520
         width: 32
         height: 30
       alignment: 9
@@ -8553,8 +8175,8 @@ TextureImporter:
       name: VThunderBoltSparse_11
       rect:
         serializedVersion: 2
-        x: 835
-        y: 886
+        x: 723
+        y: 790
         width: 62
         height: 112
       alignment: 9
@@ -8574,8 +8196,8 @@ TextureImporter:
       name: VThunderBoltSparse_12
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1096
+        x: 174
+        y: 1225
         width: 79
         height: 112
       alignment: 9
@@ -8596,7 +8218,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 625
-        y: 1379
+        y: 1449
         width: 87
         height: 112
       alignment: 9
@@ -8616,8 +8238,8 @@ TextureImporter:
       name: VThunderBoltSparse_14
       rect:
         serializedVersion: 2
-        x: 852
-        y: 1360
+        x: 734
+        y: 1380
         width: 87
         height: 112
       alignment: 9
@@ -8637,8 +8259,8 @@ TextureImporter:
       name: VThunderBoltSparse_15
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1369
+        x: 93
+        y: 1431
         width: 89
         height: 112
       alignment: 0
@@ -8658,8 +8280,8 @@ TextureImporter:
       name: VThunderBoltSparse_16
       rect:
         serializedVersion: 2
-        x: 184
-        y: 1401
+        x: 1
+        y: 1428
         width: 89
         height: 99
       alignment: 9
@@ -8679,8 +8301,8 @@ TextureImporter:
       name: VThunderBoltSparse_17
       rect:
         serializedVersion: 2
-        x: 92
-        y: 1382
+        x: 184
+        y: 1429
         width: 89
         height: 71
       alignment: 9
@@ -8700,8 +8322,8 @@ TextureImporter:
       name: VThunderBoltSparse_18
       rect:
         serializedVersion: 2
-        x: 735
-        y: 1526
+        x: 1
+        y: 1329
         width: 89
         height: 36
       alignment: 9
@@ -8721,8 +8343,8 @@ TextureImporter:
       name: VThunderBoltSparse_10
       rect:
         serializedVersion: 2
-        x: 241
-        y: 879
+        x: 664
+        y: 756
         width: 57
         height: 51
       alignment: 9
@@ -8742,8 +8364,8 @@ TextureImporter:
       name: StoneSword-0
       rect:
         serializedVersion: 2
-        x: 561
-        y: 813
+        x: 731
+        y: 600
         width: 35
         height: 14
       alignment: 0
@@ -8763,8 +8385,8 @@ TextureImporter:
       name: StoneSword-1
       rect:
         serializedVersion: 2
-        x: 561
-        y: 797
+        x: 647
+        y: 593
         width: 35
         height: 14
       alignment: 0
@@ -8784,8 +8406,8 @@ TextureImporter:
       name: StoneSword-2
       rect:
         serializedVersion: 2
-        x: 657
-        y: 789
+        x: 600
+        y: 591
         width: 35
         height: 14
       alignment: 0
@@ -8805,8 +8427,8 @@ TextureImporter:
       name: StoneSword-3
       rect:
         serializedVersion: 2
-        x: 657
-        y: 773
+        x: 768
+        y: 590
         width: 35
         height: 14
       alignment: 0
@@ -8826,8 +8448,8 @@ TextureImporter:
       name: StoneSword-4
       rect:
         serializedVersion: 2
-        x: 657
-        y: 789
+        x: 600
+        y: 591
         width: 35
         height: 14
       alignment: 0
@@ -8847,8 +8469,8 @@ TextureImporter:
       name: StoneSword-5
       rect:
         serializedVersion: 2
-        x: 561
-        y: 797
+        x: 647
+        y: 593
         width: 35
         height: 14
       alignment: 0
@@ -8890,7 +8512,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 541
-        y: 1494
+        y: 1470
         width: 10
         height: 9
       alignment: 9
@@ -8911,7 +8533,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 440
-        y: 1580
+        y: 1567
         width: 10
         height: 11
       alignment: 9
@@ -8932,7 +8554,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 440
-        y: 1567
+        y: 1554
         width: 10
         height: 11
       alignment: 9
@@ -8973,8 +8595,8 @@ TextureImporter:
       name: RoundTimedBomb-6
       rect:
         serializedVersion: 2
-        x: 541
-        y: 1483
+        x: 255
+        y: 1328
         width: 10
         height: 9
       alignment: 9
@@ -8995,7 +8617,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 541
-        y: 1505
+        y: 1481
         width: 10
         height: 10
       alignment: 9
@@ -9015,8 +8637,8 @@ TextureImporter:
       name: RoundTimedBomb-8
       rect:
         serializedVersion: 2
-        x: 250
-        y: 1193
+        x: 163
+        y: 1263
         width: 9
         height: 9
       alignment: 9
@@ -9036,8 +8658,8 @@ TextureImporter:
       name: Explosion31_0
       rect:
         serializedVersion: 2
-        x: 447
-        y: 894
+        x: 600
+        y: 705
         width: 58
         height: 56
       alignment: 9
@@ -9057,8 +8679,8 @@ TextureImporter:
       name: Explosion31_1
       rect:
         serializedVersion: 2
-        x: 447
-        y: 952
+        x: 789
+        y: 989
         width: 59
         height: 60
       alignment: 9
@@ -9078,8 +8700,8 @@ TextureImporter:
       name: Explosion31_10
       rect:
         serializedVersion: 2
-        x: 631
-        y: 567
+        x: 94
+        y: 443
         width: 42
         height: 50
       alignment: 9
@@ -9099,8 +8721,8 @@ TextureImporter:
       name: Explosion31_11
       rect:
         serializedVersion: 2
-        x: 675
-        y: 552
+        x: 1
+        y: 445
         width: 42
         height: 41
       alignment: 9
@@ -9120,8 +8742,8 @@ TextureImporter:
       name: Explosion31_12
       rect:
         serializedVersion: 2
-        x: 719
-        y: 555
+        x: 467
+        y: 718
         width: 41
         height: 34
       alignment: 9
@@ -9141,8 +8763,8 @@ TextureImporter:
       name: Explosion31_13
       rect:
         serializedVersion: 2
-        x: 665
-        y: 922
+        x: 563
+        y: 637
         width: 35
         height: 25
       alignment: 9
@@ -9183,8 +8805,8 @@ TextureImporter:
       name: Explosion31_2
       rect:
         serializedVersion: 2
-        x: 601
-        y: 921
+        x: 511
+        y: 815
         width: 62
         height: 63
       alignment: 9
@@ -9204,8 +8826,8 @@ TextureImporter:
       name: Explosion31_3
       rect:
         serializedVersion: 2
-        x: 498
-        y: 620
+        x: 715
+        y: 654
         width: 52
         height: 64
       alignment: 9
@@ -9246,8 +8868,8 @@ TextureImporter:
       name: Explosion31_5
       rect:
         serializedVersion: 2
-        x: 937
-        y: 833
+        x: 306
+        y: 920
         width: 62
         height: 64
       alignment: 9
@@ -9267,8 +8889,8 @@ TextureImporter:
       name: Explosion31_6
       rect:
         serializedVersion: 2
-        x: 939
-        y: 1035
+        x: 723
+        y: 1001
         width: 64
         height: 56
       alignment: 9
@@ -9288,8 +8910,8 @@ TextureImporter:
       name: Explosion31_7
       rect:
         serializedVersion: 2
-        x: 586
-        y: 583
+        x: 1
+        y: 488
         width: 43
         height: 47
       alignment: 9
@@ -9309,8 +8931,8 @@ TextureImporter:
       name: Explosion31_8
       rect:
         serializedVersion: 2
-        x: 397
-        y: 699
+        x: 98
+        y: 495
         width: 43
         height: 49
       alignment: 9
@@ -9330,8 +8952,8 @@ TextureImporter:
       name: Explosion31_9
       rect:
         serializedVersion: 2
-        x: 397
-        y: 802
+        x: 196
+        y: 524
         width: 43
         height: 50
       alignment: 9
@@ -9372,8 +8994,8 @@ TextureImporter:
       name: Fireball31_10
       rect:
         serializedVersion: 2
-        x: 256
-        y: 781
+        x: 968
+        y: 869
         width: 55
         height: 39
       alignment: 9
@@ -9393,8 +9015,8 @@ TextureImporter:
       name: Fireball31_11
       rect:
         serializedVersion: 2
-        x: 161
-        y: 887
+        x: 1
+        y: 847
         width: 57
         height: 40
       alignment: 9
@@ -9414,8 +9036,8 @@ TextureImporter:
       name: Fireball31_12
       rect:
         serializedVersion: 2
-        x: 300
-        y: 854
+        x: 302
+        y: 757
         width: 57
         height: 39
       alignment: 9
@@ -9435,8 +9057,8 @@ TextureImporter:
       name: Fireball31_13
       rect:
         serializedVersion: 2
-        x: 220
-        y: 838
+        x: 60
+        y: 830
         width: 57
         height: 39
       alignment: 9
@@ -9456,8 +9078,8 @@ TextureImporter:
       name: Fireball31_14
       rect:
         serializedVersion: 2
-        x: 498
-        y: 686
+        x: 830
+        y: 689
         width: 54
         height: 30
       alignment: 9
@@ -9477,8 +9099,8 @@ TextureImporter:
       name: Fireball31_15
       rect:
         serializedVersion: 2
-        x: 502
-        y: 805
+        x: 203
+        y: 762
         width: 57
         height: 32
       alignment: 9
@@ -9498,8 +9120,8 @@ TextureImporter:
       name: Fireball31_16
       rect:
         serializedVersion: 2
-        x: 812
-        y: 752
+        x: 60
+        y: 723
         width: 57
         height: 30
       alignment: 9
@@ -9519,8 +9141,8 @@ TextureImporter:
       name: Fireball31_17
       rect:
         serializedVersion: 2
-        x: 598
-        y: 784
+        x: 119
+        y: 756
         width: 57
         height: 32
       alignment: 9
@@ -9540,8 +9162,8 @@ TextureImporter:
       name: Fireball31_18
       rect:
         serializedVersion: 2
-        x: 501
-        y: 776
+        x: 850
+        y: 896
         width: 57
         height: 27
       alignment: 9
@@ -9561,8 +9183,8 @@ TextureImporter:
       name: Fireball31_19
       rect:
         serializedVersion: 2
-        x: 442
-        y: 775
+        x: 909
+        y: 882
         width: 57
         height: 27
       alignment: 9
@@ -9603,8 +9225,8 @@ TextureImporter:
       name: Fireball31_20
       rect:
         serializedVersion: 2
-        x: 338
-        y: 824
+        x: 1
+        y: 669
         width: 57
         height: 28
       alignment: 9
@@ -9624,8 +9246,8 @@ TextureImporter:
       name: Fireball31_21
       rect:
         serializedVersion: 2
-        x: 691
-        y: 730
+        x: 846
+        y: 808
         width: 56
         height: 28
       alignment: 9
@@ -9645,8 +9267,8 @@ TextureImporter:
       name: Fireball31_3
       rect:
         serializedVersion: 2
-        x: 1005
-        y: 958
+        x: 713
+        y: 1307
         width: 16
         height: 20
       alignment: 9
@@ -9687,8 +9309,8 @@ TextureImporter:
       name: Fireball31_5
       rect:
         serializedVersion: 2
-        x: 649
-        y: 657
+        x: 877
+        y: 609
         width: 52
         height: 32
       alignment: 9
@@ -9708,8 +9330,8 @@ TextureImporter:
       name: Fireball31_6
       rect:
         serializedVersion: 2
-        x: 921
-        y: 670
+        x: 844
+        y: 755
         width: 55
         height: 32
       alignment: 9
@@ -9729,8 +9351,8 @@ TextureImporter:
       name: Fireball31_7
       rect:
         serializedVersion: 2
-        x: 313
-        y: 760
+        x: 780
+        y: 722
         width: 55
         height: 32
       alignment: 9
@@ -9750,8 +9372,8 @@ TextureImporter:
       name: Fireball31_8
       rect:
         serializedVersion: 2
-        x: 1
-        y: 724
+        x: 723
+        y: 754
         width: 55
         height: 34
       alignment: 9
@@ -9771,8 +9393,8 @@ TextureImporter:
       name: Fireball31_9
       rect:
         serializedVersion: 2
-        x: 58
-        y: 689
+        x: 668
+        y: 809
         width: 53
         height: 37
       alignment: 9
@@ -9793,11 +9415,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 150
-        y: 1919
+        y: 1920
         width: 32
-        height: 33
-      alignment: 9
-      pivot: {x: 0.5, y: 0.4848485}
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -9813,12 +9435,12 @@ TextureImporter:
       name: IceSpark-1
       rect:
         serializedVersion: 2
-        x: 410
-        y: 1047
-        width: 35
+        x: 814
+        y: 1184
+        width: 34
         height: 29
       alignment: 9
-      pivot: {x: 0.45714286, y: 0.4827586}
+      pivot: {x: 0.47058824, y: 0.4827586}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -9834,12 +9456,12 @@ TextureImporter:
       name: IceSpark-10
       rect:
         serializedVersion: 2
-        x: 552
-        y: 594
+        x: 507
+        y: 506
         width: 32
-        height: 31
+        height: 30
       alignment: 9
-      pivot: {x: 0.5, y: 0.5483871}
+      pivot: {x: 0.5, y: 0.53333336}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -9855,12 +9477,12 @@ TextureImporter:
       name: IceSpark-11
       rect:
         serializedVersion: 2
-        x: 568
-        y: 853
+        x: 285
+        y: 445
         width: 31
-        height: 32
+        height: 31
       alignment: 9
-      pivot: {x: 0.516129, y: 0.53125}
+      pivot: {x: 0.516129, y: 0.516129}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -9876,8 +9498,8 @@ TextureImporter:
       name: IceSpark-12
       rect:
         serializedVersion: 2
-        x: 795
-        y: 513
+        x: 668
+        y: 503
         width: 30
         height: 30
       alignment: 9
@@ -9918,8 +9540,8 @@ TextureImporter:
       name: IceSpark-14
       rect:
         serializedVersion: 2
-        x: 938
-        y: 607
+        x: 323
+        y: 494
         width: 32
         height: 29
       alignment: 9
@@ -9939,8 +9561,8 @@ TextureImporter:
       name: IceSpark-15
       rect:
         serializedVersion: 2
-        x: 719
-        y: 526
+        x: 90
+        y: 414
         width: 31
         height: 27
       alignment: 9
@@ -9960,12 +9582,12 @@ TextureImporter:
       name: IceSpark-16
       rect:
         serializedVersion: 2
-        x: 410
-        y: 988
-        width: 35
+        x: 527
+        y: 592
+        width: 34
         height: 26
       alignment: 9
-      pivot: {x: 0.54285717, y: 0.53846157}
+      pivot: {x: 0.5294118, y: 0.53846157}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -9981,8 +9603,8 @@ TextureImporter:
       name: IceSpark-17
       rect:
         serializedVersion: 2
-        x: 655
-        y: 745
+        x: 731
+        y: 565
         width: 34
         height: 26
       alignment: 9
@@ -10023,8 +9645,8 @@ TextureImporter:
       name: IceSpark-19
       rect:
         serializedVersion: 2
-        x: 674
-        y: 523
+        x: 45
+        y: 412
         width: 31
         height: 27
       alignment: 9
@@ -10044,12 +9666,12 @@ TextureImporter:
       name: IceSpark-2
       rect:
         serializedVersion: 2
-        x: 899
-        y: 871
-        width: 36
+        x: 563
+        y: 695
+        width: 35
         height: 29
       alignment: 9
-      pivot: {x: 0.4722222, y: 0.4827586}
+      pivot: {x: 0.4857143, y: 0.4827586}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -10065,12 +9687,12 @@ TextureImporter:
       name: IceSpark-20
       rect:
         serializedVersion: 2
-        x: 752
-        y: 497
+        x: 626
+        y: 494
         width: 30
-        height: 30
+        height: 29
       alignment: 9
-      pivot: {x: 0.53333336, y: 0.56666666}
+      pivot: {x: 0.53333336, y: 0.55172414}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -10086,12 +9708,12 @@ TextureImporter:
       name: IceSpark-21
       rect:
         serializedVersion: 2
-        x: 784
-        y: 482
+        x: 541
+        y: 490
         width: 30
-        height: 29
+        height: 28
       alignment: 9
-      pivot: {x: 0.53333336, y: 0.5862069}
+      pivot: {x: 0.53333336, y: 0.5714286}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -10107,8 +9729,8 @@ TextureImporter:
       name: IceSpark-22
       rect:
         serializedVersion: 2
-        x: 908
-        y: 1004
+        x: 819
+        y: 1329
         width: 29
         height: 30
       alignment: 9
@@ -10129,7 +9751,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 417
-        y: 1136
+        y: 1197
         width: 28
         height: 32
       alignment: 9
@@ -10149,8 +9771,8 @@ TextureImporter:
       name: IceSpark-24
       rect:
         serializedVersion: 2
-        x: 695
-        y: 595
+        x: 592
+        y: 524
         width: 32
         height: 31
       alignment: 9
@@ -10170,12 +9792,12 @@ TextureImporter:
       name: IceSpark-25
       rect:
         serializedVersion: 2
-        x: 666
-        y: 1033
-        width: 37
+        x: 985
+        y: 569
+        width: 36
         height: 30
-      alignment: 9
-      pivot: {x: 0.5135135, y: 0.5}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -10191,8 +9813,8 @@ TextureImporter:
       name: IceSpark-26
       rect:
         serializedVersion: 2
-        x: 410
-        y: 1016
+        x: 563
+        y: 664
         width: 35
         height: 29
       alignment: 9
@@ -10212,8 +9834,8 @@ TextureImporter:
       name: IceSpark-27
       rect:
         serializedVersion: 2
-        x: 707
-        y: 496
+        x: 480
+        y: 476
         width: 30
         height: 28
       alignment: 9
@@ -10233,8 +9855,8 @@ TextureImporter:
       name: IceSpark-28
       rect:
         serializedVersion: 2
-        x: 925
-        y: 553
+        x: 352
+        y: 449
         width: 30
         height: 27
       alignment: 9
@@ -10296,8 +9918,8 @@ TextureImporter:
       name: IceSpark-4
       rect:
         serializedVersion: 2
-        x: 892
-        y: 551
+        x: 237
+        y: 440
         width: 31
         height: 29
       alignment: 9
@@ -10317,8 +9939,8 @@ TextureImporter:
       name: IceSpark-5
       rect:
         serializedVersion: 2
-        x: 560
-        y: 729
+        x: 814
+        y: 1155
         width: 34
         height: 27
       alignment: 9
@@ -10338,8 +9960,8 @@ TextureImporter:
       name: IceSpark-6
       rect:
         serializedVersion: 2
-        x: 665
-        y: 949
+        x: 983
+        y: 540
         width: 36
         height: 27
       alignment: 9
@@ -10359,12 +9981,12 @@ TextureImporter:
       name: IceSpark-7
       rect:
         serializedVersion: 2
-        x: 899
-        y: 902
+        x: 985
+        y: 601
         width: 36
-        height: 32
+        height: 31
       alignment: 9
-      pivot: {x: 0.5, y: 0.46875}
+      pivot: {x: 0.5, y: 0.48387095}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -10380,8 +10002,8 @@ TextureImporter:
       name: IceSpark-8
       rect:
         serializedVersion: 2
-        x: 972
-        y: 634
+        x: 378
+        y: 497
         width: 32
         height: 30
       alignment: 9
@@ -10401,8 +10023,8 @@ TextureImporter:
       name: IceSpark-9
       rect:
         serializedVersion: 2
-        x: 796
-        y: 545
+        x: 187
+        y: 426
         width: 31
         height: 29
       alignment: 9
@@ -10443,8 +10065,8 @@ TextureImporter:
       name: MegaChargedBullet-2
       rect:
         serializedVersion: 2
-        x: 262
-        y: 1200
+        x: 241
+        y: 998
         width: 72
         height: 60
       alignment: 9
@@ -10464,8 +10086,8 @@ TextureImporter:
       name: MegaChargedBullet-3
       rect:
         serializedVersion: 2
-        x: 528
-        y: 1020
+        x: 81
+        y: 941
         width: 71
         height: 60
       alignment: 9
@@ -10477,6 +10099,2883 @@ TextureImporter:
       bones: []
       spriteID: 069f059f71b1c084a8d104b19a48e883
       internalID: -153642844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_1
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 914
+        width: 15
+        height: 9
+      alignment: 9
+      pivot: {x: 0.96666664, y: 0.44444445}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52358cbda0358f24b9e97a3098aeecfc
+      internalID: -136898707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_10
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 558
+        width: 36
+        height: 17
+      alignment: 9
+      pivot: {x: 0.6527778, y: 0.4117647}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 30d786a7eaf79854ea896de7a6b3adb3
+      internalID: 611933045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_11
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 540
+        width: 36
+        height: 16
+      alignment: 9
+      pivot: {x: 0.6527778, y: 0.375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a6c8b3244c8826418cfc74201e3e49b
+      internalID: 682621680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_12
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 525
+        width: 36
+        height: 13
+      alignment: 9
+      pivot: {x: 0.6527778, y: 0.46153846}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 791b5aac53df3334c8d21371d173fe62
+      internalID: 1437331359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_13
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 520
+        width: 36
+        height: 13
+      alignment: 9
+      pivot: {x: 0.6527778, y: 0.46153846}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c50ce55362cc8a741aeee3926a60f007
+      internalID: -1253243807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_14
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 1271
+        width: 29
+        height: 26
+      alignment: 9
+      pivot: {x: 0.46551725, y: 0.42307693}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 850926cf1dddc094eb239d0b250abda6
+      internalID: -467182979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_15
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 1485
+        width: 25
+        height: 27
+      alignment: 9
+      pivot: {x: 0.3, y: 0.44444445}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9be98404a458f148a753650ab099af0
+      internalID: 1485292004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_16
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 508
+        width: 30
+        height: 30
+      alignment: 9
+      pivot: {x: 0.25, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d7aa1d981dade146989f1ce403ec97e
+      internalID: 901573498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_17
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 508
+        width: 32
+        height: 30
+      alignment: 9
+      pivot: {x: 0.265625, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c2a203124f8721439aa6c0268c3969e
+      internalID: -376504606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_18
+      rect:
+        serializedVersion: 2
+        x: 473
+        y: 508
+        width: 32
+        height: 30
+      alignment: 9
+      pivot: {x: 0.265625, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eea13b03784f4e642a876ac3df89f954
+      internalID: -452795634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_19
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 1428
+        width: 25
+        height: 24
+      alignment: 9
+      pivot: {x: 0.06, y: 0.375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06051fbb0d9129340a3a4515908f7097
+      internalID: 1059912345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_2
+      rect:
+        serializedVersion: 2
+        x: 707
+        y: 1247
+        width: 20
+        height: 11
+      alignment: 9
+      pivot: {x: 0.725, y: 0.45454547}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9315b7259e72b8c4fb17692ae39f7ba9
+      internalID: -463159303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_20
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 1617
+        width: 11
+        height: 11
+      alignment: 9
+      pivot: {x: -1.0454545, y: 0.8181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 30340800e54e7ad49a8b1e6f7a559204
+      internalID: 328132539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_21
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 1937
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 7.8333335, y: -4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff66e8ec32676d0468463bcf82de28d2
+      internalID: 701180598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_22
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 1937
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 7.8333335, y: -4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aca221e89c03fed49ab1b3e478ea215b
+      internalID: 1141267817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_3
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 1454
+        width: 21
+        height: 11
+      alignment: 9
+      pivot: {x: 0.6904762, y: 0.45454547}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46bfc83e4b1115440bf141ee1fcb0648
+      internalID: -1709020255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_4
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 492
+        width: 32
+        height: 14
+      alignment: 9
+      pivot: {x: 0.609375, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 321b57db51b77fc479d63b31fc4ad5ae
+      internalID: -535641130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_5
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 529
+        width: 36
+        height: 14
+      alignment: 9
+      pivot: {x: 0.6527778, y: 0.42857143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f531fe874c76314c8c392ef4f0a2647
+      internalID: -478064168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_6
+      rect:
+        serializedVersion: 2
+        x: 808
+        y: 1070
+        width: 40
+        height: 17
+      alignment: 9
+      pivot: {x: 0.5875, y: 0.3529412}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3080d776ea520974e8fb640aa3ea6aed
+      internalID: 1568389509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_7
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 1613
+        width: 40
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5875, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a30b669b62402f84bba69986c9c83245
+      internalID: -1613762705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_8
+      rect:
+        serializedVersion: 2
+        x: 808
+        y: 1051
+        width: 40
+        height: 17
+      alignment: 9
+      pivot: {x: 0.5875, y: 0.5882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f08335618a259644b925590b1679480
+      internalID: -1580568192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IcePick_9
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 478
+        width: 32
+        height: 14
+      alignment: 9
+      pivot: {x: 0.609375, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e777a046bcbc7284a9dfb28c263f6f38
+      internalID: 2048181333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_1
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 630
+        width: 50
+        height: 18
+      alignment: 9
+      pivot: {x: 0.44, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ccf43278bd4e89444a8931ede48bfcb4
+      internalID: -235836611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_10
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 598
+        width: 47
+        height: 17
+      alignment: 9
+      pivot: {x: 0.40425533, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de2a2ce07fb6cd94c87c2ebbaa6535b9
+      internalID: -140072376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_11
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 684
+        width: 49
+        height: 17
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ef0af6b0ac13794db5a9c52d3eac7d9
+      internalID: 1661342387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_12
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 665
+        width: 49
+        height: 17
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39f1575f7fb84ec4c8ec122cda0d79c5
+      internalID: 2143048881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_13
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 585
+        width: 47
+        height: 17
+      alignment: 9
+      pivot: {x: 0.40425533, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6fff7b1a5b65564abd4e72c856931c0
+      internalID: 124804439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_14
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 654
+        width: 49
+        height: 17
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5d409269c649be468dad06c09fd6080
+      internalID: 1454130094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_15
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 708
+        width: 51
+        height: 17
+      alignment: 9
+      pivot: {x: 0.4509804, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adcb787147f0f194792195840a61095a
+      internalID: 695215429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_16
+      rect:
+        serializedVersion: 2
+        x: 705
+        y: 635
+        width: 50
+        height: 17
+      alignment: 9
+      pivot: {x: 0.44, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 062c867b9a07cc34e8fbef3309c6fc1d
+      internalID: 741778799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_17
+      rect:
+        serializedVersion: 2
+        x: 877
+        y: 590
+        width: 52
+        height: 17
+      alignment: 9
+      pivot: {x: 0.46153846, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21ad9ab9ccec7f74394fd64d655dd757
+      internalID: -1448106097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_18
+      rect:
+        serializedVersion: 2
+        x: 845
+        y: 789
+        width: 56
+        height: 17
+      alignment: 9
+      pivot: {x: 0.5, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09802010c8e26f840a826e5fa2d955e7
+      internalID: -1892979146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_19
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 651
+        width: 49
+        height: 17
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b8195193a1fa584cb81632bbb02ac4e
+      internalID: -896977435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_2
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 645
+        width: 49
+        height: 18
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37eb50920b9359a46ad1b0d581ada39d
+      internalID: -1228557471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_20
+      rect:
+        serializedVersion: 2
+        x: 705
+        y: 616
+        width: 50
+        height: 17
+      alignment: 9
+      pivot: {x: 0.44, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f3cb59b5a938c5498967db20d356a00
+      internalID: -889220914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_21
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 546
+        width: 46
+        height: 17
+      alignment: 9
+      pivot: {x: 0.39130434, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 551fa05caf007cf429edd0a559016a48
+      internalID: -255321588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_22
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 604
+        width: 48
+        height: 17
+      alignment: 9
+      pivot: {x: 0.41666666, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1018ba9eeab0f14186be19334c871aa
+      internalID: -834113686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_23
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 599
+        width: 47
+        height: 18
+      alignment: 9
+      pivot: {x: 0.40425533, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbd818211b4d9b0428fa2e22f85dbe79
+      internalID: 415191991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_24
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 625
+        width: 49
+        height: 18
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae56a5e4bc292c644b51f82968cc80fc
+      internalID: -885924693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_25
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 706
+        width: 51
+        height: 17
+      alignment: 9
+      pivot: {x: 0.4509804, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf90e39510adabc4698592bfa112e7a0
+      internalID: -991498263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_26
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 623
+        width: 46
+        height: 16
+      alignment: 9
+      pivot: {x: 0.39130434, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28a2efce71accbc4293893f86c5e6d65
+      internalID: 2008672953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_27
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 604
+        width: 48
+        height: 16
+      alignment: 9
+      pivot: {x: 0.41666666, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45f626b6c413a2b4daf8b085e17c3098
+      internalID: 749765535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_28
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 641
+        width: 47
+        height: 17
+      alignment: 9
+      pivot: {x: 0.40425533, y: 0.5294118}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24ebc2a7940e7644193bde46dea170bd
+      internalID: 1988828227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_29
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 646
+        width: 49
+        height: 17
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.5294118}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dda3fe52fe6f59f408bc8d1a93559d85
+      internalID: -1844712065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_3
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 632
+        width: 47
+        height: 17
+      alignment: 9
+      pivot: {x: 0.40425533, y: 0.5294118}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51e360d230b67c34395c4f2ec23febe6
+      internalID: 66185993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_30
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 544
+        width: 46
+        height: 17
+      alignment: 9
+      pivot: {x: 0.39130434, y: 0.5294118}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34e326793e010be49a0dd3feee850fb6
+      internalID: -869790057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_31
+      rect:
+        serializedVersion: 2
+        x: 647
+        y: 609
+        width: 45
+        height: 18
+      alignment: 9
+      pivot: {x: 0.37777779, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0b82fdf28ec927488d1d487946cd170
+      internalID: -1562705464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_32
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 565
+        width: 46
+        height: 18
+      alignment: 9
+      pivot: {x: 0.39130434, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94616fea40e729e4c94100b61efe8387
+      internalID: 1058336140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_33
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 622
+        width: 48
+        height: 18
+      alignment: 9
+      pivot: {x: 0.41666666, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96ed18856505b304facccc28ea2a5c24
+      internalID: -88156346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_34
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 557
+        width: 46
+        height: 18
+      alignment: 9
+      pivot: {x: 0.39130434, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26511722bfdce584fa56cea0758798e0
+      internalID: -1128777747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_35
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 605
+        width: 48
+        height: 18
+      alignment: 9
+      pivot: {x: 0.41666666, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ce3bfcdb94aa0a46b9a64b3acdc406b
+      internalID: 1467924597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_4
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 623
+        width: 49
+        height: 18
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6967d1ac0c86cf4697d538e13a71691
+      internalID: -2075801889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_5
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 660
+        width: 51
+        height: 18
+      alignment: 9
+      pivot: {x: 0.4509804, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07d840ea8a7917343afbe7e2424cb54d
+      internalID: -742777477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_6
+      rect:
+        serializedVersion: 2
+        x: 931
+        y: 581
+        width: 52
+        height: 17
+      alignment: 9
+      pivot: {x: 0.46153846, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89ca977f6bc4bb5499ced0f64c9d9c6e
+      internalID: -128562905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_7
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 635
+        width: 49
+        height: 17
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d7523dc51f3f254d82f70b0df6b424c
+      internalID: -1509368485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_8
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 580
+        width: 44
+        height: 17
+      alignment: 9
+      pivot: {x: 0.36363637, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08230bff6aa0be249b5c912daa259890
+      internalID: 973482305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShiningFireball_9
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 537
+        width: 46
+        height: 17
+      alignment: 9
+      pivot: {x: 0.39130434, y: 0.47058824}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfbbceaf22878ad44906a0ef7f8c83d8
+      internalID: -963766440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_1
+      rect:
+        serializedVersion: 2
+        x: 823
+        y: 1421
+        width: 27
+        height: 17
+      alignment: 9
+      pivot: {x: 0.5555556, y: 0.5882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cab2cc7ffdb86e04ebb1f783f6be48bc
+      internalID: 1693965066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_10
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 931
+        width: 16
+        height: 8
+      alignment: 9
+      pivot: {x: 0.4375, y: 2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebc9d830e07932041b25dcdc07ff88b0
+      internalID: -1129317355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_11
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 853
+        width: 13
+        height: 10
+      alignment: 9
+      pivot: {x: 0.46153846, y: 1.6}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2065fe8e5c7d29249a797eaf0b624900
+      internalID: -1326015614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_12
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 832
+        width: 24
+        height: 17
+      alignment: 9
+      pivot: {x: 0.5, y: 0.9411765}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09a6c580406cd7940bc3cd08c94576ab
+      internalID: -1910754312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_13
+      rect:
+        serializedVersion: 2
+        x: 823
+        y: 1401
+        width: 26
+        height: 18
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8888889}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 981b04fb596de4b4b86e2010da3b6d27
+      internalID: -1025191998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_14
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 747
+        width: 28
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.84210527}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbb87f842e177134aab401a490342f37
+      internalID: 670933954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_15
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 726
+        width: 28
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.84210527}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 497d127f71677c44ca8a677096e9641e
+      internalID: -713053066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_16
+      rect:
+        serializedVersion: 2
+        x: 533
+        y: 620
+        width: 28
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.84210527}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88280d5826f39e944b5cef3d63080a01
+      internalID: -1312931320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_17
+      rect:
+        serializedVersion: 2
+        x: 533
+        y: 620
+        width: 28
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.84210527}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c797ca801b9f46249acc42af1c837419
+      internalID: 1738208497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_18
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 556
+        width: 28
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.84210527}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c534e7643bfd0824283166593f23513e
+      internalID: 1906188078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_19
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 556
+        width: 28
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.84210527}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc2693f4f66eb7545ba8f58cb2b13171
+      internalID: 1503909649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_2
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 1247
+        width: 29
+        height: 22
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.72727275}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3526b05af6e544f41bcd2bc5fefb7605
+      internalID: -1984698150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_20
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 851
+        width: 24
+        height: 18
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8888889}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 697ba0b6b3a9ea847b63f0cecc54aa36
+      internalID: 763689618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_21
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 1285
+        width: 24
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.61538464}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdd2ec84af265a7409e2bc6ae867837e
+      internalID: 1689637455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_22
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 1257
+        width: 24
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5769231}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 066687ad01d0c8f4fa2147b255f8a53f
+      internalID: -1954080570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_23
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 893
+        width: 24
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3b80d7cb9792b94c8bfca43f984326b
+      internalID: -445596274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_24
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 871
+        width: 24
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac7b4a03eedb79a4a916f6e51d2633bf
+      internalID: 1327829567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_25
+      rect:
+        serializedVersion: 2
+        x: 579
+        y: 1007
+        width: 24
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.33333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3dcb411d8f645245b3484d085853bd9
+      internalID: -1999258922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_26
+      rect:
+        serializedVersion: 2
+        x: 579
+        y: 984
+        width: 24
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.33333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9d617a83a7e124428ae0ad6287b52a2
+      internalID: 1611723023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_27
+      rect:
+        serializedVersion: 2
+        x: 579
+        y: 961
+        width: 24
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.33333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e31f0e74393b72e4299f4a08c46e4567
+      internalID: -1122892021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_28
+      rect:
+        serializedVersion: 2
+        x: 579
+        y: 938
+        width: 24
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2857143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eee875dd389605c4fa3c1285090e7db4
+      internalID: -1431516106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_29
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 915
+        width: 24
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2857143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fd3bb3a311088a4085ad90e72232732
+      internalID: 1423018852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_3
+      rect:
+        serializedVersion: 2
+        x: 318
+        y: 434
+        width: 30
+        height: 25
+      alignment: 9
+      pivot: {x: 0.5, y: 0.64}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 234b429ac4731704bb1daca3b2b59fcd
+      internalID: -353127526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_30
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 847
+        width: 23
+        height: 22
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.27272728}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 590afbfb729c96b4b9175e7a1f14b782
+      internalID: -662318960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_31
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 823
+        width: 23
+        height: 22
+      alignment: 9
+      pivot: {x: 0.47826087, y: 0.27272728}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76de7796d41aca54bbdb3752b05cf539
+      internalID: -28479094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_32
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 1356
+        width: 25
+        height: 21
+      alignment: 9
+      pivot: {x: 0.44, y: 0.23809524}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f42a480da44cb54da956613dcbe368a
+      internalID: 1104456030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_33
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 1852
+        width: 10
+        height: 7
+      alignment: 9
+      pivot: {x: -0.5, y: -0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ef265dde80e4354ab2e3821f6059615
+      internalID: 1031255660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_34
+      rect:
+        serializedVersion: 2
+        x: 990
+        y: 1826
+        width: 5
+        height: 5
+      alignment: 9
+      pivot: {x: -1.6, y: -1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0683dbfe8689d6041b804573664b4737
+      internalID: 745800803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_35
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 1937
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 5.3333335, y: -4.3333335}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b027add1705707f4fb9ae02c059ae0a1
+      internalID: -1405864645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_4
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 494
+        width: 30
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5714286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eeac311b7e34c4743a9d69764a3057f0
+      internalID: 1011710242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_5
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 422
+        width: 30
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.7619048}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a7de7d7ab497fa40a1616889e0d36ae
+      internalID: -329495578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_6
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 456
+        width: 30
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5925926}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42285fc2ccc4d50478a965f4e4d1d12d
+      internalID: 2013413757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_7
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 420
+        width: 30
+        height: 18
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8888889}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dca70231b888ec84e97d7420f87ac1d2
+      internalID: 1440349083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_8
+      rect:
+        serializedVersion: 2
+        x: 823
+        y: 1389
+        width: 26
+        height: 10
+      alignment: 9
+      pivot: {x: 0.5, y: 1.6}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04eab7742c1651f4ba6462984b9b045f
+      internalID: -1387880631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceFlower_9
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 1937
+        width: 3
+        height: 3
+      alignment: 9
+      pivot: {x: 5.3333335, y: -4.3333335}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38decb9be0a1b3b4eae000da50ef5412
+      internalID: -132504454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_1
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 706
+        width: 51
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.51785713}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ccf6aa1b6150474589efcf00cff3c60
+      internalID: 1606997090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_10
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 700
+        width: 51
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5192308}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52c867f792330944eb941fb336d4e605
+      internalID: -207705219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_11
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 648
+        width: 49
+        height: 27
+      alignment: 9
+      pivot: {x: 0.47959185, y: 0.537037}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cca8e530bb14f1244807de85907cda7d
+      internalID: 541358650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_12
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 670
+        width: 50
+        height: 28
+      alignment: 9
+      pivot: {x: 0.49, y: 0.51785713}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6a6ddeee1d0ed24ea4e4a01f823f245
+      internalID: 1643030264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_13
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 673
+        width: 49
+        height: 28
+      alignment: 9
+      pivot: {x: 0.47959185, y: 0.51785713}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd1148b6f3da70a44ad362823e71668d
+      internalID: -1963835561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_14
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 618
+        width: 48
+        height: 28
+      alignment: 9
+      pivot: {x: 0.46875, y: 0.51785713}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ee0838c1247e5249938a20f42932c92
+      internalID: 671519532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_15
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 677
+        width: 50
+        height: 29
+      alignment: 9
+      pivot: {x: 0.49, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ef7d5d1e69f840408efd9e2ff0f9304
+      internalID: -1389427410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_16
+      rect:
+        serializedVersion: 2
+        x: 877
+        y: 559
+        width: 51
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e143875dc606c0f45b7dc5ddb0a8e67b
+      internalID: 671139808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_17
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 695
+        width: 51
+        height: 25
+      alignment: 9
+      pivot: {x: 0.5, y: 0.42}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9aa96f183cf3844da97f1de58bf78c0
+      internalID: -1557369334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_18
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 680
+        width: 51
+        height: 24
+      alignment: 9
+      pivot: {x: 0.5, y: 0.47916666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec3751cf83366a84dbeb03445398f440
+      internalID: 1813272186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_19
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 650
+        width: 51
+        height: 23
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45652175}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b69b3a2889e44d74a9083900157ad6bf
+      internalID: 2125787404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_2
+      rect:
+        serializedVersion: 2
+        x: 930
+        y: 550
+        width: 51
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdac78088fd782f4ea0873c977a5ab23
+      internalID: 1881014758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_20
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 573
+        width: 44
+        height: 17
+      alignment: 9
+      pivot: {x: 0.42045453, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 668d8365356747c4391db71510f7aa99
+      internalID: -636035645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_21
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 572
+        width: 44
+        height: 18
+      alignment: 9
+      pivot: {x: 0.42045453, y: 0.5277778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de1b0f31757c8be40adb5c4b07e24df9
+      internalID: -478414626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_22
+      rect:
+        serializedVersion: 2
+        x: 373
+        y: 589
+        width: 45
+        height: 18
+      alignment: 9
+      pivot: {x: 0.43333334, y: 0.5277778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce98e63b52735c748b0f67ac90e4967a
+      internalID: 2114041232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_23
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 577
+        width: 46
+        height: 19
+      alignment: 9
+      pivot: {x: 0.4456522, y: 0.55263156}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 112176bc17c5805498032f9f5713c4b3
+      internalID: 228787652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_24
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 556
+        width: 47
+        height: 20
+      alignment: 9
+      pivot: {x: 0.4574468, y: 0.525}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba6ace1c0f8161447af7deba5787205f
+      internalID: 1858019985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_25
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 577
+        width: 44
+        height: 20
+      alignment: 9
+      pivot: {x: 0.42045453, y: 0.525}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee9aaa43a2e688e4fb76d3c5feba4fbd
+      internalID: -1793342344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_26
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 607
+        width: 45
+        height: 21
+      alignment: 9
+      pivot: {x: 0.43333334, y: 0.54761904}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c94a477149ce6b844814bc1819a57e6c
+      internalID: -995197571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_27
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 576
+        width: 46
+        height: 21
+      alignment: 9
+      pivot: {x: 0.4456522, y: 0.54761904}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d93d5deaa18403478ee319ecc857252
+      internalID: 342856381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_28
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 599
+        width: 45
+        height: 22
+      alignment: 9
+      pivot: {x: 0.43333334, y: 0.52272725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c048f97912043e04eb589c6c24d526ef
+      internalID: 564878777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_29
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 581
+        width: 44
+        height: 23
+      alignment: 9
+      pivot: {x: 0.42045453, y: 0.54347825}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a38cd3e5d7ed0c04391ad298efc30cc7
+      internalID: -44866066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_3
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 761
+        width: 51
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09903e59e8b1d674f848988e7156866d
+      internalID: -201691230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_30
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 606
+        width: 45
+        height: 24
+      alignment: 9
+      pivot: {x: 0.43333334, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42fe526d03e523040a3a709907b377f3
+      internalID: 1070708180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_31
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 592
+        width: 46
+        height: 24
+      alignment: 9
+      pivot: {x: 0.4456522, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec5ad59e62d4fb34996588003f2c0a0b
+      internalID: 1289931142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_32
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 619
+        width: 48
+        height: 26
+      alignment: 9
+      pivot: {x: 0.46875, y: 0.5192308}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00360d559833eb84cbe89df4f85f141a
+      internalID: 1213644858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_33
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 647
+        width: 49
+        height: 26
+      alignment: 9
+      pivot: {x: 0.47959185, y: 0.5192308}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 570ae53043a63f4488c82d8e9ff3198c
+      internalID: -2053996148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_34
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 725
+        width: 51
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd708f2f17c5c11458205f673549323d
+      internalID: -850841318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_35
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 675
+        width: 51
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.51785713}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37840090cf7b14d4bbeb3ec65ca23ab8
+      internalID: 450366273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_36
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 727
+        width: 51
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.51785713}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5c824cffae4f5f4085ffda3c1abef06
+      internalID: 510654912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_37
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 761
+        width: 51
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0b9b0294c566384aa0195408620f916
+      internalID: -146960504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_38
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 730
+        width: 51
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8628660e0899da3418158bbffd57dbd4
+      internalID: -1374140726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_39
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 730
+        width: 51
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cdbbd7757ac747041abc5c14251ea962
+      internalID: 2143070724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_4
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 675
+        width: 50
+        height: 29
+      alignment: 9
+      pivot: {x: 0.49, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22ececd9467ac2b4d88586ff0a5daf28
+      internalID: -199136657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_40
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 703
+        width: 51
+        height: 25
+      alignment: 9
+      pivot: {x: 0.5, y: 0.58}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3cf765698dec3a4b8b7bbf0762f5e5a
+      internalID: 799164354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_41
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 629
+        width: 50
+        height: 23
+      alignment: 9
+      pivot: {x: 0.49, y: 0.54347825}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4899559a3e395e449667565db452dcd
+      internalID: 946048896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_42
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 642
+        width: 49
+        height: 24
+      alignment: 9
+      pivot: {x: 0.47959185, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd452aadcdb41e141b0560a0ef7f7a42
+      internalID: 514726816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_43
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 578
+        width: 47
+        height: 24
+      alignment: 9
+      pivot: {x: 0.4574468, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07ca171e9fa1cd34d90c82e8c1b2cb0e
+      internalID: -2010167404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_44
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 617
+        width: 48
+        height: 24
+      alignment: 9
+      pivot: {x: 0.46875, y: 0.5208333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3a6cc76d7462924ab41a0a578c22f62
+      internalID: 1913702567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_45
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 643
+        width: 49
+        height: 25
+      alignment: 9
+      pivot: {x: 0.47959185, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d09be9deb9764254dbd228b36831250b
+      internalID: -647465651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_5
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 654
+        width: 51
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48214287}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 216cad88116c33f498a7210cc1a82f69
+      internalID: -678244830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_6
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 665
+        width: 50
+        height: 24
+      alignment: 9
+      pivot: {x: 0.49, y: 0.5625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a97121020a7ed9448c016d22464a37d
+      internalID: -514202032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_7
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 643
+        width: 50
+        height: 24
+      alignment: 9
+      pivot: {x: 0.49, y: 0.5625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3814bcabb7f471840b9e77b99567c1fc
+      internalID: 134450485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_8
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 703
+        width: 51
+        height: 25
+      alignment: 9
+      pivot: {x: 0.5, y: 0.54}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f42771b344c3494a99b641cec203ae4
+      internalID: -969329762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TailingFireball_9
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 668
+        width: 50
+        height: 25
+      alignment: 9
+      pivot: {x: 0.49, y: 0.54}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef86a8fe1c9b63046a72934fb9356c15
+      internalID: -1957802462
       vertices: []
       indices: 
       edges: []
@@ -10533,24 +13032,6 @@ TextureImporter:
       Explosion12_2: -1591862179
       Explosion12_3: -652033961
       Explosion12_4: -664204642
-      Explosion13_1: -1699899336
-      Explosion13_10: -669531434
-      Explosion13_11: -960184109
-      Explosion13_12: 1410121410
-      Explosion13_13: -1643605479
-      Explosion13_14: -694456131
-      Explosion13_15: 1232974723
-      Explosion13_16: -1287932577
-      Explosion13_17: 761487871
-      Explosion13_18: -1985576093
-      Explosion13_2: 891777805
-      Explosion13_3: -672746494
-      Explosion13_4: -168004738
-      Explosion13_5: -655333396
-      Explosion13_6: 1548035876
-      Explosion13_7: -551709478
-      Explosion13_8: -1467100775
-      Explosion13_9: -165679423
       Explosion14_1: -175082311
       Explosion14_10: 208296716
       Explosion14_11: 1806579713
@@ -10862,6 +13343,63 @@ TextureImporter:
       GoblinBomb-9: 1179829411
       GroundImpact_0: 1883513985
       GroundImpact_1: -811720151
+      IceFlower_1: 1693965066
+      IceFlower_10: -1129317355
+      IceFlower_11: -1326015614
+      IceFlower_12: -1910754312
+      IceFlower_13: -1025191998
+      IceFlower_14: 670933954
+      IceFlower_15: -713053066
+      IceFlower_16: -1312931320
+      IceFlower_17: 1738208497
+      IceFlower_18: 1906188078
+      IceFlower_19: 1503909649
+      IceFlower_2: -1984698150
+      IceFlower_20: 763689618
+      IceFlower_21: 1689637455
+      IceFlower_22: -1954080570
+      IceFlower_23: -445596274
+      IceFlower_24: 1327829567
+      IceFlower_25: -1999258922
+      IceFlower_26: 1611723023
+      IceFlower_27: -1122892021
+      IceFlower_28: -1431516106
+      IceFlower_29: 1423018852
+      IceFlower_3: -353127526
+      IceFlower_30: -662318960
+      IceFlower_31: -28479094
+      IceFlower_32: 1104456030
+      IceFlower_33: 1031255660
+      IceFlower_34: 745800803
+      IceFlower_35: -1405864645
+      IceFlower_4: 1011710242
+      IceFlower_5: -329495578
+      IceFlower_6: 2013413757
+      IceFlower_7: 1440349083
+      IceFlower_8: -1387880631
+      IceFlower_9: -132504454
+      IcePick_1: -136898707
+      IcePick_10: 611933045
+      IcePick_11: 682621680
+      IcePick_12: 1437331359
+      IcePick_13: -1253243807
+      IcePick_14: -467182979
+      IcePick_15: 1485292004
+      IcePick_16: 901573498
+      IcePick_17: -376504606
+      IcePick_18: -452795634
+      IcePick_19: 1059912345
+      IcePick_2: -463159303
+      IcePick_20: 328132539
+      IcePick_21: 701180598
+      IcePick_22: 1141267817
+      IcePick_3: -1709020255
+      IcePick_4: -535641130
+      IcePick_5: -478064168
+      IcePick_6: 1568389509
+      IcePick_7: -1613762705
+      IcePick_8: -1580568192
+      IcePick_9: 2048181333
       IceSpark-0: 1010965170
       IceSpark-1: 1014321155
       IceSpark-10: 808945821
@@ -10942,6 +13480,41 @@ TextureImporter:
       RoundTimedBomb-6: -146968281
       RoundTimedBomb-7: -1582847764
       RoundTimedBomb-8: 929448152
+      ShiningFireball_1: -235836611
+      ShiningFireball_10: -140072376
+      ShiningFireball_11: 1661342387
+      ShiningFireball_12: 2143048881
+      ShiningFireball_13: 124804439
+      ShiningFireball_14: 1454130094
+      ShiningFireball_15: 695215429
+      ShiningFireball_16: 741778799
+      ShiningFireball_17: -1448106097
+      ShiningFireball_18: -1892979146
+      ShiningFireball_19: -896977435
+      ShiningFireball_2: -1228557471
+      ShiningFireball_20: -889220914
+      ShiningFireball_21: -255321588
+      ShiningFireball_22: -834113686
+      ShiningFireball_23: 415191991
+      ShiningFireball_24: -885924693
+      ShiningFireball_25: -991498263
+      ShiningFireball_26: 2008672953
+      ShiningFireball_27: 749765535
+      ShiningFireball_28: 1988828227
+      ShiningFireball_29: -1844712065
+      ShiningFireball_3: 66185993
+      ShiningFireball_30: -869790057
+      ShiningFireball_31: -1562705464
+      ShiningFireball_32: 1058336140
+      ShiningFireball_33: -88156346
+      ShiningFireball_34: -1128777747
+      ShiningFireball_35: 1467924597
+      ShiningFireball_4: -2075801889
+      ShiningFireball_5: -742777477
+      ShiningFireball_6: -128562905
+      ShiningFireball_7: -1509368485
+      ShiningFireball_8: 973482305
+      ShiningFireball_9: -963766440
       StoneSword-0: 423777925
       StoneSword-1: 1558995787
       StoneSword-2: -914405804
@@ -10956,6 +13529,51 @@ TextureImporter:
       Suriken-5: -1291371673
       Suriken-6: -640455209
       Suriken-7: -1501814697
+      TailingFireball_1: 1606997090
+      TailingFireball_10: -207705219
+      TailingFireball_11: 541358650
+      TailingFireball_12: 1643030264
+      TailingFireball_13: -1963835561
+      TailingFireball_14: 671519532
+      TailingFireball_15: -1389427410
+      TailingFireball_16: 671139808
+      TailingFireball_17: -1557369334
+      TailingFireball_18: 1813272186
+      TailingFireball_19: 2125787404
+      TailingFireball_2: 1881014758
+      TailingFireball_20: -636035645
+      TailingFireball_21: -478414626
+      TailingFireball_22: 2114041232
+      TailingFireball_23: 228787652
+      TailingFireball_24: 1858019985
+      TailingFireball_25: -1793342344
+      TailingFireball_26: -995197571
+      TailingFireball_27: 342856381
+      TailingFireball_28: 564878777
+      TailingFireball_29: -44866066
+      TailingFireball_3: -201691230
+      TailingFireball_30: 1070708180
+      TailingFireball_31: 1289931142
+      TailingFireball_32: 1213644858
+      TailingFireball_33: -2053996148
+      TailingFireball_34: -850841318
+      TailingFireball_35: 450366273
+      TailingFireball_36: 510654912
+      TailingFireball_37: -146960504
+      TailingFireball_38: -1374140726
+      TailingFireball_39: 2143070724
+      TailingFireball_4: -199136657
+      TailingFireball_40: 799164354
+      TailingFireball_41: 946048896
+      TailingFireball_42: 514726816
+      TailingFireball_43: -2010167404
+      TailingFireball_44: 1913702567
+      TailingFireball_45: -647465651
+      TailingFireball_5: -678244830
+      TailingFireball_6: -514202032
+      TailingFireball_7: 134450485
+      TailingFireball_8: -969329762
+      TailingFireball_9: -1957802462
       TimedBomb-0: 1170630242
       TimedBomb-1: 955230186
       TimedBomb-2: 298463253

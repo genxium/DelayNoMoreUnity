@@ -8,7 +8,7 @@ using Pbc = Google.Protobuf.Collections;
 using Google.Protobuf.Collections;
 using System.Collections.Concurrent;
 
-namespace backend.Battle;
+namespace battlesrv.Battle;
 public class Room {
     private readonly Random _randGenerator = new Random();
     //private String[] _availableStageNames = new String[] {"ForestVersus", "CaveVersus", "FlatVersus"};
@@ -1075,18 +1075,18 @@ public class Room {
                 //_logger.LogInformation("Found a non-all-confirmed inputFrame for roomId={0}, upsync player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4}) inputFrameId={5}, confirmedList={6}", id, playerId, player.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId, inputFrameId, inputFrameDownsync.ConfirmedList);
                 foreach (var thatPlayer in playersArr) {
                     var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
-                    var thatPlayerJoinMask = (1UL << (thatPlayer.CharacterDownsync.JoinIndex - 1));
+                    int j = (thatPlayer.CharacterDownsync.JoinIndex - 1);
+                    var thatPlayerJoinMask = (1UL << j);
                     bool isSlowTicker = (0 == (inputFrameDownsync.ConfirmedList & thatPlayerJoinMask));
                     bool isActiveSlowTicker = (isSlowTicker && PLAYER_BATTLE_STATE_ACTIVE == thatPlayerBattleState);
                     if (isActiveSlowTicker) {
                         shouldBreakConfirmation = true; // Could be an `ACTIVE SLOW TICKER` here, but no action needed for now
                         break;
                     }
-                    /*
                     if (isSlowTicker) {
-                        _logger.LogInformation("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.CharacterDownsync.Id, thatPlayer.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
+                        inputFrameDownsync.InputList[j] = 0u; // For UNCONFIRMED BUT INACTIVE player input, always predict it to zero.
+                        //_logger.LogInformation("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.CharacterDownsync.Id, thatPlayer.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
                     }
-                    */
                 }
             }
 
@@ -1163,31 +1163,8 @@ public class Room {
                  */
                 for (int i = 0; i < capacity; i++) {
                     // [WARNING] The use of "inputBufferLock" guarantees that by now "inputFrameId >= inputBuffer.EdFrameId >= latestPlayerUpsyncedInputFrameId", thus it's safe to use "lastIndividuallyConfirmedInputList" for prediction.
-                    ulong encodedIdx = (lastIndividuallyConfirmedInputList[i] & 15UL);
+                    ulong encodedIdx = lastIndividuallyConfirmedInputList[i];
                     ifdHolder.InputList[i] = encodedIdx;
-                    bool shouldPredictBtnAHold = false;
-                    bool shouldPredictBtnEHold = false;
-                    if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 16UL) && JUMP_HOLDING_IFD_CNT_THRESHOLD_1 > gapInputFrameId - lastIndividuallyConfirmedInputFrameId[i]) {
-                        shouldPredictBtnAHold = true;
-                        if (2 == encodedIdx || 6 == encodedIdx || 7 == encodedIdx) {
-                            // Don't predict slip-jump!
-                            shouldPredictBtnAHold = false;
-                        }
-                    }
-
-                    if (null != prevInputFrameDownsync && 0 < (prevInputFrameDownsync.InputList[i] & 256UL) && BTN_E_HOLDING_IFD_CNT_THRESHOLD_1 > gapInputFrameId - lastIndividuallyConfirmedInputFrameId[i]) {
-                        shouldPredictBtnEHold = true;
-                    }
-
-                    if (shouldPredictBtnAHold) ifdHolder.InputList[i] |= (lastIndividuallyConfirmedInputList[i] & 16UL); 
-                    if (shouldPredictBtnEHold) ifdHolder.InputList[i] |= (lastIndividuallyConfirmedInputList[i] & 256UL); 
-                    /*
-                    [WARNING] 
-
-                    There's by far no good reference rdf for backend to predict holding of btnB, hence not making any prediction for now.
-
-                    Moreover, with (!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled), backend would NOT downsync any "backend-predicted inputFrame (i.e. force-confirmed)" to players.
-                    */
                 }
                 ifdHolder.ConfirmedList = 0;
                 currInputFrameDownsync = ifdHolder; // make sure that we return a pointer inside the inputBuffer for later writing

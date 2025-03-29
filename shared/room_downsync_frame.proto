@@ -248,6 +248,7 @@ message CharacterDownsync {
     int32 mpRegenRdfCountdown = 76;
 
     int32 flyingRdfCountdown = 77;
+
     int32 lockingOnJoinIndex = 78;
 
     repeated Buff buffList = 90; 
@@ -518,7 +519,9 @@ message BulletConfig {
     float gaugeIncReductionRatio = 93;
     bool mhInheritsFramesInBlState = 94;
     uint32 guardBreakerExtraHitCnt = 95;
-    
+        
+    bool takesDef1AsHardPushback = 96; // [WARNING] Always implies "beamCollision" and must be used together with "beamCollision".
+
     uint64 collisionTypeMask = 1029;
     bool takesGravity = 1030; // e.g. a bomb, a ground-wave
 
@@ -618,8 +621,8 @@ message TrapConfig {
 
     bool atk1UponTriggered = 22;
     uint32 atk1SkillId = 23;
-
     bool isRotary = 24;
+    bool noXFlipRendering = 25;
 
     // TODO: Instead of damage, a trap should also be able to provide pushbacks like a "trampoline" in only a limited "framesToRecover", possible started by a Trigger.
 

@@ -226,7 +226,7 @@ namespace shared {
         public static int DEFAULT_PER_CHARACTER_IMMUNE_BULLET_RECORD_CAPACITY = 3;
 
         public static int GRAVITY_X = 0;
-        public static int GRAVITY_Y = -(int)(0.59f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
+        public static int GRAVITY_Y = -(int)(0.62f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
         public static int GRAVITY_Y_JUMP_HOLDING = -(int)(0.35f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO);
 
         public static int INPUT_DELAY_FRAMES = 2; // in the count of render frames
@@ -403,10 +403,12 @@ namespace shared {
             CrouchAtked1,
         };
 
-        public static int BTN_B_HOLDING_RDF_CNT_THRESHOLD_2 = BATTLE_DYNAMICS_FPS + (BATTLE_DYNAMICS_FPS >> 1);
-        public static int BTN_B_HOLDING_RDF_CNT_THRESHOLD_1 = (BTN_B_HOLDING_RDF_CNT_THRESHOLD_2 >> 1);
+        public static int JAMMED_BTN_HOLDING_RDF_CNT = -1;
 
-        public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_1 = (BATTLE_DYNAMICS_FPS >> 2) - ((BATTLE_DYNAMICS_FPS >> 5) << 1);  
+        public static int BTN_B_HOLDING_RDF_CNT_THRESHOLD_2 = BATTLE_DYNAMICS_FPS + (BATTLE_DYNAMICS_FPS >> 1);
+        public static int BTN_B_HOLDING_RDF_CNT_THRESHOLD_1 = (BATTLE_DYNAMICS_FPS >> 2) + (BATTLE_DYNAMICS_FPS >> 3);
+
+        public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_1 = (BATTLE_DYNAMICS_FPS >> 3) + (BATTLE_DYNAMICS_FPS >> 4);  
         public static int JUMP_HOLDING_IFD_CNT_THRESHOLD_1 = (int)Math.Ceiling((float)JUMP_HOLDING_RDF_CNT_THRESHOLD_1/(1 << INPUT_SCALE_FRAMES));  
 
         public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_2 = (BATTLE_DYNAMICS_FPS >> 1) + ((BATTLE_DYNAMICS_FPS >> 5) << 1);  

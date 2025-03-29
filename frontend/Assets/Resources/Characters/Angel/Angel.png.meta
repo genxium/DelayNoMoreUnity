@@ -108,12 +108,12 @@ TextureImporter:
       name: Angel-0
       rect:
         serializedVersion: 2
-        x: 109
-        y: 146
+        x: 1
+        y: 134
         width: 50
         height: 47
       alignment: 9
-      pivot: {x: 0.58, y: 0.30851063}
+      pivot: {x: 0.58, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -129,12 +129,12 @@ TextureImporter:
       name: Angel-1
       rect:
         serializedVersion: 2
-        x: 219
-        y: 128
+        x: 448
+        y: 127
         width: 48
         height: 47
       alignment: 9
-      pivot: {x: 0.5833333, y: 0.30851063}
+      pivot: {x: 0.583333, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -150,12 +150,12 @@ TextureImporter:
       name: Angel-10
       rect:
         serializedVersion: 2
-        x: 161
-        y: 98
+        x: 389
+        y: 86
         width: 48
         height: 47
       alignment: 9
-      pivot: {x: 0.5833333, y: 0.30851063}
+      pivot: {x: 0.583333, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -171,12 +171,12 @@ TextureImporter:
       name: Angel-11
       rect:
         serializedVersion: 2
-        x: 404
-        y: 193
+        x: 53
+        y: 117
         width: 48
         height: 48
       alignment: 9
-      pivot: {x: 0.5833333, y: 0.3125}
+      pivot: {x: 0.583333, y: 0.3125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -192,8 +192,8 @@ TextureImporter:
       name: Angel-12
       rect:
         serializedVersion: 2
-        x: 293
-        y: 187
+        x: 287
+        y: 131
         width: 50
         height: 48
       alignment: 9
@@ -218,7 +218,7 @@ TextureImporter:
         width: 49
         height: 49
       alignment: 9
-      pivot: {x: 0.5816327, y: 0.31632653}
+      pivot: {x: 0.581633, y: 0.316327}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -234,12 +234,12 @@ TextureImporter:
       name: Angel-14
       rect:
         serializedVersion: 2
-        x: 193
-        y: 47
+        x: 269
+        y: 80
         width: 45
         height: 49
       alignment: 9
-      pivot: {x: 0.5888889, y: 0.31632653}
+      pivot: {x: 0.588889, y: 0.316327}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -255,12 +255,12 @@ TextureImporter:
       name: Angel-15
       rect:
         serializedVersion: 2
-        x: 99
-        y: 45
+        x: 49
+        y: 13
         width: 45
         height: 50
       alignment: 9
-      pivot: {x: 0.5888889, y: 0.32}
+      pivot: {x: 0.588889, y: 0.32}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -276,12 +276,12 @@ TextureImporter:
       name: Angel-16
       rect:
         serializedVersion: 2
-        x: 1
-        y: 35
+        x: 103
+        y: 96
         width: 47
         height: 50
       alignment: 9
-      pivot: {x: 0.5851064, y: 0.32}
+      pivot: {x: 0.585106, y: 0.32}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -297,12 +297,12 @@ TextureImporter:
       name: Angel-17
       rect:
         serializedVersion: 2
-        x: 1
-        y: 87
+        x: 106
+        y: 148
         width: 49
         height: 49
       alignment: 9
-      pivot: {x: 0.5816327, y: 0.31632653}
+      pivot: {x: 0.581633, y: 0.316327}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -318,12 +318,12 @@ TextureImporter:
       name: Angel-18
       rect:
         serializedVersion: 2
-        x: 334
-        y: 103
+        x: 207
+        y: 58
         width: 45
         height: 49
       alignment: 9
-      pivot: {x: 0.5888889, y: 0.31632653}
+      pivot: {x: 0.588889, y: 0.316327}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -339,12 +339,12 @@ TextureImporter:
       name: Angel-19
       rect:
         serializedVersion: 2
-        x: 146
-        y: 45
+        x: 96
+        y: 13
         width: 45
         height: 50
       alignment: 9
-      pivot: {x: 0.5888889, y: 0.32}
+      pivot: {x: 0.588889, y: 0.32}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -360,12 +360,12 @@ TextureImporter:
       name: Angel-2
       rect:
         serializedVersion: 2
-        x: 345
-        y: 154
+        x: 1
+        y: 84
         width: 48
         height: 48
       alignment: 9
-      pivot: {x: 0.5833333, y: 0.3125}
+      pivot: {x: 0.583333, y: 0.3125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -381,12 +381,12 @@ TextureImporter:
       name: Angel-20
       rect:
         serializedVersion: 2
-        x: 50
-        y: 35
+        x: 51
+        y: 65
         width: 47
         height: 50
       alignment: 9
-      pivot: {x: 0.5851064, y: 0.32}
+      pivot: {x: 0.585106, y: 0.32}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -402,12 +402,12 @@ TextureImporter:
       name: Angel-21
       rect:
         serializedVersion: 2
-        x: 293
+        x: 291
         y: 237
         width: 56
         height: 50
       alignment: 9
-      pivot: {x: 0.5714286, y: 0.32}
+      pivot: {x: 0.571429, y: 0.32}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -428,7 +428,7 @@ TextureImporter:
         width: 72
         height: 54
       alignment: 9
-      pivot: {x: 0.5555556, y: 0.33333334}
+      pivot: {x: 0.555556, y: 0.333333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -449,7 +449,7 @@ TextureImporter:
         width: 74
         height: 54
       alignment: 9
-      pivot: {x: 0.554054, y: 0.33333334}
+      pivot: {x: 0.554054, y: 0.333333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -470,7 +470,7 @@ TextureImporter:
         width: 78
         height: 52
       alignment: 9
-      pivot: {x: 0.55128205, y: 0.32692307}
+      pivot: {x: 0.551282, y: 0.326923}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -491,7 +491,7 @@ TextureImporter:
         width: 68
         height: 52
       alignment: 9
-      pivot: {x: 0.5588235, y: 0.32692307}
+      pivot: {x: 0.558824, y: 0.326923}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -507,12 +507,12 @@ TextureImporter:
       name: Angel-26
       rect:
         serializedVersion: 2
-        x: 1
-        y: 281
+        x: 130
+        y: 302
         width: 58
         height: 53
       alignment: 9
-      pivot: {x: 0.5689655, y: 0.3301887}
+      pivot: {x: 0.568966, y: 0.330189}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -528,12 +528,12 @@ TextureImporter:
       name: Angel-27
       rect:
         serializedVersion: 2
-        x: 235
-        y: 279
+        x: 357
+        y: 247
         width: 56
         height: 52
       alignment: 9
-      pivot: {x: 0.5714286, y: 0.32692307}
+      pivot: {x: 0.571429, y: 0.326923}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -549,12 +549,12 @@ TextureImporter:
       name: Angel-28
       rect:
         serializedVersion: 2
-        x: 187
-        y: 303
+        x: 465
+        y: 176
         width: 46
         height: 51
       alignment: 9
-      pivot: {x: 0.5869565, y: 0.32352942}
+      pivot: {x: 0.586957, y: 0.323529}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -570,12 +570,12 @@ TextureImporter:
       name: Angel-29
       rect:
         serializedVersion: 2
-        x: 358
-        y: 290
+        x: 210
+        y: 308
         width: 21
         height: 46
       alignment: 9
-      pivot: {x: 0.6904762, y: 0.30434784}
+      pivot: {x: 0.690476, y: 0.304348}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -591,8 +591,8 @@ TextureImporter:
       name: Angel-3
       rect:
         serializedVersion: 2
-        x: 232
-        y: 177
+        x: 115
+        y: 199
         width: 50
         height: 48
       alignment: 9
@@ -617,7 +617,7 @@ TextureImporter:
         width: 38
         height: 52
       alignment: 9
-      pivot: {x: 0.6052632, y: 0.32692307}
+      pivot: {x: 0.605263, y: 0.326923}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -633,12 +633,12 @@ TextureImporter:
       name: Angel-31
       rect:
         serializedVersion: 2
-        x: 176
-        y: 197
+        x: 289
+        y: 181
         width: 54
         height: 54
       alignment: 9
-      pivot: {x: 0.5740741, y: 0.33333334}
+      pivot: {x: 0.574074, y: 0.333333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -659,7 +659,7 @@ TextureImporter:
         width: 81
         height: 58
       alignment: 9
-      pivot: {x: 0.54938275, y: 0.3448276}
+      pivot: {x: 0.549383, y: 0.344828}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -680,7 +680,7 @@ TextureImporter:
         width: 74
         height: 59
       alignment: 9
-      pivot: {x: 0.554054, y: 0.34745762}
+      pivot: {x: 0.554054, y: 0.347458}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -701,7 +701,7 @@ TextureImporter:
         width: 68
         height: 60
       alignment: 9
-      pivot: {x: 0.5588235, y: 0.35}
+      pivot: {x: 0.558824, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -717,12 +717,12 @@ TextureImporter:
       name: Angel-35
       rect:
         serializedVersion: 2
-        x: 129
-        y: 297
+        x: 233
+        y: 273
         width: 56
         height: 58
       alignment: 9
-      pivot: {x: 0.5714286, y: 0.3448276}
+      pivot: {x: 0.571429, y: 0.344828}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -738,12 +738,12 @@ TextureImporter:
       name: Angel-36
       rect:
         serializedVersion: 2
-        x: 187
-        y: 253
+        x: 1
+        y: 34
         width: 46
         height: 48
       alignment: 9
-      pivot: {x: 0.5869565, y: 0.3125}
+      pivot: {x: 0.586957, y: 0.3125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -759,8 +759,8 @@ TextureImporter:
       name: Angel-37
       rect:
         serializedVersion: 2
-        x: 232
-        y: 177
+        x: 115
+        y: 199
         width: 50
         height: 48
       alignment: 9
@@ -780,12 +780,12 @@ TextureImporter:
       name: Angel-38
       rect:
         serializedVersion: 2
-        x: 59
-        y: 218
+        x: 179
+        y: 253
         width: 52
         height: 47
       alignment: 9
-      pivot: {x: 0.5769231, y: 0.30851063}
+      pivot: {x: 0.576923, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -806,7 +806,7 @@ TextureImporter:
         width: 72
         height: 45
       alignment: 9
-      pivot: {x: 0.5555556, y: 0.3}
+      pivot: {x: 0.555556, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -822,12 +822,12 @@ TextureImporter:
       name: Angel-4
       rect:
         serializedVersion: 2
-        x: 59
-        y: 218
+        x: 179
+        y: 253
         width: 52
         height: 47
       alignment: 9
-      pivot: {x: 0.5769231, y: 0.30851063}
+      pivot: {x: 0.576923, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -848,7 +848,7 @@ TextureImporter:
         width: 74
         height: 44
       alignment: 9
-      pivot: {x: 0.554054, y: 0.29545456}
+      pivot: {x: 0.554054, y: 0.295455}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -869,7 +869,7 @@ TextureImporter:
         width: 78
         height: 42
       alignment: 9
-      pivot: {x: 0.55128205, y: 0.2857143}
+      pivot: {x: 0.551282, y: 0.285714}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -890,7 +890,7 @@ TextureImporter:
         width: 68
         height: 41
       alignment: 9
-      pivot: {x: 0.5588235, y: 0.2804878}
+      pivot: {x: 0.558824, y: 0.280488}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -906,12 +906,12 @@ TextureImporter:
       name: Angel-43
       rect:
         serializedVersion: 2
-        x: 381
-        y: 253
+        x: 1
+        y: 233
         width: 58
         height: 46
       alignment: 9
-      pivot: {x: 0.5689655, y: 0.30434784}
+      pivot: {x: 0.568966, y: 0.304348}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -927,12 +927,12 @@ TextureImporter:
       name: Angel-44
       rect:
         serializedVersion: 2
-        x: 1
-        y: 237
+        x: 407
+        y: 185
         width: 56
         height: 42
       alignment: 9
-      pivot: {x: 0.5714286, y: 0.2857143}
+      pivot: {x: 0.571429, y: 0.285714}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -948,12 +948,12 @@ TextureImporter:
       name: Angel-45
       rect:
         serializedVersion: 2
-        x: 61
-        y: 267
+        x: 349
+        y: 199
         width: 56
         height: 46
       alignment: 9
-      pivot: {x: 0.5714286, y: 0.30434784}
+      pivot: {x: 0.571429, y: 0.304348}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -974,7 +974,7 @@ TextureImporter:
         width: 32
         height: 59
       alignment: 9
-      pivot: {x: 0.625, y: 0.34745762}
+      pivot: {x: 0.625, y: 0.347458}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -995,7 +995,7 @@ TextureImporter:
         width: 21
         height: 55
       alignment: 9
-      pivot: {x: 0.6904762, y: 0.33636364}
+      pivot: {x: 0.690476, y: 0.336364}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1011,12 +1011,12 @@ TextureImporter:
       name: Angel-48
       rect:
         serializedVersion: 2
-        x: 358
-        y: 264
+        x: 190
+        y: 331
         width: 18
         height: 24
       alignment: 9
-      pivot: {x: 0.7222222, y: 0.125}
+      pivot: {x: 0.722222, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1032,12 +1032,12 @@ TextureImporter:
       name: Angel-49
       rect:
         serializedVersion: 2
-        x: 351
-        y: 204
+        x: 345
+        y: 150
         width: 51
         height: 47
       alignment: 9
-      pivot: {x: 0.57843137, y: 0.30851063}
+      pivot: {x: 0.578431, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1053,12 +1053,12 @@ TextureImporter:
       name: Angel-5
       rect:
         serializedVersion: 2
-        x: 1
-        y: 188
+        x: 179
+        y: 204
         width: 52
         height: 47
       alignment: 9
-      pivot: {x: 0.5769231, y: 0.30851063}
+      pivot: {x: 0.576923, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1074,12 +1074,12 @@ TextureImporter:
       name: Angel-50
       rect:
         serializedVersion: 2
-        x: 119
-        y: 244
+        x: 122
+        y: 249
         width: 55
         height: 51
       alignment: 9
-      pivot: {x: 0.57272726, y: 0.32352942}
+      pivot: {x: 0.572727, y: 0.323529}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1100,7 +1100,7 @@ TextureImporter:
         width: 65
         height: 62
       alignment: 9
-      pivot: {x: 0.56153846, y: 0.3548387}
+      pivot: {x: 0.561538, y: 0.354839}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1142,7 +1142,7 @@ TextureImporter:
         width: 70
         height: 62
       alignment: 9
-      pivot: {x: 0.55714285, y: 0.3548387}
+      pivot: {x: 0.557143, y: 0.354839}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1158,12 +1158,12 @@ TextureImporter:
       name: Angel-54
       rect:
         serializedVersion: 2
-        x: 298
-        y: 289
+        x: 62
+        y: 266
         width: 58
         height: 47
       alignment: 9
-      pivot: {x: 0.5689655, y: 0.30851063}
+      pivot: {x: 0.568966, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1179,12 +1179,12 @@ TextureImporter:
       name: Angel-55
       rect:
         serializedVersion: 2
-        x: 235
-        y: 227
+        x: 415
+        y: 229
         width: 56
         height: 50
       alignment: 9
-      pivot: {x: 0.5714286, y: 0.32}
+      pivot: {x: 0.571429, y: 0.32}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1200,12 +1200,12 @@ TextureImporter:
       name: Angel-56
       rect:
         serializedVersion: 2
-        x: 68
-        y: 315
+        x: 1
+        y: 281
         width: 59
         height: 53
       alignment: 9
-      pivot: {x: 0.5677966, y: 0.3301887}
+      pivot: {x: 0.567797, y: 0.330189}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1221,12 +1221,12 @@ TextureImporter:
       name: Angel-57
       rect:
         serializedVersion: 2
-        x: 451
-        y: 292
+        x: 68
+        y: 315
         width: 60
         height: 53
       alignment: 9
-      pivot: {x: 0.56666666, y: 0.3301887}
+      pivot: {x: 0.566667, y: 0.330189}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1247,7 +1247,7 @@ TextureImporter:
         width: 61
         height: 54
       alignment: 9
-      pivot: {x: 0.56557375, y: 0.33333334}
+      pivot: {x: 0.565574, y: 0.333333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1263,12 +1263,12 @@ TextureImporter:
       name: Angel-59
       rect:
         serializedVersion: 2
-        x: 54
-        y: 120
+        x: 167
+        y: 155
         width: 50
         height: 47
       alignment: 9
-      pivot: {x: 0.58, y: 0.30851063}
+      pivot: {x: 0.58, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1284,12 +1284,12 @@ TextureImporter:
       name: Angel-6
       rect:
         serializedVersion: 2
-        x: 106
-        y: 97
+        x: 219
+        y: 109
         width: 48
         height: 47
       alignment: 9
-      pivot: {x: 0.5833333, y: 0.30851063}
+      pivot: {x: 0.583333, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1305,12 +1305,12 @@ TextureImporter:
       name: Angel-60
       rect:
         serializedVersion: 2
-        x: 395
-        y: 144
+        x: 157
+        y: 106
         width: 48
         height: 47
       alignment: 9
-      pivot: {x: 0.5833333, y: 0.30851063}
+      pivot: {x: 0.583333, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1326,12 +1326,12 @@ TextureImporter:
       name: Angel-61
       rect:
         serializedVersion: 2
-        x: 454
-        y: 193
+        x: 398
+        y: 135
         width: 48
         height: 48
       alignment: 9
-      pivot: {x: 0.5833333, y: 0.3125}
+      pivot: {x: 0.583333, y: 0.3125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1348,11 +1348,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 138
+        y: 183
         width: 51
         height: 48
       alignment: 9
-      pivot: {x: 0.57843137, y: 0.3125}
+      pivot: {x: 0.578431, y: 0.3125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1368,12 +1368,12 @@ TextureImporter:
       name: Angel-63
       rect:
         serializedVersion: 2
-        x: 441
-        y: 243
+        x: 298
+        y: 289
         width: 57
         height: 47
       alignment: 9
-      pivot: {x: 0.57017547, y: 0.30851063}
+      pivot: {x: 0.570175, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1394,7 +1394,7 @@ TextureImporter:
         width: 72
         height: 47
       alignment: 9
-      pivot: {x: 0.5555556, y: 0.30851063}
+      pivot: {x: 0.555556, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1415,7 +1415,7 @@ TextureImporter:
         width: 73
         height: 51
       alignment: 9
-      pivot: {x: 0.5547945, y: 0.32352942}
+      pivot: {x: 0.554795, y: 0.323529}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1436,7 +1436,7 @@ TextureImporter:
         width: 68
         height: 53
       alignment: 9
-      pivot: {x: 0.5588235, y: 0.3301887}
+      pivot: {x: 0.558824, y: 0.330189}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1457,7 +1457,7 @@ TextureImporter:
         width: 64
         height: 54
       alignment: 9
-      pivot: {x: 0.5625, y: 0.33333334}
+      pivot: {x: 0.5625, y: 0.333333}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1473,12 +1473,12 @@ TextureImporter:
       name: Angel-68
       rect:
         serializedVersion: 2
-        x: 113
-        y: 195
+        x: 233
+        y: 158
         width: 52
         height: 47
       alignment: 9
-      pivot: {x: 0.5769231, y: 0.30851063}
+      pivot: {x: 0.576923, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1494,12 +1494,12 @@ TextureImporter:
       name: Angel-7
       rect:
         serializedVersion: 2
-        x: 284
-        y: 137
+        x: 339
+        y: 100
         width: 48
         height: 48
       alignment: 9
-      pivot: {x: 0.5833333, y: 0.3125}
+      pivot: {x: 0.583333, y: 0.3125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1515,8 +1515,8 @@ TextureImporter:
       name: Angel-8
       rect:
         serializedVersion: 2
-        x: 167
-        y: 147
+        x: 54
+        y: 167
         width: 50
         height: 48
       alignment: 9
@@ -1536,12 +1536,12 @@ TextureImporter:
       name: Angel-9
       rect:
         serializedVersion: 2
-        x: 55
-        y: 169
+        x: 61
+        y: 217
         width: 52
         height: 47
       alignment: 9
-      pivot: {x: 0.5769231, y: 0.30851063}
+      pivot: {x: 0.576923, y: 0.308511}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1549,6 +1549,48 @@ TextureImporter:
       bones: []
       spriteID: e37cbd4608e0a074e8717c0b87caa7a8
       internalID: -16199656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Avatar_1
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 281
+        width: 60
+        height: 64
+      alignment: 9
+      pivot: {x: 0.46666667, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7077c444198a8c54d9459157c073d4d0
+      internalID: 2050019679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Avatar_2
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 207
+        width: 54
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5185185, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 168dc16640f21774c8f60fe383ae9e99
+      internalID: -60309443
       vertices: []
       indices: 
       edges: []
@@ -1633,6 +1675,8 @@ TextureImporter:
       Angel-7: -1535611620
       Angel-8: 731151305
       Angel-9: -16199656
+      Avatar_1: 2050019679
+      Avatar_2: -60309443
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

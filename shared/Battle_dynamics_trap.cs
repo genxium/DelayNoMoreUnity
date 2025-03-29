@@ -212,13 +212,13 @@ namespace shared {
                 atkedCharacterInNextFrame.VelX = 0; // yet no need to change "VelY" because it could be falling
                 atkedCharacterInNextFrame.CharacterState = Dying;
                 atkedCharacterInNextFrame.FramesToRecover = DYING_FRAMES_TO_RECOVER;
-                resetJumpStartupOrHolding(atkedCharacterInNextFrame, true);
+                resetJumpStartup(atkedCharacterInNextFrame, true);
             } else {
                 var atkedChConfig = characters[atkedCharacterInNextFrame.SpeciesId];
                 bool shouldOmitHitPushback = (atkedChConfig.Hardness > trapConfig.Hardness);   
                 bool shouldOmitStun = ((0 >= trapConfig.HitStunFrames) || (shouldOmitHitPushback));
                 if (false == shouldOmitStun) {
-                    resetJumpStartupOrHolding(atkedCharacterInNextFrame, true);
+                    resetJumpStartup(atkedCharacterInNextFrame, true);
                     if (trapConfig.BlowUp) {
                         atkedCharacterInNextFrame.CharacterState = BlownUp1;
                         if (atkedChConfig.OmitGravity) {
@@ -382,6 +382,7 @@ namespace shared {
                 }
                 var triggerInNextFrame = nextRenderFrameTriggers[i];
                 var triggerConfigFromTiled = triggerEditorIdToTiledConfig[currTrigger.EditorId];
+                bool isSubcycleConfigured = (0 < triggerConfigFromTiled.SubCycleQuota);
                 var triggerConfig = triggerConfigs[triggerConfigFromTiled.SpeciesId];
                 // [WARNING] The ORDER of zero checks of "currTrigger.FramesToRecover" and "currTrigger.FramesToFire" below is important, because we want to avoid "wrong SubCycleQuotaLeft replenishing when 0 == currTrigger.FramesToRecover"!
                 
@@ -421,7 +422,6 @@ namespace shared {
                 case TRIGGER_SPECIES_VICTORY_TRIGGER_TRIVIAL:
                 case TRIGGER_SPECIES_NPC_AWAKER_MV:
                 case TRIGGER_SPECIES_BOSS_AWAKER_MV:
-                case TRIGGER_SPECIES_TRAP_ATK_TRIGGER_MV:
                     if (mainCycleFulfilled) {
                             if (0 < currTrigger.Quota) {
                                 triggerInNextFrame.State = TriggerState.TcoolingDown;
@@ -447,6 +447,54 @@ namespace shared {
                             }
                     }
                 break;
+                case TRIGGER_SPECIES_TRAP_ATK_TRIGGER_MV:
+                    mainCycleFulfilled &= (TriggerState.Tready == currTrigger.State);
+                    if (!isSubcycleConfigured) {
+                        if (mainCycleFulfilled) {
+                            if (0 < currTrigger.Quota) {
+                                triggerInNextFrame.State = TriggerState.TcoolingDown;
+                                triggerInNextFrame.FramesInState = 0;
+                                triggerInNextFrame.Quota = currTrigger.Quota - 1;
+                                triggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
+                                fulfilledTriggerSetMask |= (1UL << (triggerInNextFrame.TriggerLocalId - 1));
+                                _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, false, triggerEditorIdToTiledConfig, logger);
+                            } else if (0 == currTrigger.Quota) {
+                                // Set to exhausted
+                                triggerInNextFrame.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
+                                triggerInNextFrame.DemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
+                            }
+                        } else if (0 == currTrigger.FramesToRecover) {
+                            // replenish upon mainCycle ends, but "false == mainCycleFulfilled"
+                            if (0 < currTrigger.Quota) {
+                                triggerInNextFrame.State = TriggerState.Tready;
+                                triggerInNextFrame.FramesInState = 0;
+                            }
+                        }
+                    } else {
+                        if (subCycleFulfilled) {
+                            fireSubscribingTraps(currTrigger, triggerConfigFromTiled, triggerInNextFrame, ref fulfilledTriggerSetMask, currRenderFrame, nextRenderFrameTriggers, triggerEditorIdToTiledConfig, logger);
+                        } else if (mainCycleFulfilled) {
+                            if (0 < currTrigger.Quota) {
+                                triggerInNextFrame.State = TriggerState.TcoolingDown;
+                                triggerInNextFrame.FramesInState = 0;
+                                triggerInNextFrame.Quota = currTrigger.Quota - 1;
+                                triggerInNextFrame.FramesToRecover = triggerConfigFromTiled.RecoveryFrames;
+                                triggerInNextFrame.FramesToFire = triggerConfigFromTiled.DelayedFrames;
+                                triggerInNextFrame.SubCycleQuotaLeft = triggerConfigFromTiled.SubCycleQuota;
+                            } else if (0 == currTrigger.Quota) {
+                                // Set to exhausted
+                                triggerInNextFrame.FulfilledEvtMask = EVTSUB_NO_DEMAND_MASK;
+                                triggerInNextFrame.DemandedEvtMask = EVTSUB_NO_DEMAND_MASK;
+                            }
+                        } else if (0 == currTrigger.FramesToRecover) {
+                            // replenish upon mainCycle ends, but "false == mainCycleFulfilled"
+                            if (0 < currTrigger.Quota) {
+                                triggerInNextFrame.State = TriggerState.Tready;
+                                triggerInNextFrame.FramesInState = 0;
+                            }
+                        }
+                    }
+                break; 
                 case TRIGGER_SPECIES_BOSS_SAVEPOINT:
                     if (mainCycleFulfilled) {
                             if (0 < currTrigger.Quota) {
@@ -649,6 +697,14 @@ namespace shared {
                 var trapInNextFrame = nextRenderFrameTraps[i]; 
                 if (TERMINATING_TRAP_ID == trapInNextFrame.TrapLocalId) break;
                 if (TERMINATING_TRIGGER_ID == trapInNextFrame.SubscribesToTriggerLocalId) continue;
+                
+                var trapConfig = trapConfigs[trapInNextFrame.ConfigFromTiled.SpeciesId];
+                if (trapConfig.Atk1UponTriggered && 0 >= trapInNextFrame.FramesInPatrolCue && TrapState.Tatk1 == trapInNextFrame.TrapState) {
+                    trapInNextFrame.TrapState = TrapState.Tidle;
+                    trapInNextFrame.FramesInTrapState = 0;
+                    continue;
+                }
+
                 ulong trapSubscribedTriggerMask = (1UL << (trapInNextFrame.SubscribesToTriggerLocalId - 1));
                 if (0 == (fulfilledEvtSubscriptionSetMask & trapSubscribedTriggerMask)) {
                     if (TERMINATING_TRIGGER_ID == trapInNextFrame.SubscribesToTriggerLocalIdAlt || 0 == (fulfilledEvtSubscriptionSetMask & trapSubscribedTriggerMask)) {
@@ -656,11 +712,21 @@ namespace shared {
                     }
                 }
 
-                var trapConfig = trapConfigs[trapInNextFrame.ConfigFromTiled.SpeciesId];
-                if (trapConfig.Atk1UponTriggered && SmallBallEmitter.SpeciesId == trapConfig.SpeciesId) {
-                    if (TrapState.Tidle == trapInNextFrame.TrapState && addNewTrapBulletToNextFrame(currRenderFrame.Id, currRenderFrame, trapInNextFrame, trapConfig, SmallBallEmitterBeamHit1, SmallBallEmitterBeamSkill, trapInNextFrame.DirX, trapInNextFrame.DirY, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, logger)) {
+                if (trapConfig.Atk1UponTriggered) {
+                    Skill? targetSkill = null;
+                    BulletConfig? targetBullet = null;
+                    if (SmallBallEmitter.SpeciesId == trapConfig.SpeciesId) {
+                        targetSkill = SmallBallEmitterBeam;
+                        targetBullet = SmallBallEmitterBeamHit1;
+                    } else if (Fort.SpeciesId == trapConfig.SpeciesId) {
+                        targetSkill = FortLv1Fireball;
+                        targetBullet = FortLv1FireballHit1;
+                    }
+
+                    if (null != targetSkill && null != targetBullet && TrapState.Tidle == trapInNextFrame.TrapState && addNewTrapBulletToNextFrame(currRenderFrame.Id, currRenderFrame, trapInNextFrame, trapConfig, targetBullet, targetSkill, trapInNextFrame.DirX, trapInNextFrame.DirY, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, logger)) {
                         trapInNextFrame.TrapState = TrapState.Tatk1;
                         trapInNextFrame.FramesInTrapState = 0;
+                        trapInNextFrame.FramesInPatrolCue = targetSkill.RecoveryFrames; // Re-purposed for countdown
                     }
                 } else if (trapConfig.DeactivateUponTriggered) {
                     if (TrapState.Tidle == trapInNextFrame.TrapState) {
@@ -797,6 +863,21 @@ namespace shared {
                         */
                     }
                 }
+            } else {
+                // Wait for "FramesToRecover" to become 0
+                triggerInNextFrame.State = TriggerState.Tready;
+                triggerInNextFrame.FramesToFire = MAX_INT;
+            }
+        }
+
+        private static void fireSubscribingTraps(Trigger currTrigger, TriggerConfigFromTiled triggerConfigFromTiled, Trigger triggerInNextFrame, ref ulong fulfilledTriggerSetMask, RoomDownsyncFrame currRenderFrame, RepeatedField<Trigger> nextRenderFrameTriggers, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ILoggerBridge logger) {
+            if (0 < currTrigger.SubCycleQuotaLeft) {
+                triggerInNextFrame.SubCycleQuotaLeft = currTrigger.SubCycleQuotaLeft - 1;
+                triggerInNextFrame.State = TriggerState.TcoolingDown;
+                triggerInNextFrame.FramesInState = 0;
+                triggerInNextFrame.FramesToFire = triggerConfigFromTiled.SubCycleTriggerFrames;
+                fulfilledTriggerSetMask |= (1UL << (triggerInNextFrame.TriggerLocalId - 1));
+                _notifySubscriberTriggers(currRenderFrame.Id, triggerInNextFrame, nextRenderFrameTriggers, false, false, triggerEditorIdToTiledConfig, logger);
             } else {
                 // Wait for "FramesToRecover" to become 0
                 triggerInNextFrame.State = TriggerState.Tready;

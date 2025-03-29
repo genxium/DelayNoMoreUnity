@@ -313,36 +313,17 @@ public abstract class AbstractMapController : MonoBehaviour {
                 // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here, we just have to assign "prefabbedInputList[(joinIndex-1)]" specifically and copy all others
                 prefabbedInputList[k] = existingInputFrame.InputList[k];
             } else if (lastIndividuallyConfirmedInputFrameId[k] <= inputFrameId) {
-                // Don't predict "btnB" -- yet predicting "btnA" for better "jump holding" consistency
-                ulong encodedIdx = (lastIndividuallyConfirmedInputList[k] & 15UL);
-                prefabbedInputList[k] = encodedIdx;
-                bool shouldPredictBtnAHold = false;
-                bool shouldPredictBtnBHold = false;
-                bool shouldPredictBtnEHold = false;
-                if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 16UL) && JUMP_HOLDING_IFD_CNT_THRESHOLD_1 > inputFrameId-lastIndividuallyConfirmedInputFrameId[k]) {
-                    shouldPredictBtnAHold = true;
-                    if (2 == encodedIdx || 6 == encodedIdx || 7 == encodedIdx) {
-                        // Don't predict slip-jump!
-                        shouldPredictBtnAHold = false;
-                    }
-                } 
-                if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 256UL) && BTN_E_HOLDING_IFD_CNT_THRESHOLD_1 > inputFrameId-lastIndividuallyConfirmedInputFrameId[k]) {
-                    shouldPredictBtnEHold = true;
-                } 
-                var chDownsync = null == rdf ? null : rdf.PlayersArr[k];;
-                if (null != previousInputFrameDownsync && 0 < (previousInputFrameDownsync.InputList[k] & 32UL)) {
-                    if (null != chDownsync && 1 < chDownsync.BtnBHoldingRdfCount) {       
-                        shouldPredictBtnBHold = true;
-                    }
-                }
-                if (shouldPredictBtnAHold) prefabbedInputList[k] |= (lastIndividuallyConfirmedInputList[k] & 16UL); 
-                if (shouldPredictBtnEHold) prefabbedInputList[k] |= (lastIndividuallyConfirmedInputList[k] & 256UL); 
-                if (shouldPredictBtnBHold) prefabbedInputList[k] |= (lastIndividuallyConfirmedInputList[k] & 32UL); 
+                prefabbedInputList[k] = lastIndividuallyConfirmedInputList[k];
             } else if (null != previousInputFrameDownsync) {
                 // When "self.lastIndividuallyConfirmedInputFrameId[k] > inputFrameId", don't use it to predict a historical input!
-                // Don't predict jump/atk holding in this case.
-                prefabbedInputList[k] = (previousInputFrameDownsync.InputList[k] & 15UL);
+                prefabbedInputList[k] = previousInputFrameDownsync.InputList[k];
             }
+
+            /*
+            [WARNING]
+
+            All "critical input predictions (i.e. BtnA/B/C/D/E)" are now handled only in "UpdateInputFrameInPlaceUponDynamics", which is called just before rendering "playerRdf" -- the only timing that matters for smooth graphcis perception of (human) players.
+            */
         }
 
         // [WARNING] Do not blindly use "selfJoinIndexMask" here, as the "actuallyUsedInput for self" couldn't be confirmed while prefabbing, otherwise we'd have confirmed a wrong self input by "_markConfirmationIfApplicable()"!
@@ -392,7 +373,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             bool allowUpdateInputFrameInPlaceUponDynamics = (!isChasing);
             if (allowUpdateInputFrameInPlaceUponDynamics) {
-                bool hasInputBeenMutated = UpdateInputFrameInPlaceUponDynamics(currRdf, inputBuffer, j, roomCapacity, delayedInputFrame.ConfirmedList, delayedInputFrame.InputList, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, selfPlayerInfo.JoinIndex);
+                bool hasInputBeenMutated = UpdateInputFrameInPlaceUponDynamics(currRdf, inputBuffer, j, roomCapacity, delayedInputFrame.ConfirmedList, delayedInputFrame.InputList, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, selfPlayerInfo.JoinIndex, disconnectedPeerJoinIndices);
                 if (hasInputBeenMutated) {
                     int ii = ConvertToFirstUsedRenderFrameId(j);
                     if (ii < i) {
@@ -795,7 +776,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             dynamicTrapObj.transform.position = newPosHolder;
             var animCtrl = dynamicTrapObj.GetComponent<TrapAnimationController>();
-            animCtrl.updateAnim(currTrap.TrapState, currTrap, trapConfig, currTrap.FramesInTrapState, currTrap.DirX);
+            animCtrl.updateAnim(currTrap.TrapState, currTrap, trapConfig, currTrap.FramesInTrapState, trapConfig.NoXFlipRendering ? +2 : currTrap.DirX);
             kDynamicTrap++;
         }
 
@@ -2083,7 +2064,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = trapChild.GetComponent<SuperObject>();
                         var tileProps = trapChild.GetComponent<SuperCustomProperties>();
 
-                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirY, speed, prohibitsWallGrabbing, subscribesToId, subscribesToIdAfterInitialFire, subscribesToIdAlt, onlyAllowsAlignedVelX, onlyAllowsAlignedVelY, initNoAngularVel;
+                        CustomProperty speciesId, providesHardPushback, providesDamage, providesEscape, providesSlipJump, forcesCrouching, isCompletelyStatic, collisionTypeMask, dirX, dirY, speed, prohibitsWallGrabbing, subscribesToId, subscribesToIdAfterInitialFire, subscribesToIdAlt, onlyAllowsAlignedVelX, onlyAllowsAlignedVelY, initNoAngularVel;
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("providesHardPushback", out providesHardPushback);
                         tileProps.TryGetCustomProperty("providesDamage", out providesDamage);
@@ -2091,6 +2072,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("providesSlipJump", out providesSlipJump);
                         tileProps.TryGetCustomProperty("forcesCrouching", out forcesCrouching);
                         tileProps.TryGetCustomProperty("static", out isCompletelyStatic);
+                        tileProps.TryGetCustomProperty("dirX", out dirX);
                         tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speed", out speed);
                         tileProps.TryGetCustomProperty("prohibitsWallGrabbing", out prohibitsWallGrabbing);
@@ -2112,6 +2094,9 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         bool xFlipped = isXFlipped(tileObj.m_TileId);
                         int dirXVal = xFlipped ? -2 : +2;
+                        if (null != dirX && !dirX.IsEmpty && 0 == dirX.GetValueAsInt()) {
+                            dirXVal = 0;
+                        }
                         int dirYVal = (null == dirY || dirY.IsEmpty ? 0 : dirY.GetValueAsInt());
                         int speedVal = (null == speed || speed.IsEmpty ? 0 : speed.GetValueAsInt());
                         int subscribesToIdVal = (null == subscribesToId || subscribesToId.IsEmpty ? TERMINATING_EVTSUB_ID_INT : subscribesToId.GetValueAsInt());
@@ -3540,7 +3525,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             } else {
                 vfxSpeciesId = chConfig.Def1BrokenVfxSpeciesId;
             }
-        } else if (chConfig.HasBtnBCharging && 0 < currCharacterDownsync.BtnBHoldingRdfCount) {
+        } else if (chConfig.HasBtnBCharging && BTN_B_HOLDING_RDF_CNT_THRESHOLD_1 < currCharacterDownsync.BtnBHoldingRdfCount) {
             vfxLookupKeySecondPrefix = KV_PREFIX_VFX_CHARGE;
             if (BTN_B_HOLDING_RDF_CNT_THRESHOLD_2 > currCharacterDownsync.BtnBHoldingRdfCount) {
                 vfxSpeciesId = VfxSharedChargingPreparation.SpeciesId;
