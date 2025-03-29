@@ -8,7 +8,7 @@ using Pbc = Google.Protobuf.Collections;
 using Google.Protobuf.Collections;
 using System.Collections.Concurrent;
 
-namespace battlesrv.Battle;
+namespace backend.Battle;
 public class Room {
     private readonly Random _randGenerator = new Random();
     //private String[] _availableStageNames = new String[] {"ForestVersus", "CaveVersus", "FlatVersus"};
