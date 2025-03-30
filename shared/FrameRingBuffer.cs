@@ -85,6 +85,7 @@ namespace shared {
 
             return (ret, oldStFrameId, oldEdFrameId);
         }
+
         public new void Clear() {
             base.Clear();
             StFrameId = EdFrameId = 0;

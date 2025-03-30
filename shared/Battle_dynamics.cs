@@ -293,7 +293,7 @@ namespace shared {
     
             var delayedConfirmedList = delayedInputFrameDownsync.ConfirmedList;
             var delayedUdpConfirmedList = delayedInputFrameDownsync.UdpConfirmedList; // [WARNING] Only used by frontend, see comment in proto file.
-            if (0 == (delayedConfirmedList & joinIndexMask) & 0 == (delayedUdpConfirmedList & joinIndexMask)) {
+            if (0 == (delayedConfirmedList & joinIndexMask) && 0 == (delayedUdpConfirmedList & joinIndexMask)) {
                 removePredictedRisingAndFallingEdgesOfPlayerInput(currCharacterDownsync, decodedInputHolder);
             }
 
