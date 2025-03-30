@@ -12,7 +12,8 @@ namespace backend.Battle;
 public class Room {
     private readonly Random _randGenerator = new Random();
     //private String[] _availableStageNames = new String[] {"ForestVersus", "CaveVersus", "FlatVersus"};
-    private String[] _availableStageNames = new String[] {"FlatVersus"};
+    //private String[] _availableStageNames = new String[] {"FlatVersus"};
+    private String[] _availableStageNames = new String[] {"FlatVersusTraining"};
 
     private TimeSpan DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT = TimeSpan.FromMilliseconds(5000);
     private bool type1ForceConfirmationEnabled = false;

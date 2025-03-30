@@ -229,6 +229,7 @@ public class OnlineMapController : AbstractMapController {
                         Debug.LogWarning(String.Format("Got empty selfPlayerInfo upon resync@localRenderFrameId={0}, @lastAllConfirmedInputFrameId={1}, @chaserRenderFrameId={2}, @inputBuffer:{3}", playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, inputBuffer.toSimpleStat()));
                         return;
                     }
+                    logForceResyncForChargeDebug(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
                     readyGoPanel.hideReady();
                     readyGoPanel.hideGo();
                     onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
@@ -238,6 +239,22 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 default:
                     break;
+            }
+        }
+    }
+
+    void logForceResyncForChargeDebug(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
+        Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}, @battleState={8}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), battleState);
+        var playersArr = pbRdf.PlayersArr;
+        foreach (var player in playersArr) {
+            if (player.JoinIndex == selfPlayerInfo.JoinIndex) {
+                continue;
+            }
+            Debug.Log($"force-resync Peer\n\t{stringifyPlayer(player)}");
+            if (null != accompaniedInputFrameDownsyncBatch) {
+                foreach (var ifd in accompaniedInputFrameDownsyncBatch) {
+                    Debug.Log($"\tifdId={ifd.InputFrameId}, input={ifd.InputList[player.JoinIndex-1]}");
+                }
             }
         }
     }
