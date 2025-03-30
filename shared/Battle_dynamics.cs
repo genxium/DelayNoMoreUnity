@@ -293,7 +293,7 @@ namespace shared {
     
             var delayedConfirmedList = delayedInputFrameDownsync.ConfirmedList;
             var delayedUdpConfirmedList = delayedInputFrameDownsync.UdpConfirmedList; // [WARNING] Only used by frontend, see comment in proto file.
-            if (selfPlayerJoinIndex != currCharacterDownsync.JoinIndex && 0 == (delayedConfirmedList & joinIndexMask) & 0 == (delayedUdpConfirmedList & joinIndexMask)) {
+            if (0 == (delayedConfirmedList & joinIndexMask) & 0 == (delayedUdpConfirmedList & joinIndexMask)) {
                 removePredictedRisingAndFallingEdgesOfPlayerInput(currCharacterDownsync, decodedInputHolder);
             }
 
@@ -677,14 +677,16 @@ namespace shared {
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
                 var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(rdfId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, inputBuffer, decodedInputHolder, currEffInAir, notDashing, selfPlayerJoinIndex, logger);
-
+                /*
                 if (PATTERN_RELEASED_B == patternId) {
                     int delayedInputFrameId = ConvertToDelayedInputFrameId(rdfId);
                     var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
-                    if (null != delayedInputFrameDownsync && 0 == (delayedInputFrameDownsync.ConfirmedList & (1u << i))) {
+                    var joinIndexMask = (1u << i);
+                    if (null != delayedInputFrameDownsync && 0 == (delayedInputFrameDownsync.ConfirmedList & joinIndexMask) && (0 == delayedInputFrameDownsync.UdpConfirmedList)) {
                         logger.LogInfo($"PATTERN_RELEASED_B from prediction: currRdfId={rdfId}, delayedIfd={delayedInputFrameId}, op={decodedInputHolder}\n\topEncoded={stringifyIfd(delayedInputFrameDownsync, false)}\n\tch={stringifyPlayer(currCharacterDownsync)}\n\tnextch={stringifyPlayer(thatCharacterInNextFrame)}");
                     }
                 }
+                */
                 _processSingleCharacterInput(rdfId, patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy, false, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, false, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
             }
         }

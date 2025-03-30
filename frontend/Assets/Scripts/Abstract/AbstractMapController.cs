@@ -310,7 +310,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             TODO: If "inArenaPracticeMode", call "deriveNpcOpPattern(...)" here for other players! 
             */
             if (null != existingInputFrame) {
-                // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here, we just have to assign "prefabbedInputList[(joinIndex-1)]" specifically and copy all others
+                // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here
                 prefabbedInputList[k] = existingInputFrame.InputList[k];
             } else if (lastIndividuallyConfirmedInputFrameId[k] <= inputFrameId) {
                 prefabbedInputList[k] = lastIndividuallyConfirmedInputList[k];
@@ -328,9 +328,11 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         // [WARNING] Do not blindly use "selfJoinIndexMask" here, as the "actuallyUsedInput for self" couldn't be confirmed while prefabbing, otherwise we'd have confirmed a wrong self input by "_markConfirmationIfApplicable()"!
         ulong initConfirmedList = 0;
-        if (null != existingInputFrame) {
-            // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here
-            initConfirmedList = (existingInputFrame.ConfirmedList | selfJoinIndexMask);
+        if (canConfirmSelf) {
+            initConfirmedList = selfJoinIndexMask;
+            if (null != existingInputFrame) {
+                initConfirmedList |= existingInputFrame.ConfirmedList;
+            }
         }
         currSelfInput = iptmgr.GetEncodedInput(); // When "null == existingInputFrame", it'd be safe to say that "GetImmediateEncodedInput()" is for the requested "inputFrameId"
         prefabbedInputList[(joinIndex - 1)] = currSelfInput;
@@ -348,6 +350,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 ifdHolder.InputList[k] = prefabbedInputList[k];
             }
             ifdHolder.ConfirmedList = initConfirmedList;
+            ifdHolder.UdpConfirmedList = initConfirmedList;
         }
 
         return (previousSelfInput, currSelfInput);
