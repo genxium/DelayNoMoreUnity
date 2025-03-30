@@ -2,7 +2,7 @@
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="160" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="200" nextobjectid="785">
  <properties>
   <property name="MatchInOrder" value="true"/>
-  <property name="battleDurationSeconds" value="45"/>
+  <property name="battleDurationSeconds" value="120"/>
   <property name="levelId" value="4"/>
   <property name="missionEvtSubId" value="5"/>
   <property name="npcPreallocCapDict" value="4104:4;16:4;4097:8;4098:6;4099:4;4100:4;4096:2;4101:2;4102:4;4103:6;4105:2;4108:8;4109:6;4106:6;4110:4;4111:2;4112:2;4107:2;18:4"/>
@@ -58,14 +58,14 @@
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
-  <object id="135" name="Player2St" x="1632" y="352">
+  <object id="135" name="Player2St" x="1312" y="336">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="teamId" value="2"/>
    </properties>
    <point/>
   </object>
-  <object id="531" name="Player1St" x="928" y="352">
+  <object id="531" name="Player1St" x="1216" y="336">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="teamId" value="1"/>

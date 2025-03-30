@@ -373,7 +373,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             bool allowUpdateInputFrameInPlaceUponDynamics = (!isChasing);
             if (allowUpdateInputFrameInPlaceUponDynamics) {
-                bool hasInputBeenMutated = UpdateInputFrameInPlaceUponDynamics(currRdf, inputBuffer, j, lastAllConfirmedInputFrameId, roomCapacity, delayedInputFrame.ConfirmedList, delayedInputFrame.InputList, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, selfPlayerInfo.JoinIndex, disconnectedPeerJoinIndices);
+                bool hasInputBeenMutated = UpdateInputFrameInPlaceUponDynamics(currRdf, inputBuffer, j, lastAllConfirmedInputFrameId, roomCapacity, delayedInputFrame.ConfirmedList, delayedInputFrame.InputList, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, selfPlayerInfo.JoinIndex, disconnectedPeerJoinIndices, _loggerBridge);
                 if (hasInputBeenMutated) {
                     int ii = ConvertToFirstUsedRenderFrameId(j);
                     if (ii < i) {
@@ -1475,7 +1475,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             //console.log(`Confirmed inputFrameId=${inputFrameDownsync.inputFrameId}`);
             var (res2, oldStFrameId, oldEdFrameId) = inputBuffer.SetByFrameId(inputFrameDownsync, inputFrameDownsync.InputFrameId);
             if (RingBuffer<InputFrameDownsync>.RING_BUFF_FAILED_TO_SET == res2) {
-                throw new ArgumentException(String.Format("Failed to dump input cache(maybe recentInputCache too small)! inputFrameDownsync.inputFrameId={0}, lastAllConfirmedInputFrameId={1}", inputFrameDownsyncId, lastAllConfirmedInputFrameId));
+                throw new ArgumentException(String.Format("Failed to dump input cache(maybe recentInputCache too small)! inputFrameDownsync.inputFrameId={0}, lastAllConfirmedInputFrameId={1}, inputBuffer: {2}", inputFrameDownsyncId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat()));
             } else if (RingBuffer<InputFrameDownsync>.RING_BUFF_NON_CONSECUTIVE_SET == res2) {
                 Debug.LogWarning(String.Format("Possibly resyncing#2! Now inputBuffer: {0}", inputBuffer.toSimpleStat()));
             }
@@ -3941,4 +3941,21 @@ public abstract class AbstractMapController : MonoBehaviour {
     private bool isXFlipped(uint superTileId) {
         return 0 < (superTileId & TiledHorizontalFlipFlag);
     }
+
+    protected void logForceResyncForChargeDebug(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
+        Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}, @battleState={8}", pbRdf.Id, pbRdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), battleState);
+        var playersArr = pbRdf.PlayersArr;
+        foreach (var player in playersArr) {
+            if (player.JoinIndex == selfPlayerInfo.JoinIndex) {
+                continue;
+            }
+            Debug.Log($"force-resync Peer\n\t{stringifyPlayer(player)}");
+            if (null != accompaniedInputFrameDownsyncBatch) {
+                foreach (var ifd in accompaniedInputFrameDownsyncBatch) {
+                    Debug.Log($"\tifdId={ifd.InputFrameId}, input={ifd.InputList[player.JoinIndex-1]}");
+                }
+            }
+        }
+    }
+
 }

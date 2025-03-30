@@ -229,7 +229,7 @@ public class OnlineMapController : AbstractMapController {
                         Debug.LogWarning(String.Format("Got empty selfPlayerInfo upon resync@localRenderFrameId={0}, @lastAllConfirmedInputFrameId={1}, @chaserRenderFrameId={2}, @inputBuffer:{3}", playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, inputBuffer.toSimpleStat()));
                         return;
                     }
-                    logForceResyncForChargeDebug(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
+                    //logForceResyncForChargeDebug(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
                     readyGoPanel.hideReady();
                     readyGoPanel.hideGo();
                     onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
@@ -239,22 +239,6 @@ public class OnlineMapController : AbstractMapController {
                     break;
                 default:
                     break;
-            }
-        }
-    }
-
-    void logForceResyncForChargeDebug(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
-        Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}, @battleState={8}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), battleState);
-        var playersArr = pbRdf.PlayersArr;
-        foreach (var player in playersArr) {
-            if (player.JoinIndex == selfPlayerInfo.JoinIndex) {
-                continue;
-            }
-            Debug.Log($"force-resync Peer\n\t{stringifyPlayer(player)}");
-            if (null != accompaniedInputFrameDownsyncBatch) {
-                foreach (var ifd in accompaniedInputFrameDownsyncBatch) {
-                    Debug.Log($"\tifdId={ifd.InputFrameId}, input={ifd.InputList[player.JoinIndex-1]}");
-                }
             }
         }
     }
@@ -732,25 +716,28 @@ public class OnlineMapController : AbstractMapController {
                 // Debug.Log(String.Format("Udp upsync inputFrameId={0} from peerJoinIndex={1} is ignored because it's already confirmed#1! lastAllConfirmedInputFrameId={2}", inputFrameId, peerJoinIndex, lastAllConfirmedInputFrameId));
                 continue;
             }
-            ulong peerJoinIndexMask = ((ulong)1 << (peerJoinIndex - 1));
+            int peerJ = (peerJoinIndex - 1);
+            ulong peerJoinIndexMask = (1u << peerJ);
             getOrPrefabInputFrameUpsync(inputFrameId, false, prefabbedInputListHolder); // Make sure that inputFrame exists locally
             var (res1, existingInputFrame) = inputBuffer.GetByFrameId(inputFrameId);
             if (!res1 || null == existingInputFrame) {
                 throw new ArgumentNullException(String.Format("inputBuffer doesn't contain inputFrameId={0} after prefabbing! Now inputBuffer StFrameId={1}, EdFrameId={2}, Cnt/N={3}/{4}", inputFrameId, inputBuffer.StFrameId, inputBuffer.EdFrameId, inputBuffer.Cnt, inputBuffer.N));
             }
             ulong existingConfirmedList = existingInputFrame.ConfirmedList;
-            if (0 < (existingConfirmedList & peerJoinIndexMask)) {
+            ulong existingUdpConfirmedList = existingInputFrame.UdpConfirmedList;
+            if (0 < (existingConfirmedList & peerJoinIndexMask) || 0 < (existingUdpConfirmedList & peerJoinIndexMask)) {
                 // Debug.Log(String.Format("Udp upsync inputFrameId={0} from peerJoinIndex={1} is ignored because it's already confirmed#2! lastAllConfirmedInputFrameId={2}, existingInputFrame={3}", inputFrameId, peerJoinIndex, lastAllConfirmedInputFrameId, existingInputFrame));
                 continue;
             }
-            if (inputFrameId > lastIndividuallyConfirmedInputFrameId[peerJoinIndex - 1]) {
-                lastIndividuallyConfirmedInputFrameId[peerJoinIndex - 1] = inputFrameId;
-                lastIndividuallyConfirmedInputList[peerJoinIndex - 1] = peerEncodedInput;
+            if (inputFrameId > lastIndividuallyConfirmedInputFrameId[peerJ]) {
+                lastIndividuallyConfirmedInputFrameId[peerJ] = inputFrameId;
+                lastIndividuallyConfirmedInputList[peerJ] = peerEncodedInput;
             }
             effCnt += 1;
 
-            bool isPeerEncodedInputUpdated = (existingInputFrame.InputList[peerJoinIndex - 1] != peerEncodedInput);
-            existingInputFrame.InputList[peerJoinIndex - 1] = peerEncodedInput;
+            bool isPeerEncodedInputUpdated = (existingInputFrame.InputList[peerJ] != peerEncodedInput);
+            existingInputFrame.InputList[peerJ] = peerEncodedInput;
+            existingInputFrame.UdpConfirmedList = (existingUdpConfirmedList | peerJoinIndexMask);
 
             int playerRdfId2 = ConvertToLastUsedRenderFrameId(inputFrameId);
             if (

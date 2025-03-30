@@ -86,7 +86,7 @@ namespace shared {
             return true;
         }
 
-        public static bool UpdateInputFrameInPlaceUponDynamics(RoomDownsyncFrame currRdf, FrameRingBuffer<InputFrameDownsync> inputBuffer, int inputFrameId, int lastAllConfirmedInputFrameId, int roomCapacity, ulong confirmedList, RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex, HashSet<int> disconnectedPeerJoinIndices) {
+        public static bool UpdateInputFrameInPlaceUponDynamics(RoomDownsyncFrame currRdf, FrameRingBuffer<InputFrameDownsync> inputBuffer, int inputFrameId, int lastAllConfirmedInputFrameId, int roomCapacity, ulong confirmedList, RepeatedField<ulong> inputList, int[] lastIndividuallyConfirmedInputFrameId, ulong[] lastIndividuallyConfirmedInputList, int toExcludeJoinIndex, HashSet<int> disconnectedPeerJoinIndices, ILoggerBridge logger) {
             bool hasInputFrameUpdatedOnDynamics = false;
             if (inputFrameId <= lastAllConfirmedInputFrameId) {
                 return hasInputFrameUpdatedOnDynamics;
@@ -97,17 +97,23 @@ namespace shared {
                     // On frontend, a "self input" is only confirmed by websocket downsync, which is quite late and might get the "self input" incorrectly overwritten if not excluded here
                     continue;
                 }
+                ulong newVal = inputList[i];
                 ulong joinMask = (1UL << i);
+                var chDownsync = currRdf.PlayersArr[i];
+                // [WARNING] Try not to predict either a "rising edge" or a "falling edge" of any critical button on frontend.
+                bool shouldPredictBtnAHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.JumpHoldingRdfCnt) || (0 < chDownsync.JumpHoldingRdfCnt);
+                bool shouldPredictBtnBHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnBHoldingRdfCount) || (0 < chDownsync.BtnBHoldingRdfCount);
+                bool shouldPredictBtnCHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnCHoldingRdfCount) || (0 < chDownsync.BtnCHoldingRdfCount);
+                bool shouldPredictBtnDHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnDHoldingRdfCount) || (0 < chDownsync.BtnDHoldingRdfCount);
+                bool shouldPredictBtnEHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnEHoldingRdfCount) || (0 < chDownsync.BtnEHoldingRdfCount);
+              
                 if (0 < (confirmedList & joinMask)) {
                     // This in-place update is only valid when "delayed input for this player is not yet confirmed"
-                    continue;
-                }
-
-                ulong newVal = inputList[i];
-                if (lastIndividuallyConfirmedInputFrameId[i] == inputFrameId) {
-                    // Already confirmed, no need to predict.
+                } else if (lastIndividuallyConfirmedInputFrameId[i] == inputFrameId) {
+                    // Received from UDP, better than local prediction though "inputFrameDownsync.ConfirmedList" is not set till confirmed by TCP path
                     newVal = lastIndividuallyConfirmedInputList[i];
                 } else {
+                    // Local prediction
                     ulong refCmd = 0;
                     var (_, previousInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId - 1);
                     if (lastIndividuallyConfirmedInputFrameId[i] < inputFrameId) {
@@ -118,19 +124,18 @@ namespace shared {
                     }
 
                     newVal = (refCmd & 15UL);
-                    var chDownsync = currRdf.PlayersArr[i];
-                    // [WARNING] Try not to predict either a "rising edge" or a "falling edge" of any critical button on frontend.
-                    bool shouldPredictBtnAHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.JumpHoldingRdfCnt) || (0 < chDownsync.JumpHoldingRdfCnt);
-                    bool shouldPredictBtnBHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnBHoldingRdfCount) || (0 < chDownsync.BtnBHoldingRdfCount);
-                    bool shouldPredictBtnCHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnCHoldingRdfCount) || (0 < chDownsync.BtnCHoldingRdfCount);
-                    bool shouldPredictBtnDHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnDHoldingRdfCount) || (0 < chDownsync.BtnDHoldingRdfCount);
-                    bool shouldPredictBtnEHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnEHoldingRdfCount) || (0 < chDownsync.BtnEHoldingRdfCount);
-                    if (shouldPredictBtnAHold) newVal |= (refCmd & 16UL); 
-                    if (shouldPredictBtnBHold) newVal |= (refCmd & 32UL); 
-                    if (shouldPredictBtnCHold) newVal |= (refCmd & 64UL); 
-                    if (shouldPredictBtnDHold) newVal |= (refCmd & 128UL); 
-                    if (shouldPredictBtnEHold) newVal |= (refCmd & 256UL); 
+                    if (shouldPredictBtnAHold) newVal |= (refCmd & 16UL);
+                    if (shouldPredictBtnBHold) newVal |= (refCmd & 32UL);
+                    if (shouldPredictBtnCHold) newVal |= (refCmd & 64UL);
+                    if (shouldPredictBtnDHold) newVal |= (refCmd & 128UL);
+                    if (shouldPredictBtnEHold) newVal |= (refCmd & 256UL);
                 }
+
+                /*
+                if (shouldPredictBtnBHold && 0 == (newVal & 32UL)) {
+                    logger.LogInfo($"currRdfId={currRdf.Id}, inputFrameId={inputFrameId}, lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, orig inputList[jidx-1:{i}]={inputList[i]}, confirmedList={confirmedList}, newVal={newVal}, lastIndividuallyConfirmedInputFrameId[jidx-1:{i}]={lastIndividuallyConfirmedInputFrameId[i]}, lastIndividuallyConfirmedInputList[jidx-1:{i}]={lastIndividuallyConfirmedInputList[i]}, predicted a falling edge!\n\tchDownsync={stringifyPlayer(chDownsync)}");
+                }
+                */
 
                 if (newVal != inputList[i]) {
                     inputList[i] = newVal;
@@ -185,6 +190,7 @@ namespace shared {
             int patternId = PATTERN_ID_NO_OP;
             int effFrontOrBack = (decodedInputHolder.Dx*currCharacterDownsync.DirX); // [WARNING] Deliberately using "decodedInputHolder.Dx" instead of "effDx (which could be 0 in block stun)" here!
             var canJumpWithinInertia = (0 == currCharacterDownsync.FramesToRecover && ((chConfig.InertiaFramesToRecover >> 1) > currCharacterDownsync.FramesCapturedByInertia)) || !notDashing;
+
             if (0 < decodedInputHolder.BtnALevel) {
                 if (0 == currCharacterDownsync.JumpHoldingRdfCnt && canJumpWithinInertia) {
                     if ((currCharacterDownsync.PrimarilyOnSlippableHardPushback || (currCharacterDownsync.InAir && currCharacterDownsync.OmitGravity && !chConfig.OmitGravity)) && (0 > decodedInputHolder.Dy && 0 == decodedInputHolder.Dx)) {
@@ -268,7 +274,7 @@ namespace shared {
             return (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy);
         }
 
-        private static (int, bool, bool, int, int) _derivePlayerOpPattern(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, bool currEffInAir, bool notDashing, ILoggerBridge logger) {
+        private static (int, bool, bool, int, int) _derivePlayerOpPattern(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, bool currEffInAir, bool notDashing, int selfPlayerJoinIndex, ILoggerBridge logger) {
             // returns (patternId, jumpedOrNot, slipJumpedOrNot, effectiveDx, effectiveDy)
             int delayedInputFrameId = ConvertToDelayedInputFrameId(rdfId);
 
@@ -280,9 +286,17 @@ namespace shared {
             if (!ok || null == delayedInputFrameDownsync) {
                 throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is null!", delayedInputFrameId));
             }
+            int j = (currCharacterDownsync.JoinIndex - 1);
             var delayedInputList = delayedInputFrameDownsync.InputList;
-            DecodeInput(delayedInputList[currCharacterDownsync.JoinIndex - 1], decodedInputHolder);
+            DecodeInput(delayedInputList[j], decodedInputHolder);
+            var joinIndexMask = (1u << j);
     
+            var delayedConfirmedList = delayedInputFrameDownsync.ConfirmedList;
+            var delayedUdpConfirmedList = delayedInputFrameDownsync.UdpConfirmedList; // [WARNING] Only used by frontend, see comment in proto file.
+            if (selfPlayerJoinIndex != currCharacterDownsync.JoinIndex && 0 == (delayedConfirmedList & joinIndexMask) & 0 == (delayedUdpConfirmedList & joinIndexMask)) {
+                removePredictedRisingAndFallingEdgesOfPlayerInput(currCharacterDownsync, decodedInputHolder);
+            }
+
             updateBtnHoldingByInput(currCharacterDownsync, decodedInputHolder, thatCharacterInNextFrame);
 
             if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
@@ -662,8 +676,15 @@ namespace shared {
                 bool currEffInAir = isEffInAir(currCharacterDownsync, notDashing);
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(rdfId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, inputBuffer, decodedInputHolder, currEffInAir, notDashing, logger);
+                var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(rdfId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, inputBuffer, decodedInputHolder, currEffInAir, notDashing, selfPlayerJoinIndex, logger);
 
+                if (PATTERN_RELEASED_B == patternId) {
+                    int delayedInputFrameId = ConvertToDelayedInputFrameId(rdfId);
+                    var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
+                    if (null != delayedInputFrameDownsync && 0 == (delayedInputFrameDownsync.ConfirmedList & (1u << i))) {
+                        logger.LogInfo($"PATTERN_RELEASED_B from prediction: currRdfId={rdfId}, delayedIfd={delayedInputFrameId}, op={decodedInputHolder}\n\topEncoded={stringifyIfd(delayedInputFrameDownsync, false)}\n\tch={stringifyPlayer(currCharacterDownsync)}\n\tnextch={stringifyPlayer(thatCharacterInNextFrame)}");
+                    }
+                }
                 _processSingleCharacterInput(rdfId, patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy, false, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, false, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
             }
         }
@@ -2602,6 +2623,23 @@ namespace shared {
             if (0 < thatCharacterInNextFrame.BtnEHoldingRdfCount) { 
                 thatCharacterInNextFrame.BtnEHoldingRdfCount = JAMMED_BTN_HOLDING_RDF_CNT;
             }
+        }
+
+        public static void removePredictedRisingAndFallingEdgesOfPlayerInput(CharacterDownsync chDownsync, InputFrameDecoded decodedInputHolder) {
+            /*
+            [WARNING] Any "predicted rising/falling edge" is harmful -- even if in "frontend rollbackAndChase(..., isChasing: true)", i.e. a "false rising/falling edge" might trigger a "false start of a skill" in "historic renderBuffer" which in turn would be picked up by "front rollbackAndChase(..., isChasing: false)" to render "false bullets" as well as deal "false damage". 
+            */
+
+            bool shouldPredictBtnAHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.JumpHoldingRdfCnt) || (0 < chDownsync.JumpHoldingRdfCnt);
+            bool shouldPredictBtnBHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnBHoldingRdfCount) || (0 < chDownsync.BtnBHoldingRdfCount);
+            bool shouldPredictBtnCHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnCHoldingRdfCount) || (0 < chDownsync.BtnCHoldingRdfCount);
+            bool shouldPredictBtnDHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnDHoldingRdfCount) || (0 < chDownsync.BtnDHoldingRdfCount);
+            bool shouldPredictBtnEHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnEHoldingRdfCount) || (0 < chDownsync.BtnEHoldingRdfCount);
+            decodedInputHolder.BtnALevel = shouldPredictBtnAHold ? 1 : 0;  
+            decodedInputHolder.BtnBLevel = shouldPredictBtnBHold ? 1 : 0;
+            decodedInputHolder.BtnCLevel = shouldPredictBtnCHold ? 1 : 0;
+            decodedInputHolder.BtnDLevel = shouldPredictBtnDHold ? 1 : 0;
+            decodedInputHolder.BtnELevel = shouldPredictBtnEHold ? 1 : 0;
         }
 
         public static void updateBtnHoldingByInput(CharacterDownsync currCharacterDownsync, InputFrameDecoded decodedInputHolder, CharacterDownsync thatCharacterInNextFrame) {
