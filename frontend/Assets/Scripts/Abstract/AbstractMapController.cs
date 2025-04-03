@@ -193,7 +193,8 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public BattleInputManager iptmgr;
 
-    protected int missionTriggerLocalId = TERMINATING_EVTSUB_ID_INT;
+    protected int storyReadyGoTriggerLocalId = TERMINATING_TRIGGER_ID;
+    protected int missionTriggerLocalId = TERMINATING_TRIGGER_ID;
     protected bool isOnlineMode;
     protected int localExtraInputDelayFrames = 0;
 
@@ -1225,7 +1226,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         justDeadNpcIndices = new HashSet<int>();
         fulfilledTriggerSetMask = 0;
         othersForcedDownsyncRenderFrameDict = new Dictionary<int, RoomDownsyncFrame>();
-        missionTriggerLocalId = TERMINATING_EVTSUB_ID_INT;
+        missionTriggerLocalId = TERMINATING_TRIGGER_ID;
         bossSavepointMask = 0u;
         triggerForceCtrlMask = 0u;
         bossSpeciesSet.Clear();
@@ -1234,6 +1235,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected void preallocateFrontendOnlyHolders() {
         //---------------------------------------------FRONTEND USE ONLY SEPERARTION---------------------------------------------
+        storyReadyGoTriggerLocalId = TERMINATING_TRIGGER_ID; 
         joinIndexToColorSwapRuleLock = new Dictionary<int, int>();
         playerSpeciesIdOccurrenceCnt = new Dictionary<uint, int>();
 
@@ -1351,16 +1353,54 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
     }
 
+    private int camFovW, camFovH, camPaddingX, camPaddingY;
     protected void calcCameraCaps() {
-        int camFovW = (int)(2.0f * gameplayCamera.orthographicSize * gameplayCamera.aspect);
-        int camFovH = (int)(2.0f * gameplayCamera.orthographicSize);
-        int paddingX = (camFovW >> 1);
-        int paddingY = (camFovH >> 1);
-        cameraCapMinX = 0 + paddingX;
-        cameraCapMaxX = (spaceOffsetX << 1) - paddingX;
+        cameraCapMinX = 0;
+        cameraCapMaxX = (spaceOffsetX << 1);
+        cameraCapMinY = -(spaceOffsetY << 1);
+        cameraCapMaxY = 0;
+        var grid = underlyingMap.GetComponentInChildren<Grid>();
+        foreach (Transform child in grid.transform) {
+            switch (child.gameObject.name) {
+                case "GrandCameraBounds": {
+                        foreach (Transform camBoundChild in child) {
+                            var tileObj = camBoundChild.GetComponent<SuperObject>();
+                            var (candidateCamMinTileX, candidateCamMinY) = (tileObj.m_X, tileObj.m_Y + tileObj.m_Height);
+                            var (candidateCamMinCx, candidateCamMinCy) = TiledLayerPositionToCollisionSpacePosition(candidateCamMinTileX, candidateCamMinY, spaceOffsetX, spaceOffsetY);
+                            var (candidateCamMaxTileX, candidateCamMaxY) = (tileObj.m_X + tileObj.m_Width, tileObj.m_Y);
+                            var (candidateCamMaxCx, candidateCamMaxCy) = TiledLayerPositionToCollisionSpacePosition(candidateCamMaxTileX, candidateCamMaxY, spaceOffsetX, spaceOffsetY);
 
-        cameraCapMinY = -(spaceOffsetY << 1) + paddingY;
-        cameraCapMaxY = 0 - paddingY;
+                            var (candidateCamMinWx, candidateCamMinWy) = CollisionSpacePositionToWorldPosition(candidateCamMinCx, candidateCamMinCy, spaceOffsetX, spaceOffsetY);
+                            var (candidateCamMaxWx, candidateCamMaxWy) = CollisionSpacePositionToWorldPosition(candidateCamMaxCx, candidateCamMaxCy, spaceOffsetX, spaceOffsetY);
+
+                            // [WARNING] The inequality checks below are NOT typos! They're meant to shrink the default camera range! 
+                            if (candidateCamMinWx > cameraCapMinX) {
+                                cameraCapMinX = candidateCamMinWx;
+                            }
+                            if (candidateCamMaxWx < cameraCapMaxX) {
+                                cameraCapMaxX = candidateCamMaxWx;
+                            }
+                            if (candidateCamMinWy > cameraCapMinY) {
+                                cameraCapMinY = candidateCamMinWy;
+                            }
+                            if (candidateCamMaxWy < cameraCapMaxY) {
+                                cameraCapMaxY = candidateCamMaxWy;
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
+        camFovW = (int)(2.0f * gameplayCamera.orthographicSize * gameplayCamera.aspect);
+        camFovH = (int)(2.0f * gameplayCamera.orthographicSize);
+        camPaddingX = (camFovW >> 1);
+        camPaddingY = (camFovH >> 1);
+        cameraCapMinX += camPaddingX;
+        cameraCapMaxX -= camPaddingX;
+
+        cameraCapMinY += camPaddingY;
+        cameraCapMaxY -= camPaddingY;
 
         effectivelyInfinitelyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
     }
@@ -1874,9 +1914,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         int patrolCueLocalId = 1;
 
         var mapProps = underlyingMap.GetComponent<SuperCustomProperties>();
-        CustomProperty battleDurationSeconds;
+        CustomProperty battleDurationSeconds, storyReadyGoTriggerEditorId;
         mapProps.TryGetCustomProperty("battleDurationSeconds", out battleDurationSeconds);
         int battleDurationSecondsVal = (null == battleDurationSeconds || battleDurationSeconds.IsEmpty) ? 60 : battleDurationSeconds.GetValueAsInt();
+        mapProps.TryGetCustomProperty("storyReadyGoTriggerEditorId", out storyReadyGoTriggerEditorId);
+        int storyReadyGoTriggerEditorIdVal = (null == storyReadyGoTriggerEditorId || storyReadyGoTriggerEditorId.IsEmpty) ? TERMINATING_EVTSUB_ID_INT : storyReadyGoTriggerEditorId.GetValueAsInt();
 
         foreach (Transform child in grid.transform) {
             switch (child.gameObject.name) {
@@ -2787,6 +2829,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             throw new ArgumentException("missionEvtSubId = " + missionEvtSubId + " not found, please double check your map config!");
         }
         missionTriggerLocalId = (TERMINATING_EVTSUB_ID_INT == missionEvtSubId ? TERMINATING_TRIGGER_ID : serializedTriggerEditorIdToLocalId.Dict[missionEvtSubId]);
+        storyReadyGoTriggerLocalId = (TERMINATING_EVTSUB_ID_INT == storyReadyGoTriggerEditorIdVal ? TERMINATING_TRIGGER_ID : serializedTriggerEditorIdToLocalId.Dict[storyReadyGoTriggerEditorIdVal]);
 
         return (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, battleDurationSecondsVal);
     }
@@ -2810,7 +2853,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         posHolder.Set(newX, newY, newZ);
     }
 
-    protected void cameraTrack(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf, bool battleResultIsSet) {
+    protected void cameraTrack(RoomDownsyncFrame rdf, RoomDownsyncFrame prevRdf, bool battleResultIsSet, bool forceTeleport=false) {
         if (null == selfPlayerInfo) return;
         int targetJoinIndex = battleResultIsSet ? confirmedBattleResult.WinnerJoinIndex : selfPlayerInfo.JoinIndex;
         int targetBulletTeamId = battleResultIsSet ? confirmedBattleResult.WinnerBulletTeamId : selfPlayerInfo.BulletTeamId;
@@ -2838,22 +2881,27 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         var camOldPos = gameplayCamera.transform.position;
         var dst = chGameObj.transform.position;
-        camDiffDstHolder.Set(dst.x - camOldPos.x, dst.y - camOldPos.y);
-
-        float camDiffMagnitude = camDiffDstHolder.magnitude; 
-
-        //Debug.Log(String.Format("cameraTrack, camOldPos={0}, dst={1}, deltaTime={2}", camOldPos, dst, Time.deltaTime));
-        var stepLength = Time.deltaTime * cameraSpeedInWorld;
-        if (DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START == rdf.Id || DOWNSYNC_MSG_ACT_BATTLE_START == rdf.Id || stepLength > camDiffMagnitude || justDead) {
-            // Immediately teleport
+        if (forceTeleport) {
             newPosHolder.Set(dst.x, dst.y, defaultGameplayCamZ);
         } else {
-            var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength;
-            newPosHolder.Set(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, defaultGameplayCamZ);
+            camDiffDstHolder.Set(dst.x - camOldPos.x, dst.y - camOldPos.y);
+
+            float camDiffMagnitude = camDiffDstHolder.magnitude;
+
+            //Debug.Log(String.Format("cameraTrack, camOldPos={0}, dst={1}, deltaTime={2}", camOldPos, dst, Time.deltaTime));
+            var stepLength = Time.deltaTime * cameraSpeedInWorld;
+            if (DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START == rdf.Id || DOWNSYNC_MSG_ACT_BATTLE_START == rdf.Id || stepLength > camDiffMagnitude || justDead) {
+                // Immediately teleport
+                newPosHolder.Set(dst.x, dst.y, defaultGameplayCamZ);
+            } else {
+                var newMapPosDiff2 = camDiffDstHolder.normalized * stepLength;
+                newPosHolder.Set(camOldPos.x + newMapPosDiff2.x, camOldPos.y + newMapPosDiff2.y, defaultGameplayCamZ);
+            }
+            
         }
+        
         clampToMapBoundary(ref newPosHolder);
         gameplayCamera.transform.position = newPosHolder;
-
         // TODO: In OfflineMap shall I move the "mainCamera" too such that the audio listener is placed correctly?
     }
 

@@ -595,9 +595,13 @@ namespace shared {
             thatCharacterInNextFrame.JumpTriggered = jumpedOrNot;
             thatCharacterInNextFrame.SlipJumpTriggered |= slipJumpedOrNot;
     
-            if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 > currCharacterDownsync.JumpHoldingRdfCnt && JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= thatCharacterInNextFrame.JumpHoldingRdfCnt && !thatCharacterInNextFrame.OmitGravity && chConfig.JumpHoldingToFly) {
+            if (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 > currCharacterDownsync.JumpHoldingRdfCnt && JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= thatCharacterInNextFrame.JumpHoldingRdfCnt && !thatCharacterInNextFrame.OmitGravity && chConfig.JumpHoldingToFly && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState)) {
+                /*
+                (a.) The original "hold-only-to-fly" is prone to "falsely predicted flying" due to not being edge-triggered; 
+                (b.) However, "releasing BtnA at JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= currCharacterDownsync.JumpHoldingRdfCnt" makes it counter-intuitive to use when playing, the trade-off is not easy for me...
+                */
+                //logger.LogInfo($"_processSingleCharacterInput/start, currRdfId={rdfId}, about to fly currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, JumpHoldingRdfCnt: {currCharacterDownsync.JumpHoldingRdfCnt}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, chS: {currCharacterDownsync.CharacterState})");
                 thatCharacterInNextFrame.OmitGravity = true;
-                thatCharacterInNextFrame.JumpHoldingRdfCnt = 0;
                 thatCharacterInNextFrame.FlyingRdfCountdown = chConfig.FlyingQuotaRdfCnt;
                 if (0 >= thatCharacterInNextFrame.VelY) { 
                     thatCharacterInNextFrame.VelY = 0;
