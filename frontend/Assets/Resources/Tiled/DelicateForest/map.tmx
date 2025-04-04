@@ -117,7 +117,7 @@
   </object>
  </objectgroup>
  <objectgroup id="50" name="GrandCameraBounds">
-  <object id="468" x="656" y="64" width="2160" height="672"/>
+  <object id="468" x="656" y="32" width="2208" height="736"/>
  </objectgroup>
  <objectgroup id="13" name="TriggerPos">
   <object id="465" name="Victory" x="2752" y="496">
@@ -159,7 +159,7 @@
     <property name="id" value="11"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
-    <property name="speciesId" value="4"/>
+    <property name="speciesId" value="3"/>
     <property name="storyPointId" value="4"/>
     <property name="subscribesToExhaustedIdList" value="4"/>
    </properties>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="208" nextobjectid="623">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="72" height="36" tilewidth="16" tileheight="16" infinite="0" nextlayerid="209" nextobjectid="627">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="1800"/>
   <property name="levelId" value="3"/>
   <property name="missionEvtSubId" value="6"/>
-  <property name="npcPreallocCapDict" value="15:1;16:1;4097:8;4098:2;4099:4;4100:4;4102:2;4103:1"/>
+  <property name="npcPreallocCapDict" value="15:1;16:1;4097:8;4098:2;4099:4;4100:4;4102:2;4103:1;18:1"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="11" source="../triggers/switch/triggers_switch.tsx"/>
@@ -22,28 +22,28 @@
  <tileset firstgid="2409" source="../shared_comps/bkg-shrinked/dc_bkg_1.tsx"/>
  <tileset firstgid="2541" source="../shared_comps/bkg-shrinked/dc_bkg_3.tsx"/>
  <tileset firstgid="2661" source="../towers/towers.tsx"/>
- <layer id="160" name="Background2" width="64" height="28">
+ <layer id="160" name="Background2" width="72" height="36">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1tdTFEEQwOHdQ4E7FYl7ikpOKiCogEhQkKxkFIkG+PcNpB2i8qNgqvragycfqKl5+Kp2Z3tmenrnoU0YBOnEuQgmPGff5Vh8MW6fI/FsGbGenWcuYu0c+ay/p9WYXN+uG6t17ZxI5CzPI/OKw8xvMpd0IjMPuafcx+Zj17CxcixKZK5hrjiDzF3WUc6V343aR+6l5+gYma/8zzIveS6dk66tvg/6Dl1Wn2z3SJ9D/19ZF117GSfvq1wrWx31f9Z3UN9rE/57Xl0n+RyrHPXe2e6XroeumVHr6n8eh9n30zU98yMZBD/xC7+xhW3sYBd7iGGwn3Qv/gCHOMIxTvAHfxGkgiBEAjm4kXIv/iZjuchDPpJI4RZu4w4KcBeFKffii1CMEpSiDBHSuIf7KMcDPHQw/hEqUIkqVKMGtahDPRrQiCYH4x/jCZ6iGS1oxTO0oR3P8QIvHYzvQCe68ArdeI0e9KIP/XiDtw7GD2AQ7zCEYYxgFGMYxwTe44OD8ZOYwjRmMIs5zGMBH/EJi/jsYPwSlrGCVaxhHV/wFd/wHRvYdDD+uvdnvv/z/Z/v/3z/5/s/3//5/s/3f77/8/2f7/98/+f7v/8TfwpDqcxj
+   eJzt12dTFEEQgOHdM94aEMOuKGYwK6JgzpgVc46o/H0wADtmfa27qeprT+4+zIedqr6qp2qZ7ekJO1T1uDRJilpDDpc2+L9lW9ls98+5ePacyOf7uWas7yOf9ftCtcn8Pm+p8vo+uZizXI+cV5m2vuv0k3Mtaq3zlHOS8/Dz9WP4WNmW11pzuHnWKNcm91n2le+dGkeOpfvoGDnfbvZHrt33k+vWc9bfRp8nfQb/t3/tzqFepz4fct/0t5Fx8rzLXO32uZv90d9VjqP/b1z6737ofZTPpVqDnJsfU59PvV96T53Kq89MmbYfT+/5X51+U/UkmcYHfMQnfMYMZjGHEg5f6nHFh8j1Fd/wHT/wE7/wG0mWJClqWICFWVzxIXIton0xlmAp6siwDMuxAivRg1VZXPEhcvViNdZgLdYhR4H16MMGbER/ZPEhcm3CZmzBVmzDduzAAAaxE7uwO7L4ELn2YC/2YT8O4CCGcAjDOIwjGIksPkSuURzFMRzHCZzEKZzGGZzFOZyPLD5Ergu4iDFcwmVcwVVcw3XcwE3ciiw+RK5x3MYd3MU93McDPMQjPMYTPI0sPkSuZ3iOF3iJV3iNN5jAW7zDe0xGFh8iV0z1sNXP1aufYzoPdn6qd35iuk/Z/cvuX3b/qk683b/s/mX3L7t/2f2rmvFWP1v9bPWz1c9WP1cz3upnq5+tfrb6Oeb6+Q9MTRB6
   </data>
  </layer>
- <layer id="65" name="Background1" width="64" height="28">
+ <layer id="65" name="Background1" width="72" height="36">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1uc+FmAAxuH363uoRRlJVpERRUlDCYmorAYqKpSWCtkZ2bJyEK5z8Kmn5/79rm//A7gTibi4uP91J5KJxElSSOUUp0kjnQwyOZMMs83iLNmcI4dc8singPNcCLQtpIiLFFNCKWVcopwKLgfaXqGSKq5yjWquU8MNbnIr0PY2tdzhLnXco54GGrlPU6DtA5pp4SGttPGIxzyhnY5A20666OYpz3jOC3ropY+XgbaveE0/A7zhLe8YZIhh3gfafmCEj3ziM1/4yijf+M6PQNsxxpngJ5NMMc0Ms8wxH2j7iwUWWWKZ36ywyhrrbATabrLFNn/YYZc99jngL4eBtv/KT4//P/7/+P/j/4//P/7/+P/j/4//P/7/+P+P3x4B7Yc0ZQ==
+   eJzt10OSBQEURNGa/qW2bdu2bdu2bZuL6LuLzohXGXFmdwPpOO7cuXP3P/PyOI43fOALP/gjAIEIQjBCPDbbUIQhHBGIRBSiEYNYxCHeaJuARCQhGSlIRRrSkYFMZBlts5GDXOQhHwUoRBGKUYJSo20ZylGBSlShGjWoRR3q0WC0bUQTmtGCVrShHR3oRBe6jbY96EUf+jGAQQxhGCMYxZjRdhwTmMQUpjGDWcxhHgtYNNouYRkrWMUa1rGBTWxhGztG213sYR8HOMQRjnGCU5zh3Gh7gUtc4Ro3uMUd7vGARzwZbZ/xgle84R0f+MQXvvGDX6Ot8vdRaJW/j0Kr/H0UWuXvo9Aqfx+FVvn7KLTK30ehVf4+Cq3y91Folb+PQqv8fRRa5e+j0Cp/H4VW+fsotMrfR6FV/j4KrfL3UWiVv49Cq/x9FFrl76PQ/gHzbhx7
   </data>
  </layer>
- <layer id="33" name="setGround" width="64" height="28" visible="0">
+ <layer id="33" name="setGround" width="72" height="36" visible="0">
   <properties>
    <property name="MatchInOrder" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1csJACAQQ0EP9iDYf6FWoIKSZTUvkKOfgUVbLaVRSi17mtv1UXuqgh8//vx7qoIff7Tf/f/H7+3PlF/8va47i7tfkZfmX5FIv/qsk7dW8b7Pzs44ay7+3Z1c/S53wI8/S/F7+wdtrj6h
+   eJzt1kEKhDAQRFEX3kHw/gd14borkNCpEv+DbLX4A3Gu8ziuH58R9z73oQ99OvvM6nh+9+ad6KPRR6OPRh+NPhp9NEcf/v/QZ+WZ9OH+2f3MVfepT4U+uk+HxD5JdvZx/xYz34qO71P1bnefGfR5jTbTx78tYUMlYVvChkrCtoQNlc57ZvVeSuBuQp9v9wEAAHB6ABaHPqE=
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -57,9 +57,24 @@
  </objectgroup>
  <objectgroup id="27" name="Decoration"/>
  <objectgroup id="13" name="TriggerPos">
-  <object id="548" name="Victory" x="464" y="112">
+  <object id="625" name="FirstStageBossSavepoint" x="832" y="288">
    <properties>
-    <property name="demandedEvtMask" value="7"/>
+    <property name="bossSpeciesIds" value="18"/>
+    <property name="demandedEvtMask" value="1"/>
+    <property name="id" value="7"/>
+    <property name="isBossSavepoint" value="1"/>
+    <property name="newRevivalX" value="832"/>
+    <property name="newRevivalY" value="288"/>
+    <property name="quota" value="1"/>
+    <property name="recoveryFrames" value="65535"/>
+    <property name="speciesId" value="1024"/>
+    <property name="subscribesToIdList" value="4"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="548" name="Victory" x="512" y="112">
+   <properties>
+    <property name="demandedEvtMask" value="1"/>
     <property name="id" value="6"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
@@ -67,11 +82,9 @@
    </properties>
    <point/>
   </object>
-  <object id="593" name="BossAwaker" x="592" y="144" width="432" height="32">
+  <object id="593" name="BossAwaker" x="720" y="64" width="304" height="128">
    <properties>
     <property name="id" value="5"/>
-    <property name="newRevivalX" value="608"/>
-    <property name="newRevivalY" value="176"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
     <property name="speciesId" value="1025"/>
@@ -107,38 +120,32 @@
    </properties>
   </object>
  </objectgroup>
- <layer id="207" name="Ground" width="64" height="28">
+ <layer id="207" name="Ground" width="72" height="36">
   <data encoding="base64" compression="zlib">
-   eJztmL9OwzAQhw1ygAEoCxKjBx6AR+JJSsUMe1UxdAJ2yt4+AAixgUAwgRD/FoZSFn4WtThVTuIk9iUCn/Qpqhr7/NnJ2UpPCtGL/FsOC3IEjiu05+rTNedJQQbglIy1aHuuPl1zlo0u2h5UaM/VZ6iI/tE/+je/z1AR/aM/t38b/+14xiU2kuJjLRN5fXYt57iq5z+XeLfcV5d/Hee/pviHiKFMZzQdy1/2P5PpnDP7rySi/yBF32+v2TGQ2eiw+YeIVfjPgSvmOcgLbv8PBn+zl7oEl38L7vPgwvMev5vy/upvDc/gBbxOebPcy+W/9vP+39963udtdcr4j8EnuU4sc+Dbv52xJiG+8+T5axKc8RbAIvgK7F9HnU8bw5jMgVn/pZnzbhl/1HBxTbghfdRd55FXmTHodddQ//UZ/y383izAMsDcikfCk8Wfo87bAnkV8us5UMabPv+2GugzQtV5V5C3g/yqRfwn5HoZ2J/W+T1m9gHydpB/G+NQdN3N9U7+7okhngVTe5vAN7MYv6k=
+   eJztmMtKxDAUhqt01IWObgSXXfgAPpJPMg6udS+DixFEXY0jjisv6M4LigheURR1FPG2ceFl4x9sMIQ2STttEjE/fJwMnea0/5wmZ1rxPa/icKRkJiGzYK6F83XNqZpTFhcT0gBLzL0kPV/XnKo5ZTGtJnDuZAvn65rTlJw/Yjl/xHL+iOX8Ecv5I5bzRywT/pRwbEQzKhooJL+XNJLNSY7r7p9V9BrxPVP+2Ng/2+KPCa378WyE1/qf/dn149nT7E9Pwave+V4121lbU8MXQxTlTx4qwp82cGqZRzLp9udNgz+0V5BFFenypxfetIP9BP2JCqMx6wN51ySLj+AJPIe8RMyly5++n/Xn6sLPts+JWifJ/U+BeVDnIh1Pg3fwwcTPCI+y9qck+E3zeE8Y508NrIBVLtLxQugLoYAeuQN0gq+c/bFhnyLXUGPqhafO+cPWTxf3fyKNP9iDvDOGc2YO0/sU8gZFRX9I3RBYf/o5f4bweTAB3QD14d0zPET4o2OfihLyBsgfLDPPEw95vtaYumGfr6g1OkvltU+pgrxl5A82Md4C22FkxyTucM8VjQc5+8PuU2OaGQfIW0b+4UOMj2I4BieK60/Wor2Faa7BTQy3oOmrrT9Zi64/Nvgjqp+mofqxyR8b64euzzb44+rn79WPTf6o1I+p/scGf2T1Y7L/scEfWf2wdUPjpf/7ziOPWvpL/c83qXwqPA==
   </data>
  </layer>
- <layer id="64" name="Foreground" width="64" height="28">
+ <layer id="64" name="Foreground" width="72" height="36">
   <properties>
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmMsNwkAMRA0kHPk1wa+plLa9AF0AogcInxsTJEcrlEMkbGFr90lztTzZjNcJUSaTyfTnXlA1KqmikkJBdJGueS0oSNTUokavQ2H/XHOAmjfj/tFf06eof66JZxBq4/7xfjbeRf1zTWQg3I37z/nP+f81/3WJM4ce0BN6QSnlfzImmkIzaA4toJTyv4TfFbSGNtAW+s7/Du/EPpIVNOZfV/6P8HyKZIW41xTv/7hXKf8fnOQ/3lUk57+X+1+Crvnv5f6XoM/8TwlP+58G2vOfd4iDoXs0Rvv7j3eI85/9e/rO0yD1nPP5e9jzNODz97DnadD+O0iU9t+BEd4T2JTS
+   eJztmF0OgjAQhFcFH/27hH+X4mi9i3oLNd5BQX1zMCk02hAftpE28yXzuqGTZTogQggh8VBlUoxyKSQXk4lctGdeMzEaM/9FibMMlf2xMweYeYvcHzx/fQ5Vf+xMeGTKyP3B/tfeqPpjZ+IdM1Xk/jB/umH+dKORP2WOnYHu0AN6QsyflslYZArNoDm0gJg/LUv4sYLW0AbaQp/5s8NO7R3FQoh89uXPEZ6cHMWCexb2n2/cs2j58yaR/HG7nOb9lUr/0cB3f6XSfzT45f4iLSn15xCEvr9shzpE1BNcQn+/2w517rk/KX2nh4A5043dnxR6cgjs/qTQk0PQ/DsiXpp/R4QQQgghpJe8APXwlNI=
   </data>
  </layer>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="586" name="FireSwordMan" x="736" y="304">
+  <object id="623" gid="2147486331" x="944" y="192" width="50" height="47">
    <properties>
-    <property name="dirX" value="+2"/>
-    <property name="initGoal" value="Nidle"/>
-    <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
-    <property name="publishingEvtSubIdUponKilled" value="4"/>
-    <property name="speciesId" value="16"/>
+    <property name="publishingEvtSubIdUponKilled" value="6"/>
+    <property name="subscriptionId" value="5"/>
     <property name="teamId" value="3"/>
    </properties>
-   <point/>
   </object>
   <object id="604" gid="2147486320" x="512" y="288" width="41" height="41">
    <properties>
     <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
-    <property name="publishingEvtMaskUponKilled" value="1"/>
-    <property name="publishingEvtSubIdUponKilled" value="6"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -146,8 +153,6 @@
    <properties>
     <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
-    <property name="publishingEvtMaskUponKilled" value="1"/>
-    <property name="publishingEvtSubIdUponKilled" value="6"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -159,22 +164,20 @@
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="615" gid="2147486316" x="864" y="192" width="96" height="64">
+  <object id="615" gid="2147486316" x="832" y="192" width="96" height="64">
    <properties>
-    <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
-    <property name="publishingEvtMaskUponKilled" value="4"/>
-    <property name="publishingEvtSubIdUponKilled" value="6"/>
     <property name="speciesId" value="4102"/>
+    <property name="subscriptionId" value="5"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="616" gid="2147486315" x="800" y="192" width="63" height="48">
+  <object id="624" gid="2677" x="768" y="320" width="28" height="47">
    <properties>
     <property name="initGoal" value="Nidle"/>
-    <property name="publishingEvtMaskUponKilled" value="2"/>
-    <property name="publishingEvtSubIdUponKilled" value="6"/>
-    <property name="speciesId" value="4103"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
+    <property name="publishingEvtSubIdUponKilled" value="4"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -299,7 +302,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="523" name="Ceil" x="0" y="0" width="1024" height="64">
+  <object id="523" name="Ceil" x="0" y="0" width="1152" height="64">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -310,7 +313,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="580" name="Platform" x="992" y="304" width="32" height="144">
+  <object id="580" name="Platform" x="992" y="304" width="160" height="144">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -320,7 +323,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="583" name="Platform" x="688" y="192" width="336" height="32">
+  <object id="583" name="Platform" x="688" y="192" width="464" height="32">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -380,6 +383,9 @@
     <property name="fuCaptureFrames" value="120"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup id="208" name="GrandCameraBounds">
+  <object id="626" x="0" y="0" width="1072" height="576"/>
  </objectgroup>
  <objectgroup id="204" name="Pickable">
   <object id="602" gid="2156" x="784" y="416" width="32" height="32">

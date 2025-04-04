@@ -1822,6 +1822,7 @@ namespace shared {
                         Def1DefiesEleWeaknessPenetration = true,
                         Def1DefiesDebuff = true,
                         GaugeIncWhenKilled = 80,
+                        HasDimmedAnim = true,
                         Ifc = IfaceCat.Flesh,
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {

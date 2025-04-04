@@ -18,7 +18,7 @@
  <tileset firstgid="1150" source="../shared_comps/deep_cave16.tsx"/>
  <tileset firstgid="1345" source="../shared_comps/pickable.tsx"/>
  <tileset firstgid="1777" source="../towers/towers.tsx"/>
- <tileset firstgid="1792" source="../traps/machinery/traps_machinery.tsx"/>
+ <tileset firstgid="1800" source="../traps/machinery/traps_machinery.tsx"/>
  <layer id="160" name="Background2" width="64" height="47">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -245,8 +245,8 @@
     <property name="subscribesToIdAfterInitialFire" value="8"/>
    </properties>
   </object>
-  <object id="578" gid="1793" x="240" y="608" width="21" height="16"/>
-  <object id="579" gid="1793" x="780" y="608" width="21" height="16"/>
+  <object id="578" gid="1801" x="240" y="608" width="21" height="16"/>
+  <object id="579" gid="1801" x="780" y="608" width="21" height="16"/>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>

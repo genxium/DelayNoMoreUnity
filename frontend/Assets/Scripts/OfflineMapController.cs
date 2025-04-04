@@ -317,7 +317,7 @@ public class OfflineMapController : AbstractMapController {
                         justTriggeredStoryPoint = oldTriggeredStoryPoint;
                     } else {
                         isInNonctrlStory = true;
-                        if (null != justTriggeredStoryPoint.CutsceneName) {
+                        if (!String.IsNullOrEmpty(justTriggeredStoryPoint.CutsceneName)) {
                             Debug.LogFormat("NonctrlCutscene triggered at playerRdfId={0}: {1}", playerRdfId, justTriggeredStoryPoint.CutsceneName);
                         } else {
                             nonctrlStoryNarrativeDialogBoxes.gameObject.SetActive(true);
@@ -468,7 +468,7 @@ public class OfflineMapController : AbstractMapController {
             if (applyRendering) {
                 if (null != nextRdf) {
                     applyRoomDownsyncFrameDynamics(nextRdf, currRdf);
-                    Debug.Log($"Rendering mockRdfId={mockRdfId}, player={stringifyPlayer(nextRdf.PlayersArr[0])} by cmd={stringifyIfd(delayedInputFrameDownsync, true)}");
+                    //Debug.Log($"Rendering mockRdfId={mockRdfId}, player={stringifyPlayer(nextRdf.PlayersArr[0])} by cmd={stringifyIfd(delayedInputFrameDownsync, true)}");
                     cameraTrack(nextRdf, currRdf, false);
                 }
                 break;
