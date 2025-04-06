@@ -104,7 +104,7 @@ public class OnlineMapController : AbstractMapController {
                     battleDurationFrames = battleDurationSeconds * BATTLE_DYNAMICS_FPS;
                     renderBuffer.Put(thatStartRdf);
 
-                    refreshColliders(thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, spaceOffsetX, spaceOffsetY, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out int staticCollidersCnt, ref collisionHolder, ref residueCollided, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerEditorIdToLocalId, ref triggerEditorIdToConfigFromTiled);
+                    refreshColliders(thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, collisionSpaceHalfWidth, collisionSpaceHalfHeight, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out int staticCollidersCnt, ref collisionHolder, ref residueCollided, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerEditorIdToLocalId, ref triggerEditorIdToConfigFromTiled);
 
                     var initialPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
                     var serverHolePuncher = new WsReq {
@@ -132,8 +132,8 @@ public class OnlineMapController : AbstractMapController {
                         SelfParsedRdf = thatStartRdf,
                         SerializedTrapLocalIdToColliderAttrs = serializedTrapLocalIdToColliderAttrs,
                         SerializedTriggerEditorIdToLocalId = serializedTriggerEditorIdToLocalId,
-                        SpaceOffsetX = spaceOffsetX,
-                        SpaceOffsetY = spaceOffsetY,
+                        CollisionSpaceHalfWidth = collisionSpaceHalfWidth,
+                        CollisionSpaceHalfHeight = collisionSpaceHalfHeight,
                         BattleDurationSeconds = battleDurationSeconds,
                     };
 

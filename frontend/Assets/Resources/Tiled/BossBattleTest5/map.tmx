@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="23" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="606">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="23" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="608">
  <properties>
   <property name="battleDurationSeconds" value="600"/>
-  <property name="levelId" value="2"/>
+  <property name="levelId" value="7"/>
   <property name="missionEvtSubId" value="6"/>
-  <property name="npcPreallocCapDict" value="4104:1;16:1"/>
+  <property name="npcPreallocCapDict" value="4111:1;1:1"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="11" source="../triggers/switch/triggers_switch.tsx"/>
@@ -151,7 +151,7 @@
   </object>
   <object id="592" name="BossSavepoint" x="480" y="112">
    <properties>
-    <property name="bossSpeciesIds" value="4104,16"/>
+    <property name="bossSpeciesIds" value="4111"/>
     <property name="id" value="2"/>
     <property name="isBossSavepoint" value="1"/>
     <property name="newRevivalX" value="480.00"/>
@@ -171,9 +171,7 @@
     <property name="speciesId" value="1027"/>
    </properties>
   </object>
- </objectgroup>
- <objectgroup id="4" name="NpcStartingPos">
-  <object id="605" gid="2147498279" x="1312" y="292" width="34" height="50">
+  <object id="607" gid="2147498281" x="1216" y="288" width="48" height="46">
    <properties>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
@@ -182,6 +180,7 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup id="4" name="NpcStartingPos"/>
  <objectgroup id="9" name="TrapStartingPos">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>

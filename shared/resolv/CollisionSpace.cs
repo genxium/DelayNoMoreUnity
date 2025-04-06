@@ -31,17 +31,9 @@ namespace shared {
             return SpaceHeight;
         }
 
-        // WorldToSpace converts from a world position (x, y) to a position in the Space (a grid-based position).
-        public (int, int) WorldToSpace(float x, float y) {
+        public (int, int) CollisionSpaceToCellIndex(float x, float y) {
             int fx = (int)(Math.Floor(x / CellWidth));
             int fy = (int)(Math.Floor(y / CellHeight));
-            return (fx, fy);
-        }
-
-        // SpaceToWorld converts from a position in the Space (on a grid) to a world-based position, given the size of the Space when first created.
-        public (float, float) SpaceToWorld(int x, int y) {
-            float fx = (float)(x * CellWidth);
-            float fy = (float)(y * CellHeight);
             return (fx, fy);
         }
 

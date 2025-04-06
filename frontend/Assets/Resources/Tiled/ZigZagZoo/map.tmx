@@ -250,7 +250,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="596" x="560" y="64" width="32" height="288">
+  <object id="596" x="560" y="0" width="32" height="352">
    <properties>
     <property name="collisionTypeMask" value="32773"/>
     <property name="providesHardPushback" value="1"/>

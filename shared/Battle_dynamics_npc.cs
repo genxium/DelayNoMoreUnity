@@ -587,6 +587,13 @@ namespace shared {
             bool closeEnough = false;
             InventorySlot? targetSlot = null;
             switch (currCharacterDownsync.SpeciesId) {
+                case SPECIES_BLADEGIRL:
+                    if (notRecovered) return TARGET_CH_REACTION_UNKNOWN;
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * (BasicBladeHit1.HitboxOffsetX << 1), currCharacterDownsync.VirtualGridY + BasicBladeHit1.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BasicBladeHit1.HitboxSizeX), (BasicBladeHit1.HitboxSizeY >> 1));
+                    targetSlot = (currCharacterDownsync.Inventory.Slots[0]);
+                    if (0 >= targetSlot.Quota) return TARGET_CH_REACTION_NOT_ENOUGH_MP;
+                    return TARGET_CH_REACTION_USE_SLOT_C;
                 case SPECIES_RIDLEYDRAKE:
                     if (currCharacterDownsync.Hp > (chConfig.Hp >> 1)) return TARGET_CH_REACTION_UNKNOWN;
                     if (notRecovered) return TARGET_CH_REACTION_UNKNOWN;
@@ -703,6 +710,17 @@ namespace shared {
             float boxCx, boxCy, boxCwHalf, boxChHalf;
             bool closeEnough = false;
             switch (currCharacterDownsync.SpeciesId) {
+                case SPECIES_BLADEGIRL:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * BladeGirlDragonPunchPrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + (chConfig.DefaultSizeY >> 1) + BladeGirlDragonPunchPrimerBullet.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BladeGirlDragonPunchPrimerBullet.HitboxSizeX >> 1), BladeGirlDragonPunchPrimerBullet.HitboxSizeY);
+                    if (0.1f*aCollider.H < colliderDy) {
+                        if (0 <= colliderDx) {
+                            closeEnough = (boxCx + boxCwHalf > opponentBoxLeft) && (boxCy + boxChHalf > opponentBoxBottom); 
+                        } else {
+                            closeEnough = (boxCx - boxCwHalf < opponentBoxRight) && (boxCy + boxChHalf > opponentBoxBottom); 
+                        }
+                    } // Don't use DragonPunch otherwise
+                    break;
                 case SPECIES_SWORDMAN_BOSS:
                 case SPECIES_SWORDMAN:
                     if (currCharacterDownsync.Mp < SwordManDragonPunchPrimerSkill.MpDelta) {
@@ -802,6 +820,10 @@ namespace shared {
             float boxCx, boxCy, boxCwHalf, boxChHalf;
             bool closeEnough;
             switch (currCharacterDownsync.SpeciesId) {
+                case SPECIES_BLADEGIRL:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * BasicBladeHit1.HitboxOffsetX, currCharacterDownsync.VirtualGridY + BasicBladeHit1.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BasicBladeHit1.HitboxSizeX >> 1), (BasicBladeHit1.HitboxSizeY >> 1));
+                    break;
                 case SPECIES_LIGHTGUARD_RED:
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * LightGuardMelee1PrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + LightGuardMelee1PrimerBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((LightGuardMelee1PrimerBullet.HitboxSizeX >> 1), (LightGuardMelee1PrimerBullet.HitboxSizeY >> 1));
@@ -910,6 +932,31 @@ namespace shared {
             float boxCx, boxCy, boxCwHalf, boxChHalf;
             bool closeEnough = false;
             switch (currCharacterDownsync.SpeciesId) {
+                case SPECIES_BLADEGIRL:
+                    if (notRecovered) return TARGET_CH_REACTION_UNKNOWN;
+                    if (!currCharacterDownsync.InAir) return TARGET_CH_REACTION_UNKNOWN; 
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * DiverImpactStarterBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + DiverImpactStarterBullet.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((DiverImpactStarterBullet.HitboxSizeX << 1), (DiverImpactStarterBullet.HitboxSizeY >> 1));
+                    
+                    // A special case
+                    if (0 <= colliderDx) {
+                        if (0 <= colliderDy) {
+                            closeEnough = (boxCy + boxChHalf > opponentBoxBottom);
+                        } else {
+                            closeEnough = (boxCy - boxChHalf < opponentBoxTop);
+                        }
+                    } else {
+                        if (0 <= colliderDy) {
+                            closeEnough = (boxCy + boxChHalf > opponentBoxBottom);
+                        } else {
+                            closeEnough = (boxCy - boxChHalf < opponentBoxTop);
+                        }
+                    }
+                    if (closeEnough) {
+                        return TARGET_CH_REACTION_USE_FIREBALL;
+                    } else {
+                        return TARGET_CH_REACTION_UNKNOWN;
+                    }
                 case SPECIES_RIDLEYDRAKE:
                     if (notRecovered) return TARGET_CH_REACTION_UNKNOWN;
                     if (currCharacterDownsync.Mp < DrakePrimerFireball.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;
@@ -1059,7 +1106,7 @@ namespace shared {
             return (0 >= currCharacterDownsync.Hp && DYING_FRAMES_TO_RECOVER == currCharacterDownsync.FramesToRecover);
         }
 
-        private static (int, bool, bool, int, int, bool) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, bool currEffInAir, bool currNotDashing, bool nextEffInAIr, bool nextNoDashing, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, ref SatResult mvBlockerOverlapResult, InputFrameDecoded decodedInputHolder, InputFrameDecoded tempInputHolder, ILoggerBridge logger) {
+        public static (int, bool, bool, int, int, bool) deriveNpcOpPattern(CharacterDownsync currCharacterDownsync, CharacterDownsync thatCharacterInNextFrame, bool currEffInAir, bool currNotDashing, bool nextEffInAIr, bool nextNoDashing, RoomDownsyncFrame currRenderFrame, int roomCapacity, CharacterConfig chConfig, Collider[] dynamicRectangleColliders, int colliderCnt, CollisionSpace collisionSys, Collision collision, ref SatResult overlapResult, ref SatResult mvBlockerOverlapResult, InputFrameDecoded decodedInputHolder, InputFrameDecoded tempInputHolder, ILoggerBridge logger) {
             decodedInputHolder.Reset();
             /*
             [REMINDER FOR MYSELF]
@@ -1315,10 +1362,11 @@ namespace shared {
             collisionSys.AddSingleToCellTail(visionCollider);
 
             findHorizontallyClosestCharacterCollider(rdfId, currRenderFrame, currCharacterDownsync, chConfig, isCharacterFlying, visionCollider, aCollider, collision, ref overlapResult, ref mvBlockerOverlapResult, out oppoChCollider, out v3, out oppoBlCollider, out v4, out allyChCollider, out v5, out mvBlockerCollider, out v6, out standingOnCollider, logger);
+            /*
             if (!isCharacterFlying && !nextEffInAir && null == standingOnCollider) {
                 logger.LogInfo($"\t@rdfId={rdfId}, false==nextEffInAir but null standingOnCollider: maybe the character's vision is not low enough to cover where it stands!\n\tcurrCharacterDownsync=(Id:{currCharacterDownsync.Id}, speciesId:{currCharacterDownsync.SpeciesId}, dirX:{currCharacterDownsync.DirX}, velX:{currCharacterDownsync.VelX}, velY:{currCharacterDownsync.VelY}, VirtualX:{currCharacterDownsync.VirtualGridX}, VirtualY:{currCharacterDownsync.VirtualGridY}, goal:{currCharacterDownsync.GoalAsNpc})\n\tmvBlockerColliderShape={(null == mvBlockerCollider ? "null" : mvBlockerCollider.Shape.ToString(true))}");
             }
-
+            */
             collisionSys.RemoveSingleFromCellTail(visionCollider); // no need to increment "colliderCnt", the visionCollider is transient
             float allyChColliderDx = 0f, allyChColliderDy = 0f;
             float allyBoxCx = 0, allyBoxCy = 0, allyBoxCw = 0, allyBoxCh = 0;

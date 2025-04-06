@@ -196,7 +196,7 @@ public class WebSocketController : ControllerBase {
                         switch (pReq.Act) {
                             case shared.Battle.UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK:
 
-                                var res1 = await room.OnPlayerBattleColliderAcked(playerId, pReq.SelfParsedRdf, pReq.SerializedBarrierPolygons, pReq.SerializedStaticPatrolCues, pReq.SerializedCompletelyStaticTraps, pReq.SerializedStaticTriggers, pReq.SerializedTrapLocalIdToColliderAttrs, pReq.SerializedTriggerEditorIdToLocalId, pReq.SpaceOffsetX, pReq.SpaceOffsetY, pReq.BattleDurationSeconds);
+                                var res1 = await room.OnPlayerBattleColliderAcked(playerId, pReq.SelfParsedRdf, pReq.SerializedBarrierPolygons, pReq.SerializedStaticPatrolCues, pReq.SerializedCompletelyStaticTraps, pReq.SerializedStaticTriggers, pReq.SerializedTrapLocalIdToColliderAttrs, pReq.SerializedTriggerEditorIdToLocalId, pReq.CollisionSpaceHalfWidth, pReq.CollisionSpaceHalfHeight, pReq.BattleDurationSeconds);
                                 if (!res1) {
                                     _logger.LogWarning("About to cancel session for [ roomId={0}, playerId={1}, joinIndex={2} ] due to failure of OnPlayerBattleColliderAcked", room.id, playerId, effJoinIndex);
                                     if (!cancellationToken.IsCancellationRequested) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="160" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="200" nextobjectid="785">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="160" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="200" nextobjectid="787">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="240"/>
@@ -16,7 +16,7 @@
  <tileset firstgid="1087" source="../decoration/Statics/DW_bg_1.tsx"/>
  <tileset firstgid="1591" source="../traps/machinery/traps_machinery.tsx"/>
  <tileset firstgid="1598" source="../towers/towers.tsx"/>
- <tileset firstgid="1621" source="../shared_comps/CastlePrisonProps16.tsx"/>
+ <tileset firstgid="1622" source="../shared_comps/CastlePrisonProps16.tsx"/>
  <layer id="197" name="Background3" width="160" height="33" opacity="0.5" parallaxx="0.6">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -38,7 +38,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmE1OwzAQhdMUcQdKuQQF1hwBuAVwBdROKbDgAqHh5xLlZ9s1CwpcgQUFLsFzcCTDgiauK8ft+6SnmQVSZsYPu3YUEUIIIYQQQgghhBBCCCGEEEIIIeFwHEdRL/Zdxf+coL5T6KzidS4KT7UoGkHPRnyxyJUusaZX0HVB7Tn0wE6J797EWa2CmjOhBxlZ5Hl8rbnrY9F4x+zG0IcRPy1ypVus6x10X1CHDv23X+K7D3FWq6DmTOhBxhZ5Hr/oP3uwFjUoNmLdIldaCuhMQ61S10IPUrPI8xhS31VjBbNrQKtGbFrkSmsBrQNqlaYWepCGRZ7HkPquGut/fPQWR9ubiC1oAyqaK20FtA6oVTa10IO0SuSY0dD0YUh9V5E+5pdAbegR/vNdT9XBjIaYlWBmgtmJ73pCp6O9dwF1Hf8vq3vpriGXd15f38SMBLMS5cEO/Tc1fcN/qeO1UvfSA0Mu77y+vpka/uP+Nz1tff4mM9j/5pGuPnsT7UHf9YROYvjP9f43j6SG/xL6b2ry/a/N/a8QXb3vcf9zg/rdJ/HPPYT732RSfe8Q/TvQdz2hkxjvfoMC/jtann1NvkBvMulvBsY7IM/f6Sn77tebY/+V6S1/B5xZMQtC2Xe/8zn2X5neujx/CSGEEEIIIeQX3/Lf7IE=
+   eJztmE1SAjEQhYfB8g4iXkLEtUdQb6GeQWj823iAkfHnEvizZe1C1Cu4EPUSvoyZquhCZkKoTOB9Va+6F1ZNd+eZkEQRIYQQQgghhBBCCCGEEEIIIYQQEg5HcRQdx76r+J8T1HcKnVW8zkXhqRZFI+jZiC8WudIl1vQKui6oXYce2C7x3Zs4q1VQcyb0ICOLPI+vNXd9LBrvmN0Y+jDip0WudIt1vYPuC+rAof/2Snz3Ic5qFdScCT3I2CLP4xf9Zw/WogbFRqxb5EpLAZ1pqFXqWuhBahZ5HkPqu2qsYHYNaNWITYtcaS2gdUCt0tRCD9KwyPMYUt9VY/2Pj97iaKuN2II2oKK50mZA64Bapa2FHqRVIseMhqYPQ+q7ivQxvwTqQI/wn+96qg5mNMSsBDMTzE581xM6Xe29C6jn+H9Z3Ut3DLm88/r6JmYkmJUoD3bpv6npG/5LHa+VupfuG3J55/X1zdTwH/e/6eno8zeZwf43j/T02ZtoD/quJ3QSw3+u9795JDX8l9B/U5Pvfx3uf4Xo6X2P+58b1O8+iX/uIdz/JpPqe4fo34G+6wmdxHj3GxTw3+Hy7GvyBXqTSX8zMN4Bef5OT9l3v5M59l+Z3vJ3wJkVsyCUffc7n2P/lemtx/OXEEIIIYQQQn7xDVR67Ic=
   </data>
  </layer>
  <layer id="194" name="Ground2" width="160" height="33">
@@ -46,7 +46,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmU1OwzAQheNEFI5AmgjOQGmPAOx6BGDXQ7DxLThWYckNCivEEjaMSSKljmlqe1z/dEb65LSJ3ZHz8jKuyyLLpkAFzCwpW+TP5X79+Ry4BsTxFbCE728JK5bNXP7NMcxtNvd8n8U1nd5q6XPpFw45cMiFi+Nz4I35v3+xA3Mo5jKk+xys/mT/+yL9WQNzOPC/kPRXS74zxqzHPtfrIPsfvX/tWRbu/U/1bjbV32wElRZV2jRB9r9VAPcvdlaB13+6/ucS8j98DuF/uoSqP2z/+86z7KGIm58c3/9i1l9M9d8d4DKeJm7HF3FjOQdU//mr/0h/VP+R/9lFDP6nS6j6U/mfTe30mID+7i3nILX6zyUq/ws5DqE/2wjd/wLKS7n/QWEen4z2P1L2vxiC1r92618Ku6D1L/mfzwi9/gtJf+R/+JHa+pfqv7iC6j+q/3wG1X/kfz6D6j+q/3xGavWfS8j/8CN0/1tIvmOiG6z1CPkffrjwP521hqpvl8eC/C/5CN3/QtIf+R9+HEP9h6Vf8j/8cOF/tuOEqj/yP/xw4X+p6k/lfy9sm3XbvrLhOROwxzMBfptDy9dNO5qrTv7kf3b+98622bTtBxueG+Mkz7IJ8IzABXCJNJbgFDjLd+e/2fHdf/ORmv+p9uJc+Z94bvN8G9a2RT48Z4LpeJ3+MHKA3+bQcta0o7nq5N/No0v/s9n/lf//M9n/1emvs/8rnttp3lABtXRc7Und64sxXtXTn06fHflxaDnkwvvHqlx18+/mEXP/Vx6nry2d/lj//5H/Hbf/HfL9q7rWVf1H/ufG/1zoT0eTff39AoG+IWo=
+   eJztmU1OwzAQheNEFI5AmgjOQGmPAOx6BGDXS7DwLThWYckNCivEEjaMSSKljmlqe1z/dEb65LSJ3ZHz8jKuyyLLpkAFzCwpW+TP5X79+Ry4BsTxFbCE728JK5bNXP7NMcxtNvd8n8U1nd5q6XPpFw45cMiFi+Nz4I35v3+xA3Mo5jKk+xys/mT/+yL9WQNzOPC/kPRXS74zxqzHPtfrIPsfvX/tWRbu/U/1bjbV32wElRZV2jRB9r9VAPcvdlaB13+6/ucS8j98DuF/uoSqP2z/+86z7KGIm58c3/9i1l9M9d8d4DKeJm7HF3FjOQdU//mr/0h/VP+R/9lFDP6nS6j6U/mfTe30mID+7i3nILX6zyUq/ws5DqE/2wjd/wLKS7n/QWEen4z2P1L2vxiC1r92618Ku6D1L/mfzwi9/gtJf+R/+JHa+pfqv7iC6j+q/3wG1X/kfz6D6j+q/3xGavWfS8j/8CN0/1tIvmOiG6z1CPkffrjwP521hqpvl8eC/C/5CN3/QtIf+R9+HEP9h6Vf8j/8cOF/tuOEqj/yP/xw4X+p6k/lfy9sm3XbvrLhOROwxzMBfptDy9dNO5qrTv7kf3b+98622bTtBxueG+Mkz7IJ8IzABXCJNJbgFDjLd+e/2fHdf/ORmv+p9uJc+Z94bvN8G9a2RT48Z4LpeJ3+MHKA3+bQcta0o7nq5N/No0v/s9n/lf//M9n/1emvs/8rnttp3lABtXRc7Und64sxXtXTn06fHflxaDnkwvvHqlx18+/mEXP/Vx6nry2d/lj//5H/Hbf/HfL9q7rWVf1H/ufG/1zoT0eTff39AqehIW8=
   </data>
  </layer>
  <layer id="198" name="Ground1" width="160" height="33">
@@ -54,7 +54,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1MEJgEAQA8AF4WrQMrSn049ag6W7XSx6M5B/HiERAAAAAAAAALV6i9gzR6tuwojO3N2Vue0PAAAAAAAAAAAAgJ9YpnjmTHUPxrTl9lb7o4j/o9IX/u8F98EH3g==
+   eJzt1MEJgEAQA8AF4WrQMrSo04/agqW7XSx6M5B/HiERAAAAAAAAALV6i9gzR6tuwojO3N2Vue0PAAAAAAAAAAAAgJ9YpnjmTHUPxrTl9lb7o4j/o9IX/u8FMvcH5A==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -303,18 +303,18 @@
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="768" gid="2147485248" x="1840" y="472" width="64" height="96">
-   <properties>
-    <property name="publishingEvtMaskUponKilled" value="1"/>
-    <property name="publishingEvtSubIdUponKilled" value="5"/>
-    <property name="teamId" value="2"/>
-   </properties>
-  </object>
-  <object id="769" gid="1600" x="656" y="472" width="64" height="96">
+  <object id="785" gid="1600" x="672" y="464" width="32" height="70">
    <properties>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="5"/>
     <property name="teamId" value="1"/>
+   </properties>
+  </object>
+  <object id="786" gid="2147485248" x="1856" y="464" width="32" height="70">
+   <properties>
+    <property name="publishingEvtMaskUponKilled" value="1"/>
+    <property name="publishingEvtSubIdUponKilled" value="5"/>
+    <property name="teamId" value="2"/>
    </properties>
   </object>
  </objectgroup>
@@ -371,7 +371,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="704" name="Refractory" x="1248" y="384" width="32" height="144">
+  <object id="704" name="Refractory" x="1248" y="392" width="32" height="136">
    <properties>
     <property name="collisionTypeMask" value="32773"/>
     <property name="providesHardPushback" value="1"/>

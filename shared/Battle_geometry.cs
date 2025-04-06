@@ -1197,15 +1197,6 @@ namespace shared {
             }
         }
 
-        public static (float, float) TiledLayerPositionToCollisionSpacePosition(float tiledLayerX, float tiledLayerY, float spaceOffsetX, float spaceOffsetY) {
-            return (tiledLayerX, spaceOffsetY + spaceOffsetY - tiledLayerY);
-        }
-
-        public static (float, float) CollisionSpacePositionToWorldPosition(float collisionSpaceX, float collisionSpaceY, float spaceOffsetX, float spaceOffsetY) {
-            // [WARNING] This conversion is specifically added for Unity+SuperTiled2Unity
-            return (collisionSpaceX, -spaceOffsetY - spaceOffsetY + collisionSpaceY);
-        }
-
         // These directions are chosen such that when speed is changed to "(speedX+delta, speedY+delta)" for any of them, the direction is unchanged.
         public static int[,] DIRECTION_DECODER = new int[,] {
             {0, 0}, // 0

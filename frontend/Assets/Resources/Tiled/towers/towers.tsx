@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="towers" tilewidth="128" tileheight="111" tilecount="23" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="towers" tilewidth="79" tileheight="103" tilecount="24" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -138,5 +138,11 @@
    <property name="speciesId" value="18"/>
   </properties>
   <image source="Angel-0.png" width="50" height="47"/>
+ </tile>
+ <tile id="23">
+  <properties>
+   <property name="speciesId" value="1"/>
+  </properties>
+  <image source="BladeGirl.png" width="40" height="37"/>
  </tile>
 </tileset>

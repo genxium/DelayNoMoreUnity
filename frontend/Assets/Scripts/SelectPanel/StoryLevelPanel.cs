@@ -7,6 +7,7 @@ using SuperTiled2Unity;
 using shared;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using static FrontendOnlyGeometry;
 
 public class StoryLevelPanel : MonoBehaviour {
     public UISoundSource uiSoundSource;
@@ -90,8 +91,7 @@ public class StoryLevelPanel : MonoBehaviour {
 
                         int levelIdVal = null == levelId || levelId.IsEmpty ? StoryConstants.LEVEL_NONE : levelId.GetValueAsInt();
 
-                        var (cx, cy) = Battle.TiledLayerPositionToCollisionSpacePosition(levelTileObj.m_X + .5f*levelTileObj.m_Width, levelTileObj.m_Y + .5f * levelTileObj.m_Height, spaceOffsetX, spaceOffsetY);
-                        var (wx, wy) = Battle.CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
+                        var (wx, wy) = TiledLayerPositionToWorldPosition(levelTileObj.m_X + .5f*levelTileObj.m_Width, levelTileObj.m_Y + .5f * levelTileObj.m_Height);
 
                         newCellDataList.Add((levelIdVal, wx, wy));
                         

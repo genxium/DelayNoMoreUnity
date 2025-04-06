@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static shared.Battle;
 using static Story.StoryConstants;
+using static FrontendOnlyGeometry;
 
 public abstract class AbstractMapController : MonoBehaviour {
 
@@ -103,8 +104,9 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected ulong latestTriggerForceCtrlCmd = 0u;
 
     protected long battleState;
-    protected int spaceOffsetX;
-    protected int spaceOffsetY;
+    protected float tilemapHalfWidth, tilemapHalfHeight;
+    protected int collisionSpaceHalfWidth, collisionSpaceHalfHeight;
+    protected float collisionSpacePaddingLeft, collisionSpacePaddingBottom;
     protected float cameraCapMinX, cameraCapMaxX, cameraCapMinY, cameraCapMaxY;
     protected float effectivelyInfinitelyFar;
 
@@ -304,12 +306,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             return (previousSelfInput, existingInputFrame.InputList[joinIndex - 1]);
         }
 
-        var (_, rdf) = renderBuffer.GetByFrameId(playerRdfId);
         Array.Fill<ulong>(prefabbedInputList, 0);
         for (int k = 0; k < roomCapacity; ++k) {
-            /**
-            TODO: If "inArenaPracticeMode", call "deriveNpcOpPattern(...)" here for other players! 
-            */
             if (null != existingInputFrame) {
                 // When "null != existingInputFrame", it implies that "true == canConfirmSelf" here
                 prefabbedInputList[k] = existingInputFrame.InputList[k];
@@ -335,6 +333,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 initConfirmedList |= existingInputFrame.ConfirmedList;
             }
         }
+
         currSelfInput = iptmgr.GetEncodedInput(); // When "null == existingInputFrame", it'd be safe to say that "GetImmediateEncodedInput()" is for the requested "inputFrameId"
         prefabbedInputList[(joinIndex - 1)] = currSelfInput;
         while (inputBuffer.EdFrameId <= inputFrameId) {
@@ -376,7 +375,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             bool allowUpdateInputFrameInPlaceUponDynamics = (!isChasing);
-            if (allowUpdateInputFrameInPlaceUponDynamics) {
+            if (allowUpdateInputFrameInPlaceUponDynamics && !WsSessionManager.Instance.getInArenaPracticeMode()) {
                 bool hasInputBeenMutated = UpdateInputFrameInPlaceUponDynamics(currRdf, inputBuffer, j, lastAllConfirmedInputFrameId, roomCapacity, delayedInputFrame.ConfirmedList, delayedInputFrame.InputList, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, selfPlayerInfo.JoinIndex, disconnectedPeerJoinIndices, _loggerBridge);
                 if (hasInputBeenMutated) {
                     int ii = ConvertToFirstUsedRenderFrameId(j);
@@ -394,7 +393,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             bool hasIncorrectlyPredictedRenderFrame = false;
             bool selfNotEnoughMp = false;
-            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, triggerEditorIdToConfigFromTiled, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionTriggerLocalId, selfPlayerInfo.JoinIndex, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadNpcIndices, out fulfilledTriggerSetMask, ref selfNotEnoughMp, _loggerBridge);
+            Step(inputBuffer, i, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, triggerEditorIdToConfigFromTiled, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionTriggerLocalId, selfPlayerInfo.JoinIndex, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadNpcIndices, out fulfilledTriggerSetMask, ref selfNotEnoughMp, _loggerBridge, WsSessionManager.Instance.getInArenaPracticeMode());
             if (hasIncorrectlyPredictedRenderFrame) {
                 Debug.LogFormat("@playerRdfId={0}, hasIncorrectlyPredictedRenderFrame=true for i:{1} -> i+1:{2}", playerRdfId, i, i + 1);
             }
@@ -553,7 +552,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var chConfig = characters[currCharacterDownsync.SpeciesId];
             float boxCx, boxCy, boxCw, boxCh;
             calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
 
             var playerGameObj = playerGameObjs[k]; 
             var chAnimCtrl = playerGameObj.GetComponent<CharacterAnimController>();
@@ -655,7 +654,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var chConfig = characters[currNpcDownsync.SpeciesId];
             float boxCx, boxCy, boxCw, boxCh;
             calcCharacterBoundingBoxInCollisionSpace(currNpcDownsync, chConfig, currNpcDownsync.VirtualGridX, currNpcDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
 
             float halfBoxCh = .5f * boxCh;
             float halfBoxCw = .5f * boxCw;
@@ -767,7 +766,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var currTrap = rdf.TrapsArr[k];
             if (TERMINATING_TRAP_ID == currTrap.TrapLocalId) break;
             var (collisionSpaceX, collisionSpaceY) = VirtualGridToPolygonColliderCtr(currTrap.VirtualGridX, currTrap.VirtualGridY);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, spaceOffsetX, spaceOffsetY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(collisionSpaceX, collisionSpaceY, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
             var dynamicTrapObj = dynamicTrapGameObjs[kDynamicTrap];
             // [WARNING] When placing a trap tile object in Tiled editor, the anchor is ALWAYS (0.5, 0.5) -- and in our "Virtual Grid Coordinates" we also use (0.5, 0.5) anchor ubiquitously. Therefore to achieve a "what you see is what you get effect", the compensation is done here, i.e. only at rendering.
             var trapConfig = trapConfigs[currTrap.ConfigFromTiled.SpeciesId];
@@ -800,7 +799,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (null == skillConfig || null == bulletConfig) continue;
             var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
             var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bulletConfig.HitboxSizeX, bulletConfig.HitboxSizeY);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
 
             float halfBoxCh = .5f * boxCh;
             float halfBoxCw = .5f * boxCw;
@@ -864,7 +863,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 var (cx2, cy2) = VirtualGridToPolygonColliderCtr(bullet.OriginatedVirtualGridX, bullet.OriginatedVirtualGridY);
                                 cx2 += newDx;
                                 cy2 += newDy;
-                                var (wx2, wy2) = CollisionSpacePositionToWorldPosition(cx2, cy2, spaceOffsetX, spaceOffsetY);
+                                var (wx2, wy2) = CollisionSpacePositionToWorldPosition(cx2, cy2, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                                 newPosHolder.Set(wx2, wy2, fireballZ - 1);
                             }
                         }
@@ -912,7 +911,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             var (cx, cy) = VirtualGridToPolygonColliderCtr(pickable.VirtualGridX, pickable.VirtualGridY);
             var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(DEFAULT_PICKABLE_HITBOX_SIZE_X, DEFAULT_PICKABLE_HITBOX_SIZE_Y);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
 
             float halfBoxCh = .5f * boxCh;
             float halfBoxCw = .5f * boxCw;
@@ -1356,8 +1355,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     private int camFovW, camFovH, camPaddingX, camPaddingY;
     protected void calcCameraCaps() {
         cameraCapMinX = 0;
-        cameraCapMaxX = (spaceOffsetX << 1);
-        cameraCapMinY = -(spaceOffsetY << 1);
+        cameraCapMaxX = tilemapHalfWidth+tilemapHalfWidth;
+        cameraCapMinY = -tilemapHalfHeight-tilemapHalfHeight;
         cameraCapMaxY = 0;
         var grid = underlyingMap.GetComponentInChildren<Grid>();
         foreach (Transform child in grid.transform) {
@@ -1366,12 +1365,17 @@ public abstract class AbstractMapController : MonoBehaviour {
                         foreach (Transform camBoundChild in child) {
                             var tileObj = camBoundChild.GetComponent<SuperObject>();
                             var (candidateCamMinTileX, candidateCamMinY) = (tileObj.m_X, tileObj.m_Y + tileObj.m_Height);
-                            var (candidateCamMinCx, candidateCamMinCy) = TiledLayerPositionToCollisionSpacePosition(candidateCamMinTileX, candidateCamMinY, spaceOffsetX, spaceOffsetY);
                             var (candidateCamMaxTileX, candidateCamMaxY) = (tileObj.m_X + tileObj.m_Width, tileObj.m_Y);
-                            var (candidateCamMaxCx, candidateCamMaxCy) = TiledLayerPositionToCollisionSpacePosition(candidateCamMaxTileX, candidateCamMaxY, spaceOffsetX, spaceOffsetY);
 
-                            var (candidateCamMinWx, candidateCamMinWy) = CollisionSpacePositionToWorldPosition(candidateCamMinCx, candidateCamMinCy, spaceOffsetX, spaceOffsetY);
-                            var (candidateCamMaxWx, candidateCamMaxWy) = CollisionSpacePositionToWorldPosition(candidateCamMaxCx, candidateCamMaxCy, spaceOffsetX, spaceOffsetY);
+                            var (candidateCamMinWx, candidateCamMinWy) = TiledLayerPositionToWorldPosition(candidateCamMinTileX, candidateCamMinY);
+                            var (candidateCamMaxWx, candidateCamMaxWy) = TiledLayerPositionToWorldPosition(candidateCamMaxTileX, candidateCamMaxY);
+
+                            if (isOnlineMode) {
+                                collisionSpaceHalfWidth = (int)((candidateCamMaxWx - candidateCamMinWx)*.5f);
+                                collisionSpaceHalfHeight = (int)((candidateCamMaxWy - candidateCamMinWy)*.5f);
+                                collisionSpacePaddingLeft = candidateCamMinWx;
+                                collisionSpacePaddingBottom = collisionSpaceHalfHeight + collisionSpaceHalfHeight + candidateCamMinWy;
+                            }
 
                             // [WARNING] The inequality checks below are NOT typos! They're meant to shrink the default camera range! 
                             if (candidateCamMinWx > cameraCapMinX) {
@@ -1402,7 +1406,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         cameraCapMinY += camPaddingY;
         cameraCapMaxY -= camPaddingY;
 
-        effectivelyInfinitelyFar = 4f * Math.Max(spaceOffsetX, spaceOffsetY);
+        effectivelyInfinitelyFar = 4f * Math.Max(tilemapHalfWidth, tilemapHalfHeight);
     }
 
     protected virtual void resetCurrentMatch(string theme) {
@@ -1451,8 +1455,12 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         var superMap = underlyingMap.GetComponent<SuperMap>();
         int mapWidth = superMap.m_Width, tileWidth = superMap.m_TileWidth, mapHeight = superMap.m_Height, tileHeight = superMap.m_TileHeight;
-        spaceOffsetX = ((mapWidth * tileWidth) >> 1);
-        spaceOffsetY = ((mapHeight * tileHeight) >> 1);
+        tilemapHalfWidth = (mapWidth * tileWidth) >> 1;
+        tilemapHalfHeight = (mapHeight * tileHeight) >> 1;
+        collisionSpaceHalfWidth = (int)tilemapHalfWidth;
+        collisionSpaceHalfHeight = (int)tilemapHalfHeight;
+        collisionSpacePaddingLeft = 0;
+        collisionSpacePaddingBottom = 0;
 
         selfBattleHeading.ResetSelf();
         readyGoPanel.resetCountdown();
@@ -1863,7 +1871,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (SPECIES_NONE_CH == speciesIdList[i]) continue;
             var playerInRdf = startRdf.PlayersArr[i];
             var (playerCposX, playerCposY) = VirtualGridToPolygonColliderCtr(playerInRdf.VirtualGridX, playerInRdf.VirtualGridY);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(playerCposX, playerCposY, spaceOffsetX, spaceOffsetY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(playerCposX, playerCposY, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
 
             if (selfPlayerInfo.JoinIndex == i + 1) {
                 spawnPlayerNode(playerInRdf.JoinIndex, playerInRdf.SpeciesId, wx, wy, playerInRdf.BulletTeamId);
@@ -1950,8 +1958,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var inMapCollider = barrierChild.GetComponent<EdgeCollider2D>();
 
                         if (null == inMapCollider || 0 >= inMapCollider.pointCount) {
-                            var (tiledRectCx, tiledRectCy) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
-                            var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                            var (tiledRectCenterX, tiledRectCenterY) = (barrierTileObj.m_X + barrierTileObj.m_Width * 0.5f, barrierTileObj.m_Y + barrierTileObj.m_Height * 0.5f);
+                            var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCenterX, tiledRectCenterY, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                             /*
                              [WARNING] 
 
@@ -1968,7 +1976,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 points2.Add(point.x);
                                 points2.Add(point.y);
                             }
-                            var (anchorCx, anchorCy) = TiledLayerPositionToCollisionSpacePosition(barrierTileObj.m_X, barrierTileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                            var (anchorCx, anchorCy) = TiledLayerPositionToCollisionSpacePosition(barrierTileObj.m_X, barrierTileObj.m_Y, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                             var srcPolygon = new ConvexPolygon(anchorCx, anchorCy, points2.ToArray());
                             serializedBarrierPolygons.Add(srcPolygon.Serialize());
                         }
@@ -1989,7 +1997,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("teamId", out teamId);
                         tileProps.TryGetCustomProperty("dirX", out dirX);
 
-                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(posTileObj.m_X, posTileObj.m_Y, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
 
                         playerStartingCposList.Add((
                             new Vector(cx, cy),
@@ -2005,10 +2013,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                     foreach (Transform npcPos in child) {
                         var tileObj = npcPos.gameObject.GetComponent<SuperObject>();
                         var tileProps = npcPos.gameObject.gameObject.GetComponent<SuperCustomProperties>();
-                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        var (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         if (0 != tileObj.m_Width) {
-                            var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
-                            (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                            var (tiledRectCenterX, tiledRectCenterY) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
+                            (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCenterX, tiledRectCenterY, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         }
                         
                         CustomProperty dirY, speciesId, teamId, initGoal, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId, killedToDropPickupSkillId;
@@ -2025,7 +2033,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         uint speciesIdVal = null == speciesId || speciesId.IsEmpty ? SPECIES_NONE_CH : (uint)speciesId.GetValueAsInt();
                         if (SPECIES_BRICK1 == speciesIdVal) {
-                            (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X + 0.5f*tileObj.m_Width, tileObj.m_Y - 0.5f*tileObj.m_Height, spaceOffsetX, spaceOffsetY);
+                            (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X + 0.5f*tileObj.m_Width, tileObj.m_Y - 0.5f*tileObj.m_Height, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         }
 
                         NpcGoal initGoalVal = NpcGoal.Npatrol;
@@ -2058,10 +2066,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var tileObj = patrolCueChild.GetComponent<SuperObject>();
                         var tileProps = patrolCueChild.GetComponent<SuperCustomProperties>();
                         
-                        var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, spaceOffsetX, spaceOffsetY);
+                        var (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X, tileObj.m_Y, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         if (0 != tileObj.m_Width) {
                             var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y + tileObj.m_Height * 0.5f);
-                            (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                            (patrolCueCx, patrolCueCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         }
 
                         CustomProperty flAct, frAct, flCaptureFrames, frCaptureFrames, fdAct, fuAct, fdCaptureFrames, fuCaptureFrames, collisionTypeMask;
@@ -2195,7 +2203,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         if (isCompletelyStaticVal) {
                             bool isBottomAnchor = (null != tileObj.m_SuperTile && (null != tileObj.m_SuperTile.m_Sprite || null != tileObj.m_SuperTile.m_AnimationSprites));
                             var (tiledRectCx, tiledRectCy) = isBottomAnchor ? (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f) : (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y + tileObj.m_Height * 0.5f);
-                            var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                            var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                             var (rectVw, rectVh) = PolygonColliderCtrToVirtualGridPos(tileObj.m_Width, tileObj.m_Height);
                             var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
 
@@ -2232,12 +2240,12 @@ public abstract class AbstractMapController : MonoBehaviour {
                             if ((TrapBarrier.SpeciesId != speciesIdVal && LinearSpike.SpeciesId != speciesIdVal) || (!hasOnlyAllowedDir && !providesDamageVal && !providesSlipJumpVal && !prohibitsWallGrabbingVal && (0 >= (COLLISION_REFRACTORY_INDEX_PREFIX & collisionTypeMaskVal)))) {
                                 // [WARNING] Slipjump platforms often have their own tilelayer painting 
                                 var trapPrefab = loadTrapPrefab(trapConfigs[speciesIdVal]);
-                                var (wx, wy) = CollisionSpacePositionToWorldPosition(rectCx, rectCy, spaceOffsetX, spaceOffsetY);
+                                var (wx, wy) = CollisionSpacePositionToWorldPosition(rectCx, rectCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                                 Instantiate(trapPrefab, new Vector3(wx, wy, triggerZ), Quaternion.identity, underlyingMap.transform);
                             }
                         } else {
                             var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
-                            var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                            var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                             var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
                             float spinCos = 1f, spinSin = 0f;
                             float zAngleDegs = trapChild.localEulerAngles.z;
@@ -2417,7 +2425,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         if (null != newRevivalX && !newRevivalX.IsEmpty && null != newRevivalY && !newRevivalY.IsEmpty) {   
                             float newRevivalXTiled = newRevivalX.GetValueAsFloat(); 
                             float newRevivalYTiled = newRevivalY.GetValueAsFloat();
-                            var (newRevivalCx, newRevivalCy) = TiledLayerPositionToCollisionSpacePosition(newRevivalXTiled, newRevivalYTiled, spaceOffsetX, spaceOffsetY);
+                            var (newRevivalCx, newRevivalCy) = TiledLayerPositionToCollisionSpacePosition(newRevivalXTiled, newRevivalYTiled, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                             (newRevivalXVal, newRevivalYVal) = PolygonColliderCtrToVirtualGridPos(newRevivalCx, newRevivalCy);
                         }
 
@@ -2540,11 +2548,11 @@ public abstract class AbstractMapController : MonoBehaviour {
                         bool isBottomAnchor = (null != tileObj.m_SuperTile && (null != tileObj.m_SuperTile.m_Sprite || null != tileObj.m_SuperTile.m_AnimationSprites));
                         var (tiledRectCx, tiledRectCy) = isBottomAnchor ? (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f) : (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y + tileObj.m_Height * 0.5f);
 
-                        var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                        var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
                         trigger.VirtualGridX = rectCenterVx;
                         trigger.VirtualGridY = rectCenterVy;
-                        var (wx, wy) = CollisionSpacePositionToWorldPosition(rectCx, rectCy, spaceOffsetX, spaceOffsetY);
+                        var (wx, wy) = CollisionSpacePositionToWorldPosition(rectCx, rectCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         triggerList.Add((trigger, wx, wy));
 
                         if (COLLISION_NONE_INDEX  == triggerConfig.CollisionTypeMask) {
@@ -2594,7 +2602,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                         var (tiledRectCx, tiledRectCy) = (tileObj.m_X + tileObj.m_Width * 0.5f, tileObj.m_Y - tileObj.m_Height * 0.5f);
 
-                        var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, spaceOffsetX, spaceOffsetY);
+                        var (rectCx, rectCy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCx, tiledRectCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         var (rectCenterVx, rectCenterVy) = PolygonColliderCtrToVirtualGridPos(rectCx, rectCy);
                         var pickable = new Pickable {
                             PickableLocalId = pickableLocalId,
@@ -2613,7 +2621,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                 PickupType = pickupTypeVal,
                             },
                         };
-                        var (wx, wy) = CollisionSpacePositionToWorldPosition(rectCx, rectCy, spaceOffsetX, spaceOffsetY);
+                        var (wx, wy) = CollisionSpacePositionToWorldPosition(rectCx, rectCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         pickableList.Add((pickable, wx, wy));
 
                         ++pickableLocalId;
@@ -2638,7 +2646,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         for (int i = 0; i < roomCapacity; i++) {
             int joinIndex = i + 1;
             var (cpos, teamId, dirX) = playerStartingCposList[i];
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
             teamId = (DEFAULT_BULLET_TEAM_ID == teamId ? joinIndex : teamId);
             var playerInRdf = startRdf.PlayersArr[i];
             playerInRdf.JoinIndex = joinIndex;
@@ -2696,7 +2704,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (MAGIC_EVTSUB_ID_DUMMY != subscriptionId && TERMINATING_EVTSUB_ID_INT != subscriptionId && !serializedTriggerEditorIdToLocalId.Dict.ContainsKey(subscriptionId)) {
                 throw new ArgumentException(String.Format("Preset NPC with speciesId={0}, teamId={1} is set to subscribe to an non-existent trigger editor id={2}", characterSpeciesId, teamId, subscriptionId));
             }
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, spaceOffsetX, spaceOffsetY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cpos.X, cpos.Y, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
             var chConfig = Battle.characters[characterSpeciesId];
             var npcInRdf = startRdf.NpcsArr[i];
             var (vx, vy) = PolygonColliderCtrToVirtualGridPos(cpos.X, cpos.Y);
@@ -2782,7 +2790,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             startRdf.TrapsArr[i] = trap;
             var (cx, cy) = VirtualGridToPolygonColliderCtr(trap.VirtualGridX, trap.VirtualGridY);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
             spawnDynamicTrapNode(trapConfig.SpeciesId, wx, wy);
         }
 
@@ -2951,7 +2959,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 throw new ArgumentNullException("barrierCollider.Shape.Points is null when drawing staticRectangleColliders");
             }
 
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(collider.X, collider.Y, spaceOffsetX, spaceOffsetY); ;
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(collider.X, collider.Y, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom); ;
             newPosHolder.Set(wx, wy, 0);
             if (!isGameObjPositionWithinCamera(newPosHolder)) {
                 continue; // To save memory
@@ -3000,7 +3008,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             line.GetPositions(debugDrawPositionsHolder);
             for (int i = 0; i < 4; i++) {
                 var (_, pi) = collider.Shape.Points.GetByOffset(i);
-                (debugDrawPositionsHolder[i].x, debugDrawPositionsHolder[i].y) = CollisionSpacePositionToWorldPosition(collider.X + pi.X, collider.Y + pi.Y, spaceOffsetX, spaceOffsetY);
+                (debugDrawPositionsHolder[i].x, debugDrawPositionsHolder[i].y) = CollisionSpacePositionToWorldPosition(collider.X + pi.X, collider.Y + pi.Y, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
             }
             line.SetPositions(debugDrawPositionsHolder);
             line.score = rdf.Id;
@@ -3013,7 +3021,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var chConfig = characters[currCharacterDownsync.SpeciesId];
             float boxCx, boxCy, boxCw, boxCh;
             calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
             newPosHolder.Set(wx, wy, 0);
             if (!isGameObjPositionWithinCamera(newPosHolder)) {
                 continue; // To save memory
@@ -3049,7 +3057,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             float boxCx, boxCy, boxCw, boxCh;
             calcCharacterBoundingBoxInCollisionSpace(currCharacterDownsync, chConfig, currCharacterDownsync.VirtualGridX, currCharacterDownsync.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
 
-            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+            var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
             newPosHolder.Set(wx, wy, 0);
             if (!isGameObjPositionWithinCamera(newPosHolder)) {
                 continue; // To save memory
@@ -3086,7 +3094,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             lineVision.GetPositions(debugDrawPositionsHolder);
             float visionCx, visionCy, visionCw, visionCh;
             calcNpcVisionBoxInCollisionSpace(currCharacterDownsync, chConfig, out visionCx, out visionCy, out visionCw, out visionCh);
-            (wx, wy) = CollisionSpacePositionToWorldPosition(visionCx, visionCy, spaceOffsetX, spaceOffsetY);
+            (wx, wy) = CollisionSpacePositionToWorldPosition(visionCx, visionCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
 
             (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * visionCw), (wy - 0.5f * visionCh));
             (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * visionCw), (wy - 0.5f * visionCh));
@@ -3104,7 +3112,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (null == skillConfig || null == bulletConfig) continue;
             if (!bulletConfig.BeamCollision) {
                 var (cx, cy) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX, bullet.VirtualGridY);
-                var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY); ;
+                var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                 newPosHolder.Set(wx, wy, 0);
                 if (!isGameObjPositionWithinCamera(newPosHolder)) {
                     continue; // To save memory
@@ -3157,7 +3165,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
                 var (boxCw, boxCh) = VirtualGridToPolygonColliderCtr(bullet.VirtualGridX - bullet.OriginatedVirtualGridX, bulletConfig.HitboxSizeY + bulletConfig.HitboxSizeIncY * (int)bullet.FramesInBlState);
                 var (cx, cy) = VirtualGridToPolygonColliderCtr(((bullet.OriginatedVirtualGridX + bullet.VirtualGridX) >> 1), bullet.VirtualGridY);
-                var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, spaceOffsetX, spaceOffsetY);
+                var (wx, wy) = CollisionSpacePositionToWorldPosition(cx, cy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                 (debugDrawPositionsHolder[0].x, debugDrawPositionsHolder[0].y) = ((wx - 0.5f * boxCw), (wy - 0.5f * boxCh));
                 (debugDrawPositionsHolder[1].x, debugDrawPositionsHolder[1].y) = ((wx + 0.5f * boxCw), (wy - 0.5f * boxCh));
                 (debugDrawPositionsHolder[2].x, debugDrawPositionsHolder[2].y) = ((wx + 0.5f * boxCw), (wy + 0.5f * boxCh));
@@ -3179,7 +3187,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             foreach (var colliderAttr in colliderAttrs) {
                 float boxCx, boxCy, boxCw, boxCh;
                 calcTrapBoxInCollisionSpace(colliderAttr, currTrap.VirtualGridX, currTrap.VirtualGridY, out boxCx, out boxCy, out boxCw, out boxCh);
-                var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, spaceOffsetX, spaceOffsetY);
+                var (wx, wy) = CollisionSpacePositionToWorldPosition(boxCx, boxCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                 newPosHolder.Set(wx, wy, 0);
                 if (!isGameObjPositionWithinCamera(newPosHolder)) {
                     continue; // To save memory
@@ -3548,7 +3556,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         var chdBackthen = getChdFromRdf(currCharacterDownsync.JoinIndex, roomCapacity, rdfBackthen);
                         if (null != chdBackthen && chdBackthen.Id == currCharacterDownsync.Id) {
                             var (cxBackthen, cyBackthen) = VirtualGridToPolygonColliderCtr(chdBackthen.VirtualGridX, chdBackthen.VirtualGridY);
-                            var (wxBackthen, wyBackthen) = CollisionSpacePositionToWorldPosition(cxBackthen, cyBackthen, spaceOffsetX, spaceOffsetY);
+                            var (wxBackthen, wyBackthen) = CollisionSpacePositionToWorldPosition(cxBackthen, cyBackthen, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                             newPosHolder.Set(wxBackthen, wyBackthen, characterZ);
                             pixelVfxHolder.gameObject.transform.position = newPosHolder;
                             pixelVfxHolder.score = rdfId;
@@ -3740,7 +3748,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 newPosHolder.Set(wx, wy, fireballZ);
             } else if (VfxMotionType.Dropped == vfxConfig.MotionType) {
                 var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(bullet.OriginatedVirtualGridX, bullet.OriginatedVirtualGridY);
-                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                 newPosHolder.Set(vfxWx, vfxWy, fireballZ);
             }
         } else if (vfxConfig.OnCharacter) {
@@ -3754,11 +3762,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             dirX = ch.DirX;
             if (VfxMotionType.Tracing == vfxConfig.MotionType) {
                 var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(ch.VirtualGridX, ch.VirtualGridY);
-                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                 newPosHolder.Set(vfxWx, vfxWy, fireballZ);
             } else if (VfxMotionType.Dropped == vfxConfig.MotionType) {
                 var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(bullet.OriginatedVirtualGridX, bullet.OriginatedVirtualGridY);
-                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                 newPosHolder.Set(vfxWx, vfxWy, fireballZ);
             }
         } else if (vfxConfig.OnTrap) {
@@ -3768,11 +3776,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             dirX = trap.DirX;
             if (VfxMotionType.Tracing == vfxConfig.MotionType) {
                 var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(trap.VirtualGridX, trap.VirtualGridY);
-                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                 newPosHolder.Set(vfxWx, vfxWy, fireballZ);
             } else if (VfxMotionType.Dropped == vfxConfig.MotionType) {
                 var (vfxCx, vfxCy) = VirtualGridToPolygonColliderCtr(bullet.OriginatedVirtualGridX, bullet.OriginatedVirtualGridY);
-                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, spaceOffsetX, spaceOffsetY);
+                var (vfxWx, vfxWy) = CollisionSpacePositionToWorldPosition(vfxCx, vfxCy, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                 newPosHolder.Set(vfxWx, vfxWy, fireballZ);
             }
         }
@@ -3831,7 +3839,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                         float absBeamVisualLength = beamVisualLength2 * invBeamVisualLength;
                         var (_, beamVisualCh) = VirtualGridToPolygonColliderCtr(0, bulletConfig.BeamVisualSizeY + bulletConfig.HitboxSizeIncY * (int)bullet.FramesInBlState);
                         var (cx2, cy2) = VirtualGridToPolygonColliderCtr((spinFlipX ? bullet.VirtualGridX : bullet.OriginatedVirtualGridX), (spinFlipX ? bullet.VirtualGridY : bullet.OriginatedVirtualGridY));
-                        var (wx2, wy2) = CollisionSpacePositionToWorldPosition(cx2, cy2, spaceOffsetX, spaceOffsetY);
+                        var (wx2, wy2) = CollisionSpacePositionToWorldPosition(cx2, cy2, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         newPosHolder.Set(wx2, wy2, fireballZ-1);
                         plasmaVfxHolder.gameObject.transform.position = newPosHolder;
                         if (IsBulletRotary(bulletConfig) || (bulletConfig.RotatesAlongVelocity && 0 != bullet.VelX)) {
@@ -3843,7 +3851,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                                     float newDx, newDy;
                                     var (ccx2, ccy2) = VirtualGridToPolygonColliderCtr(bullet.OriginatedVirtualGridX, bullet.OriginatedVirtualGridY);
                                     Vector.Rotate(boxCw, 0, bullet.SpinCos, bullet.SpinSin, out newDx, out newDy);
-                                    (wx2, wy2) = CollisionSpacePositionToWorldPosition((ccx2 + newDx), (ccy2 + newDy), spaceOffsetX, spaceOffsetY);
+                                    (wx2, wy2) = CollisionSpacePositionToWorldPosition((ccx2 + newDx), (ccy2 + newDy), tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                                     newPosHolder.Set(wx2, wy2, fireballZ - 1);
                                     plasmaVfxHolder.gameObject.transform.position = newPosHolder;
                                 } else {
@@ -4008,5 +4016,4 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
         }
     }
-
 }

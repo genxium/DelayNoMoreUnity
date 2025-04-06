@@ -274,18 +274,8 @@ namespace shared {
             return (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy);
         }
 
-        private static (int, bool, bool, int, int) _derivePlayerOpPattern(int rdfId, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, bool currEffInAir, bool notDashing, int selfPlayerJoinIndex, ILoggerBridge logger) {
+        private static (int, bool, bool, int, int) _derivePlayerOpPattern(int rdfId, InputFrameDownsync delayedInputFrameDownsync, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, CharacterDownsync thatCharacterInNextFrame, FrameRingBuffer<InputFrameDownsync> inputBuffer, InputFrameDecoded decodedInputHolder, bool currEffInAir, bool notDashing, int selfPlayerJoinIndex, ILoggerBridge logger) {
             // returns (patternId, jumpedOrNot, slipJumpedOrNot, effectiveDx, effectiveDy)
-            int delayedInputFrameId = ConvertToDelayedInputFrameId(rdfId);
-
-            if (0 >= delayedInputFrameId) {
-                return (PATTERN_ID_UNABLE_TO_OP, false, false, 0, 0);
-            }
-
-            var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
-            if (!ok || null == delayedInputFrameDownsync) {
-                throw new ArgumentNullException(String.Format("InputFrameDownsync for delayedInputFrameId={0} is null!", delayedInputFrameId));
-            }
             int j = (currCharacterDownsync.JoinIndex - 1);
             var delayedInputList = delayedInputFrameDownsync.InputList;
             DecodeInput(delayedInputList[j], decodedInputHolder);
@@ -580,11 +570,11 @@ namespace shared {
             return false;
         }
 
-        private static bool isNotDashing(CharacterDownsync chd) {
+        public static bool isNotDashing(CharacterDownsync chd) {
             return (Dashing != chd.CharacterState && Sliding != chd.CharacterState && BackDashing != chd.CharacterState);
         }
 
-        private static bool isEffInAir(CharacterDownsync chd, bool notDashing) {
+        public static bool isEffInAir(CharacterDownsync chd, bool notDashing) {
             return (chd.InAir || (inAirSet.Contains(chd.CharacterState) && notDashing));
         }
         
@@ -602,6 +592,8 @@ namespace shared {
                 */
                 //logger.LogInfo($"_processSingleCharacterInput/start, currRdfId={rdfId}, about to fly currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, JumpHoldingRdfCnt: {currCharacterDownsync.JumpHoldingRdfCnt}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, chS: {currCharacterDownsync.CharacterState})");
                 thatCharacterInNextFrame.OmitGravity = true;
+                thatCharacterInNextFrame.InAir = true;
+                thatCharacterInNextFrame.PrimarilyOnSlippableHardPushback = false;
                 thatCharacterInNextFrame.FlyingRdfCountdown = chConfig.FlyingQuotaRdfCnt;
                 if (0 >= thatCharacterInNextFrame.VelY) { 
                     thatCharacterInNextFrame.VelY = 0;
@@ -672,15 +664,17 @@ namespace shared {
             }
         }
         
-        private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, int roomCapacity, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<Bullet> nextRenderFrameBullets, InputFrameDecoded decodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, int selfPlayerJoinIndex, ref bool selfNotEnoughMp, ILoggerBridge logger) {
-            int rdfId = currRenderFrame.Id;
+        private static void _processPlayerInputs(RoomDownsyncFrame currRenderFrame, InputFrameDownsync? delayedInputFrameDownsync, int roomCapacity, FrameRingBuffer<InputFrameDownsync> inputBuffer, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<Bullet> nextRenderFrameBullets, InputFrameDecoded decodedInputHolder, ref int bulletLocalIdCounter, ref int bulletCnt, int selfPlayerJoinIndex, ref bool selfNotEnoughMp, ILoggerBridge logger) {
+            if (null == delayedInputFrameDownsync) {
+                return;
+            }
             for (int i = 0; i < roomCapacity; i++) {
                 var currCharacterDownsync = currRenderFrame.PlayersArr[i];
                 bool notDashing = isNotDashing(currCharacterDownsync);
                 bool currEffInAir = isEffInAir(currCharacterDownsync, notDashing);
                 var thatCharacterInNextFrame = nextRenderFramePlayers[i];
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-                var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(rdfId, currCharacterDownsync, chConfig, thatCharacterInNextFrame, inputBuffer, decodedInputHolder, currEffInAir, notDashing, selfPlayerJoinIndex, logger);
+                var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy) = _derivePlayerOpPattern(currRenderFrame.Id, delayedInputFrameDownsync, currCharacterDownsync, chConfig, thatCharacterInNextFrame, inputBuffer, decodedInputHolder, currEffInAir, notDashing, selfPlayerJoinIndex, logger);
                 /*
                 if (PATTERN_RELEASED_B == patternId) {
                     int delayedInputFrameId = ConvertToDelayedInputFrameId(rdfId);
@@ -691,7 +685,7 @@ namespace shared {
                     }
                 }
                 */
-                _processSingleCharacterInput(rdfId, patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy, false, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, false, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
+                _processSingleCharacterInput(currRenderFrame.Id, patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy, false, currCharacterDownsync, currEffInAir, chConfig, thatCharacterInNextFrame, false, nextRenderFrameBullets, ref bulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
             }
         }
         
@@ -2090,9 +2084,9 @@ namespace shared {
                 }
         
                 if (!thatCharacterInNextFrame.OmitGravity && !chConfig.OmitGravity) {
-                    if (Idle1 == thatCharacterInNextFrame.CharacterState && 0 != thatCharacterInNextFrame.VelX) {
+                    if (Idle1 == thatCharacterInNextFrame.CharacterState && 0 != thatCharacterInNextFrame.VelX && 0 >= thatCharacterInNextFrame.FramesCapturedByInertia) {
                         thatCharacterInNextFrame.CharacterState = Walking;
-                    } else if (Walking == thatCharacterInNextFrame.CharacterState && 0 == thatCharacterInNextFrame.VelX) {
+                    } else if (Walking == thatCharacterInNextFrame.CharacterState && 0 == thatCharacterInNextFrame.VelX && 0 >= thatCharacterInNextFrame.FramesCapturedByInertia) {
                         thatCharacterInNextFrame.CharacterState = Idle1;
                     }
                 }
@@ -2232,7 +2226,7 @@ namespace shared {
         - Make use of CPU parallelization -- better by using some libraries with sub-kernel-thread granularity(e.g. Goroutine or Greenlet equivalent) -- or GPU parallelization. It's not trivial to make an improvement because by dispatching smaller tasks to other resources other than the current kernel-thread, overhead I/O and synchronization/locking time is introduced. Moreover, we need guarantee that the dispatched smaller tasks can yield deterministic outputs regardless of processing order, e.g. that each "i" in "_calcAllCharactersCollisions" can be traversed earlier than another and same "effPushbacks" for the next render frame is obtained.   
         - Enable "IL2CPP" when building client application.  
         */
-        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded tempInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, int> triggerEditorIdToLocalId, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, int missionTriggerLocalId, int selfPlayerJoinIndex, Dictionary<int, int> joinIndexRemap, ref int justTriggeredStoryPointId, ref int justTriggeredBgmId, HashSet<int> justDeadJoinIndices, out ulong fulfilledTriggerSetMask, ref bool selfNotEnoughMp, ILoggerBridge logger) {
+        public static void Step(FrameRingBuffer<InputFrameDownsync> inputBuffer, int currRenderFrameId, int roomCapacity, CollisionSpace collisionSys, FrameRingBuffer<RoomDownsyncFrame> renderBuffer, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Collision collision, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, Vector[] softPushbacks, bool softPushbackEnabled, Collider[] dynamicRectangleColliders, InputFrameDecoded decodedInputHolder, InputFrameDecoded tempInputHolder, FrameRingBuffer<Collider> residueCollided, Dictionary<int, int> triggerEditorIdToLocalId, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, List<Collider> completelyStaticTrapColliders, Dictionary<int, BattleResult> unconfirmedBattleResults, ref BattleResult confirmedBattleResult, FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, bool pushbackFrameLogEnabled, int playingRdfId, bool shouldDetectRealtimeRenderHistoryCorrection, out bool hasIncorrectlyPredictedRenderFrame, RoomDownsyncFrame historyRdfHolder, int missionTriggerLocalId, int selfPlayerJoinIndex, Dictionary<int, int> joinIndexRemap, ref int justTriggeredStoryPointId, ref int justTriggeredBgmId, HashSet<int> justDeadJoinIndices, out ulong fulfilledTriggerSetMask, ref bool selfNotEnoughMp, ILoggerBridge logger, bool inArenaPracticeMode=false) {
             var (ok1, currRenderFrame) = renderBuffer.GetByFrameId(currRenderFrameId);
             if (!ok1 || null == currRenderFrame) {
                 throw new ArgumentNullException(String.Format("Null currRenderFrame is not allowed in `Battle.Step` for currRenderFrameId={0}", currRenderFrameId));
@@ -2406,7 +2400,15 @@ namespace shared {
                5. For an "Npc", it's a little tricky to move it because the inputs of an "Npc" are not performed by a human (or another machine with heuristic logic, e.g. a trained neural network w/ possibly "RoomDownsyncFrame" as input). Moreover an "Npc" should behave deterministically -- especially when encountering a "PatrolCue" or a "Player Character in vision", thus we should insert some "Npc input generation" between "4.[b]" and "4.[c]" such that it can collide with a "PatrolCue" or a "Player Character".      
              */
             int colliderCnt = 0, bulletCnt = 0, pickableCnt = 0;
-            _processPlayerInputs(currRenderFrame, roomCapacity, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
+            int delayedInputFrameId = ConvertToDelayedInputFrameId(currRenderFrameId);
+            if (0 < delayedInputFrameId) {
+                var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
+                if (!ok || null == delayedInputFrameDownsync) {
+                    throw new ArgumentNullException($"Null delayedInputFrameDownsync for delayedInputFrameId={delayedInputFrameId} in `Step`!");
+                }
+                _processPlayerInputs(currRenderFrame, delayedInputFrameDownsync, roomCapacity, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
+            }
+
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity + currNpcI, logger);
             
             int trapColliderCntOffset = colliderCnt;
@@ -2428,6 +2430,29 @@ namespace shared {
             _moveAndInsertBulletColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, currRenderFrame.Bullets, nextRenderFrameBullets, dynamicRectangleColliders, ref colliderCnt, collisionSys, ref bulletCnt, effPushbacks, ref overlapResult, collision, logger);
 
             // ---------[WARNING] Deliberately put "_processNpcInputs" after "_moveAndInsertBulletColliders" such that NPC vision can see bullets; also deliberately put "_processNpcInputs" before "_calcAllCharactersCollisions" to avoid overwriting "onSlope velocities" ---------
+            if (inArenaPracticeMode) {
+                int noDelayInputFrameId = ConvertToDynamicallyGeneratedDelayInputFrameId(currRenderFrameId, 0);
+                var (ok, noDelayIfd) = inputBuffer.GetByFrameId(noDelayInputFrameId);
+                if (ok && null != noDelayIfd) {
+                    for (int i = 0; i < roomCapacity; i++) {
+                        if (i + 1 == selfPlayerJoinIndex) continue;
+                        ulong joinIndexMask = (1u << i);
+                        if (0 < (noDelayIfd.ConfirmedList & joinIndexMask)) continue;
+                        var currCharacterDownsync = currRenderFrame.PlayersArr[i];
+                        var thatCharacterInNextFrame = nextRenderFramePlayers[i];
+                        var chConfig = characters[currCharacterDownsync.SpeciesId];
+
+                        bool currNotDashing = isNotDashing(currCharacterDownsync);
+                        bool currEffInAir = isEffInAir(currCharacterDownsync, currNotDashing);
+                        bool nextNotDashing = isNotDashing(thatCharacterInNextFrame);
+                        bool nextEffInAir = isEffInAir(thatCharacterInNextFrame, currNotDashing);
+                        var (patternId, jumpedOrNot, slipJumpedOrNot, effDx, effDy, slowDownToAvoidOverlap) = deriveNpcOpPattern(currCharacterDownsync, thatCharacterInNextFrame, currEffInAir, currNotDashing, nextNotDashing, nextEffInAir, currRenderFrame, roomCapacity, chConfig, dynamicRectangleColliders, colliderCnt: colliderCnt, collisionSys, collision, ref overlapResult, ref primaryOverlapResult, decodedInputHolder, tempInputHolder, logger);
+                        noDelayIfd.InputList[i] = EncodeInput(decodedInputHolder);
+                        noDelayIfd.ConfirmedList |= joinIndexMask;
+                    }
+                }
+            }
+
             _processNpcInputs(currRenderFrame, roomCapacity, currNpcI, nextRenderFrameNpcs, nextRenderFrameBullets, dynamicRectangleColliders, colliderCnt, collision, collisionSys, ref overlapResult, mvBlockerOverlapResult: ref primaryOverlapResult, decodedInputHolder, tempInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, logger);
 
             _calcAllCharactersCollisions(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, nextRenderFrameTraps, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, triggerEditorIdToTiledConfig, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
@@ -2506,7 +2531,7 @@ namespace shared {
                         confirmedBattleResult.WinnerJoinIndex = targetTrigger.OffenderJoinIndex;
                         confirmedBattleResult.WinnerBulletTeamId = targetTrigger.OffenderBulletTeamId;
                     } else {
-                        var (rdfAllConfirmed, delayedInputFrameId) = isRdfAllConfirmed(currRenderFrame.Id, inputBuffer, roomCapacity);
+                        var (rdfAllConfirmed, _) = isRdfAllConfirmed(currRenderFrame.Id, inputBuffer, roomCapacity);
                         if (rdfAllConfirmed) {
                             confirmedBattleResult.WinnerJoinIndex = targetTrigger.OffenderJoinIndex;
                             confirmedBattleResult.WinnerBulletTeamId = targetTrigger.OffenderBulletTeamId;

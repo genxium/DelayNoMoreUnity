@@ -293,8 +293,8 @@ message WsReq {
     int32 authKey = 6;
     repeated InputFrameUpsync inputFrameUpsyncBatch = 7;
     RoomDownsyncFrame selfParsedRdf = 8;
-    int32 spaceOffsetX = 9; 
-    int32 spaceOffsetY = 10; 
+    int32 collisionSpaceHalfWidth = 9; 
+    int32 collisionSpaceHalfHeight = 10; 
     int32 battleDurationSeconds = 11;
     repeated SerializableConvexPolygon serializedBarrierPolygons = 12;
     repeated SerializedCompletelyStaticPatrolCueCollider serializedStaticPatrolCues = 13;

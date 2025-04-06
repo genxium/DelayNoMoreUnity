@@ -961,7 +961,7 @@ namespace shared {
             }
             renderBuffer.Clear(); // Then use it by "DryPut"
 
-            int softPushbacksCap = 16;
+            int softPushbacksCap = 8;
             if (frameLogEnabled) {
                 pushbackFrameLogBuffer = new FrameRingBuffer<RdfPushbackFrameLog>(renderBufferSize);
                 for (int i = 0; i < renderBufferSize; i++) {
@@ -1096,7 +1096,7 @@ namespace shared {
             collisionHolder.ClearDeep();
         }
 
-        public static void refreshColliders(RoomDownsyncFrame startRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerEditorIdToLocalId serializedTriggerEditorIdToLocalId, int spaceOffsetX, int spaceOffsetY, ref CollisionSpace collisionSys, ref int maxTouchingCellsCnt, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, out int staticCollidersCnt, ref Collision collisionHolder, ref FrameRingBuffer<Collider> residueCollided, ref List<Collider> completelyStaticTrapColliders, ref Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref Dictionary<int, int> triggerEditorIdToLocalId, ref Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToConfigFromTiled) {
+        public static void refreshColliders(RoomDownsyncFrame startRdf, RepeatedField<SerializableConvexPolygon> serializedBarrierPolygons, RepeatedField<SerializedCompletelyStaticPatrolCueCollider> serializedStaticPatrolCues, RepeatedField<SerializedCompletelyStaticTrapCollider> serializedCompletelyStaticTraps, RepeatedField<SerializedCompletelyStaticTriggerCollider> serializedStaticTriggers, SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs, SerializedTriggerEditorIdToLocalId serializedTriggerEditorIdToLocalId, int collisionSpaceHalfWidth, int collisionSpaceHalfHeight, ref CollisionSpace collisionSys, ref int maxTouchingCellsCnt, ref Collider[] dynamicRectangleColliders, ref Collider[] staticColliders, out int staticCollidersCnt, ref Collision collisionHolder, ref FrameRingBuffer<Collider> residueCollided, ref List<Collider> completelyStaticTrapColliders, ref Dictionary<int, List<TrapColliderAttr>> trapLocalIdToColliderAttrs, ref Dictionary<int, int> triggerEditorIdToLocalId, ref Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToConfigFromTiled) {
             /*
             [WARNING] 
     
@@ -1107,7 +1107,7 @@ namespace shared {
 
             int cellWidth = 64;
             int cellHeight = 128; // To avoid dynamic trap as a standing point to slip when moving down along with the character
-            collisionSys = new CollisionSpace((spaceOffsetX << 1), (spaceOffsetY << 1), cellWidth, cellHeight); // spaceOffsetX, spaceOffsetY might change for each map, so not reusing memory here due to similar reason given above for "Collider"
+            collisionSys = new CollisionSpace((collisionSpaceHalfWidth << 1), (collisionSpaceHalfHeight << 1), cellWidth, cellHeight); // spaceOffsetX, spaceOffsetY might change for each map, so not reusing memory here due to similar reason given above for "Collider"
 
             collisionHolder = new Collision();
 
@@ -1117,7 +1117,7 @@ namespace shared {
             int dynamicRectangleCollidersCap = 192;
             dynamicRectangleColliders = new Collider[dynamicRectangleCollidersCap];
 
-            maxTouchingCellsCnt = (((spaceOffsetX << 1) + cellWidth) / cellWidth) * (((spaceOffsetY << 1) + cellHeight) / cellHeight) + 1;
+            maxTouchingCellsCnt = (((collisionSpaceHalfWidth << 1) + cellWidth) / cellWidth) * (((collisionSpaceHalfHeight << 1) + cellHeight) / cellHeight) + 1;
             for (int i = 0; i < dynamicRectangleColliders.Length; i++) {
                 var srcPolygon = NewRectPolygon(0, 0, 0, 0, 0, 0, 0, 0);
                 dynamicRectangleColliders[i] = NewConvexPolygonCollider(srcPolygon, 0, 0, maxTouchingCellsCnt, null);

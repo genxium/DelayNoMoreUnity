@@ -29,8 +29,8 @@ namespace shared {
             if (null == Space) {
                 throw new ArgumentException("Collider Space is null when calling `BoundsToSpace`!");
             }
-            var (cx, cy) = Space.WorldToSpace(X + Shape.MinPtX + dx, Y + Shape.MinPtY + dy);
-            var (ex, ey) = Space.WorldToSpace(X + Shape.MaxPtX + dx, Y + Shape.MaxPtY + dy);
+            var (cx, cy) = Space.CollisionSpaceToCellIndex(X + Shape.MinPtX + dx, Y + Shape.MinPtY + dy);
+            var (ex, ey) = Space.CollisionSpaceToCellIndex(X + Shape.MaxPtX + dx, Y + Shape.MaxPtY + dy);
             return (cx, cy, ex, ey);
         }
 

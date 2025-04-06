@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="160" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="200" nextobjectid="785">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="160" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="201" nextobjectid="786">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="120"/>
@@ -16,7 +16,7 @@
  <tileset firstgid="1087" source="../decoration/Statics/DW_bg_1.tsx"/>
  <tileset firstgid="1591" source="../traps/machinery/traps_machinery.tsx"/>
  <tileset firstgid="1598" source="../towers/towers.tsx"/>
- <tileset firstgid="1621" source="../shared_comps/CastlePrisonProps16.tsx"/>
+ <tileset firstgid="1622" source="../shared_comps/CastlePrisonProps16.tsx"/>
  <layer id="197" name="Background3" width="160" height="33" opacity="0.5" parallaxx="0.6">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -38,7 +38,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmU1SwkAQhZNgeQcRLyHi2iOot1CvYEEj6sILROLPJfBny9qFqFdwIeolfBMn5ZQLTYahkgnvq3rVvaAq3T2PTg0EASGEEEIIIYQQQgghhBBCCCGEEOIPR1EQDKKyq/ibY9R3Ap1WvM5F4TEMggn0ZMRni1zpAmd6CV3l1K5DD2wXeO51lNYqqDkVepCJRZ7Fl9BdH4vGG2Y3hd6N+GGRK93gXG+hu5w6cOi/vQLPvY/SWgU1p0IPMrXIs/hJ/9mDswihyIgNi1xpyaN3GmqVhhZ6kNAiz6JPfVeNFcyuCa0asWWRK615dA6oVVpa6EGaFnkWfeq7aqz/8tFrFGx1ENvQBpQ3V9r06BxQq3S00IO0C+SY0dj0oU99V5Eh5hdDXegB/iu7nqqDGY0xK8HMBLOTsuvxnZ723jnUd/xdVvfSHUMu77xlPRMzEsxKlAd79N/MDA3/JY7PSt1L9w25vPOW9czE8B/33+x09fs3nsP+qyN9/e6NtQfLrsd3YsN/rvdfHUkM/8X038xk+6/L/ZeLvt573H9u4P4rBvefW4ruv8Pl+ddUFuhN/vsM959b1L1Xou/fYfLsv0GN/Zent0T/7iL6Hjz3ompObPzvMcrhv7Ma+y9PbyPjfxC+fwkhhBBCCCHkhy9IdvI1
+   eJztmU1SwkAQhZNgeQcRLyHi2iOot1DPIDSKbjxAJP5cAn+2rF2IegUXol7CN3FSTrnQZBgqmfC+qlfdC6rS3fPo1EAQEEIIIYQQQgghhBBCCCGEEEIIIf5wFAXBcVR2FX8zQH0n0GnF61wUHsMgmEBPRny2yJUucKaX0FVO7Tr0wHaB515Haa2CmlOhB5lY5Fl8Cd31sWi8YXZT6N2IHxa50g3O9Ra6y6kDh/7bK/Dc+yitVVBzKvQgU4s8i5/0nz04ixCKjNiwyJWWPHqnoVZpaKEHCS3yLPrUd9VYweya0KoRWxa50ppH54BapaWFHqRpkWfRp76rxvovH71GwVYHsQ1tQHlzpU2PzgG1SkcLPUi7QI4ZjU0f+tR3FRlifjHUhR7gv7LrqTqY0RizEsxMMDspux7f6WnvnUN9x99ldS/dMeTyzlvWMzEjwaxEebBH/83M0PBf4vis1L1035DLO29Zz0wM/3H/zU5Xv3/jOey/OtLX795Ye7DsenwnNvznev/VkcTwX0z/zUy2/7rcf7no673H/ecG7r9icP+5pej+O1yef01lgd7kv89w/7lF3Xsl+v4dJs/+G9TYf3l6S/TvLqLvwXMvqubExv8eoxz+O6ux//L0NjL+B+H7lxBCCCGEEEJ++AKqAvI7
   </data>
  </layer>
  <layer id="194" name="Ground2" width="160" height="33">
@@ -46,7 +46,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmU1OwzAQheNEFI5AmgjOQGmPAOx6BGDXQ7DxLThWYckNCivEEjaMSSKljmlqe1z/dEb65LSJ3ZHz8jKuyyLLpkAFzCwpW+TP5X79+Ry4BsTxFbCE728JK5bNXP7NMcxtNvd8n8U1nd5q6XPpFw45cMiFi+Nz4I35v3+xA3Mo5jKk+xys/mT/+yL9WQNzOPC/kPRXS74zxqzHPtfrIPsfvX/tWRbu/U/1bjbV32wElRZV2jRB9r9VAPcvdlaB13+6/ucS8j98DuF/uoSqP2z/+86z7KGIm58c3/9i1l9M9d8d4DKeJm7HF3FjOQdU//mr/0h/VP+R/9lFDP6nS6j6U/mfTe30mID+7i3nILX6zyUq/ws5DqE/2wjd/wLKS7n/QWEen4z2P1L2vxiC1r92618Ku6D1L/mfzwi9/gtJf+R/+JHa+pfqv7iC6j+q/3wG1X/kfz6D6j+q/3xGavWfS8j/8CN0/1tIvmOiG6z1CPkffrjwP521hqpvl8eC/C/5CN3/QtIf+R9+HEP9h6Vf8j/8cOF/tuOEqj/yP/xw4X+p6k/lfy9sm3XbvrLhOROwxzMBfptDy9dNO5qrTv7kf3b+98622bTtBxueG+Mkz7IJ8IzABXCJNJbgFDjLd+e/2fHdf/ORmv+p9uJc+Z94bvN8G9a2RT48Z4LpeJ3+MHKA3+bQcta0o7nq5N/No0v/s9n/lf//M9n/1emvs/8rnttp3lABtXRc7Und64sxXtXTn06fHflxaDnkwvvHqlx18+/mEXP/Vx6nry2d/lj//5H/Hbf/HfL9q7rWVf1H/ufG/1zoT0eTff39AoG+IWo=
+   eJztmU1OwzAQheNEFI5AmgjOQGmPAOx6BGDXS7DwLThWYckNCivEEjaMSSKljmlqe1z/dEb65LSJ3ZHz8jKuyyLLpkAFzCwpW+TP5X79+Ry4BsTxFbCE728JK5bNXP7NMcxtNvd8n8U1nd5q6XPpFw45cMiFi+Nz4I35v3+xA3Mo5jKk+xys/mT/+yL9WQNzOPC/kPRXS74zxqzHPtfrIPsfvX/tWRbu/U/1bjbV32wElRZV2jRB9r9VAPcvdlaB13+6/ucS8j98DuF/uoSqP2z/+86z7KGIm58c3/9i1l9M9d8d4DKeJm7HF3FjOQdU//mr/0h/VP+R/9lFDP6nS6j6U/mfTe30mID+7i3nILX6zyUq/ws5DqE/2wjd/wLKS7n/QWEen4z2P1L2vxiC1r92618Ku6D1L/mfzwi9/gtJf+R/+JHa+pfqv7iC6j+q/3wG1X/kfz6D6j+q/3xGavWfS8j/8CN0/1tIvmOiG6z1CPkffrjwP521hqpvl8eC/C/5CN3/QtIf+R9+HEP9h6Vf8j/8cOF/tuOEqj/yP/xw4X+p6k/lfy9sm3XbvrLhOROwxzMBfptDy9dNO5qrTv7kf3b+98622bTtBxueG+Mkz7IJ8IzABXCJNJbgFDjLd+e/2fHdf/ORmv+p9uJc+Z94bvN8G9a2RT48Z4LpeJ3+MHKA3+bQcta0o7nq5N/No0v/s9n/lf//M9n/1emvs/8rnttp3lABtXRc7Und64sxXtXTn06fHflxaDnkwvvHqlx18+/mEXP/Vx6nry2d/lj//5H/Hbf/HfL9q7rWVf1H/ufG/1zoT0eTff39AqehIW8=
   </data>
  </layer>
  <layer id="198" name="Ground1" width="160" height="33">
@@ -54,7 +54,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1MEJgEAQA8AF4WrQMrSn049ag6W7XSx6M5B/HiERAAAAAAAAALV6i9gzR6tuwojO3N2Vue0PAAAAAAAAAAAAgJ9YpnjmTHUPxrTl9lb7o4j/o9IX/u8F98EH3g==
+   eJzt1MEJgEAQA8AF4WrQMrSo04/agqW7XSx6M5B/HiERAAAAAAAAALV6i9gzR6tuwojO3N2Vue0PAAAAAAAAAAAAgJ9YpnjmTHUPxrTl9lb7o4j/o9IX/u8FMvcH5A==
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -154,59 +154,9 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="4" name="NpcStartingPos">
-  <object id="644" gid="1603" x="1536" y="168" width="32" height="23">
-   <properties>
-    <property name="killedToDropConsumableSpeciesId" value="3"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="645" gid="2147485251" x="1008" y="168" width="32" height="23">
-   <properties>
-    <property name="killedToDropConsumableSpeciesId" value="3"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="647" gid="1602" x="1440" y="168" width="32" height="23">
-   <properties>
-    <property name="killedToDropConsumableSpeciesId" value="2"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="648" gid="2147485250" x="1088" y="168" width="32" height="23">
-   <properties>
-    <property name="killedToDropConsumableSpeciesId" value="2"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="692" gid="1604" x="704" y="222" width="63" height="48">
-   <properties>
-    <property name="dirX" value="+2"/>
-    <property name="subscriptionId" value="7"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="693" gid="1604" x="656" y="224" width="63" height="48">
-   <properties>
-    <property name="dirX" value="+2"/>
-    <property name="subscriptionId" value="7"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="697" gid="2147485252" x="1792" y="222" width="63" height="48">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="subscriptionId" value="8"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="698" gid="2147485252" x="1840" y="222" width="63" height="48">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="subscriptionId" value="8"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
+ <objectgroup id="4" name="NpcStartingPos"/>
+ <objectgroup id="200" name="GrandCameraBounds">
+  <object id="785" x="528" y="0" width="1520" height="528"/>
  </objectgroup>
  <layer id="64" name="Slopes" width="160" height="33">
   <properties>
@@ -261,7 +211,7 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="704" name="Refractory" x="1248" y="384" width="32" height="144">
+  <object id="704" name="Refractory" x="1248" y="392" width="32" height="136">
    <properties>
     <property name="collisionTypeMask" value="32773"/>
     <property name="providesHardPushback" value="1"/>

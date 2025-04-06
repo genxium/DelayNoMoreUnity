@@ -62,6 +62,14 @@ public class WsSessionManager {
     private uint speciesId = Battle.SPECIES_NONE_CH;
     private int roomId = Battle.ROOM_ID_NONE;
     private bool forReentry = false;
+    private bool inArenaPracticeMode = false;
+    public bool getInArenaPracticeMode() {
+        return inArenaPracticeMode;
+    }
+
+    public void setInArenaPracticeMode(bool val) {
+        inArenaPracticeMode = val;
+    }
 
     public string GetPlayerId() {
         return playerId;

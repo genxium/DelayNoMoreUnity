@@ -25,10 +25,10 @@
  <tileset firstgid="11926" source="../shared_comps/bkg-shrinked/gh_bg_4.tsx"/>
  <tileset firstgid="13270" source="../shared_comps/bkg-shrinked/gh_bg_5.tsx"/>
  <tileset firstgid="14614" source="../towers/towers.tsx"/>
- <tileset firstgid="14637" source="../shared_comps/CastlePrisonProps16.tsx"/>
- <tileset firstgid="14742" source="../decoration/Swayable/Campfire.tsx"/>
- <tileset firstgid="14782" source="../decoration/Swayable/CampfireWithFood.tsx"/>
- <tileset firstgid="14822" source="../decoration/Swayable/GhWater.tsx"/>
+ <tileset firstgid="14638" source="../shared_comps/CastlePrisonProps16.tsx"/>
+ <tileset firstgid="14743" source="../decoration/Swayable/Campfire.tsx"/>
+ <tileset firstgid="14783" source="../decoration/Swayable/CampfireWithFood.tsx"/>
+ <tileset firstgid="14823" source="../decoration/Swayable/GhWater.tsx"/>
  <layer id="45" name="Background1" width="100" height="23">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -82,7 +82,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztzjEBAAAIA6DVsqh5jeEOSEACAAAAAAAANNr5HgAAjQ65LQDQ
+   eJztzjEBAAAIA6DVMql1jeEOSEACAAAAAAAANNr5HgAAjQ7BUQDR
   </data>
  </layer>
  <layer id="20" name="Ground1" width="100" height="23">
@@ -132,7 +132,7 @@
   <object id="586" name="BossAwaker" x="1104" y="112" width="32" height="176">
    <properties>
     <property name="forceCtrlCmd" value="0"/>
-    <property name="forceCtrlRdfCount" value="90"/>
+    <property name="forceCtrlRdfCount" value="45"/>
     <property name="id" value="4"/>
     <property name="quota" value="1"/>
     <property name="recoveryFrames" value="65535"/>
