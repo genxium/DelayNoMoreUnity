@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="160" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="200" nextobjectid="787">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="160" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="201" nextobjectid="788">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="240"/>
@@ -227,6 +227,9 @@
     <property name="subscribesToIdList" value="6"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup id="200" name="GrandCameraBounds">
+  <object id="787" x="528" y="0" width="1520" height="528"/>
  </objectgroup>
  <objectgroup id="183" name="Pickable">
   <object id="594" gid="209" x="768" y="222" width="32" height="32">

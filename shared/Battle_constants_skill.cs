@@ -1716,16 +1716,77 @@ namespace shared {
         .AddHit(HeatBeamBulletEnderHit)
         ;
 
-        public static Skill RidleyMelee2 = new Skill{
-            Id = 39,
-               RecoveryFrames = 40,
-               RecoveryFramesOnBlock = 40,
-               RecoveryFramesOnHit = 40,
+        public static Skill RidleyMelee3 = new Skill{
+            Id = 40,
+               RecoveryFrames = 50,
+               RecoveryFramesOnBlock = 50,
+               RecoveryFramesOnHit = 50,
                TriggerType = SkillTriggerType.RisingEdge,
-               BoundChState = Atk3
+               BoundChState = Atk4
         }
         .AddHit(
                 new BulletConfig {
+                StartupFrames = 8,
+                StartupInvinsibleFrames = 4,
+                ActiveFrames = 18,
+                HitStunFrames = MAX_INT,
+                BlockStunFrames = 9,
+                Damage = 13,
+                PushbackVelX = 0,
+                PushbackVelY = 0,
+                SelfLockVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                SelfLockVelY = (int)(+4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                HitboxOffsetX = (int)(22*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxOffsetY = (int)(13*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                BlowUp = false,
+                SpeciesId = 1,
+                ExplosionSpeciesId = 1,
+                ExplosionFrames = 25,
+                BType = BulletType.Melee,
+                MhType = MultiHitType.FromEmission,
+                DirX = 1,
+                DirY = 0,
+                Hardness = 8,
+                CharacterEmitSfxName = "SlashEmitSpd3",
+                ExplosionSfxName = "Melee_Explosion2",
+                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                }
+        )
+            .AddHit(
+                    new BulletConfig {
+                    StartupFrames = 27,
+                    ActiveFrames = 18,
+                    HitStunFrames = MAX_INT,
+                    HitInvinsibleFrames = 60,
+                    BlockStunFrames = 9,
+                    Damage = 30,
+                    PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    PushbackVelY = (int)(-4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SelfLockVelX = 0,
+                    SelfLockVelY = (int)(-6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    SelfLockVelYWhenFlying = NO_LOCK_VEL,
+                    HitboxOffsetX = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxOffsetY = (int)(-13*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeX = (int)(52*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    HitboxSizeY = (int)(78*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                    BlowUp = true,
+                    SpeciesId = 3,
+                    ExplosionSpeciesId = 3,
+                    ExplosionFrames = 25,
+                    BType = BulletType.Melee,
+                    DirX = 1,
+                    DirY = 0,
+                    Hardness = 8,
+                    CharacterEmitSfxName = "SlashEmitSpd3",
+                    ExplosionSfxName = "Melee_Explosion2",
+                    CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
+                    }
+        );
+
+        public static BulletConfig RidleyMelee2Hit1 = new BulletConfig {
                 StartupFrames = 7,
                 ActiveFrames = 22,
                 HitStunFrames = 23,
@@ -1736,10 +1797,10 @@ namespace shared {
                 SelfLockVelX = (int)(0.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                 SelfLockVelY = NO_LOCK_VEL,
                 SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                HitboxOffsetX = (int)(15*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                HitboxOffsetY = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                HitboxSizeX = (int)(32*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxOffsetX = (int)(8*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+                HitboxSizeY = (int)(42*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                 SpeciesId = 1,
                 ExplosionSpeciesId = 1,
                 ExplosionFrames = 25,
@@ -1753,8 +1814,17 @@ namespace shared {
                 CharacterEmitSfxName = "SlashEmitSpd2",
                 ExplosionSfxName = "Melee_Explosion2",
                 CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                }.UpsertCancelTransit(PATTERN_B, 40)
-        );
+                }.UpsertCancelTransit(PATTERN_B, RidleyMelee3.Id);
+
+        public static Skill RidleyMelee2 = new Skill{
+            Id = 39,
+               RecoveryFrames = 40,
+               RecoveryFramesOnBlock = 40,
+               RecoveryFramesOnHit = 40,
+               TriggerType = SkillTriggerType.RisingEdge,
+               BoundChState = Atk3
+        }
+        .AddHit(RidleyMelee2Hit1);
 
         public static BulletConfig RidleyMeleeBulletAirHit1 = new BulletConfig {
             StartupFrames = 6,
@@ -1792,21 +1862,21 @@ namespace shared {
         }
         .AddHit(RidleyMeleeBulletAirHit1);
 
-        public static BulletConfig RidleyMeleeBulletHit1 = new BulletConfig {
+        public static BulletConfig RidleyMelee1Hit1 = new BulletConfig {
             StartupFrames = 7,
             ActiveFrames = 24,
             HitStunFrames = 8,
             BlockStunFrames = 9,
-            Damage = 18,
-            PushbackVelX = (int)(-0.1f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            Damage = 15,
+            PushbackVelX = (int)(-0.05f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = NO_LOCK_VEL,
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
             SelfLockVelYWhenFlying = NO_LOCK_VEL,
             HitboxOffsetX = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(12*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            HitboxSizeY = (int)(16*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxSizeY = (int)(42*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             CancellableStFrame = 16,
             CancellableEdFrame = 32,
             SpeciesId = 2,
@@ -1830,7 +1900,7 @@ namespace shared {
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk2
         }
-        .AddHit(RidleyMeleeBulletHit1);
+        .AddHit(RidleyMelee1Hit1);
 
         public static BulletConfig BoarMelee1PrimerBullet = new BulletConfig {
             StartupFrames = 40,
@@ -5629,75 +5699,7 @@ namespace shared {
 
                     new KeyValuePair<uint, Skill>(RidleyMelee2.Id, RidleyMelee2),
 
-                    new KeyValuePair<uint, Skill>(40, new Skill{
-                            RecoveryFrames = 50,
-                            RecoveryFramesOnBlock = 50,
-                            RecoveryFramesOnHit = 50,
-                            TriggerType = SkillTriggerType.RisingEdge,
-                            BoundChState = Atk4
-                            }
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 8,
-                                StartupInvinsibleFrames = 4,
-                                ActiveFrames = 18,
-                                HitStunFrames = MAX_INT,
-                                BlockStunFrames = 9,
-                                Damage = 13,
-                                PushbackVelX = 0,
-                                PushbackVelY = 0,
-                                SelfLockVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelY = (int)(+4.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(22*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(13*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(48*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                BlowUp = false,
-                                SpeciesId = 1,
-                                ExplosionSpeciesId = 1,
-                                ExplosionFrames = 25,
-                                BType = BulletType.Melee,
-                                MhType = MultiHitType.FromEmission,
-                                DirX = 1,
-                                DirY = 0,
-                                Hardness = 8,
-                                CharacterEmitSfxName = "SlashEmitSpd3",
-                                ExplosionSfxName = "Melee_Explosion2",
-                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                }
-                )
-                            .AddHit(
-                                new BulletConfig {
-                                StartupFrames = 27,
-                                ActiveFrames = 18,
-                                HitStunFrames = MAX_INT,
-                                HitInvinsibleFrames = 60,
-                                BlockStunFrames = 9,
-                                Damage = 30,
-                                PushbackVelX = (int)(0.5f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                PushbackVelY = (int)(-4f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelX = 0,
-                                SelfLockVelY = (int)(-6f*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                SelfLockVelYWhenFlying = NO_LOCK_VEL,
-                                HitboxOffsetX = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxOffsetY = (int)(-13*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeX = (int)(52*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                HitboxSizeY = (int)(78*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-                                BlowUp = true,
-                                SpeciesId = 3,
-                                ExplosionSpeciesId = 3,
-                                ExplosionFrames = 25,
-                                BType = BulletType.Melee,
-                                DirX = 1,
-                                DirY = 0,
-                                Hardness = 8,
-                                CharacterEmitSfxName = "SlashEmitSpd3",
-                                ExplosionSfxName = "Melee_Explosion2",
-                                CollisionTypeMask = COLLISION_MELEE_BULLET_INDEX_PREFIX
-                                }
-                            )
-                ),
+                    new KeyValuePair<uint, Skill>(40, RidleyMelee3),
 
                     new KeyValuePair<uint, Skill>(41, BoarWarriorMelee1PrimerSkill),
 

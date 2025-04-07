@@ -57,6 +57,10 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
                 enterAllSettings();
                 gameObject.SetActive(false);
                 break;
+            case 3:
+                enterArenaPractice();
+                gameObject.SetActive(false);
+                break;
             default:
             break;
         }
@@ -99,6 +103,11 @@ public class ModeSelectGroup : AbstractSingleSelectGroup {
             onLoginRequired(onLoggedInPerAdhocRequirement);
         }
     }
+
+    public void enterArenaPractice() {
+        WsSessionManager.Instance.setInArenaPracticeMode(true);
+        SceneManager.LoadScene("OnlineMapScene", LoadSceneMode.Single);
+    } 
 
     public override void OnBtnConfirm(InputAction.CallbackContext context) {
         bool rising = context.ReadValueAsButton();

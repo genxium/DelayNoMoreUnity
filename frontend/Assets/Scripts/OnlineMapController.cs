@@ -340,12 +340,61 @@ public class OnlineMapController : AbstractMapController {
     }
 
     public void onCharacterSelectGoAction(uint speciesId) {
-        Debug.LogFormat("Executing OnlineMapController.onCharacterSelectGoAction with selectedSpeciesId={0}", speciesId);
+        bool inArenaPracticeMode = WsSessionManager.Instance.getInArenaPracticeMode();
+        Debug.Log($"Executing OnlineMapController.onCharacterSelectGoAction with selectedSpeciesId={speciesId}, inArenaPracticeMode={inArenaPracticeMode}");
         if (ROOM_STATE_IMPOSSIBLE != battleState && ROOM_STATE_STOPPED != battleState) {
             Debug.LogWarningFormat("OnlineMapController.onCharacterSelectGoAction having invalid battleState={0}, calling `onBattleStopped`", battleState);
             onBattleStopped();
             showCharacterSelection();
         }
+        if (inArenaPracticeMode) {
+            selfPlayerInfo = new PlayerMetaInfo();
+            roomCapacity = 2;
+            selfPlayerInfo.JoinIndex = 1;
+            selfPlayerInfo.SpeciesId = speciesId;
+            uint[] speciesIdList = new uint[roomCapacity];
+            speciesIdList[selfPlayerInfo.JoinIndex - 1] = speciesId;
+            speciesIdList[1] = SPECIES_BLADEGIRL;
+            //resetCurrentMatch("FlatVersus");
+            resetCurrentMatch("FlatVersusTraining");
+            calcCameraCaps();
+            preallocateBattleDynamicsHolder();
+            preallocateFrontendOnlyHolders();
+            preallocateSfxNodes();
+            preallocatePixelVfxNodes();
+            preallocateNpcNodes();
+         
+            var (thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, battleDurationSeconds) = mockStartRdf(speciesIdList);
+            renderBuffer.Put(thatStartRdf);
+            battleDurationFrames = battleDurationSeconds * BATTLE_DYNAMICS_FPS;
+            refreshColliders(thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, (int)collisionSpaceHalfWidth, (int)collisionSpaceHalfHeight, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out int staticCollidersCnt, ref collisionHolder, ref residueCollided, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerEditorIdToLocalId, ref triggerEditorIdToConfigFromTiled);
+            networkInfoPanel.gameObject.SetActive(false);
+            playerWaitingPanel.gameObject.SetActive(false);
+            characterSelectPanel.gameObject.SetActive(false);
+            battleState = ROOM_STATE_PREPARE;
+            var peerChd = thatStartRdf.PlayersArr[1];
+            peerChd.BulletTeamId = 2;
+            peerChd.GoalAsNpc = NpcGoal.Npatrol;
+            peerChd.DirX = -2;
+            patchStartRdf(thatStartRdf, speciesIdList);
+            cameraTrack(thatStartRdf, null, false);
+            applyRoomDownsyncFrameDynamics(thatStartRdf, null);
+            readyGoPanel.playReadyAnim(() => { }, () => {
+                var (ok1, startRdf) = renderBuffer.GetByFrameId(DOWNSYNC_MSG_ACT_BATTLE_START);
+                if (ROOM_STATE_IN_BATTLE > battleState) {
+                    // Making anim respect battleState to avoid wrong order of DOTWeen async execution  
+                    readyGoPanel.playGoAnim();
+                } else {
+                    readyGoPanel.hideReady();
+                    readyGoPanel.hideGo();
+                }
+                bgmSource.Play();
+                onRoomDownsyncFrame(startRdf, null);
+                enableBattleInput(true);
+            });
+            return;
+        }
+
         // [WARNING] Deliberately NOT declaring this method as "async" to make tests related to `<proj-root>/GOROUTINE_TO_ASYNC_TASK.md` more meaningful.
         battleState = ROOM_STATE_IDLE;
 
@@ -560,7 +609,7 @@ public class OnlineMapController : AbstractMapController {
             */
 
             // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
-            if (useFreezingLockStep && !shouldLockStep) {
+            if (!WsSessionManager.Instance.getInArenaPracticeMode() && useFreezingLockStep && !shouldLockStep) {
                 var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, (inputFrameUpsyncDelayTolerance << INPUT_SCALE_FRAMES), freezeIfdLagThresHold, disconnectedPeerJoinIndices);
 
                 shouldLockStep = (
@@ -603,7 +652,8 @@ public class OnlineMapController : AbstractMapController {
             }
 
             doUpdate();
-            {
+
+            if (!WsSessionManager.Instance.getInArenaPracticeMode()) {
                 var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), slowDownIfdLagThreshold, disconnectedPeerJoinIndices);
                 shouldLockStep = tooFastOrNot;
 

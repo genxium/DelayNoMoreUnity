@@ -230,7 +230,7 @@ namespace shared {
                             decodedInputHolder.BtnDLevel = 0;
                             decodedInputHolder.BtnELevel = 0;
                         } else {
-                            s3 = frontOpponentReachableByFireball(currCharacterDownsync, chConfig, aCollider, oppoChCollider, oppoChColliderDx, oppoChColliderDy, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop);
+                            s3 = frontOpponentReachableByFireball(currCharacterDownsync, chConfig, aCollider, oppoChCollider, oppoChColliderDx, oppoChColliderDy, absColliderDx, absColliderDy, opponentBoxLeft, opponentBoxRight, opponentBoxBottom, opponentBoxTop);
                             visionReaction = s3;
                             if (TARGET_CH_REACTION_USE_FIREBALL == s3) {
                                 decodedInputHolder.Dx = 0;
@@ -470,7 +470,7 @@ namespace shared {
                         decodedInputHolder.Dx = 0;
                     }
                     decodedInputHolder.Dy = 0;
-                    if (SPECIES_RIDERGUARD_RED != chConfig.SpeciesId && SPECIES_DEMON_FIRE_SLIME != chConfig.SpeciesId && !chConfig.HasDef1 && 0 < chConfig.JumpingInitVelY) {
+                    if (SPECIES_BOARWARRIOR != chConfig.SpeciesId && SPECIES_RIDERGUARD_RED != chConfig.SpeciesId && SPECIES_DEMON_FIRE_SLIME != chConfig.SpeciesId && !chConfig.HasDef1 && 0 < chConfig.JumpingInitVelY) {
                         visionReaction = TARGET_CH_REACTION_JUMP_TOWARDS_CH;
                     } else if (!effInAir && canJumpWithinInertia && chConfig.HasDef1) {
                         decodedInputHolder.Dx = 0;
@@ -588,9 +588,8 @@ namespace shared {
             InventorySlot? targetSlot = null;
             switch (currCharacterDownsync.SpeciesId) {
                 case SPECIES_BLADEGIRL:
-                    if (notRecovered) return TARGET_CH_REACTION_UNKNOWN;
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * (BasicBladeHit1.HitboxOffsetX << 1), currCharacterDownsync.VirtualGridY + BasicBladeHit1.HitboxOffsetY);
-                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BasicBladeHit1.HitboxSizeX), (BasicBladeHit1.HitboxSizeY >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * (SuperBladeHit1.HitboxOffsetX << 1), currCharacterDownsync.VirtualGridY + SuperBladeHit1.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((SuperBladeHit1.HitboxSizeX), (SuperBladeHit1.HitboxSizeY >> 1));
                     targetSlot = (currCharacterDownsync.Inventory.Slots[0]);
                     if (0 >= targetSlot.Quota) return TARGET_CH_REACTION_NOT_ENOUGH_MP;
                     return TARGET_CH_REACTION_USE_SLOT_C;
@@ -821,8 +820,20 @@ namespace shared {
             bool closeEnough;
             switch (currCharacterDownsync.SpeciesId) {
                 case SPECIES_BLADEGIRL:
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * BasicBladeHit1.HitboxOffsetX, currCharacterDownsync.VirtualGridY + BasicBladeHit1.HitboxOffsetY);
-                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BasicBladeHit1.HitboxSizeX >> 1), (BasicBladeHit1.HitboxSizeY >> 1));
+                    switch (currCharacterDownsync.CharacterState) {
+                        case Atk1:
+                            (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * BasicBladeHit2.HitboxOffsetX, currCharacterDownsync.VirtualGridY + BasicBladeHit2.HitboxOffsetY);
+                            (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BasicBladeHit2.HitboxSizeX >> 1), (BasicBladeHit2.HitboxSizeY >> 1));
+                        break;
+                        case Atk2:
+                            (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * BasicBladeHit3.HitboxOffsetX, currCharacterDownsync.VirtualGridY + BasicBladeHit3.HitboxOffsetY);
+                            (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BasicBladeHit3.HitboxSizeX >> 1), (BasicBladeHit3.HitboxSizeY >> 1));
+                        break;
+                        default:
+                            (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * BasicBladeHit1.HitboxOffsetX, currCharacterDownsync.VirtualGridY + BasicBladeHit1.HitboxOffsetY);
+                            (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((BasicBladeHit1.HitboxSizeX >> 1), (BasicBladeHit1.HitboxSizeY >> 1));
+                        break;
+                    }
                     break;
                 case SPECIES_LIGHTGUARD_RED:
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * LightGuardMelee1PrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + LightGuardMelee1PrimerBullet.HitboxOffsetY);
@@ -880,8 +891,13 @@ namespace shared {
                         return TARGET_CH_REACTION_FLEE_OPPO;
                     }
                 case SPECIES_DARKBEAMTOWER:
-                    if (currCharacterDownsync.Mp < DarkTowerPrimerSkill.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;         
-                    return TARGET_CH_REACTION_USE_MELEE;
+                    if (currCharacterDownsync.Mp < DarkTowerLowerSkill.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;
+                    closeEnough = (0 > colliderDy || 0.6f * aCollider.H < aCollider.Y + aCollider.H - opponentBoxTop) && (absColliderDx < 5.0f * aCollider.W); // A special case
+                    if (closeEnough) {
+                        return TARGET_CH_REACTION_USE_FIREBALL;
+                    } else {
+                        return TARGET_CH_REACTION_USE_MELEE;
+                    }
                 case SPECIES_STONE_GOLEM:
                     if (currCharacterDownsync.Mp < StoneSwordSkill.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;
                     closeEnough = (0 < colliderDy && absColliderDy < 1.2f * aCollider.H) && (absColliderDx < 5.0f * aCollider.W); // A special case
@@ -898,8 +914,8 @@ namespace shared {
                     break;
                 case SPECIES_RIDLEYDRAKE:
                     if (effInAir && (IN_AIR_DASH_GRACE_PERIOD_RDF_CNT << 1) > currCharacterDownsync.FramesInChState) return TARGET_CH_REACTION_FOLLOW;
-                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * RidleyMeleeBulletHit1.HitboxOffsetX, currCharacterDownsync.VirtualGridY + RidleyMeleeBulletHit1.HitboxOffsetY);
-                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((RidleyMeleeBulletHit1.HitboxSizeX >> 1), (RidleyMeleeBulletHit1.HitboxSizeY >> 1));
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * RidleyMelee1Hit1.HitboxOffsetX, currCharacterDownsync.VirtualGridY + RidleyMelee1Hit1.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((RidleyMelee1Hit1.HitboxSizeX >> 1), (RidleyMelee1Hit1.HitboxSizeY >> 1));
                     break;
                 default:
                     return TARGET_CH_REACTION_UNKNOWN;
@@ -925,7 +941,7 @@ namespace shared {
             }
         }
 
-        private static int frontOpponentReachableByFireball(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, Collider aCollider, Collider bCollider, float colliderDx, float colliderDy, float absColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop) {
+        private static int frontOpponentReachableByFireball(CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, Collider aCollider, Collider bCollider, float colliderDx, float colliderDy, float absColliderDx, float absColliderDy, float opponentBoxLeft, float opponentBoxRight, float opponentBoxBottom, float opponentBoxTop) {
             bool notRecovered = (0 < currCharacterDownsync.FramesToRecover);
             // Whenever there's an opponent in vision, it's deemed already close enough for fireball
             int xfac = (0 < colliderDx ? 1 : -1);
@@ -1067,7 +1083,7 @@ namespace shared {
                 case SPECIES_DARKBEAMTOWER:
                     if (notRecovered) return TARGET_CH_REACTION_UNKNOWN;
                     if (currCharacterDownsync.Mp < DarkTowerLowerSkill.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;         
-                    closeEnough = (0 > colliderDy && absColliderDy > 0.8f * aCollider.H); // A special case
+                    closeEnough = (0 > colliderDy || 0.6f * aCollider.H < aCollider.Y+aCollider.H-opponentBoxTop) && (absColliderDx < 5.0f * aCollider.W); // A special case
                     if (closeEnough) {
                         return TARGET_CH_REACTION_USE_FIREBALL;
                     } else {
@@ -1165,7 +1181,7 @@ namespace shared {
             if (!nonAttackingSet.Contains(currCharacterDownsync.CharacterState)) {
                 var (skillConfig, activeBulletConfig) = FindBulletConfig(currCharacterDownsync.ActiveSkillId, currCharacterDownsync.ActiveSkillHit);
                 if (null != activeBulletConfig && 0 <= activeBulletConfig.CancellableStFrame && 0 < activeBulletConfig.CancellableEdFrame) {
-                    hasCancellableCombo = (currCharacterDownsync.FramesInChState == ((activeBulletConfig.CancellableStFrame + activeBulletConfig.CancellableEdFrame) >> 1));
+                    hasCancellableCombo = (currCharacterDownsync.FramesInChState >= ((activeBulletConfig.CancellableStFrame + activeBulletConfig.CancellableEdFrame) >> 1));
                 }
             }
 
