@@ -56,6 +56,7 @@ public class LoginPageController : MonoBehaviour {
     }
 
     private void reset() {
+        WsSessionManager.Instance.setInArenaPracticeMode(false); 
         modeSelectGroup.resetShouldShowMarks();
         loginStatusBarController.SetLoggedInData(WsSessionManager.Instance.GetUname());
         toggleUIInteractability(true);
