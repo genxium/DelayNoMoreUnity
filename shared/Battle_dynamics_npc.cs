@@ -1163,13 +1163,16 @@ namespace shared {
 
             bool isCharacterFlying = (currCharacterDownsync.OmitGravity || chConfig.OmitGravity);
             int rdfId = currRenderFrame.Id;
+            bool hasCachedCueCmdFromPatrolCue = (currCharacterDownsync.CapturedByPatrolCue && 0 < currCharacterDownsync.FramesInPatrolCue && NO_PATROL_CUE_ID != currCharacterDownsync.WaivingPatrolCueId);
 
             switch (currCharacterDownsync.GoalAsNpc) {
                 case NpcGoal.Nidle:
                 case NpcGoal.NidleIfGoHuntingThenPatrol:
-                    decodedInputHolder.Dx = 0;                    
+                    decodedInputHolder.Dx = 0;
                     decodedInputHolder.Dy = 0;
-                    thatCharacterInNextFrame.CachedCueCmd = 0;
+                    if (!hasCachedCueCmdFromPatrolCue) {
+                        thatCharacterInNextFrame.CachedCueCmd = 0;
+                    }
                 break; 
                 default:
                     if (0 < currCharacterDownsync.CachedCueCmd) {
@@ -1262,7 +1265,7 @@ namespace shared {
 
             if (inAntiGravityGracePeriod) {
                 thatCharacterInNextFrame.CachedCueCmd = 0;
-            } else if (!shouldCheckVisionCollision) {
+            } else if (!shouldCheckVisionCollision && !hasCachedCueCmdFromPatrolCue) {
                 if (_executeCachedCueCmd(currCharacterDownsync, chConfig, decodedInputHolder)) {
                     thatCharacterInNextFrame.CachedCueCmd = _sanitizeCachedCueCmd(currCharacterDownsync.CachedCueCmd);
                     DecodeInput(thatCharacterInNextFrame.CachedCueCmd, decodedInputHolder);
@@ -1270,10 +1273,16 @@ namespace shared {
                 
                 // [WARNING] Without proper release of "BtnA", an NPC might be stuck at holding it and increasing "chd.JumpHoldingRdfCnt" forever but NOT ABLE TO JUMP when needed!
                 if (chConfig.JumpHoldingToFly && (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 <= currCharacterDownsync.JumpHoldingRdfCnt || (JUMP_HOLDING_RDF_CNT_THRESHOLD_2 << 1) < currCharacterDownsync.FramesInChState || !inProactiveJumpOrJumpStartupOrJumpEnd)) {
+                    if (0 > decodedInputHolder.Dy) {
+                        decodedInputHolder.Dy = 0;
+                    }
                     decodedInputHolder.BtnALevel = 0;
                     ulong newCachedCueCmd = EncodeInput(decodedInputHolder);
                     thatCharacterInNextFrame.CachedCueCmd = newCachedCueCmd;
                 } else if (!chConfig.JumpHoldingToFly && (JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= currCharacterDownsync.JumpHoldingRdfCnt || JUMP_HOLDING_RDF_CNT_THRESHOLD_2 < currCharacterDownsync.FramesInChState || !inProactiveJumpOrJumpStartupOrJumpEnd)) {
+                    if (0 > decodedInputHolder.Dy) {
+                        decodedInputHolder.Dy = 0;
+                    }
                     decodedInputHolder.BtnALevel = 0;
                     ulong newCachedCueCmd = EncodeInput(decodedInputHolder);
                     thatCharacterInNextFrame.CachedCueCmd = newCachedCueCmd;
@@ -1320,6 +1329,7 @@ namespace shared {
                                 break;
                         }
                         decodedInputHolder.Reset();
+                        newCachedCueCmd = oldCachedCueCmd;
                         break;
                 }
 
@@ -1650,12 +1660,11 @@ namespace shared {
                 decodedInputHolder.Reset();
                 return TARGET_CH_REACTION_STOP_BY_PATROL_CUE_CAPTURED;
             } 
-            if (shouldBreakCurrentPatrolCueCapture) {  
-                if (_executeCachedCueCmd(currCharacterDownsync, chConfig, decodedInputHolder)) {
-                    _sanitizeCachedCueCmdForPatrolCue(currCharacterDownsync.CachedCueCmd, thatCharacterInNextFrame);
-                } 
+            if (shouldBreakCurrentPatrolCueCapture) {
+                _executeCachedCueCmd(currCharacterDownsync, chConfig, decodedInputHolder);
+                _sanitizeCachedCueCmdForPatrolCue(currCharacterDownsync.CachedCueCmd, thatCharacterInNextFrame);
                 return visionReactionByFar;
-            } 
+            }
 
             // [WARNING] The field "CharacterDownsync.FramesInPatrolCue" would also be re-purposed as "patrol cue collision waiving frames" by the logic here.
             Collider? pCollider;
@@ -1665,8 +1674,8 @@ namespace shared {
 
             if (null == pCollider || null == ptrlCue) return visionReactionByFar;
             // By now we're sure that it should react to the PatrolCue
-            var colliderDx = (aCollider.X - pCollider.X);
-            var colliderDy = (aCollider.Y - pCollider.Y);
+            var colliderDx = (aCollider.X+.5f*aCollider.W - (pCollider.X+.5f*pCollider.W));
+            var colliderDy = (aCollider.Y+.5f*aCollider.H - (pCollider.Y+.5f*pCollider.H));
             bool fr = 0 < colliderDx && (0 > currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 > currCharacterDownsync.DirX));
             bool fl = 0 > colliderDx && (0 < currCharacterDownsync.VelX || (0 == currCharacterDownsync.VelX && 0 < currCharacterDownsync.DirX));
             bool fu = 0 < colliderDy && (0 > currCharacterDownsync.VelY || (0 == currCharacterDownsync.VelY && 0 > currCharacterDownsync.DirY));
@@ -1702,7 +1711,7 @@ namespace shared {
                 //logger.LogWarn(String.Format("aCollider={{ X:{0}, Y:{1}, W:{2}, H:{3}, dirX: {9} }} collided with pCollider={{ X:{4}, Y:{5}, W:{6}, H:{7}, cue={8} }} but direction couldn't be determined!", aCollider.X, aCollider.Y, aCollider.W, aCollider.H, pCollider.X, pCollider.Y, pCollider.W, pCollider.H, ptrlCue, currCharacterDownsync.DirX));
             }
 
-            bool shouldWaivePatrolCueReaction = (false == prevCapturedByPatrolCue && 0 < currCharacterDownsync.FramesInPatrolCue && ptrlCue.Id == currCharacterDownsync.WaivingPatrolCueId && !tempInputHolder.HasCriticalBtnLevel());
+            bool shouldWaivePatrolCueReaction = (false == prevCapturedByPatrolCue && 0 < currCharacterDownsync.FramesInPatrolCue && ptrlCue.Id == currCharacterDownsync.WaivingPatrolCueId);
 
             bool reversingDirectionByFar = (    
                                             0 > tempInputHolder.Dx * decodedInputHolder.Dx 
@@ -1755,6 +1764,7 @@ namespace shared {
             }
 
             if (shouldEnterNewCapturedPeriod) {
+                thatCharacterInNextFrame.CachedCueCmd = toCacheCmd;
                 thatCharacterInNextFrame.CapturedByPatrolCue = true;
                 thatCharacterInNextFrame.FramesInPatrolCue = targetFramesInPatrolCue;
                 thatCharacterInNextFrame.WaivingPatrolCueId = ptrlCue.Id;
@@ -1996,9 +2006,11 @@ namespace shared {
                     break;
                 }
 
+                mvBlockerStrictlyDown = (mvBlockerColliderTop <= aBoxBottom + 3 * STANDING_COLLIDER_CHECK_EPS);
+                mvBlockerStrictlyUp = (mvBlockerColliderBottom >= aBoxTop);
                 // A flying character
-                hasBlockerInYForward = (0 < effDyByFar && mvBlockerStrictlyUp) || (0 > effDyByFar && mvBlockerStrictlyDown);
-                hasBlockerInXForward = (0 < effDxByFar && mvBlockerStrictlyToTheRight) || (0 > effDxByFar && mvBlockerStrictlyToTheLeft);
+                hasBlockerInYForward = !mvBlockerStrictlyToTheLeft && !mvBlockerStrictlyToTheRight && (0 < effDyByFar && mvBlockerStrictlyUp) || (0 > effDyByFar && mvBlockerStrictlyDown);
+                hasBlockerInXForward = !mvBlockerStrictlyDown && !mvBlockerStrictlyUp && (0 < effDxByFar && mvBlockerStrictlyToTheRight) || (0 > effDxByFar && mvBlockerStrictlyToTheLeft);
 
                 hasBlockerInYForward &= (null != mvBlockerCollider);
                 hasBlockerInXForward &= (null != mvBlockerCollider);

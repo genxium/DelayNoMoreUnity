@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="599">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="601">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="1800"/>
@@ -18,7 +18,7 @@
  <tileset firstgid="1150" source="../shared_comps/deep_cave16.tsx"/>
  <tileset firstgid="1345" source="../shared_comps/pickable.tsx"/>
  <tileset firstgid="1777" source="../towers/towers.tsx"/>
- <tileset firstgid="1800" source="../traps/machinery/traps_machinery.tsx"/>
+ <tileset firstgid="1801" source="../traps/machinery/traps_machinery.tsx"/>
  <layer id="160" name="Background2" width="64" height="47">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -239,20 +239,20 @@
     <property name="static" value="1"/>
    </properties>
   </object>
-  <object id="544" gid="1042" x="448" y="400" width="96" height="64">
+  <object id="544" gid="1042" x="448" y="416" width="96" height="64">
    <properties>
     <property name="subscribesToId" value="4"/>
     <property name="subscribesToIdAfterInitialFire" value="8"/>
    </properties>
   </object>
-  <object id="578" gid="1801" x="240" y="608" width="21" height="16"/>
-  <object id="579" gid="1801" x="780" y="608" width="21" height="16"/>
+  <object id="578" gid="1802" x="240" y="608" width="21" height="16"/>
+  <object id="579" gid="1802" x="780" y="608" width="21" height="16"/>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
    <property name="type" value="barrier_and_shelter"/>
   </properties>
-  <object id="358" name="MidPlatformL" x="0" y="352" width="448" height="64">
+  <object id="358" name="MidPlatformL" x="0" y="352" width="448" height="56">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -262,7 +262,7 @@
     <property name="boundary_type" value="barrier"/>
    </properties>
   </object>
-  <object id="428" name="MidPlatformR" x="544" y="352" width="480" height="64">
+  <object id="428" name="MidPlatformR" x="544" y="352" width="480" height="56">
    <properties>
     <property name="boundary_type" value="barrier"/>
    </properties>
@@ -303,31 +303,6 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="PatrolCue">
-  <object id="573" name="Floor2FlyingCue" x="64" y="688" width="896" height="32">
-   <properties>
-    <property name="collisionTypeMask" value="16384"/>
-    <property name="fdAct" value="5"/>
-    <property name="fdCaptureFrames" value="0"/>
-    <property name="flAct" value="5"/>
-    <property name="flCaptureFrames" value="0"/>
-    <property name="frAct" value="8"/>
-    <property name="frCaptureFrames" value="0"/>
-    <property name="fuAct" value="8"/>
-    <property name="fuCaptureFrames" value="0"/>
-   </properties>
-  </object>
-  <object id="582" x="432" y="336" width="32" height="32">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-   </properties>
-  </object>
-  <object id="583" x="528" y="336" width="32" height="32">
-   <properties>
-    <property name="flAct" value="19"/>
-    <property name="frAct" value="20"/>
-   </properties>
-  </object>
   <object id="586" name="FloorL" x="32" y="32" width="32" height="240">
    <properties>
     <property name="fdAct" value="3"/>
@@ -350,6 +325,22 @@
     <property name="frCaptureFrames" value="60"/>
     <property name="fuAct" value="4"/>
     <property name="fuCaptureFrames" value="60"/>
+   </properties>
+  </object>
+  <object id="599" x="528" y="336" width="24" height="24">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="flCaptureFrames" value="30"/>
+    <property name="frAct" value="20"/>
+    <property name="frCaptureFrames" value="30"/>
+   </properties>
+  </object>
+  <object id="600" x="432" y="336" width="24" height="24">
+   <properties>
+    <property name="flAct" value="19"/>
+    <property name="flCaptureFrames" value="30"/>
+    <property name="frAct" value="20"/>
+    <property name="frCaptureFrames" value="30"/>
    </properties>
   </object>
  </objectgroup>
