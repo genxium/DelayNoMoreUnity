@@ -249,6 +249,14 @@ namespace shared {
                 } else if (BulletType.Fireball == srcConfig.BType || BulletType.GroundWave == srcConfig.BType || BulletType.MissileLinear == srcConfig.BType) {
                     if (IsBulletActive(dst, srcConfig, currRenderFrame.Id)) {
                         var (proposedNewVx, proposedNewVy) = (src.VirtualGridX + src.VelX, src.VirtualGridY + src.VelY);
+                        if (BulletState.StartUp == src.BlState) {
+                            dst.BlState = BulletState.Active;
+                            dst.FramesInBlState = 0;
+                            if (srcConfig.AllowsWalking && null != offender && (WalkingAtk1 == offender.CharacterState || WalkingAtk4 == offender.CharacterState)) {
+                                proposedNewVx = (offender.VirtualGridX + src.VelX);
+                                dst.OriginatedVirtualGridX = proposedNewVx;   
+                            }
+                        }
                         if (!srcConfig.BeamCollision) {
                             var (bulletCx, bulletCy) = VirtualGridToPolygonColliderCtr(proposedNewVx, proposedNewVy);
                             var (hitboxSizeCx, hitboxSizeCy) = VirtualGridToPolygonColliderCtr(srcConfig.HitboxSizeX + srcConfig.HitboxSizeIncX * src.FramesInBlState, srcConfig.HitboxSizeY + srcConfig.HitboxSizeIncY * src.FramesInBlState);
@@ -260,10 +268,6 @@ namespace shared {
                             colliderCnt++;
 
                             collisionSys.AddSingleToCellTail(newBulletCollider);
-                            if (BulletState.StartUp == src.BlState) {
-                                dst.BlState = BulletState.Active;
-                                dst.FramesInBlState = 0;
-                            }
                             (dst.VirtualGridX, dst.VirtualGridY) = (proposedNewVx, proposedNewVy);
 
                             // [WARNING] There's no support for missile beam yet! 

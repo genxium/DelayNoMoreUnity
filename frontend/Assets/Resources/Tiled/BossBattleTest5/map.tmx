@@ -171,6 +171,8 @@
     <property name="speciesId" value="1027"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup id="4" name="NpcStartingPos">
   <object id="607" gid="2147498281" x="1216" y="288" width="48" height="46">
    <properties>
     <property name="publishingEvtMaskUponKilled" value="1"/>
@@ -180,7 +182,6 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="4" name="NpcStartingPos"/>
  <objectgroup id="9" name="TrapStartingPos">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>

@@ -114,7 +114,8 @@ namespace shared {
             if (TARGET_CH_REACTION_FOLLOW == visionReaction) {
                 bool allyAboveMe = (0.6f * aCollider.H < allyChColliderDy);
                 bool shouldJumpTowardsTarget = (canJumpWithinInertia && !effInAir && allyAboveMe && (0 <= currCharacterDownsync.DirX * allyChColliderDx));
-                shouldJumpTowardsTarget |= (allyAboveMe && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState) && effInAir && chConfig.JumpHoldingToFly);
+                bool temptingToFly = (allyAboveMe && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState) && effInAir && chConfig.JumpHoldingToFly);
+                shouldJumpTowardsTarget |= temptingToFly;
                 bool shouldSlipJumpTowardsTarget = (canJumpWithinInertia && !effInAir && 0 > allyChColliderDy && currCharacterDownsync.PrimarilyOnSlippableHardPushback);
                 shouldSlipJumpTowardsTarget = (!chConfig.OmitGravity && chConfig.JumpHoldingToFly && currCharacterDownsync.OmitGravity && !allyAboveMe && !allyBehindMe);
                 if (0 >= chConfig.JumpingInitVelY) {
@@ -273,7 +274,11 @@ namespace shared {
             if (TARGET_CH_REACTION_FOLLOW == visionReaction) {
                 bool opponentAboveMe = 0 < oppoChColliderDy && (oppoChCollider.H < (1.67f*oppoChColliderDy+aCollider.H)); // i.e. "0.6f * (oppoChCollider.H - aCollider.H) < oppoChColliderDy"
                 bool shouldJumpTowardsTarget = (canJumpWithinInertia && !effInAir && opponentAboveMe && (0 <= currCharacterDownsync.DirX * oppoChColliderDx));
-                shouldJumpTowardsTarget |= (opponentAboveMe && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState) && effInAir && chConfig.JumpHoldingToFly);
+                bool temptingToFly = (opponentAboveMe && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState) && effInAir && chConfig.JumpHoldingToFly);
+                if (temptingToFly) {
+                    logger.LogInfo($"handleOppoCh/end, rdfId={rdfId}, temptingToFly towards oppoCh=(jidx:{v3.JoinIndex}), currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, VelX: {currCharacterDownsync.VelX}, VelY: {currCharacterDownsync.VelY}, DirX: {currCharacterDownsync.DirX}, DirY: {currCharacterDownsync.DirY}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState})");
+                }
+                shouldJumpTowardsTarget |= temptingToFly;
                 bool shouldSlipJumpTowardsTarget = (canJumpWithinInertia && !effInAir && 0 > oppoChColliderDy && currCharacterDownsync.PrimarilyOnSlippableHardPushback);
                 shouldSlipJumpTowardsTarget = (!chConfig.OmitGravity && chConfig.JumpHoldingToFly && currCharacterDownsync.OmitGravity && !opponentAboveMe && !opponentBehindMe);
                 if (0 >= chConfig.JumpingInitVelY) {
@@ -900,7 +905,7 @@ namespace shared {
                     }
                 case SPECIES_STONE_GOLEM:
                     if (currCharacterDownsync.Mp < StoneSwordSkill.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;
-                    closeEnough = (0 < colliderDy && absColliderDy < 1.2f * aCollider.H) && (absColliderDx < 5.0f * aCollider.W); // A special case
+                    closeEnough = (0 < colliderDy && absColliderDy < 1.4f * aCollider.H) && (absColliderDx < 8.0f * aCollider.W); // A special case
                     if (closeEnough) {
                         return TARGET_CH_REACTION_USE_MELEE;
                     } else {
@@ -1155,6 +1160,7 @@ namespace shared {
                 updateBtnHoldingByInput(currCharacterDownsync, decodedInputHolder, thatCharacterInNextFrame);
                 return (PATTERN_ID_NO_OP, false, false, decodedInputHolder.Dx, decodedInputHolder.Dy, false);
             }
+
             bool isCharacterFlying = (currCharacterDownsync.OmitGravity || chConfig.OmitGravity);
             int rdfId = currRenderFrame.Id;
 
@@ -1320,6 +1326,8 @@ namespace shared {
                 // Overwrite the "cachedCueCmd".
                 thatCharacterInNextFrame.CachedCueCmd = newCachedCueCmd;
             }
+
+            updateBtnHoldingByInput(currCharacterDownsync, decodedInputHolder, thatCharacterInNextFrame);
 
             var (patternId, jumpedOrNot, slipJumpedOrNot, effectiveDx, effectiveDy) = _deriveCharacterOpPattern(rdfId, currCharacterDownsync, decodedInputHolder, chConfig, currEffInAir, currNotDashing, logger);
 

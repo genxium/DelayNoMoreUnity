@@ -112,7 +112,7 @@ namespace shared {
                         DyingSizeY = (int)(12.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
                         CollisionTypeMask = COLLISION_CHARACTER_INDEX_PREFIX,
                         HasTurnAroundAnim = false,
-                        ProactiveJumpStartupFrames = 3,
+                        ProactiveJumpStartupFrames = 4,
                         Hardness = 5,
                         HasDimmedAnim = true,
                         MinFallingVelY = DEFAULT_MIN_FALLING_VEL_Y_VIRTUAL_GRID,
@@ -121,6 +121,10 @@ namespace shared {
                         SlipJumpCharacterDropVirtual = SLIP_JUMP_CHARACTER_DROP_VIRTUAL,
                         DefaultAirDashQuota = 1,
                         DefaultAirJumpQuota = 1,
+                        GroundDodgeEnabledByRdfCntFromBeginning = 12, 
+                        GroundDodgedFramesInvinsible = 25, 
+                        GroundDodgedFramesToRecover = 30, 
+                        GroundDodgedSpeed = (int)(4.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), 
                         InitInventorySlots = new List<InventorySlot> {
                             new InventorySlot {
                                 StockType = InventorySlotStockType.GaugedMagazineIv,

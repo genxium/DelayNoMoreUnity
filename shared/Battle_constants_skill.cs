@@ -452,7 +452,7 @@ namespace shared {
                 DirX = 1,
                 DirY = 0,
                 ExplosionFrames = 25,
-                Hardness = 4,
+                Hardness = 5,
                 BType = BulletType.Fireball,
                 CharacterEmitSfxName = "FlameEmit1",
                 ExplosionSfxName = "Explosion4",
@@ -766,8 +766,8 @@ namespace shared {
         }.UpsertCancelTransit(PATTERN_B, 47).UpsertCancelTransit(PATTERN_DOWN_B, 47).UpsertCancelTransit(PATTERN_UP_B, 47);
 
         private static BulletConfig MagicPistolBulletAir = new BulletConfig {
-            StartupFrames = 2,
-            ActiveFrames = 180,
+            StartupFrames = 7,
+            ActiveFrames = 120,
             HitStunFrames = 14,
             BlockStunFrames = 12,
             Damage = 15,
@@ -776,12 +776,12 @@ namespace shared {
             SelfLockVelX = NO_LOCK_VEL,
             SelfLockVelY = NO_LOCK_VEL,
             SelfLockVelYWhenFlying = NO_LOCK_VEL,
-            HitboxOffsetX = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            HitboxOffsetX = (int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxOffsetY = (int)(0 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(8 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SpeciesId = 19,
-            Speed = (int)(7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            Speed = (int)(6.7f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             DirX = 2,
             DirY = 0,
             Hardness = 5,
@@ -803,7 +803,7 @@ namespace shared {
                                                                 .SetSelfLockVel(0, 0, 0);
 
         private static BulletConfig MagicCannonBulletAir = new BulletConfig {
-            StartupFrames = 2,
+            StartupFrames = 7,
             ActiveFrames = 120,
             HitStunFrames = MAX_INT,
             HitInvinsibleFrames = 60,
@@ -842,7 +842,7 @@ namespace shared {
                                                                 .SetAllowsCrouching(true);
 
         private static BulletConfig BasicPistolBulletAir = new BulletConfig {
-            StartupFrames = 4,
+            StartupFrames = 7,
             ActiveFrames = 180,
             HitStunFrames = 7,
             BlockStunFrames = 7,
@@ -857,7 +857,7 @@ namespace shared {
             HitboxSizeX = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(4 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             SpeciesId = 1,
-            Speed = (int)(7.3f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
+            Speed = (int)(7.0f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             DirX = 2,
             DirY = 0,
             Hardness = 4,
@@ -868,11 +868,13 @@ namespace shared {
             IsPixelatedActiveVfx = true,
             ExplosionSfxName = "Piercing",
             ExplosionOnRockSfxName = "Explosion8",
+            CancellableStFrame = 11,
+            CancellableEdFrame = 19,
             CollisionTypeMask = COLLISION_B_M_FIREBALL_INDEX_PREFIX
         };
 
         private static BulletConfig BasicPistolBulletGround = new BulletConfig(BasicPistolBulletAir)
-                                                                .SetHitboxOffsets((int)(12 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
+                                                                .SetHitboxOffsets((int)(14 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO), (int)(10 * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO))
                                                                 .SetAllowsWalking(true) 
                                                                 .SetAllowsCrouching(true);
 
@@ -1339,9 +1341,9 @@ namespace shared {
         
         public static Skill MagicPistolGround = new Skill {
             Id = 29,
-               RecoveryFrames = 14,
-               RecoveryFramesOnBlock = 10,
-               RecoveryFramesOnHit = 10,
+                RecoveryFrames = 18,
+                RecoveryFramesOnBlock = 18,
+                RecoveryFramesOnHit = 18,
                TriggerType = SkillTriggerType.RisingEdge,
                BoundChState = Atk1
         }
@@ -1349,9 +1351,9 @@ namespace shared {
         
         public static Skill MagicPistolAir = new Skill {
             Id = 30,
-                RecoveryFrames = 14,
-                RecoveryFramesOnBlock = 10,
-                RecoveryFramesOnHit = 10,
+                RecoveryFrames = MagicPistolGround.RecoveryFrames,
+                RecoveryFramesOnBlock = MagicPistolGround.RecoveryFramesOnBlock,
+                RecoveryFramesOnHit = MagicPistolGround.RecoveryFramesOnHit,
                 TriggerType = SkillTriggerType.RisingEdge,
                 BoundChState = InAirAtk1
         }
@@ -1359,9 +1361,9 @@ namespace shared {
 
         public static Skill MagicPistolCrouch = new Skill{
             Id = 34, 
-            RecoveryFrames = 14,
-            RecoveryFramesOnBlock = 10,
-            RecoveryFramesOnHit = 10,
+                RecoveryFrames = MagicPistolGround.RecoveryFrames,
+                RecoveryFramesOnBlock = MagicPistolGround.RecoveryFramesOnBlock,
+                RecoveryFramesOnHit = MagicPistolGround.RecoveryFramesOnHit,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = CrouchAtk1
         }
@@ -1369,9 +1371,9 @@ namespace shared {
 
         public static Skill MagicCannonGround = new Skill{
             Id = 87, 
-            RecoveryFrames = 14,
-            RecoveryFramesOnBlock = 10,
-            RecoveryFramesOnHit = 10,
+                RecoveryFrames = MagicPistolGround.RecoveryFrames,
+                RecoveryFramesOnBlock = MagicPistolGround.RecoveryFramesOnBlock,
+                RecoveryFramesOnHit = MagicPistolGround.RecoveryFramesOnHit,
             MpDelta = 300,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk1
@@ -1380,9 +1382,9 @@ namespace shared {
 
         public static Skill MagicCannonAir = new Skill{
             Id = 88,
-               RecoveryFrames = 14,
-               RecoveryFramesOnBlock = 10,
-               RecoveryFramesOnHit = 10,
+                RecoveryFrames = 18,
+                RecoveryFramesOnBlock = 18,
+                RecoveryFramesOnHit = 18,
                MpDelta = 300,
                TriggerType = SkillTriggerType.RisingEdge,
                BoundChState = InAirAtk1
@@ -1391,9 +1393,9 @@ namespace shared {
     
         public static Skill MagicCannonCrouch = new Skill{
             Id = 89,
-               RecoveryFrames = 14,
-               RecoveryFramesOnBlock = 10,
-               RecoveryFramesOnHit = 10,
+                RecoveryFrames = MagicCannonAir.RecoveryFrames,
+                RecoveryFramesOnBlock = MagicCannonAir.RecoveryFramesOnBlock,
+                RecoveryFramesOnHit = MagicCannonAir.RecoveryFramesOnHit,
                MpDelta = 300,
                TriggerType = SkillTriggerType.RisingEdge,
                BoundChState = CrouchAtk1
@@ -1498,7 +1500,7 @@ namespace shared {
         };
         
         public static Skill HunterAirSlash = new Skill {
-            Id = 74,
+            Id = HunterAirSlashId,
             RecoveryFrames = 20,
             RecoveryFramesOnBlock = 20,
             RecoveryFramesOnHit = 20,
@@ -2984,12 +2986,12 @@ namespace shared {
         .AddHit(DemonDiverImpactShockBullet)
         .AddHit(DemonDiverImpactShockBulletRevX);
 
-        public static uint HunterPistolWallId = 68, HunterPistolId = 71, HunterPistolAirId = 72, HunterDashingId = 78, HunterSlidingId = 132, HunterPistolCrouchId = 133, HunterDragonPunchId = 73, MobileThunderCannonPrimerId = 143, MobileThunderCannonPrimerAirId = 144, MobileThunderCannonPrimerCrouchId = 145, MobileThunderCannonPrimerWallId = 146;
+        public static uint HunterPistolWallId = 68, HunterPistolId = 71, HunterPistolAirId = 72, HunterDashingId = 78, HunterSlidingId = 132, HunterPistolCrouchId = 133, HunterDragonPunchId = 73, HunterAirSlashId = 74, MobileThunderCannonPrimerId = 143, MobileThunderCannonPrimerAirId = 144, MobileThunderCannonPrimerCrouchId = 145, MobileThunderCannonPrimerWallId = 146;
         
         public static BulletConfig BasicBladeHit1 = new BulletConfig {
-            StartupFrames = 3,
+            StartupFrames = 6,
             StartupInvinsibleFrames = 1,
-            ActiveFrames = 18,
+            ActiveFrames = 11,
             HitStunFrames = 20,
             BlockStunFrames = 8,
             Damage = 10,
@@ -3002,8 +3004,8 @@ namespace shared {
             HitboxOffsetY = (int)(10*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            CancellableStFrame = 8,
-            CancellableEdFrame = 19,
+            CancellableStFrame = 10,
+            CancellableEdFrame = 24,
             SpeciesId = 2,
             ExplosionSpeciesId = 2,
             ExplosionFrames = 25,
@@ -3020,11 +3022,11 @@ namespace shared {
 
         public static BulletConfig BasicBladeHit2 = new BulletConfig {
             StartupFrames = 5,
-            StartupInvinsibleFrames = 2,
-            ActiveFrames = 14,
-            HitStunFrames = 25,
+            StartupInvinsibleFrames = 1,
+            ActiveFrames = 11,
+            HitStunFrames = 28,
             BlockStunFrames = 9,
-            Damage = 12,
+            Damage = 8,
             PushbackVelX = 0,
             PushbackVelY = 0,
             SelfLockVelX = (int)(0.1f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
@@ -3034,8 +3036,8 @@ namespace shared {
             HitboxOffsetY = (int)(0*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeX = (int)(36*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             HitboxSizeY = (int)(42*COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
-            CancellableStFrame = 12,
-            CancellableEdFrame = 20,
+            CancellableStFrame = 10,
+            CancellableEdFrame = 25,
             SpeciesId = 2,
             ExplosionSpeciesId = 2,
             ExplosionFrames = 25,
@@ -3050,12 +3052,12 @@ namespace shared {
         }.UpsertCancelTransit(PATTERN_B, BladeGirlGroundSlash3Id).UpsertCancelTransit(PATTERN_DOWN_B, BladeGirlGroundSlash3Id).UpsertCancelTransit(PATTERN_UP_B, BladeGirlDragonPunchId);
     
         public static BulletConfig BasicBladeHit3 = new BulletConfig {
-            StartupFrames = 6,
+            StartupFrames = 16,
             StartupInvinsibleFrames = 4,
-            ActiveFrames = 17,
+            ActiveFrames = 11,
             HitStunFrames = 34,
             BlockStunFrames = 5,
-            Damage = 18,
+            Damage = 20,
             PushbackVelX = (int)(1.2f * COLLISION_SPACE_TO_VIRTUAL_GRID_RATIO),
             PushbackVelY = 0,
             SelfLockVelX = NO_LOCK_VEL,
@@ -3070,8 +3072,8 @@ namespace shared {
             ExplosionSpeciesId = 2,
             ExplosionFrames = 25,
             BType = BulletType.Melee,
-            CancellableStFrame = 10,
-            CancellableEdFrame = 25,
+            CancellableStFrame = 24,
+            CancellableEdFrame = 47,
             CancellableByInventorySlotC = true,
             DirX = 1,
             DirY = 0,
@@ -3148,9 +3150,9 @@ namespace shared {
         public static Skill BladeGirlGroundSlash1 = new Skill {
             // [WARNING] The relationship between "RecoveryFrames", "StartupFrames", "HitStunFrames" and "PushbackVelX" makes sure that a MeleeBullet is counterable!
             Id = BladeGirlGroundSlash1Id,
-            RecoveryFrames = 26,
-            RecoveryFramesOnBlock = 26,
-            RecoveryFramesOnHit = 26,
+            RecoveryFrames = 23,
+            RecoveryFramesOnBlock = 23,
+            RecoveryFramesOnHit = 23,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk1
         }.AddHit(BasicBladeHit1);
@@ -3167,9 +3169,9 @@ namespace shared {
 
         public static Skill BladeGirlGroundSlash3 = new Skill {
             Id = BladeGirlGroundSlash3Id,
-            RecoveryFrames = 39,
-            RecoveryFramesOnBlock = 39,
-            RecoveryFramesOnHit = 39,
+            RecoveryFrames = 46,
+            RecoveryFramesOnBlock = 46,
+            RecoveryFramesOnHit = 46,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk3
         }
@@ -5129,48 +5131,48 @@ namespace shared {
 
         public static Skill HunterPistolWall = new Skill{
              Id = HunterPistolWallId,
-               RecoveryFrames = 12,
-               RecoveryFramesOnBlock = 10,
-               RecoveryFramesOnHit = 10,
+               RecoveryFrames = 18,
+               RecoveryFramesOnBlock = 18,
+               RecoveryFramesOnHit = 18,
                TriggerType = SkillTriggerType.RisingEdge,
                BoundChState = OnWallAtk1
-        }.AddHit(BasicPistolBulletAir);
+        }.AddHit(new BulletConfig(BasicPistolBulletAir).UpsertCancelTransit(PATTERN_UP_B, HunterAirSlashId));
 
         public static Skill HunterPistol = new Skill{
             Id = HunterPistolId,
-               RecoveryFrames = 14,
-               RecoveryFramesOnBlock = 10,
-               RecoveryFramesOnHit = 10,
+               RecoveryFrames = HunterPistolWall.RecoveryFrames,
+               RecoveryFramesOnBlock = HunterPistolWall.RecoveryFramesOnBlock,
+               RecoveryFramesOnHit = HunterPistolWall.RecoveryFramesOnHit,
                TriggerType = SkillTriggerType.RisingEdge,
                BoundChState = Atk1
         }
-        .AddHit(BasicPistolBulletGround);
+        .AddHit(new BulletConfig(BasicPistolBulletGround).UpsertCancelTransit(PATTERN_UP_B, HunterDragonPunchId).UpsertCancelTransit(PATTERN_DOWN_B, HunterPistolCrouchId));
         
         public static Skill HunterPistolAir = new Skill{
             Id = HunterPistolAirId,
-               RecoveryFrames = 13,
-               RecoveryFramesOnBlock = 10,
-               RecoveryFramesOnHit = 10,
+               RecoveryFrames = HunterPistolWall.RecoveryFrames,
+               RecoveryFramesOnBlock = HunterPistolWall.RecoveryFramesOnBlock,
+               RecoveryFramesOnHit = HunterPistolWall.RecoveryFramesOnHit,
                TriggerType = SkillTriggerType.RisingEdge,
                BoundChState = InAirAtk1
         }
-        .AddHit(BasicPistolBulletAir);
+        .AddHit(new BulletConfig(BasicPistolBulletAir).UpsertCancelTransit(PATTERN_UP_B, HunterAirSlashId));
 
         public static Skill HunterPistolCrouch = new Skill{
             Id = HunterPistolCrouchId,
-               RecoveryFrames = 14,
-               RecoveryFramesOnBlock = 10,
-               RecoveryFramesOnHit = 10,
+               RecoveryFrames = HunterPistolWall.RecoveryFrames,
+               RecoveryFramesOnBlock = HunterPistolWall.RecoveryFramesOnBlock,
+               RecoveryFramesOnHit = HunterPistolWall.RecoveryFramesOnHit,
                TriggerType = SkillTriggerType.RisingEdge,
                BoundChState = CrouchAtk1
         }
-        .AddHit(BasicPistolBulletCrouch);
+        .AddHit(new BulletConfig(BasicPistolBulletCrouch).UpsertCancelTransit(PATTERN_UP_B, HunterDragonPunchId));
 
         public static Skill HunterDashing = new Skill {
             Id = HunterDashingId,
-                RecoveryFrames = 18,
-                RecoveryFramesOnBlock = 18,
-                RecoveryFramesOnHit = 18,
+                RecoveryFrames = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+                RecoveryFramesOnBlock = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
+                RecoveryFramesOnHit = (BasicDashingHit2.StartupFrames + BasicDashingHit2.ActiveFrames + 2),
                 TriggerType = SkillTriggerType.RisingEdge,
                 BoundChState = Dashing
         }
@@ -5380,9 +5382,9 @@ namespace shared {
         .AddHit(DrakePrimerFireballBl1);
 
         public static BulletConfig MobileThunderCannonPrimerBullet = new BulletConfig {
-            StartupFrames = 4,
+            StartupFrames = 7,
             StartupInvinsibleFrames = 3,
-            ActiveFrames = 320,
+            ActiveFrames = 120,
             HitStunFrames = MAX_INT,
             HitInvinsibleFrames = 60,
             BlockStunFrames = 12,
@@ -5423,9 +5425,9 @@ namespace shared {
 
         public static Skill MobileThunderCannonPrimer = new Skill {
             Id = 143,
-            RecoveryFrames = 14,
-            RecoveryFramesOnBlock = 10,
-            RecoveryFramesOnHit = 10,
+            RecoveryFrames = 18,
+            RecoveryFramesOnBlock = 18,
+            RecoveryFramesOnHit = 18,
             TriggerType = SkillTriggerType.RisingEdge,
             BoundChState = Atk1,
         }
@@ -5822,7 +5824,7 @@ namespace shared {
                     new KeyValuePair<uint, Skill>(HunterPistolAir.Id, HunterPistolAir),
 
                     new KeyValuePair<uint, Skill>(HunterDragonPunch.Id, HunterDragonPunch),
-                    new KeyValuePair<uint, Skill>(HunterAirSlash.Id, HunterAirSlash),
+                    new KeyValuePair<uint, Skill>(HunterAirSlashId, HunterAirSlash),
                     new KeyValuePair<uint, Skill>(HunterDashSlashSKill.Id, HunterDashSlashSKill),
                     new KeyValuePair<uint, Skill>(BladeGirlDiverImpact.Id, BladeGirlDiverImpact),
                     new KeyValuePair<uint, Skill>(HunterDashing.Id, HunterDashing),
@@ -6844,9 +6846,9 @@ namespace shared {
                         case PATTERN_UP_B: // Including "PATTERN_DOWN_B" here as a "no-skill fallback" if attack button is pressed
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
-                                    return HunterAirSlash.Id; 
+                                    return HunterAirSlashId; 
                                 } else {
-                                    return HunterDragonPunch.Id;
+                                    return HunterDragonPunchId;
                                 }
                             } else {
                                 // [WARNING] Combo in air is possible for this character!
@@ -6862,15 +6864,15 @@ namespace shared {
                             if (!notRecovered) {
                                 if (currCharacterDownsync.InAir) {
                                     if (OnWallIdle1 != currCharacterDownsync.CharacterState) {
-                                        return HunterPistolAir.Id;
+                                        return HunterPistolAirId;
                                     } else {
                                         return HunterPistolWall.Id;
                                     }
                                 } else {
                                     if (isCrouching(currCharacterDownsync.CharacterState, chConfig) || PATTERN_DOWN_B == patternId) {
-                                        return HunterPistolCrouch.Id;
+                                        return HunterPistolCrouchId;
                                     } else {
-                                        return HunterPistol.Id;
+                                        return HunterPistolId;
                                     }
                                 }
                             } else {

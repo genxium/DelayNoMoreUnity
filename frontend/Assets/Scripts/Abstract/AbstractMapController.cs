@@ -326,16 +326,24 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         // [WARNING] Do not blindly use "selfJoinIndexMask" here, as the "actuallyUsedInput for self" couldn't be confirmed while prefabbing, otherwise we'd have confirmed a wrong self input by "_markConfirmationIfApplicable()"!
+        currSelfInput = iptmgr.GetEncodedInput(); // When "null == existingInputFrame", it'd be safe to say that "GetImmediateEncodedInput()" is for the requested "inputFrameId"
+        prefabbedInputList[(joinIndex - 1)] = currSelfInput;
+
         ulong initConfirmedList = 0;
         if (canConfirmSelf) {
-            initConfirmedList = selfJoinIndexMask;
-            if (null != existingInputFrame) {
-                initConfirmedList |= existingInputFrame.ConfirmedList;
+            bool shouldSetConfirmedMask = (previousSelfInput != currSelfInput || 15u < currSelfInput);
+            if (!shouldSetConfirmedMask) {
+                bool isLastRdfInIfdCoverage = (ConvertToDynamicallyGeneratedDelayInputFrameId(playerRdfId+1, localExtraInputDelayFrames) == (inputFrameId+1));
+                shouldSetConfirmedMask = isLastRdfInIfdCoverage; 
+            }
+            if (shouldSetConfirmedMask) {
+                initConfirmedList = selfJoinIndexMask;
+                if (null != existingInputFrame) {
+                    initConfirmedList |= existingInputFrame.ConfirmedList;
+                }
             }
         }
 
-        currSelfInput = iptmgr.GetEncodedInput(); // When "null == existingInputFrame", it'd be safe to say that "GetImmediateEncodedInput()" is for the requested "inputFrameId"
-        prefabbedInputList[(joinIndex - 1)] = currSelfInput;
         while (inputBuffer.EdFrameId <= inputFrameId) {
             // Fill the gap
             int gapInputFrameId = inputBuffer.EdFrameId;
@@ -1723,12 +1731,12 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected void doUpdate() {
         int toGenerateInputFrameId = ConvertToDynamicallyGeneratedDelayInputFrameId(playerRdfId, localExtraInputDelayFrames);
         ulong prevSelfInput = 0, currSelfInput = 0;
-        if (ShouldGenerateInputFrameUpsync(playerRdfId)) {
-            (prevSelfInput, currSelfInput) = getOrPrefabInputFrameUpsync(toGenerateInputFrameId, true, prefabbedInputListHolder);
-            if (inputBuffer.EdFrameId <= toGenerateInputFrameId) {
-                Debug.LogWarningFormat("After getOrPrefabInputFrameUpsync at playerRdfId={0}, toGenerateInputFrameId={1}; inputBuffer={2}", playerRdfId, toGenerateInputFrameId, inputBuffer.toSimpleStat());
-            }
+        (prevSelfInput, currSelfInput) = getOrPrefabInputFrameUpsync(toGenerateInputFrameId, true, prefabbedInputListHolder);
+        /*
+        if (inputBuffer.EdFrameId <= toGenerateInputFrameId) {
+            Debug.LogWarningFormat("After getOrPrefabInputFrameUpsync at playerRdfId={0}, toGenerateInputFrameId={1}; inputBuffer={2}", playerRdfId, toGenerateInputFrameId, inputBuffer.toSimpleStat());
         }
+        */
         int delayedInputFrameId = ConvertToDelayedInputFrameId(playerRdfId);
         var (delayedInputFrameExists, _) = inputBuffer.GetByFrameId(delayedInputFrameId);
         if (!delayedInputFrameExists) {

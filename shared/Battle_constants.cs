@@ -411,7 +411,7 @@ namespace shared {
         public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_1 = (BATTLE_DYNAMICS_FPS >> 3) + (BATTLE_DYNAMICS_FPS >> 4);  
         public static int JUMP_HOLDING_IFD_CNT_THRESHOLD_1 = (int)Math.Ceiling((float)JUMP_HOLDING_RDF_CNT_THRESHOLD_1/(1 << INPUT_SCALE_FRAMES));  
 
-        public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_2 = (BATTLE_DYNAMICS_FPS >> 1) + (BATTLE_DYNAMICS_FPS >> 2);  
+        public static int JUMP_HOLDING_RDF_CNT_THRESHOLD_2 = (BATTLE_DYNAMICS_FPS >> 1) + (BATTLE_DYNAMICS_FPS >> 4);  
         public static int JUMP_HOLDING_IFD_CNT_THRESHOLD_2 = (int)Math.Ceiling((float)JUMP_HOLDING_RDF_CNT_THRESHOLD_2/(1 << INPUT_SCALE_FRAMES));  
 
         public static int IN_AIR_DASH_GRACE_PERIOD_RDF_CNT = 3;
