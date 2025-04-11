@@ -332,10 +332,13 @@ public class Room {
             
             var existingPlayer = players[playerId];
             int existingJoinIndex = existingPlayer.CharacterDownsync.JoinIndex;
-            if (PLAYER_BATTLE_STATE_DISCONNECTED != Interlocked.CompareExchange(ref existingPlayer.BattleState, PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC, PLAYER_BATTLE_STATE_DISCONNECTED)) {
-                _logger.LogInformation("The existingPlayer in active battle is not at required state when calling `ReAddPlayerIfPossible` for (roomId={0}, playerId={1}, joinIndex={2}, existingState={3})", id, playerId, existingJoinIndex, existingPlayer.BattleState);
+            var oldPlayerBattleState = existingPlayer.BattleState;
+            if (PLAYER_BATTLE_STATE_DISCONNECTED != oldPlayerBattleState && PLAYER_BATTLE_STATE_ACTIVE != oldPlayerBattleState) {
+                _logger.LogInformation("The existingPlayer in active battle is not at required state when calling `ReAddPlayerIfPossible` for (roomId={0}, playerId={1}, joinIndex={2}, oldPlayerBattleState={3})", id, playerId, existingJoinIndex, oldPlayerBattleState);
                 return (ErrCode.PlayerNotAddableToRoom, null);
             }
+
+            existingPlayer.BattleState = PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC;
 
             // [WARNING] Deliberately inheriting the same "BattleUdpTunnelAuthKey" to favor already hole-punched UDP session.
 
