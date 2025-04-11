@@ -144,27 +144,28 @@ public class WsSessionManager {
         recvBuffer.Clear();
         string fullUrl = wsEndpoint + $"?authToken={authToken}&playerId={playerId}&speciesId={speciesId}&roomId={roomId}&forReentry={forReentry}";
         Debug.Log($"About to connect Ws to {fullUrl}, please wait...");
-        using (ClientWebSocket ws = new ClientWebSocket())
-        using (System.Threading.Timer timeoutWatcher = new System.Threading.Timer(new TimerCallback((s) => {
-            Debug.LogWarning($"Ws connection to {fullUrl} timed out, cancelling...");
-            if (null == s) {
-                return;
-            }
-            var passedInCancellationTokenSource = (CancellationTokenSource)s;
-            if (null == passedInCancellationTokenSource || passedInCancellationTokenSource.IsCancellationRequested) return;
-            passedInCancellationTokenSource.Cancel();
-        }), cancellationTokenSource, 5000, Timeout.Infinite)) {
+        using (ClientWebSocket ws = new ClientWebSocket()) {
             try {
-                await ws.ConnectAsync(new Uri(fullUrl), cancellationToken);
-                timeoutWatcher.Change(Timeout.Infinite, Timeout.Infinite);
-                var openMsg = new WsResp {
-                    Ret = ErrCode.Ok,
-                    Act = Battle.DOWNSYNC_MSG_WS_OPEN
-                };
-                recvBuffer.Enqueue(openMsg);
-                guiCanProceedSignalSource.Cancel();
-                await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
-                Debug.LogFormat("Both WebSocket 'Receive' and 'Send' tasks are ended.");
+                /**
+                 * The previous "System.Threading.Timer" implementation has a caveat: if "OnlineMapController.wsTask" is still in "WaitingForActivation" status when cancelled, the whole GUI will be stuck.
+                 */
+                var successWithoutTimeout = ws.ConnectAsync(new Uri(fullUrl), cancellationToken).Wait(5000, cancellationToken);
+                if (!successWithoutTimeout) {
+                    Debug.LogWarning($"Ws connection to {fullUrl} timed out, would not start 'Receive' or 'Send' tasks.");
+                    if (!cancellationToken.IsCancellationRequested) {
+                        cancellationTokenSource.Cancel();
+                        Debug.LogWarning($"Ws connection to {fullUrl} timed out, cancelled");
+                    }
+                } else {
+                    var openMsg = new WsResp {
+                        Ret = ErrCode.Ok,
+                        Act = Battle.DOWNSYNC_MSG_WS_OPEN
+                    };
+                    recvBuffer.Enqueue(openMsg);
+                    guiCanProceedSignalSource.Cancel();
+                    await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
+                    Debug.LogFormat("Both WebSocket 'Receive' and 'Send' tasks are ended.");
+                }
             } catch (OperationCanceledException ocEx) {
                 Debug.LogWarningFormat("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message);
             } catch (Exception ex) {

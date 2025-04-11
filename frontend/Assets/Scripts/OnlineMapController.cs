@@ -232,7 +232,11 @@ public class OnlineMapController : AbstractMapController {
                     readyGoPanel.hideReady();
                     readyGoPanel.hideGo();
                     onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
-                    
+                    if (ROOM_STATE_FRONTEND_REJOINING == battleState) {
+                        battleState = ROOM_STATE_IN_BATTLE;
+                        Debug.LogWarning($"Got force-resync during rejoining, transited to in battle@pbRdfId={wsRespHolder.Rdf.Id}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @localRenderFrameId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
+                        rejoinPrompt.gameObject.SetActive(false);
+                    }
                     //Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}, @battleState={8}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), battleState);
                     
                     break;
@@ -285,7 +289,13 @@ public class OnlineMapController : AbstractMapController {
             Debug.LogWarning($"Ends rejoined ws session within Task.Run(async lambda): thread id={Thread.CurrentThread.ManagedThreadId}.");
 
             // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message to trigger "cleanupNetworkSessions" to clean up ws session resources!
-        }, wsCancellationToken);
+        }, wsCancellationToken)
+        .ContinueWith(failedTask => {
+            Debug.LogWarning(String.Format("Failed to start rejoining ws session#1: thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] NOT YET in MainThread
+            if (!wsCancellationToken.IsCancellationRequested) {
+                wsCancellationTokenSource.Cancel();
+            }
+        }, TaskContinuationOptions.OnlyOnFaulted);
     }
 
     public void onCharacterSelectGoAction(uint speciesId) {
@@ -815,7 +825,9 @@ public class OnlineMapController : AbstractMapController {
 
         if (null != wsTask && (TaskStatus.Canceled != wsTask.Status && TaskStatus.Faulted != wsTask.Status)) {
             try {
+                Debug.Log($"OnlineMapController.cleanupNetworkSessions, about to wait for wsTask with status={wsTask.Status}");
                 wsTask.Wait();
+                Debug.Log($"OnlineMapController.cleanupNetworkSessions, wsTask returns with status={wsTask.Status}");
             } catch (Exception ex) {
                 Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask is already cancelled: {0}", ex));
             } finally {
@@ -848,7 +860,9 @@ public class OnlineMapController : AbstractMapController {
                 UdpSessionManager.Instance.CloseUdpSession(); // Would effectively end "ReceiveAsync" if it's blocking "Receive" loop in udpTask.
                 if (TaskStatus.Canceled != udpTask.Status && TaskStatus.Faulted != udpTask.Status) {
                     try {
+                        Debug.Log($"OnlineMapController.cleanupNetworkSessions, about to wait for udpTask with status={udpTask.Status}");
                         udpTask.Wait();
+                        Debug.Log($"OnlineMapController.cleanupNetworkSessions, udpTask returns with status={udpTask.Status}");
                     } catch (Exception ex) {
                         Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask is already cancelled: {0}", ex));
                     } finally {
