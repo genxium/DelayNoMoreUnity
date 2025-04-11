@@ -2404,7 +2404,7 @@ namespace shared {
             if (0 < delayedInputFrameId) {
                 var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
                 if (!ok || null == delayedInputFrameDownsync) {
-                    throw new ArgumentNullException($"Null delayedInputFrameDownsync for delayedInputFrameId={delayedInputFrameId} in `Step`!");
+                    throw new ArgumentNullException($"Null delayedInputFrameDownsync for delayedInputFrameId={delayedInputFrameId} in `Step`! renderBuffer={renderBuffer.toSimpleStat()}, inputBuffer={inputBuffer.toSimpleStat()}");
                 }
                 _processPlayerInputs(currRenderFrame, delayedInputFrameDownsync, roomCapacity, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
             }

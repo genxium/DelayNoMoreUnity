@@ -275,9 +275,11 @@ namespace shared {
                 bool opponentAboveMe = 0 < oppoChColliderDy && (oppoChCollider.H < (1.67f*oppoChColliderDy+aCollider.H)); // i.e. "0.6f * (oppoChCollider.H - aCollider.H) < oppoChColliderDy"
                 bool shouldJumpTowardsTarget = (canJumpWithinInertia && !effInAir && opponentAboveMe && (0 <= currCharacterDownsync.DirX * oppoChColliderDx));
                 bool temptingToFly = (opponentAboveMe && proactiveJumpingSet.Contains(currCharacterDownsync.CharacterState) && effInAir && chConfig.JumpHoldingToFly);
+                /*
                 if (temptingToFly) {
                     logger.LogInfo($"handleOppoCh/end, rdfId={rdfId}, temptingToFly towards oppoCh=(jidx:{v3.JoinIndex}), currChd = (id:{currCharacterDownsync.Id}, spId: {currCharacterDownsync.SpeciesId}, jidx: {currCharacterDownsync.JoinIndex}, VelX: {currCharacterDownsync.VelX}, VelY: {currCharacterDownsync.VelY}, DirX: {currCharacterDownsync.DirX}, DirY: {currCharacterDownsync.DirY}, fchs:{currCharacterDownsync.FramesInChState}, inAir:{currCharacterDownsync.InAir}, onWall: {currCharacterDownsync.OnWall}, chS: {currCharacterDownsync.CharacterState})");
                 }
+                */
                 shouldJumpTowardsTarget |= temptingToFly;
                 bool shouldSlipJumpTowardsTarget = (canJumpWithinInertia && !effInAir && 0 > oppoChColliderDy && currCharacterDownsync.PrimarilyOnSlippableHardPushback);
                 shouldSlipJumpTowardsTarget = (!chConfig.OmitGravity && chConfig.JumpHoldingToFly && currCharacterDownsync.OmitGravity && !opponentAboveMe && !opponentBehindMe);

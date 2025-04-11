@@ -102,7 +102,7 @@ public class Room {
 
     public PeerUdpAddr? battleUdpTunnelAddr;
     public RepeatedField<PeerUdpAddr>? peerUdpAddrList;
-    
+
     IRoomManager _roomManager;
     ILoggerFactory _loggerFactory;
     ILogger<Room> _logger;
@@ -132,7 +132,7 @@ public class Room {
      * to avoid chaotic flaws.
      *
      * Moreover, during the invocation of `PlayerSignalToCloseDict`, the `Player` instance is supposed to be deallocated (though not synchronously).
-*/
+     */
     Dictionary<string, WebSocket> playerDownsyncSessionDict;
     Dictionary<string, (CancellationTokenSource, CancellationToken)> playerSignalToCloseDict;
     Dictionary<string, BlockingCollection<(ArraySegment<byte>, InputBufferSnapshot)>> playerWsDownsyncQueDict;
@@ -142,7 +142,7 @@ public class Room {
     //////////////////////////////Room lifecycle disposables////////////////////////////////// 
     Mutex joinerLock;         // Guards [AddPlayerIfPossible, ReAddPlayerIfPossible, OnPlayerDisconnected, dismiss]
     Mutex inputBufferLock;         // Guards [*renderBuffer*, inputBuffer, latestPlayerUpsyncedInputFrameId, lastAllConfirmedInputFrameId, lastAllConfirmedInputList, lastAllConfirmedInputFrameIdWithChange, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, player.LastConsecutiveRecvInputFrameId]
-    //////////////////////////////Room lifecycle disposables////////////////////////////////// 
+                                   //////////////////////////////Room lifecycle disposables////////////////////////////////// 
 
     public class RoomLoggerBridge : ILoggerBridge {
         private ILogger<Room> _intLogger;
@@ -205,7 +205,7 @@ public class Room {
         collisionSys = new CollisionSpace(1, 1, 1, 1); 
         collisionHolder = new Collision();
         residueCollided = new FrameRingBuffer<Collider>(0);
-        
+
         // Preallocate network management fields
         players = new Dictionary<string, Player>();
         playersArr = new Player[capacity];
@@ -232,10 +232,10 @@ public class Room {
 
     private int getRenderBufferSize() {
         /*
-        [WARNING]
+           [WARNING]
 
-        After v1.6.4, the netcode preference is changed to "freeze normal tickerw for awaiting slow tickers", therefore "type#1 forceConfirmation" can be disabled to favor smoother graphics on the "slow tickers", yet it will cost a larger "inputBuffer" on the backend capped by the interval of "type#3 forceConfirmation".
-        */
+           After v1.6.4, the netcode preference is changed to "freeze normal tickers for awaiting slow tickers", therefore "type#1 forceConfirmation" can be disabled to favor smoother graphics on the "slow tickers", yet it will cost a larger "inputBuffer" on the backend capped by the interval of "type#3 forceConfirmation".
+         */
         return (type1ForceConfirmationEnabled ? 96 : FORCE_RESYNC_INTERVAL_THRESHOLD);
     }
 
@@ -329,7 +329,7 @@ public class Room {
                 _logger.LogInformation("The active battle doesn't contain playerId when calling `ReAddPlayerIfPossible` for (roomId={0}, playerId={1})", id, playerId);
                 return (ErrCode.PlayerNotAddableToRoom, null);
             }
-            
+
             var existingPlayer = players[playerId];
             int existingJoinIndex = existingPlayer.CharacterDownsync.JoinIndex;
             var oldPlayerBattleState = existingPlayer.BattleState;
@@ -451,17 +451,17 @@ public class Room {
                 }
                 playerActiveWatchdogDict.Remove(playerId);
             }
-            
+
             if (playerSignalToCloseDict.ContainsKey(playerId)) {
                 var (cancellationTokenSource, _) = playerSignalToCloseDict[playerId];
                 /*
-                 [WARNING]
+                   [WARNING]
 
-                 "clearPlayerNetworkSession" will only be called by 
-                - OnPlayerDisconnected(...) which will only be called by "WebSocketController.HandleNewPlayerPrimarySession" after proactive close received or cancelled on the same signal
-                - DismissBattleAsync()
+                   "clearPlayerNetworkSession" will only be called by 
+                   - OnPlayerDisconnected(...) which will only be called by "WebSocketController.HandleNewPlayerPrimarySession" after proactive close received or cancelled on the same signal
+                   - DismissBattleAsync()
 
-                thus calling "cancellationTokenSource.Cancel()" here would NOT by any chance interrupt this function itself.
+                   thus calling "cancellationTokenSource.Cancel()" here would NOT by any chance interrupt this function itself.
                  */
                 try { 
                     if (!cancellationTokenSource.IsCancellationRequested) {
@@ -531,7 +531,7 @@ public class Room {
             case PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK:
                 var playerAckedFrame = new RoomDownsyncFrame {
                     Id = renderFrameId,
-                    ParticipantChangeId = participantChangeId++
+                       ParticipantChangeId = participantChangeId++
                 };
                 playerAckedFrame.PlayersArr.AddRange(clonePlayersArrToPb());
                 var tList = new List<Task>();
@@ -544,7 +544,7 @@ public class Room {
                        By making use of the sequential nature of each ws session, all later "RoomDownsyncFrame"s generated after `pRoom.StartBattle()` will be put behind this `playerAckedFrame`.
 
                        This function is triggered by an upsync message via WebSocket, thus downsync sending is also available by now.
-                    */
+                     */
                     var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
                     _logger.LogInformation("OnPlayerBattleColliderAcked-middle: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={2}, thatPlayerId={3}, thatPlayerBattleState={4}", id, state, targetPlayerId, targetPlayerBattleState, thatPlayerId, thatPlayerBattleState);
                     if (thatPlayerId == targetPlayerId || (PLAYER_BATTLE_STATE_ADDED_PENDING_BATTLE_COLLIDER_ACK == thatPlayerBattleState || PLAYER_BATTLE_STATE_ACTIVE == thatPlayerBattleState)) {
@@ -561,13 +561,13 @@ public class Room {
         }
 
         _logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
-        
+
         try {
             joinerLock.WaitOne();
             if (0 >= renderBuffer.Cnt) {
                 provisionStepHolders(capacity, renderBuffer, pushbackFrameLogBuffer, inputBuffer, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, effPushbacks, hardPushbackNormsArr, softPushbacks, confirmedBattleResult);
-                    _logger.LogInformation("OnPlayerBattleColliderAcked-post-provisionStepHolders: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
-                
+                _logger.LogInformation("OnPlayerBattleColliderAcked-post-provisionStepHolders: roomId={0}, roomState={1}, targetPlayerId={2}, targetPlayerBattleState={3}, capacity={4}, effectivePlayerCount={5}", id, state, targetPlayerId, targetPlayerBattleState, capacity, effectivePlayerCount);
+
                 renderBuffer.Put(selfParsedRdf);
 
                 //_logger.LogInformation("OnPlayerBattleColliderAcked-post-downsync details: roomId={0}, selfParsedRdf={1}, serializedBarrierPolygons={2}", id, selfParsedRdf, serializedBarrierPolygons);
@@ -652,17 +652,17 @@ public class Room {
                     var toSendInputFrameIdEd = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
 
                     /*
-                    [WARNING] 
+                       [WARNING] 
 
-                    Reasons behind putting this "downsyncToSinglePlayerAsync" under a "Task.Run(...)" as follows.
+                       Reasons behind putting this "downsyncToSinglePlayerAsync" under a "Task.Run(...)" as follows.
 
-                    - When "downsyncToAllPlayers" is invoked by "OnBattleCmdReceived(...)" which is in turn very frequently called **even upon UDP reception**, we want it to be "as I/O non-blocking as possible" -- that said, the need for "downsyncToAllPlayers" to **preserve the order of generation of "inputBufferSnapshot" for sending** still exists -- creating a somewhat dilemma. 
+                       - When "downsyncToAllPlayers" is invoked by "OnBattleCmdReceived(...)" which is in turn very frequently called **even upon UDP reception**, we want it to be "as I/O non-blocking as possible" -- that said, the need for "downsyncToAllPlayers" to **preserve the order of generation of "inputBufferSnapshot" for sending** still exists -- creating a somewhat dilemma. 
 
-                    - The ideal behavior for me in this case is a "wsSession.PutToSendLater(...)" which executes synchronously in the current calling thread, thus returns immediately without "yielding at I/O awaiting". However "wsSession.SendAsync" returns an "async Task" -- certainly not the ideal form, i.e. "wsSession.SendAsync" respects "TCP flow control" to wait for corresponding ACKs when invocation rate is too high, which puts a significant "function return rate limit" of it ("yielding at I/O awaiting" is NOT a "return").  
-                    */
-                    var playerBattleState = Interlocked.Read(ref player.BattleState);
+                       - The ideal behavior for me in this case is a "wsSession.PutToSendLater(...)" which executes synchronously in the current calling thread, thus returns immediately without "yielding at I/O awaiting". However "wsSession.SendAsync" returns an "async Task" -- certainly not the ideal form, i.e. "wsSession.SendAsync" respects "TCP flow control" to wait for corresponding ACKs when invocation rate is too high, which puts a significant "function return rate limit" of it ("yielding at I/O awaiting" is NOT a "return").  
+                     */
+                    var oldPlayerBattleState = Interlocked.Read(ref player.BattleState);
 
-                    switch (playerBattleState) {
+                    switch (oldPlayerBattleState) {
                         case PLAYER_BATTLE_STATE_DISCONNECTED:
                         case PLAYER_BATTLE_STATE_LOST:
                         case PLAYER_BATTLE_STATE_EXPELLED_DURING_GAME:
@@ -673,19 +673,31 @@ public class Room {
                     }
 
                     /*
-                        Resync helps
-                        1. when player with a slower frontend clock lags significantly behind and thus wouldn't get its inputUpsync recognized due to faster "forceConfirmation"
-                        2. reconnection
-                    */
+                       Resync helps
+                       1. when player with a slower frontend clock lags significantly behind and thus wouldn't get its inputUpsync recognized due to faster "forceConfirmation"
+                       2. reconnection
+                     */
 
                     // [WARNING] Preserving generated order (of inputBufferSnapshot) while sending per player by simply "awaiting" the "wsSession.SendAsync(...)" calls
                     await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationSignal.c2);
 
                     player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
 
-                    if (backendDynamicsEnabled && shouldResync && PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC == playerBattleState) {
-                        _logger.LogInformation(String.Format("[readded-resync] @LastAllConfirmedInputFrameId={11}; Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, playerId={4}, playerJoinIndex={5}, renderFrameId={6}, curDynamicsRenderFrameId={7}, playerLastSentInputFrameId={8}: oldPlayerBattleState={9}, contentByteLength={10}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, playerId, joinIndex, renderFrameId, curDynamicsRenderFrameId, player.LastSentInputFrameId, playerBattleState, content.Count, lastAllConfirmedInputFrameId));
+                    if (backendDynamicsEnabled && shouldResync && PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC == oldPlayerBattleState) {
+                        _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex}, renderFrameId={renderFrameId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: contentByteLength={content.Count}");
                         Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
+                        foreach (var (otherPlayerId, otherPlayer) in players) { 
+                            if (otherPlayerId == playerId) continue;
+                            var oldOtherPlayerBattleState = Interlocked.Read(ref otherPlayer.BattleState);
+                            if (oldOtherPlayerBattleState != PLAYER_BATTLE_STATE_DISCONNECTED) continue;    
+                            var resp = new WsResp {
+                                Ret = ErrCode.Ok,
+                                    Act = DOWNSYNC_MSG_ACT_PLAYER_DISCONNECTED,
+                                    PeerJoinIndex = otherPlayer.CharacterDownsync.JoinIndex
+                            };
+                            // Such that rejoined players know who to ignore for freezing!
+                            await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationSignal.c2);
+                        }
                     }
                 }
             }
@@ -736,10 +748,10 @@ public class Room {
         await Task.Delay(1500);
 
         /**
-		  [WARNING] We actually need the "battleMainLoop" immediately switch into another thread for running, such that we can avoid putting an unevenly heavy load on the current thread (i.e. which is of a specific player session)! See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
+          [WARNING] We actually need the "battleMainLoop" immediately switch into another thread for running, such that we can avoid putting an unevenly heavy load on the current thread (i.e. which is of a specific player session)! See "GOROUTINE_TO_ASYNC_TASK.md" for more information.
 
           Moreover, I'm deliberately NOT AWAITING here, because the execution of "OnPlayerBattleColliderAcked -> startBattleAsync" should continue without the result of "battleMainLoopActionAsync"!
-		 */
+         */
         battleMainLoopTask = Task.Run(battleMainLoopAsync);
     }
 
@@ -779,11 +791,11 @@ public class Room {
             }
 
             /**
-			[WARNING] "OnPlayerDisconnected" could be called after "SettleBattleAsync" and during "dismiss", but it's guaranteed that 
-			- when "dismiss" is called, "Room.players" is always full, i.e. any "OnPlayerDisconnected" called in active battle wouldn't remove any entry in "Room.players"
-			- if "OnPlayerDisconnected" is called during settlement or dismissal, it wouldn't remove any entry in "Room.players"	
-			- if "OnPlayerDisconnected" is called during settlement or dismissal, the call to "clearPlayerNetworkSession" is always safe due to use of "joinerLock"	
-			*/
+              [WARNING] "OnPlayerDisconnected" could be called after "SettleBattleAsync" and during "dismiss", but it's guaranteed that 
+              - when "dismiss" is called, "Room.players" is always full, i.e. any "OnPlayerDisconnected" called in active battle wouldn't remove any entry in "Room.players"
+              - if "OnPlayerDisconnected" is called during settlement or dismissal, it wouldn't remove any entry in "Room.players"	
+              - if "OnPlayerDisconnected" is called during settlement or dismissal, the call to "clearPlayerNetworkSession" is always safe due to use of "joinerLock"	
+             */
             foreach (var (playerId, _) in players) {
                 clearPlayerNetworkSession(playerId);
             }
@@ -863,7 +875,7 @@ public class Room {
 
                 nowMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 var totalElapsedMillis = nowMillis - battleStartedAt;
-                
+
                 int toSleepMillis = estimatedMillisPerFrame;
                 int nextRenderFrameId = (int)((totalElapsedMillis + estimatedMillisPerFrame - 1) / estimatedMillisPerFrame); // fast ceiling
 
@@ -880,7 +892,7 @@ public class Room {
                             }
                             var tList = new List<Task>();
                             // It's important to send kickoff frame iff  "0 == renderFrameId && nextRenderFrameId > renderFrameId", otherwise it might send duplicate kickoff frames
-                            
+
                             foreach (var (playerId, player) in players) {
                                 tList.Add(sendSafelyAsync(startRdf, null, null, DOWNSYNC_MSG_ACT_BATTLE_START, playerId, player, MAGIC_JOIN_INDEX_DEFAULT));
                             }
@@ -890,21 +902,21 @@ public class Room {
 
                         int prevRenderFrameId = renderFrameId;
                         renderFrameId = nextRenderFrameId;
-                        
+
                         ulong dynamicsDuration = 0ul;
                         // Prefab and buffer backend inputFrameDownsync
                         if (backendDynamicsEnabled) {
                             int oldCurDynamicsRenderFrameId = curDynamicsRenderFrameId;
                             doBattleMainLoopPerTickBackendDynamicsWithProperLocking(prevRenderFrameId, ref dynamicsDuration);
                             if (oldCurDynamicsRenderFrameId < curDynamicsRenderFrameId && curDynamicsRenderFrameId+(int)(4UL << INPUT_SCALE_FRAMES) >= battleDurationFrames) {
-                                 int oldElongatedBattleDurationFrame = elongatedBattleDurationFrames; 
-                                 int proposedElongatedBattleDurationFrame = (renderFrameId + 3*BATTLE_DYNAMICS_FPS); // [WARNING] Now that CONFIRMED LAST INPUT FRAMES from all players are received, we shouldn't be awaiting too long from here on.
-                                 if (false == elongatedBattleDurationFramesShortenedOnce) {
-                                     elongatedBattleDurationFrames = oldElongatedBattleDurationFrame < proposedElongatedBattleDurationFrame ? oldElongatedBattleDurationFrame : proposedElongatedBattleDurationFrame;  
-                                     elongatedBattleDurationFramesShortenedOnce = true;
-                                 } else {
-                                     elongatedBattleDurationFrames = oldElongatedBattleDurationFrame > proposedElongatedBattleDurationFrame ? oldElongatedBattleDurationFrame : proposedElongatedBattleDurationFrame;  
-                                 }
+                                int oldElongatedBattleDurationFrame = elongatedBattleDurationFrames; 
+                                int proposedElongatedBattleDurationFrame = (renderFrameId + 3*BATTLE_DYNAMICS_FPS); // [WARNING] Now that CONFIRMED LAST INPUT FRAMES from all players are received, we shouldn't be awaiting too long from here on.
+                                if (false == elongatedBattleDurationFramesShortenedOnce) {
+                                    elongatedBattleDurationFrames = oldElongatedBattleDurationFrame < proposedElongatedBattleDurationFrame ? oldElongatedBattleDurationFrame : proposedElongatedBattleDurationFrame;  
+                                    elongatedBattleDurationFramesShortenedOnce = true;
+                                } else {
+                                    elongatedBattleDurationFrames = oldElongatedBattleDurationFrame > proposedElongatedBattleDurationFrame ? oldElongatedBattleDurationFrame : proposedElongatedBattleDurationFrame;  
+                                }
                                 _logger.LogInformation("In `battleMainLoop` for roomId={0}, curDynamicsRenderFrameId={1} just surpassed battleDurationFrames={2}, elongating per required: renderFrameId={3}, oldElongatedBattleDurationFrame={4}, newElongatedBattleDurationFrames={5}", id, curDynamicsRenderFrameId, battleDurationFrames, renderFrameId, oldElongatedBattleDurationFrame, elongatedBattleDurationFrames);
                             }
                         }
@@ -920,7 +932,7 @@ public class Room {
 
             _logger.LogInformation("Times up, will settle `battleMainLoopActionAsync` for roomId={0} @renderFrameId={1}, elongatedBattleDurationFrames={2}", id, renderFrameId, elongatedBattleDurationFrames);
         } catch (Exception ex) {
-            _logger.LogError(ex, "Error running battleMainLoopActionAsync for roomId={0}", id);
+            _logger.LogError(ex, $"Error running battleMainLoopActionAsync for roomId={id}, renderFrameId={renderFrameId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, renderBuffer={renderBuffer.toSimpleStat()}, inputBuffer={inputBuffer.toSimpleStat()}");
         } finally {
             await SettleBattleAsync();
             _logger.LogInformation("The `battleMainLoop` for roomId={0} is settled@renderFrameId={1}", id, renderFrameId);
@@ -933,17 +945,17 @@ public class Room {
 
     public void OnBattleCmdReceived(WsReq pReq, string playerId, bool fromUDP, bool fromReentryWsSession=false) {
         /*
-		   [WARNING] This function "OnBattleCmdReceived" could be called by different ws sessions and thus from different threads!
+           [WARNING] This function "OnBattleCmdReceived" could be called by different ws sessions and thus from different threads!
 
-		   That said, "markConfirmationIfApplicable" will still work as expected. Here's an example of weird call orders.
-		   ---------------------------------------------------
-		   now lastAllConfirmedInputFrameId: 42; each "()" below indicates a "Lock/Unlock cycle of inputBufferLock", and "x" indicates no new all-confirmed snapshot is created
-		   A: ([44,50],x)                                            ([49,54],snapshot=[51,53])
-		   B:           ([54,58],x)
-		   C:                               ([42,53],snapshot=[43,50])
-		   D:                     ([51,55],x)
-		   ---------------------------------------------------
-		*/
+           That said, "markConfirmationIfApplicable" will still work as expected. Here's an example of weird call orders.
+           ---------------------------------------------------
+           now lastAllConfirmedInputFrameId: 42; each "()" below indicates a "Lock/Unlock cycle of inputBufferLock", and "x" indicates no new all-confirmed snapshot is created
+A: ([44,50],x)                                            ([49,54],snapshot=[51,53])
+B:           ([54,58],x)
+C:                               ([42,53],snapshot=[43,50])
+D:                     ([51,55],x)
+---------------------------------------------------
+         */
         // TODO: Put a rate limiter on this function!
         var nowRoomState = Interlocked.Read(ref this.state);
         if (ROOM_STATE_IN_BATTLE != nowRoomState) {
@@ -952,6 +964,10 @@ public class Room {
         }
 
         var inputFrameUpsyncBatch = pReq.InputFrameUpsyncBatch;
+        if (0 >= inputFrameUpsyncBatch.Count) {
+            _logger.LogWarning("OnBattleCmdReceived early return because inputFrameUpsyncBatch is empty: roomId={0}, fromPlayerId={1}, nowRoomState={2}", id, playerId, nowRoomState);
+            return;
+        }
         var ackingFrameId = pReq.AckingFrameId;
         var ackingInputFrameId = pReq.AckingInputFrameId;
 
@@ -963,26 +979,26 @@ public class Room {
 
         if (false == fromUDP) {
             /*
-             [WARNING]
-            
-             When an Android client changes network AP from 4g to Wi-Fi, the "ws backend session" held by this C# WebSocket service could no longer send/receive packets to/from that Android client (HOWEVER, there's NO automatic close callback invoked for that "ws backend session"), therefore we only kick the watchdog upon ws session rx/tx for better sensitivity.
+               [WARNING]
+
+               When an Android client changes network AP from 4g to Wi-Fi, the "ws backend session" held by this C# WebSocket service could no longer send/receive packets to/from that Android client (HOWEVER, there's NO automatic close callback invoked for that "ws backend session"), therefore we only kick the watchdog upon ws session rx/tx for better sensitivity.
              */
             PlayerSessionAckWatchdog? watchdog;
             if (playerActiveWatchdogDict.TryGetValue(playerId, out watchdog)) {
                 watchdog.Kick();
             }
             /*
-            if (fromReentryWsSession) {
-                _logger.LogInformation("[AFTER REENTRY] roomId={0}, playerId={1}, joinIndex={2}, upsynced from reentry ws session inputFrameId range: [{3}, {4}], lastAllConfirmedInputFrameId={5}", id, playerId, player.CharacterDownsync.JoinIndex, inputFrameUpsyncBatch[0].InputFrameId, inputFrameUpsyncBatch[inputFrameUpsyncBatch.Count-1].InputFrameId, lastAllConfirmedInputFrameId);
-            }
-            */
+               if (fromReentryWsSession) {
+               _logger.LogInformation("[AFTER REENTRY] roomId={0}, playerId={1}, joinIndex={2}, upsynced from reentry ws session inputFrameId range: [{3}, {4}], lastAllConfirmedInputFrameId={5}", id, playerId, player.CharacterDownsync.JoinIndex, inputFrameUpsyncBatch[0].InputFrameId, inputFrameUpsyncBatch[inputFrameUpsyncBatch.Count-1].InputFrameId, lastAllConfirmedInputFrameId);
+               }
+             */
         }
 
-        // I've been seeking a totally lock-free approach for this whole operation for a long time, but still it's safer to keep using "mutex inputBufferLock"... 
-        Interlocked.Exchange(ref player.AckingFrameId, ackingFrameId);
-        Interlocked.Exchange(ref player.AckingInputFrameId, ackingInputFrameId);
+        player.AckingFrameId = ackingFrameId;
+        player.AckingInputFrameId = ackingInputFrameId;
 
         //_logger.LogInformation("OnBattleCmdReceived-inputBufferLock about to lock: roomId={0}, fromPlayerId={1}", id, playerId);
+        // I've been seeking a totally lock-free approach for this whole operation for a long time, but still it's safer to keep using "mutex inputBufferLock"... 
         inputBufferLock.WaitOne();
         try {
             var inputBufferSnapshot = markConfirmationIfApplicable(inputFrameUpsyncBatch, playerId, player, fromUDP, fromReentryWsSession);
@@ -1010,28 +1026,38 @@ public class Room {
             if (clientInputFrameId < player.LastConsecutiveRecvInputFrameId) {
                 // [WARNING] It's important for correctness that we use "player.LastConsecutiveRecvInputFrameId" instead of "lastIndividuallyConfirmedInputFrameId[player.JoinIndex-1]" here!
                 /*
-                if (fromReentryWsSession) {
-                    _logger.LogInformation("Omitting obsolete inputFrameUpsync#2: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}, playerLastConsecutiveRecvInputFrameId={5}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat(), player.LastConsecutiveRecvInputFrameId);
-                }
-                */
+                   if (fromReentryWsSession) {
+                   _logger.LogInformation("Omitting obsolete inputFrameUpsync#2: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}, playerLastConsecutiveRecvInputFrameId={5}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat(), player.LastConsecutiveRecvInputFrameId);
+                   }
+                 */
                 continue;
             }
             if (clientInputFrameId <= lastAllConfirmedInputFrameId) {
                 /*
-                if (fromReentryWsSession) {
-                    _logger.LogInformation("Omitting obsolete inputFrameUpsync#3: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
-                }
-                */
+                   if (fromReentryWsSession) {
+                   _logger.LogInformation("Omitting obsolete inputFrameUpsync#3: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
+                   }
+                 */
                 continue;
             }
 
-            int nextToUseIfdId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId);
-            int advanceGap = (clientInputFrameId > inputBuffer.EdFrameId) ? (clientInputFrameId - inputBuffer.EdFrameId) : 0;  
-            bool tooAdvanced = (0 < advanceGap && inputBuffer.StFrameId + advanceGap >= nextToUseIfdId);
-            if (tooAdvanced) {
-                //_logger.LogWarning("Dropping too advanced inputFrameUpsync#1: roomId={0}, playerId={1}, clientInputFrameId={2}, lastAllConfirmedInputFrameId={3}, inputBuffer={4}; is this player cheating?", id, playerId, clientInputFrameId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat());
-                break;
+            bool willEvict = (clientInputFrameId >= inputBuffer.EdFrameId && inputBuffer.Cnt >= inputBuffer.N);
+            if (willEvict) {
+                var frontIfd = inputBuffer.GetFirst();
+                if (null == frontIfd) {
+                    _logger.LogWarning($"markConfirmationIfApplicable/phase1 early return because clientInputFrameId={clientInputFrameId} against a full inputBuffer={inputBuffer.toSimpleStat()} is having a null frontIfd in this room: roomId={id}, fromPlayerId={playerId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: breaking phase1 and ignoring the rest inputFrameUpsyncs from this player in phase2");
+                    break;
+                }
+                var frontIfdId = frontIfd.InputFrameId;
+                var curDynamicsToUseIfdId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId);
+                bool toEvictIfdAlreadyUsed = (curDynamicsToUseIfdId > frontIfdId);
+                if (!toEvictIfdAlreadyUsed) {
+                    _logger.LogWarning($"markConfirmationIfApplicable/phase1 early return because frontIfdId={frontIfdId}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} not being safe for eviction while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} n this room: roomId={id}, fromPlayerId={playerId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: breaking phase1 and ignoring the rest inputFrameUpsyncs from this player in phase2");
+                    // OnPlayerDisconnected(playerId); // [WARNING] This line is tried but outcome is not good, need more data collection and analysis for a better approach.
+                    break;
+                } 
             }
+
             // by now "clientInputFrameId <= inputBuffer.EdFrameId"
             var targetInputFrameDownsync = getOrPrefabInputFrameDownsync(clientInputFrameId);
             targetInputFrameDownsync.InputList[player.CharacterDownsync.JoinIndex - 1] = inputFrameUpsync.Encoded;
@@ -1039,12 +1065,12 @@ public class Room {
 
             if (false == fromUDP) {
                 /**
-				  [WARNING] We have to distinguish whether or not the incoming batch is from UDP here, otherwise "pR.LatestPlayerUpsyncedInputFrameId - pR.LastAllConfirmedInputFrameId" might become unexpectedly large in case of "UDP packet loss + slow ws session"!
+                  [WARNING] We have to distinguish whether or not the incoming batch is from UDP here, otherwise "pR.LatestPlayerUpsyncedInputFrameId - pR.LastAllConfirmedInputFrameId" might become unexpectedly large in case of "UDP packet loss + slow ws session"!
 
-				  Moreover, only ws session upsyncs should advance "player.LastConsecutiveRecvInputFrameId" & "latestPlayerUpsyncedInputFrameId".
+                  Moreover, only ws session upsyncs should advance "player.LastConsecutiveRecvInputFrameId" & "latestPlayerUpsyncedInputFrameId".
 
-				  Kindly note that the updates of "player.LastConsecutiveRecvInputFrameId" could be discrete before and after reconnection.
-				 */
+                  Kindly note that the updates of "player.LastConsecutiveRecvInputFrameId" could be discrete before and after reconnection.
+                 */
                 player.LastConsecutiveRecvInputFrameId = clientInputFrameId;
                 if (clientInputFrameId > latestPlayerUpsyncedInputFrameId) {
                     latestPlayerUpsyncedInputFrameId = clientInputFrameId;
@@ -1068,6 +1094,7 @@ public class Room {
         if (clientInputFrameIdEd > inputBuffer.EdFrameId) {
             clientInputFrameIdEd = inputBuffer.EdFrameId;
         }
+
         for (int inputFrameId = inputFrameId1; inputFrameId < clientInputFrameIdEd; inputFrameId++) {
             // See comments for the traversal above.
             if (inputFrameId < inputBuffer.StFrameId) {
@@ -1093,7 +1120,7 @@ public class Room {
                     }
                     if (isSlowTicker) {
                         inputFrameDownsync.InputList[j] = 0u; // For UNCONFIRMED BUT INACTIVE player input, always predict it to zero.
-                        //_logger.LogInformation("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.CharacterDownsync.Id, thatPlayer.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
+                                                              //_logger.LogInformation("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.CharacterDownsync.Id, thatPlayer.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
                     }
                 }
             }
@@ -1108,14 +1135,14 @@ public class Room {
 
         if (0 < newAllConfirmedCount) {
             /**
-			[WARNING]
+              [WARNING]
 
-			If "inputBufferLock" was previously held by "doBattleMainLoopPerTickBackendDynamicsWithProperLocking", then "snapshotStFrameId" would be just (LastAllConfirmedInputFrameId - newAllConfirmedCount).
+              If "inputBufferLock" was previously held by "doBattleMainLoopPerTickBackendDynamicsWithProperLocking", then "snapshotStFrameId" would be just (LastAllConfirmedInputFrameId - newAllConfirmedCount).
 
-			However if "inputBufferLock" was previously held by another "OnBattleCmdReceived", the proper value for "snapshotStFrameId" might be smaller than (pR.LastAllConfirmedInputFrameId - newAllConfirmedCount) -- but why? Especially when we've already wrapped this whole function in "inputBufferLock", the order of "markConfirmationIfApplicable" generated snapshots is preserved for sending, isn't (LastAllConfirmedInputFrameId - newAllConfirmedCount) good enough here?
+              However if "inputBufferLock" was previously held by another "OnBattleCmdReceived", the proper value for "snapshotStFrameId" might be smaller than (pR.LastAllConfirmedInputFrameId - newAllConfirmedCount) -- but why? Especially when we've already wrapped this whole function in "inputBufferLock", the order of "markConfirmationIfApplicable" generated snapshots is preserved for sending, isn't (LastAllConfirmedInputFrameId - newAllConfirmedCount) good enough here?
 
-			Unfortunately no, for a reconnected player to get recovered asap (of course with BackendDynamicsEnabled), we put a check of READDED_BATTLE_COLLIDER_ACKED in "downsyncToSinglePlayerAsync" -- which could be called right after "markConfirmationIfApplicable" yet without going through "forceConfirmationIfApplicable" -- and if a READDED_BATTLE_COLLIDER_ACKED player is found there we need a proper "(refRenderFrameId, snapshotStFrameId)" pair for that player!
-			*/
+              Unfortunately no, for a reconnected player to get recovered asap (of course with BackendDynamicsEnabled), we put a check of READDED_BATTLE_COLLIDER_ACKED in "downsyncToSinglePlayerAsync" -- which could be called right after "markConfirmationIfApplicable" yet without going through "forceConfirmationIfApplicable" -- and if a READDED_BATTLE_COLLIDER_ACKED player is found there we need a proper "(refRenderFrameId, snapshotStFrameId)" pair for that player!
+             */
             int snapshotStFrameId = (lastAllConfirmedInputFrameId - newAllConfirmedCount);
             if (backendDynamicsEnabled) {
                 int refRenderFrameIdIfNeeded = curDynamicsRenderFrameId - 1;
@@ -1126,10 +1153,10 @@ public class Room {
             }
             int snapshotEdFrameId = lastAllConfirmedInputFrameId + 1;
             /*
-            if (fromReentryWsSession) {
-                _logger.LogInformation("markConfirmationIfApplicable for roomId={0} returning newAllConfirmedCount={1}, snapshotStFrameId={2}, snapshotEdFrameId={3}", id, newAllConfirmedCount, snapshotStFrameId, snapshotEdFrameId);
-            }
-            */
+               if (fromReentryWsSession) {
+               _logger.LogInformation("markConfirmationIfApplicable for roomId={0} returning newAllConfirmedCount={1}, snapshotStFrameId={2}, snapshotEdFrameId={3}", id, newAllConfirmedCount, snapshotStFrameId, snapshotEdFrameId);
+               }
+             */
             return produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(0, snapshotStFrameId, snapshotEdFrameId);
         } else {
             return null;
@@ -1188,12 +1215,12 @@ public class Room {
         int inputFrameId = inputFrameDownsync.InputFrameId;
         if (MAGIC_LAST_SENT_INPUT_FRAME_ID_NORMAL_ADDED == lastAllConfirmedInputFrameIdWithChange || false == shared.Battle.EqualInputLists(inputFrameDownsync.InputList, lastAllConfirmedInputList)) {
             /*
-            if (INVALID_DEFAULT_PLAYER_ID == playerId) {
-                _logger.LogInformation("Key inputFrame change: roomId={0}, newInputFrameId={1}, lastInputFrameId={2}, newInputList={2}, lastAllConfirmedInputList={3}", id, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList);
-            } else {
-                _logger.LogInformation("Key inputFrame change: roomId={0}, playerId={1}, newInputFrameId={2}, lastInputFrameId={3}, newInputList={4}, lastAllConfirmedInputList={5}", id, playerId, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList);
-            }
-            */
+               if (INVALID_DEFAULT_PLAYER_ID == playerId) {
+               _logger.LogInformation("Key inputFrame change: roomId={0}, newInputFrameId={1}, lastInputFrameId={2}, newInputList={2}, lastAllConfirmedInputList={3}", id, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList);
+               } else {
+               _logger.LogInformation("Key inputFrame change: roomId={0}, playerId={1}, newInputFrameId={2}, lastInputFrameId={3}, newInputList={4}, lastAllConfirmedInputList={5}", id, playerId, inputFrameId, lastAllConfirmedInputFrameId, inputFrameDownsync.InputList, lastAllConfirmedInputList);
+               }
+             */
             lastAllConfirmedInputFrameIdWithChange = inputFrameId;
         }
         lastAllConfirmedInputFrameId = inputFrameId;
@@ -1201,12 +1228,12 @@ public class Room {
             lastAllConfirmedInputList[i] = inputFrameDownsync.InputList[i];
         }
         /*
-        if (INVALID_DEFAULT_PLAYER_ID == playerId) {
-            _logger.LogInformation("inputFrame lifecycle#2[forced-allconfirmed]: roomId={0}, inputFrameId={1}", id, inputFrameId);
-        } else {
-            _logger.LogInformation("inputFrame lifecycle#2[allconfirmed]: roomId={0}, playerId={1}, inputFrameId={2}", id, playerId, inputFrameId);
-        }
-        */
+           if (INVALID_DEFAULT_PLAYER_ID == playerId) {
+           _logger.LogInformation("inputFrame lifecycle#2[forced-allconfirmed]: roomId={0}, inputFrameId={1}", id, inputFrameId);
+           } else {
+           _logger.LogInformation("inputFrame lifecycle#2[allconfirmed]: roomId={0}, playerId={1}, inputFrameId={2}", id, playerId, inputFrameId);
+           }
+         */
     }
 
     private InputBufferSnapshot? produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(ulong unconfirmedMask, int snapshotStFrameId, int snapshotEdFrameId) {
@@ -1219,7 +1246,7 @@ public class Room {
         // [WARNING] As this snapshot is to be sent via network, I'm not sure whether there's a more memory efficient way, i.e. to AVOID creating "a clone of [snapshotStFrameId, snapshotEdFrameId) of the inputBuffer".  
         var ret = new InputBufferSnapshot {
             RefRenderFrameId = refRenderFrameIdIfNeeded,
-            UnconfirmedMask = unconfirmedMask,
+                             UnconfirmedMask = unconfirmedMask,
         };
         ret.ToSendInputFrameDownsyncs.AddRange(cloneInputBuffer(snapshotStFrameId, snapshotEdFrameId));
         return ret;
@@ -1259,20 +1286,20 @@ public class Room {
 
     private void downsyncToAllPlayers(InputBufferSnapshot? inputBufferSnapshot) {
         /*
-        [WARNING] 
-        
-        This function MUST BE called while "pR.inputBufferLock" is LOCKED to **preserve the order of generation of "inputBufferSnapshot" for sending** -- see comments in "OnBattleCmdReceived" and [this issue](https://github.com/genxium/DelayNoMore/issues/12).
-        */
+           [WARNING] 
+
+           This function MUST BE called while "pR.inputBufferLock" is LOCKED to **preserve the order of generation of "inputBufferSnapshot" for sending** -- see comments in "OnBattleCmdReceived" and [this issue](https://github.com/genxium/DelayNoMore/issues/12).
+         */
 
         if (null == inputBufferSnapshot) {
             _logger.LogWarning("inputBufferSnapshot is null when calling downsyncToAllPlayers for (roomId: {0})", id);
             return;
         }
-        
+
         if (true == backendDynamicsEnabled) {
             /*
-            [WARNING] The comment of this part in Golang version is obsolete. The field "ForceAllResyncOnAnyActiveSlowTicker" is always true, and setting "ShouldForceResync = true" here is only going to impact unconfirmed players on frontend, i.e. there's a filter on frontend to ignore "nonSelfForceConfirmation". 
-            */
+               [WARNING] The comment of this part in Golang version is obsolete. The field "ForceAllResyncOnAnyActiveSlowTicker" is always true, and setting "ShouldForceResync = true" here is only going to impact unconfirmed players on frontend, i.e. there's a filter on frontend to ignore "nonSelfForceConfirmation". 
+             */
             if (0 < inputBufferSnapshot.UnconfirmedMask) {
                 inputBufferSnapshot.ShouldForceResync = true;
             } else {
@@ -1318,18 +1345,18 @@ public class Room {
         }
 
         /*
-        if (backendDynamicsEnabled && shouldResync) {
-            _logger.LogInformation(String.Format("[resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, renderFrameId, curDynamicsRenderFrameId, content.Count));
-        } else {
-            _logger.LogInformation(String.Format("[ipt-sync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, renderFrameId, curDynamicsRenderFrameId, content.Count));
-        }
-        */
+           if (backendDynamicsEnabled && shouldResync) {
+           _logger.LogInformation(String.Format("[resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, renderFrameId, curDynamicsRenderFrameId, content.Count));
+           } else {
+           _logger.LogInformation(String.Format("[ipt-sync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, renderFrameId, curDynamicsRenderFrameId, content.Count));
+           }
+         */
     }
 
     private ArraySegment<byte> allocBytesFromInputBufferSnapshot(InputBufferSnapshot inputBufferSnapshot) {
         /*
-        [WARNING] This function MUST BE called while "pR.inputBufferLock" is LOCKED such that "renderBuffer.GetByFrameId(...)" is synchronized across different threads!
-        */
+           [WARNING] This function MUST BE called while "pR.inputBufferLock" is LOCKED such that "renderBuffer.GetByFrameId(...)" is synchronized across different threads!
+         */
         var (ok1, refRenderFrame) = renderBuffer.GetByFrameId(inputBufferSnapshot.RefRenderFrameId);
         if (!ok1 || null == refRenderFrame) {
             throw new ArgumentNullException(String.Format("allocBytesFromInputBufferSnapshot-Required refRenderFrameId={0} for (roomId={1}, renderFrameId={2}) doesn't exist! inputBuffer={3}, renderBuffer={4}", inputBufferSnapshot.RefRenderFrameId, id, renderFrameId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat()));
@@ -1343,9 +1370,9 @@ public class Room {
 
         var resp = new WsResp {
             Ret = ErrCode.Ok,
-            Act = ((backendDynamicsEnabled && refRenderFrame.ShouldForceResync) ? DOWNSYNC_MSG_ACT_FORCED_RESYNC : DOWNSYNC_MSG_ACT_INPUT_BATCH),
-            Rdf = ((backendDynamicsEnabled && refRenderFrame.ShouldForceResync) ? refRenderFrame : null),
-            PeerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT
+                Act = ((backendDynamicsEnabled && refRenderFrame.ShouldForceResync) ? DOWNSYNC_MSG_ACT_FORCED_RESYNC : DOWNSYNC_MSG_ACT_INPUT_BATCH),
+                Rdf = ((backendDynamicsEnabled && refRenderFrame.ShouldForceResync) ? refRenderFrame : null),
+                PeerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT
         };
         if (null != inputBufferSnapshot.ToSendInputFrameDownsyncs) {
             resp.InputFrameDownsyncBatch.AddRange(inputBufferSnapshot.ToSendInputFrameDownsyncs);
@@ -1379,9 +1406,9 @@ public class Room {
 
         var resp = new WsResp {
             Ret = ErrCode.Ok,
-            Act = act,
-            Rdf = roomDownsyncFrame,
-            PeerJoinIndex = peerJoinIndex
+                Act = act,
+                Rdf = roomDownsyncFrame,
+                PeerJoinIndex = peerJoinIndex
         };
         if (null != peerUdpAddrList) {
             resp.PeerUdpAddrList.AddRange(peerUdpAddrList);
@@ -1392,7 +1419,7 @@ public class Room {
 
         try {
             if (WebSocketState.Open != wsSession.State) {
-              throw new ArgumentException(String.Format("sendSafelyAsync-Invalid websocket session state for (roomId: {0}, playerId: {1}): wsSession.State={2}", id, playerId, wsSession.State)); 
+                throw new ArgumentException(String.Format("sendSafelyAsync-Invalid websocket session state for (roomId: {0}, playerId: {1}): wsSession.State={2}", id, playerId, wsSession.State)); 
             }
             await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
         } catch (Exception ex) {
@@ -1413,8 +1440,8 @@ public class Room {
 
                 // initialize "peerUdpAddrBroadcastRdf" 
                 peerUdpAddrList = new RepeatedField<PeerUdpAddr> {
-                battleUdpTunnelAddr // i.e. "MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL == 0"
-            };
+                    battleUdpTunnelAddr // i.e. "MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL == 0"
+                };
                 for (int i = 0; i < capacity; i++) {
                     // Prefill with invalid addrs
                     peerUdpAddrList.Add(new PeerUdpAddr { });
@@ -1487,7 +1514,7 @@ public class Room {
                     player.BattleUdpTunnelAddr = recvResult.RemoteEndPoint;
                     peerUdpAddrList[player.CharacterDownsync.JoinIndex] = new PeerUdpAddr {
                         Ip = recvResult.RemoteEndPoint.Address.ToString(),
-                        Port = recvResult.RemoteEndPoint.Port
+                           Port = recvResult.RemoteEndPoint.Port
                     };
                     _logger.LogInformation("`battleUdpTask` for roomId={0} updated udp addr for playerId={1} to be {2}", id, playerId, peerUdpAddrList[player.CharacterDownsync.JoinIndex]);
                     // Need broadcast to all, including the current "pReq.PlayerId", to favor p2p holepunching
@@ -1519,8 +1546,8 @@ public class Room {
                     }
                     OnBattleCmdReceived(pReq, playerId, true);
                     /*
-                    [WARNING] Different from frontend concerns, it's actually safe to update "ifd.ConfirmedList" (where "ifd" belongs to the "inputBuffer") by an UDP inputFrameUpsync, as long as all updates to "ifd.ConfirmedList" and "room.lastAllConfirmedInputFrameId" are guarded by "inputBufferLock" -- hence in Golang version, both "markConfirmationIfApplicable" and "forceConfirmationIfApplicable" are guarded by "inputBufferLock".
-                    */
+                       [WARNING] Different from frontend concerns, it's actually safe to update "ifd.ConfirmedList" (where "ifd" belongs to the "inputBuffer") by an UDP inputFrameUpsync, as long as all updates to "ifd.ConfirmedList" and "room.lastAllConfirmedInputFrameId" are guarded by "inputBufferLock" -- hence in Golang version, both "markConfirmationIfApplicable" and "forceConfirmationIfApplicable" are guarded by "inputBufferLock".
+                     */
                 }
             }
         } catch (OperationCanceledException ocEx) {
@@ -1568,7 +1595,7 @@ public class Room {
                Consider that in a 4-player battle, player#1 is once disconnected but soon reconnected in 2 seconds, during its absence, "markConfirmationIfApplicable" would skip it and increment "LastAllConfirmedInputFrameId" and when backend is sending "DOWNSYNC_MSG_ACT_FORCED_RESYNC" it'd be always based on "LatestPlayerUpsyncedInputFrameId == LastAllConfirmedInputFrameId" thus NOT triggering "[type#1 forceConfirmation]".
 
                However, if player#1 remains connected but ticks very slowly (i.e. an "ACTIVE SLOW TICKER"), "markConfirmationIfApplicable" couldn't increment "LastAllConfirmedInputFrameId", thus "[type#1 forceConfirmation]" will be triggered, but what's worse is that after "[type#1 forceConfirmation]" if the "refRenderFrameId" is not advanced enough, player#1 could never catch up even if it resumed from slow ticking!
-            */
+             */
 
             if (0 < unconfirmedMask) {
                 // [WARNING] As "curDynamicsRenderFrameId" was just incremented above, "refSnapshotStFrameId" is most possibly larger than "oldLastAllConfirmedInputFrameId + 1", therefore this initial assignment is critical for `ACTIVE NORMAL TICKER`s to receive consecutive ids of inputFrameDownsync.
@@ -1595,10 +1622,10 @@ public class Room {
                     downsyncToAllPlayers(inputBufferSnapshot);
                     lastForceResyncedRdfId = renderFrameId;
                     /*
-                    if (null != inputBufferSnapshot) {
-                        _logger.LogInformation(String.Format("[no forceConfirmation, just resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}", inputBufferSnapshot.RefRenderFrameId, snapshotStFrameId, lastAllConfirmedInputFrameId, id, renderFrameId, curDynamicsRenderFrameId));
-                    }
-                    */
+                       if (null != inputBufferSnapshot) {
+                       _logger.LogInformation(String.Format("[no forceConfirmation, just resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}", inputBufferSnapshot.RefRenderFrameId, snapshotStFrameId, lastAllConfirmedInputFrameId, id, renderFrameId, curDynamicsRenderFrameId));
+                       }
+                     */
                 }
             }
         } finally {
@@ -1631,10 +1658,10 @@ public class Room {
             }
             _logger.LogInformation(String.Format("[type#3 forceConfirmation] For roomId={0}@renderFrameId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, lastForceResyncedRdfId={6}, unconfirmedMask={7}", id, renderFrameId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, lastForceResyncedRdfId, unconfirmedMask));
             /*
-            [WARNING] Only "type#1" will delay "conditional graphical update" from the force-resync snapshot for non-self-unconfirmed players, both "type#2" and "type#3" might have immediate impact on the "ACTIVE NORMAL TICKER"s, e.g. abrupt & inconsistent graphical update.  
+               [WARNING] Only "type#1" will delay "conditional graphical update" from the force-resync snapshot for non-self-unconfirmed players, both "type#2" and "type#3" might have immediate impact on the "ACTIVE NORMAL TICKER"s, e.g. abrupt & inconsistent graphical update.  
 
-            However, experiments show that for type#3 "curDynamicsRenderFrameId" is NEVER TOO ADVANCED compared to "OnlineMapController.playerRdfId", possibly due to the absence of any SLOW TICKER (including disconnected) -- hence when executing "OnlineMap.onRoomDownsyncFrame", the force-resync snapshot would only get "RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet", i.e. only effectively trigger "OnlineMapController.onInputFrameDownsyncBatch(accompaniedInputFrameDownsyncBatch) -> _handleIncorrectlyRenderedPrediction(...)" -- thus relatively smooth graphical updates. 
-            */
+               However, experiments show that for type#3 "curDynamicsRenderFrameId" is NEVER TOO ADVANCED compared to "OnlineMapController.playerRdfId", possibly due to the absence of any SLOW TICKER (including disconnected) -- hence when executing "OnlineMap.onRoomDownsyncFrame", the force-resync snapshot would only get "RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet", i.e. only effectively trigger "OnlineMapController.onInputFrameDownsyncBatch(accompaniedInputFrameDownsyncBatch) -> _handleIncorrectlyRenderedPrediction(...)" -- thus relatively smooth graphical updates. 
+             */
             lastForceResyncedRdfId = renderFrameId;
         } else if (type1ForceConfirmationEnabled && latestPlayerUpsyncedInputFrameId > (lastAllConfirmedInputFrameId + inputFrameUpsyncDelayTolerance)) {
             // Type#1 check whether there's a significantly slow ticker among players
@@ -1688,6 +1715,7 @@ public class Room {
         }
 
         bool hasIncorrectlyPredictedRenderFrame = false;
+        bool selfNotEnoughMp = false;
         for (var i = fromRenderFrameId; i < toRenderFrameId; i++) {
             if (frameLogEnabled) {
                 int j = ConvertToDelayedInputFrameId(i);
@@ -1697,7 +1725,6 @@ public class Room {
                 }
                 rdfIdToActuallyUsedInput[i] = delayedInputFrame.Clone();
             }
-            bool selfNotEnoughMp = false;
             Step(inputBuffer, i, capacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, triggerEditorIdToConfigFromTiled, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, TERMINATING_RENDER_FRAME_ID, false, out hasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionEvtSubId, MAGIC_JOIN_INDEX_INVALID, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadJoinIndices, out fulfilledTriggerSetMask, ref selfNotEnoughMp, loggerBridge);
             curDynamicsRenderFrameId++;
         }
