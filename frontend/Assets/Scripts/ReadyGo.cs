@@ -18,6 +18,7 @@ public class ReadyGo : MonoBehaviour {
     public void hideReady() {
         if (null != readyBoundSequence && readyBoundSequence.IsPlaying()) {
              readyBoundSequence.Kill();
+             readyBoundSequence = null;
         }
         ready.gameObject.transform.localScale = Vector3.zero;
     }
@@ -25,6 +26,7 @@ public class ReadyGo : MonoBehaviour {
     public void hideGo() {
         if (null != goBoundSequence && goBoundSequence.IsPlaying()) {
             goBoundSequence.Kill();
+            goBoundSequence = null;
         }
         go.gameObject.transform.localScale = Vector3.zero;
     }
@@ -52,6 +54,7 @@ public class ReadyGo : MonoBehaviour {
         if (1 < phase) return;
         if (goBoundSequence != null && goBoundSequence.IsPlaying()) {
             goBoundSequence.Kill();
+            goBoundSequence = null;
         }
         goBoundSequence = DOTween.Sequence();
         goBoundSequence.Append(go.gameObject.transform.DOScale(2.0f * Vector3.one, 0.5f));

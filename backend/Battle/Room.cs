@@ -679,7 +679,7 @@ public class Room {
                      */
 
                     // [WARNING] Preserving generated order (of inputBufferSnapshot) while sending per player by simply "awaiting" the "wsSession.SendAsync(...)" calls
-                    await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationSignal.c2);
+                    await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
 
                     player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
 
@@ -696,7 +696,7 @@ public class Room {
                                     PeerJoinIndex = otherPlayer.CharacterDownsync.JoinIndex
                             };
                             // Such that rejoined players know who to ignore for freezing!
-                            await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationSignal.c2);
+                            await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
                         }
                     }
                 }

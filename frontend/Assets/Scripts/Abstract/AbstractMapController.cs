@@ -1824,7 +1824,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (
             ROOM_STATE_IMPOSSIBLE != battleState && ROOM_STATE_IN_BATTLE != battleState && ROOM_STATE_IN_SETTLEMENT != battleState
             && 
-            ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN != battleState
+            ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN != battleState && ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN != battleState && ROOM_STATE_FRONTEND_REJOINING != battleState
             ) {
             Debug.LogWarningFormat("@playerRdfId={0}, unable to stop battle due to invalid state transition; now battleState={1}", playerRdfId, battleState);
             return;
