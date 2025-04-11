@@ -28,16 +28,24 @@ public class RejoinPrompt : MonoBehaviour {
         underlyingExitCallback = aExitCallback;
     }
 
-    public void toggleUIInteractability(bool val) {
+    public void toggleUIInteractability(bool val, string customMessage = "") {
         currentPanelEnabled = val;
         if (val) {
             retryButton.transform.localScale = Vector3.one;
             exitButton.transform.localScale = Vector3.one;
-            hint.text = "Auto rejoin failed, please manually proceed";
+            if (string.IsNullOrEmpty(customMessage)) {
+                hint.text = "Rejoin failed, please manually proceed";
+            } else {
+                hint.text = customMessage;
+            }
         } else {
             retryButton.transform.localScale = Vector3.zero;
             exitButton.transform.localScale = Vector3.zero;
-            hint.text = "Rejoining, please wait...";
+            if (string.IsNullOrEmpty(customMessage)) {
+                hint.text = "Rejoining, please wait...";
+            } else {
+                hint.text = customMessage;
+            }
         }
     }
 

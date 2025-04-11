@@ -460,8 +460,12 @@ public class Room {
 
                 thus calling "cancellationTokenSource.Cancel()" here would NOT by any chance interrupt this function itself.
                  */
-                if (!cancellationTokenSource.IsCancellationRequested) {
-                    cancellationTokenSource.Cancel();
+                try { 
+                    if (!cancellationTokenSource.IsCancellationRequested) {
+                        cancellationTokenSource.Cancel();
+                    }
+                } catch (Exception ex) {
+                    _logger.LogWarning($"clearPlayerNetworkSession exception when cancelling cancellationTokenSource of playerSignalToCloseDict[{playerId}]: {ex}");
                 }
                 playerSignalToCloseDict.Remove(playerId);
                 // [WARNING] Disposal of each "playerSignalToClose" is automatically managed in "WebSocketController"

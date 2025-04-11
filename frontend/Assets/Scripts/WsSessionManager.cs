@@ -9,8 +9,8 @@ using shared;
 using Google.Protobuf;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
+using System.Timers;
 
 public class WsSessionManager {
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
@@ -137,15 +137,26 @@ public class WsSessionManager {
 
     public async Task ConnectWsAsync(string wsEndpoint, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource, CancellationTokenSource guiCanProceedSignalSource) {
         if (null == authToken || null == playerId) {
-            string errMsg = String.Format("ConnectWs not having enough credentials, authToken={0}, playerId={1}, please go back to LoginPage!", authToken, playerId);
+            string errMsg = $"ConnectWs not having enough credentials, authToken={authToken}, playerId={playerId}, please go back to LoginPage!";
             throw new Exception(errMsg);
         }
         while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, cancellationToken)) { }
         recvBuffer.Clear();
-        string fullUrl = wsEndpoint + String.Format("?authToken={0}&playerId={1}&speciesId={2}&roomId={3}&forReentry={4}", authToken, playerId, speciesId, roomId, forReentry);
-        using (ClientWebSocket ws = new ClientWebSocket()) {
+        string fullUrl = wsEndpoint + $"?authToken={authToken}&playerId={playerId}&speciesId={speciesId}&roomId={roomId}&forReentry={forReentry}";
+        Debug.Log($"About to connect Ws to {fullUrl}, please wait...");
+        using (ClientWebSocket ws = new ClientWebSocket())
+        using (System.Threading.Timer timeoutWatcher = new System.Threading.Timer(new TimerCallback((s) => {
+            Debug.LogWarning($"Ws connection to {fullUrl} timed out, cancelling...");
+            if (null == s) {
+                return;
+            }
+            var passedInCancellationTokenSource = (CancellationTokenSource)s;
+            if (null == passedInCancellationTokenSource || passedInCancellationTokenSource.IsCancellationRequested) return;
+            passedInCancellationTokenSource.Cancel();
+        }), cancellationTokenSource, 5000, Timeout.Infinite)) {
             try {
                 await ws.ConnectAsync(new Uri(fullUrl), cancellationToken);
+                timeoutWatcher.Change(Timeout.Infinite, Timeout.Infinite);
                 var openMsg = new WsResp {
                     Ret = ErrCode.Ok,
                     Act = Battle.DOWNSYNC_MSG_WS_OPEN
@@ -163,7 +174,7 @@ public class WsSessionManager {
                     string errMsg = ("ConnectWs failed before battle starts, authToken=" + authToken + " playerId=" + playerId + ", please go back to LoginPage!");
                     throw new Exception(errMsg);
                 } else {
-                    var exMsg = new WsResp { 
+                    var exMsg = new WsResp {
                         Ret = ErrCode.UnknownError,
                         ErrMsg = ex.Message
                     };

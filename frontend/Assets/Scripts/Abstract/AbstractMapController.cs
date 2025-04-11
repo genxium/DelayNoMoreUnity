@@ -1207,7 +1207,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected void preallocateBattleDynamicsHolder() {
         preallocateStepHolders(
             roomCapacity,
-            384,
+            renderBufferSize,
             preallocNpcCapacity,
             preallocBulletCapacity,
             preallocTrapCapacity,
@@ -1821,7 +1821,11 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected virtual void onBattleStopped() {
-        if (ROOM_STATE_IMPOSSIBLE != battleState && ROOM_STATE_IN_BATTLE != battleState && ROOM_STATE_IN_SETTLEMENT != battleState) {
+        if (
+            ROOM_STATE_IMPOSSIBLE != battleState && ROOM_STATE_IN_BATTLE != battleState && ROOM_STATE_IN_SETTLEMENT != battleState
+            && 
+            ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN != battleState
+            ) {
             Debug.LogWarningFormat("@playerRdfId={0}, unable to stop battle due to invalid state transition; now battleState={1}", playerRdfId, battleState);
             return;
         }

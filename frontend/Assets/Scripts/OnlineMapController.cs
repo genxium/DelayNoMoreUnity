@@ -29,12 +29,12 @@ public class OnlineMapController : AbstractMapController {
     slowDown:              | no      | no        | yes         | yes         | yes  ...  | no
     freeze:                | no      | no        | no          | no          | yes  ...  | yes
     */
-    private int slowDownIfdLagThreshold = 3;
+    private const int slowDownIfdLagThreshold = 3;
     /* 
     [WARNING] Lower the value of "freezeIfdLagThresHold" if you want to see more frequent freezing and verify that the graphics are continuous across the freezing point.
     */
-    private int freezeIfdLagThresHold = 16; 
-    private int acIfdLagThresHold = 200; // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
+    private const int freezeIfdLagThresHold = (slowDownIfdLagThreshold*4); 
+    private const int acIfdLagThresHold = 200; // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
     public bool useFreezingLockStep = true; // [WARNING] If set to "false", expect more teleports due to "chaseRolledbackRdfs" but less frozen graphics when your device has above average network among all peers in the same battle -- yet "useFreezingLockStep" could NOT completely rule out teleports as long as potential floating point mismatch between devices exists (especially between backend .NET 7.0 and frontend .NET 2.1).
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;
@@ -63,9 +63,8 @@ public class OnlineMapController : AbstractMapController {
                     Debug.LogWarning(msg);
                     popupErrStackPanel(msg);
                 }
-                Debug.LogWarning("Calling onBattleStopped with remote non-OK resp @playerRdfId=" + playerRdfId);
-                onBattleStopped();
-                showCharacterSelection();
+                Debug.LogWarning("Calling onWsSessionClosed with remote non-OK resp @playerRdfId=" + playerRdfId);
+                onWsSessionClosed();
                 break;
             }
             switch (wsRespHolder.Act) {
@@ -259,84 +258,34 @@ public class OnlineMapController : AbstractMapController {
     public void rejoinByWs() {
         uint selfSpeciesId = WsSessionManager.Instance.GetSpeciesId();
         if (ROOM_ID_NONE == roomId) {
-            Debug.Log(String.Format("Early returning OnlineMapController.rejoinByWs with selectedSpeciesId={0}, roomId=ROOM_ID_NONE", selfSpeciesId));
+            Debug.Log("Early returning OnlineMapController.rejoinByWs with selectedSpeciesId={selfSpeciesId}, roomId=ROOM_ID_NONE");
             return;
         }
-        Debug.Log(String.Format("Executing OnlineMapController.rejoinByWs with selectedSpeciesId={0}, roomId={1}", selfSpeciesId, roomId));
+        Debug.Log($"Executing OnlineMapController.rejoinByWs with selectedSpeciesId={selfSpeciesId}, roomId={roomId}");
         if (ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN != battleState && ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN != battleState) {
-            Debug.Log(String.Format("Early returning OnlineMapController.rejoinByWs with selectedSpeciesId={0}, roomId={1}, battleState={2}", selfSpeciesId, roomId, battleState));
+            Debug.Log($"Early returning OnlineMapController.rejoinByWs with selectedSpeciesId={selfSpeciesId}, roomId={roomId}, battleState={battleState}");
             return;
         }
+
+        rejoinPrompt.toggleUIInteractability(false);
+        rejoinPrompt.gameObject.SetActive(true);
 
         tcpJamEnabled = false; // [WARNING] Upsyncing will be enabled after receiving the FORCED_RESYNC rdf which sets "battleState=ROOM_STATE_IN_BATTLE".
         battleState = ROOM_STATE_FRONTEND_REJOINING; 
         wsCancellationTokenSource = new CancellationTokenSource();
         wsCancellationToken = wsCancellationTokenSource.Token;
 
-        bool guiCanProceedOnFailure = false;
-        var guiCanProceedSignalSource = new CancellationTokenSource(); // by design a new token-source for each "rejoinByWs"
-        var guiCanProceedSignal = guiCanProceedSignalSource.Token;
-        var pseudoQ = new BlockingCollection<int>();
-        Task guiWaitToProceedTask = Task.Run(async () => {
-            await Task.Delay(int.MaxValue, guiCanProceedSignal);
-        });
-
-        try {
-            WsSessionManager.Instance.SetForReentry(true);
-            WsSessionManager.Instance.SetRoomId(roomId);
-            wsTask = Task.Run(async () => {
-                Debug.LogWarning(String.Format("About to rejoin ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] By design switched to another thread other than the MainThread!
-                await wsSessionTaskAsync(guiCanProceedSignalSource);
-                Debug.LogWarning(String.Format("Ends rejoined ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
-
-                // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message to trigger "cleanupNetworkSessions" to clean up ws session resources!
-            }, wsCancellationToken)
-            .ContinueWith(failedTask => {
-                Debug.LogWarning(String.Format("Failed to rejoin ws session#1: thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] NOT YET in MainThread
-                guiCanProceedOnFailure = true;
-                if (!wsCancellationToken.IsCancellationRequested) {
-                    wsCancellationTokenSource.Cancel();
-                }
-                if (!guiCanProceedSignal.IsCancellationRequested) {
-                    guiCanProceedSignalSource.Cancel();
-                }
-            }, TaskContinuationOptions.OnlyOnFaulted);
-
-            // [WARNING] returned to MainThread
-            if (!guiCanProceedSignal.IsCancellationRequested && (TaskStatus.Canceled != guiWaitToProceedTask.Status && TaskStatus.Faulted != guiWaitToProceedTask.Status)) {
-                try {
-                    guiWaitToProceedTask.Wait(guiCanProceedSignal);
-                } catch (Exception guiWaitCancelledEx) {
-                    Debug.LogFormat("guiWaitToProceedTask was cancelled before proactive awaiting#1: thread id={0} a.k.a. the MainThread, exMsg={1}.", Thread.CurrentThread.ManagedThreadId, guiWaitCancelledEx.Message);
-                }
+        WsSessionManager.Instance.SetForReentry(true);
+        WsSessionManager.Instance.SetRoomId(roomId);
+        wsTask = Task.Run(async () => {
+            Debug.LogWarning($"About to rejoin ws session within Task.Run(async lambda): thread id={Thread.CurrentThread.ManagedThreadId}."); // [WARNING] By design switched to another thread other than the MainThread!
+            using (CancellationTokenSource dummyGuiCanceller = new CancellationTokenSource()) {
+                await wsSessionTaskAsync(dummyGuiCanceller);
             }
+            Debug.LogWarning($"Ends rejoined ws session within Task.Run(async lambda): thread id={Thread.CurrentThread.ManagedThreadId}.");
 
-            if (!guiCanProceedOnFailure) {
-                Debug.Log(String.Format("Rejoined ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
-            } else {
-                var msg = String.Format("Failed to rejoin ws session#2: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId);
-                battleState = ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN; 
-                rejoinPrompt.toggleUIInteractability(true);
-                rejoinPrompt.gameObject.SetActive(true);
-            }
-        } finally {
-            try {
-                if (!guiCanProceedSignal.IsCancellationRequested) {
-                    guiCanProceedSignalSource.Cancel();
-                }
-                guiWaitToProceedTask.Wait();
-            } catch (Exception guiWaitEx) {
-                Debug.LogFormat("guiWaitToProceedTask was cancelled before proactive awaiting#2: thread id={0} a.k.a. the MainThread, exMsg={1}.", Thread.CurrentThread.ManagedThreadId, guiWaitEx.Message);
-            } finally {
-                try {
-                    guiWaitToProceedTask.Dispose();
-                } catch (Exception guiWaitTaskDisposedEx) {
-                    Debug.LogWarning(String.Format("guiWaitToProceedTask couldn't be disposed: thread id={0} a.k.a. the MainThread: {1}", Thread.CurrentThread.ManagedThreadId, guiWaitTaskDisposedEx));
-                }
-            }
-
-            guiCanProceedSignalSource.Dispose();
-        }
+            // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message to trigger "cleanupNetworkSessions" to clean up ws session resources!
+        }, wsCancellationToken);
     }
 
     public void onCharacterSelectGoAction(uint speciesId) {
@@ -487,6 +436,7 @@ public class OnlineMapController : AbstractMapController {
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
+        renderBufferSize = 384;
         selfPlayerInfo = new PlayerMetaInfo();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = Battle.BATTLE_DYNAMICS_FPS;
@@ -524,19 +474,34 @@ public class OnlineMapController : AbstractMapController {
     }
 
     public void onWsSessionClosed() {
-        Debug.Log("Handling onWsSessionClosed in main thread, battleState=" + battleState + ", roomId=" + roomId + ".");
+        if (ROOM_STATE_FRONTEND_REJOINING == battleState) {
+            Debug.LogWarning($"Handling onWsSessionClosed in main thread, battleState=ROOM_STATE_FRONTEND_REJOINING, roomId={roomId}, autoRejoinQuota={autoRejoinQuota}.");
+        } else {
+            Debug.Log($"Handling onWsSessionClosed in main thread, battleState={battleState}, roomId={roomId}, autoRejoinQuota={autoRejoinQuota}.");
+        }
         // [WARNING] No need to show SettlementPanel in this case, but instead we should show something meaningful to the player if it'd be better for bug reporting.
         playerWaitingPanel.gameObject.SetActive(false);
         cleanupNetworkSessions(true); // Make sure that all resources are properly deallocated
-        if (ROOM_ID_NONE != roomId && ROOM_STATE_IN_BATTLE == battleState && 0 < autoRejoinQuota) {
-            Debug.LogFormat("As roomId={0} is not ROOM_ID_NONE and autoRejoinQuota={1} and battleState was ROOM_STATE_IN_BATTLE, transited battleState to ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN.", roomId, autoRejoinQuota);
-            battleState = ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN;
-            autoRejoinQuota--;
+        if (ROOM_ID_NONE != roomId && (ROOM_STATE_IN_BATTLE == battleState || ROOM_STATE_FRONTEND_REJOINING == battleState)) {
+            if (0 < autoRejoinQuota) {
+                Debug.Log($"As roomId={roomId} is not ROOM_ID_NONE and autoRejoinQuota={autoRejoinQuota} and battleState was ROOM_STATE_IN_BATTLE, transited battleState to ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN.");
+                battleState = ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN;
+                autoRejoinQuota--;
+            } else {
+                Debug.Log($"As roomId={roomId} is not ROOM_ID_NONE and autoRejoinQuota={autoRejoinQuota} and battleState was ROOM_STATE_IN_BATTLE, transited battleState to ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN.");
+                battleState = ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN;
+                rejoinPrompt.toggleUIInteractability(true);
+                rejoinPrompt.gameObject.SetActive(true);
+            }
+        } else if (ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN == battleState || ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN == battleState || ROOM_STATE_FRONTEND_REJOINING == battleState) {
+            Debug.Log($"As roomId={roomId} is not ROOM_ID_NONE and autoRejoinQuota={autoRejoinQuota} and battleState was ROOM_STATE_IN_BATTLE, transited battleState to ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN.");
+            battleState = ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN;
+            rejoinPrompt.toggleUIInteractability(true);
+            rejoinPrompt.gameObject.SetActive(true);
         } else {
-            Debug.LogFormat("Resetting roomId and replaying from character select.");
-            roomId = ROOM_ID_NONE;
-            characterSelectPanel.gameObject.SetActive(true);
-            characterSelectPanel.ResetSelf();
+            Debug.Log($"Stopping battle due to onWsSessionClosed and replaying from character select at battleState={battleState}.");
+            onBattleStopped();
+            showCharacterSelection();
         }
         Debug.Log("Handled onWsSessionClosed in main thread.");
     }
@@ -548,6 +513,7 @@ public class OnlineMapController : AbstractMapController {
         autoRejoinQuota = 1;
         WsSessionManager.Instance.SetForReentry(false);
         WsSessionManager.Instance.SetRoomId(ROOM_ID_NONE);
+        rejoinPrompt.gameObject.SetActive(false); // After setting ROOM_ID_NONE, the rejoinPrompt becomes useless
         cleanupNetworkSessions(false); // Make sure that all resources are properly deallocated
 
         // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
@@ -594,6 +560,7 @@ public class OnlineMapController : AbstractMapController {
                 // For settlement 
                 return;
             }
+
             pollAndHandleWsRecvBuffer();
             pollAndHandleUdpRecvBuffer();
             if (ROOM_STATE_IN_BATTLE != battleState) {
@@ -610,7 +577,7 @@ public class OnlineMapController : AbstractMapController {
 
             // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
             if (!WsSessionManager.Instance.getInArenaPracticeMode() && useFreezingLockStep && !shouldLockStep) {
-                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, (inputFrameUpsyncDelayTolerance << INPUT_SCALE_FRAMES), freezeIfdLagThresHold, disconnectedPeerJoinIndices);
+                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (inputFrameUpsyncDelayTolerance << INPUT_SCALE_FRAMES), ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
 
                 shouldLockStep = (
                     tooFastOrNot
@@ -645,16 +612,18 @@ public class OnlineMapController : AbstractMapController {
             if (shouldLockStep) {
                 NetworkDoctor.Instance.LogLockedStepCnt();
                 shouldLockStep = false;
+                /*
                 if (useFreezingLockStep && 0 < disconnectedPeerJoinIndices.Count) {
                     Debug.LogWarningFormat("Freezing at playerRdfId={0}, disconnectedPeerJoinIndices.Count={1}", playerRdfId, disconnectedPeerJoinIndices.Count);
                 }
+                */
                 return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
             }
 
             doUpdate();
 
             if (!WsSessionManager.Instance.getInArenaPracticeMode()) {
-                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), slowDownIfdLagThreshold, disconnectedPeerJoinIndices);
+                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, lockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), ifdLagTolerance: slowDownIfdLagThreshold, disconnectedPeerJoinIndices);
                 shouldLockStep = tooFastOrNot;
 
                 networkInfoPanel.SetValues(sendingFps, (localRequiredIfdId > lastAllConfirmedInputFrameId ? localRequiredIfdId - lastAllConfirmedInputFrameId : 0), peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
@@ -674,12 +643,9 @@ public class OnlineMapController : AbstractMapController {
             }
             //throw new NotImplementedException("Intended");
         } catch (Exception ex) {
-            var msg = String.Format("Error during OnlineMap.Update, calling onBattleStopped {0}", ex);
-            popupErrStackPanel(msg);
+            var msg = String.Format("Error during OnlineMap.Update, calling onWsSessionClosed {0}", ex);
             Debug.LogError(msg);
-            // [WARNING] No need to show SettlementPanel in this case, but instead we should show something meaningful to the player if it'd be better for bug reporting.
-            onBattleStopped();
-            showCharacterSelection();
+            onWsSessionClosed();
         }
     }
 
