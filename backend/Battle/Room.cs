@@ -1094,7 +1094,7 @@ D:                     ([51,55],x)
             if (willEvict) {
                 var frontIfd = inputBuffer.GetFirst();
                 if (null == frontIfd) {
-                    _logger.LogWarning($"[markConfirmationIfApplicable] early return because clientInputFrameId={clientInputFrameId} against a full inputBuffer={inputBuffer.toSimpleStat()} is having a null frontIfd in this room: roomId={id}, fromPlayerId={playerId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: breaking and ignoring the rest inputFrameUpsyncs from this player in phase2");
+                    _logger.LogWarning($"[markConfirmationIfApplicable] early return because clientInputFrameId={clientInputFrameId} against a full inputBuffer={inputBuffer.toSimpleStat()} is having a null frontIfd in this room: roomId={id}, backendTimerRenderFrameId={renderFrameId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: breaking and ignoring the rest inputFrameUpsyncs from this player in phase2");
                     break;
                 }
                 var frontIfdId = frontIfd.InputFrameId;
@@ -1104,11 +1104,11 @@ D:                     ([51,55],x)
                     newAllConfirmedCount += _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(inputBuffer.EdFrameId);
                     int nextDynamicsRenderFrameId = (0 <= lastAllConfirmedInputFrameId ? ConvertToLastUsedRenderFrameId(lastAllConfirmedInputFrameId) + 1 : -1);
                     if (0 < nextDynamicsRenderFrameId && nextDynamicsRenderFrameId > curDynamicsRenderFrameId) {
-                        _logger.LogInformation($"[markConfirmationIfApplicable] moving forward curDynamicsRenderFrameId={curDynamicsRenderFrameId} to nextDynamicsRenderFrameId={nextDynamicsRenderFrameId} to resolve eviction of frontIfdId={frontIfdId}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} n this room: roomId={id}, fromPlayerId={playerId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: continuing and accepting more inputFrameUpsyncs from this player");
+                        _logger.LogInformation($"[markConfirmationIfApplicable] moving forward curDynamicsRenderFrameId={curDynamicsRenderFrameId} to nextDynamicsRenderFrameId={nextDynamicsRenderFrameId} to resolve eviction of frontIfdId={frontIfdId}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} n this room: roomId={id}, backendTimerRenderFrameId={renderFrameId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: continuing and accepting more inputFrameUpsyncs from this player");
                         // Apply "all-confirmed inputFrames" to move forward "curDynamicsRenderFrameId"
                         multiStep(curDynamicsRenderFrameId, nextDynamicsRenderFrameId);
                     } else {
-                        _logger.LogWarning($"[markConfirmationIfApplicable] early return because frontIfdId={frontIfdId}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} not being safe for eviction while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} in this room: roomId={id}, fromPlayerId={playerId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, nextDynamicsRenderFrameId={nextDynamicsRenderFrameId}: breaking and ignoring the rest inputFrameUpsyncs from this player");
+                        _logger.LogWarning($"[markConfirmationIfApplicable] early return because frontIfdId={frontIfdId}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} not being safe for eviction while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} in this room: roomId={id}, backendTimerRenderFrameId={renderFrameId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}: breaking and ignoring the rest inputFrameUpsyncs from this player");
                         // OnPlayerDisconnected(playerId); // [WARNING] This line is tried but outcome is not good, need more data collection and analysis for a better approach.
                         break;
                     } 
@@ -1171,6 +1171,7 @@ D:                     ([51,55],x)
                _logger.LogInformation("markConfirmationIfApplicable for roomId={0} returning newAllConfirmedCount={1}, snapshotStFrameId={2}, snapshotEdFrameId={3}", id, newAllConfirmedCount, snapshotStFrameId, snapshotEdFrameId);
                }
              */
+            if (snapshotStFrameId >= snapshotEdFrameId) return null;
             return produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(0, snapshotStFrameId, snapshotEdFrameId);
         } else {
             return null;
@@ -1248,7 +1249,7 @@ D:                     ([51,55],x)
         // [WARNING] As this snapshot is to be sent via network, I'm not sure whether there's a more memory efficient way, i.e. to AVOID creating "a clone of [snapshotStFrameId, snapshotEdFrameId) of the inputBuffer".  
         var ret = new InputBufferSnapshot {
             RefRenderFrameId = refRenderFrameIdIfNeeded,
-                             UnconfirmedMask = unconfirmedMask,
+            UnconfirmedMask = unconfirmedMask,
         };
         ret.ToSendInputFrameDownsyncs.AddRange(cloneInputBuffer(snapshotStFrameId, snapshotEdFrameId));
         return ret;
@@ -1295,6 +1296,11 @@ D:                     ([51,55],x)
 
         if (null == inputBufferSnapshot) {
             _logger.LogWarning("inputBufferSnapshot is null when calling downsyncToAllPlayers for (roomId: {0})", id);
+            return;
+        }
+
+        if (0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) {
+            _logger.LogWarning("inputBufferSnapshot contains no content when calling downsyncToAllPlayers for (roomId: {0})", id);
             return;
         }
 
@@ -1376,6 +1382,7 @@ D:                     ([51,55],x)
                 Rdf = ((backendDynamicsEnabled && refRenderFrame.ShouldForceResync) ? refRenderFrame : null),
                 PeerJoinIndex = MAGIC_JOIN_INDEX_DEFAULT
         };
+
         if (null != inputBufferSnapshot.ToSendInputFrameDownsyncs) {
             resp.InputFrameDownsyncBatch.AddRange(inputBufferSnapshot.ToSendInputFrameDownsyncs);
         }
@@ -1606,10 +1613,11 @@ D:                     ([51,55],x)
                 if (refSnapshotStFrameId < snapshotStFrameId) {
                     snapshotStFrameId = refSnapshotStFrameId;
                 }
-                var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
-                downsyncToAllPlayers(inputBufferSnapshot);
+                if (snapshotStFrameId < lastAllConfirmedInputFrameId + 1) {
+                    var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
+                    downsyncToAllPlayers(inputBufferSnapshot);
+                }
             } else if (!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled) {
-
                 bool isLastRenderFrame = (renderFrameId >= battleDurationFrames && curDynamicsRenderFrameId >= battleDurationFrames);
                 if ((0 <= lastAllConfirmedInputFrameId && 0 < curDynamicsRenderFrameId && (renderFrameId - lastForceResyncedRdfId > FORCE_RESYNC_INTERVAL_THRESHOLD || isLastRenderFrame))) {
                     // [WARNING] With no forceConfirmation enabled, the following logic is based on "allConfirmed" input frames which all frontends already hold full information of, hence no need to be concerned with fast-forwarding issues. 
@@ -1619,9 +1627,11 @@ D:                     ([51,55],x)
                         snapshotStFrameId = refSnapshotStFrameId;
                     }
                     unconfirmedMask = allConfirmedMask;
-                    var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
-                    downsyncToAllPlayers(inputBufferSnapshot);
-                    lastForceResyncedRdfId = renderFrameId;
+                    if (snapshotStFrameId < lastAllConfirmedInputFrameId + 1) {
+                        var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
+                        downsyncToAllPlayers(inputBufferSnapshot);
+                        lastForceResyncedRdfId = renderFrameId;
+                    }
                     /*
                        if (null != inputBufferSnapshot) {
                        _logger.LogInformation(String.Format("[no forceConfirmation, just resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, renderFrameId={4}, curDynamicsRenderFrameId={5}", inputBufferSnapshot.RefRenderFrameId, snapshotStFrameId, lastAllConfirmedInputFrameId, id, renderFrameId, curDynamicsRenderFrameId));

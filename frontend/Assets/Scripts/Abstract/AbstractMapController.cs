@@ -1586,7 +1586,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var (dumpRenderCacheRet, oldStRenderFrameId, oldEdRenderFrameId) = (shouldForceDumping1 || shouldForceDumping2 || shouldForceResync) ? renderBuffer.SetByFrameId(pbRdf, rdfId) : (RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET, TERMINATING_RENDER_FRAME_ID, TERMINATING_RENDER_FRAME_ID);
 
         if (RingBuffer<RoomDownsyncFrame>.RING_BUFF_FAILED_TO_SET == dumpRenderCacheRet) {
-            throw new ArgumentException(String.Format("Failed to dump render cache#1 (maybe recentRenderCache too small)! rdfId={0}", rdfId));
+            throw new ArgumentException($"Failed to dump render cache#1 (maybe recentRenderCache too small)! pbRdfId={rdfId}, renderBuffer={renderBuffer.toSimpleStat()}, inputBuffer={inputBuffer.toSimpleStat()}");
         }
 
         bool isRingBuffConsecutiveSet = (RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet);
@@ -1599,7 +1599,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             "selfConfirmed && rdfId > playerRdfId" WOULD NOT IMMEDIATELY enter this block due to the mutation of "shouldForceDumping2" and "shouldForceResync" -- however it'd defer to enter here by "shouldForceDumping1 = usingOthersForcedDownsyncRenderFrameDict".  
             */
             if (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId) {
-                Debug.LogFormat("On battle started! received rdfId={0}", rdfId);
+                Debug.LogFormat("On battle started! received pbRdfId={0}", rdfId);
             } else {
                 /*  
                     [WARNING] DON'T allow silent replacement of incorrectly calculated history!

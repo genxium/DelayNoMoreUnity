@@ -237,7 +237,7 @@ public class OnlineMapController : AbstractMapController {
                             return;
                         default:
                             if (null == wsRespHolder.InputFrameDownsyncBatch || 0 >= wsRespHolder.InputFrameDownsyncBatch.Count) {
-                                Debug.LogWarning($"Got empty inputFrameDownsyncBatch upon resync@playerRdfId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
+                                Debug.LogWarning($"Got empty inputFrameDownsyncBatch upon resync pbRdfId={wsRespHolder.Rdf.Id} @playerRdfId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
                                 return;
                             }
                             if (null == selfPlayerInfo) {
