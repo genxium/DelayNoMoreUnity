@@ -1587,7 +1587,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         var (dumpRenderCacheRet, oldStRenderFrameId, oldEdRenderFrameId) = (shouldForceDumping1 || shouldForceDumping2 || shouldForceResync) ? renderBuffer.SetByFrameId(pbRdf, rdfId) : (RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET, TERMINATING_RENDER_FRAME_ID, TERMINATING_RENDER_FRAME_ID);
 
         if (RingBuffer<RoomDownsyncFrame>.RING_BUFF_FAILED_TO_SET == dumpRenderCacheRet) {
-            throw new ArgumentException($"Failed to dump render cache#1 (maybe recentRenderCache too small)! pbRdfId={rdfId}, renderBuffer={renderBuffer.toSimpleStat()}, inputBuffer={inputBuffer.toSimpleStat()}");
+            throw new ArgumentException($"Failed to dump render cache#1 (maybe recentRenderCache too small)! pbRdfId={rdfId}, chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, renderBuffer={renderBuffer.toSimpleStat()}, inputBuffer={inputBuffer.toSimpleStat()}");
         }
 
         bool isRingBuffConsecutiveSet = (RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET == dumpRenderCacheRet);

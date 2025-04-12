@@ -72,7 +72,7 @@ public class OnlineMapController : AbstractMapController {
                     onBattleStopped();
                     StartCoroutine(delayToShowSettlementPanel());
                 } else if (ErrCode.PlayerNotReaddableToRoom == wsRespHolder.Ret) {
-                    var msg = $"@playerRdfId={playerRdfId}, received ws error PlayerNotAddableToRoom for roomId={roomId} when roomBattleState={battleState}";
+                    var msg = $"@playerRdfId={playerRdfId}, received ws error PlayerNotReaddableToRoom for roomId={roomId} when roomBattleState={battleState}";
                     Debug.LogWarning(msg);
                     switch (battleState) {
                         case ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN:
@@ -687,8 +687,8 @@ public class OnlineMapController : AbstractMapController {
             }
             //throw new NotImplementedException("Intended");
         } catch (Exception ex) {
-            var msg = String.Format("Error during OnlineMap.Update, calling cleanupNetworkSessions(false) {0}", ex);
-            Debug.LogError(msg);
+            Debug.LogError($"Error during OnlineMap.Update, calling cleanupNetworkSessions(false): {ex}");
+            autoRejoinQuota = 0; // To require manual rejoin.
             cleanupNetworkSessions(false);
         }
     }
