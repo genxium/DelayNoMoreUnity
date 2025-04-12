@@ -1213,6 +1213,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         preallocateStepHolders(
             roomCapacity,
             renderBufferSize,
+            renderBufferSize,
             preallocNpcCapacity,
             preallocBulletCapacity,
             preallocTrapCapacity,

@@ -33,8 +33,19 @@ public class OnlineMapController : AbstractMapController {
     /* 
     [WARNING] Lower the value of "freezeIfdLagThresHold" if you want to see more frequent freezing and verify that the graphics are continuous across the freezing point.
     */
-    private const int freezeIfdLagThresHold = (slowDownIfdLagThreshold*3); 
-    private const int acIfdLagThresHold = BATTLE_DYNAMICS_FPS*3; // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
+    private const int freezeIfdLagThresHold = (slowDownIfdLagThreshold*3);
+
+    //private const int acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE << 1); // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
+    private const int acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE - 2); // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
+
+    /*****************************
+     * The values "slowDownIfdLagThreshold" and "freezeIfdLagThresHold" are mostly used for tracking "UDP received packet front".
+     * 
+     * The value "acIfdLagThresHold" is used for tracking "TCP received packet front". Its value should be a little smaller than "backend inputBuffer.N", see codes for "BattleServer/Room.insituForceConfirmationEnabled" for more information, roughly speacking
+        - "acIfdLagThresHold" too small will trigger frequent frontend freezing
+        - "acIfdLagThresHold" too big will trigger frequent backend insituForceConfirmation
+            - e.g. with "acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE << 1)" you can see lots of "insituForceConfirmation" and "lastIfdIdOfBatch tooAdvanced" logs on backend; while with "acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE - 2)" such logs are only seen in extreme cases (like PC#1 v.s. PC#2 via internet while PC#1's traffic is controlled by Clumsy v0.3 for various conditions).
+     */
     public bool useFreezingLockStep = true; // [WARNING] If set to "false", expect more teleports due to "chaseRolledbackRdfs" but less frozen graphics when your device has above average network among all peers in the same battle -- yet "useFreezingLockStep" could NOT completely rule out teleports as long as potential floating point mismatch between devices exists (especially between backend .NET 7.0 and frontend .NET 2.1).
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;
@@ -54,13 +65,20 @@ public class OnlineMapController : AbstractMapController {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
             // Debug.Log(String.Format("@playerRdfId={0}, handling wsResp in main thread: {0}", playerRdfId, wsRespHolder));
             if (ErrCode.Ok != wsRespHolder.Ret) {
-                if (ErrCode.PlayerNotAddableToRoom == wsRespHolder.Ret) {
+                if (ErrCode.BattleStopped == wsRespHolder.Ret) {
+                    onBattleStopped();
+                    Debug.LogWarning("Calling onBattleStopped with remote errCode=BattleStopped @playerRdfId=" + playerRdfId + " with battleState=" + battleState);
+                    settlementRdfId = playerRdfId;
+                    onBattleStopped();
+                    StartCoroutine(delayToShowSettlementPanel());
+                } else if (ErrCode.PlayerNotReaddableToRoom == wsRespHolder.Ret) {
                     var msg = $"@playerRdfId={playerRdfId}, received ws error PlayerNotAddableToRoom for roomId={roomId} when roomBattleState={battleState}";
                     Debug.LogWarning(msg);
                     switch (battleState) {
                         case ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN:
                         case ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN:
                         case ROOM_STATE_FRONTEND_REJOINING:
+                            autoRejoinQuota = 0; // To require manual rejoin.
                             cleanupNetworkSessions(false);
                             break;
                         default:
@@ -72,7 +90,6 @@ public class OnlineMapController : AbstractMapController {
                     Debug.LogWarning(msg);
                     popupErrStackPanel(msg);
                     Debug.LogWarning("Calling cleanupNetworkSessions(false) with remote non-OK resp @playerRdfId=" + playerRdfId);
-                    cleanupNetworkSessions(false);
                 }
                 break;
             }

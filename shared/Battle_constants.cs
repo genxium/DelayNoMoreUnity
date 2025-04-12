@@ -253,7 +253,8 @@ namespace shared {
 		   [WARNING]
 		   Experimentally having an input rate > 15 (e.g., 60 >> 2) doesn't improve multiplayer smoothness, in fact higher input rate often results in higher packet loss (both TCP and UDP) thus higher wrong prediction rate!
 		*/
-        public static int INPUT_SCALE_FRAMES = 2; // inputDelayedAndScaledFrameId = ((originalFrameId - InputDelayFrames) >> InputScaleFrames)
+        public const int INPUT_SCALE_FRAMES = 2; // inputDelayedAndScaledFrameId = ((originalFrameId - InputDelayFrames) >> InputScaleFrames)
+        public const int DEFAULT_BACKEND_INPUT_BUFFER_SIZE = ((7*BATTLE_DYNAMICS_FPS) >> INPUT_SCALE_FRAMES) + 1; 
 
         public static int SP_ATK_LOOKUP_FRAMES = 5;
         public static float SNAP_INTO_PLATFORM_OVERLAP = 0.1f;

@@ -945,12 +945,18 @@ namespace shared {
         }
 
 
-        public static void preallocateStepHolders(int roomCapacity, int renderBufferSize, int preallocNpcCapacity, int preallocBulletCapacity, int preallocTrapCapacity, int preallocTriggerCapacity, int preallocPickableCount, out FrameRingBuffer<RoomDownsyncFrame> renderBuffer, out FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, out FrameRingBuffer<InputFrameDownsync> inputBuffer, out int[] lastIndividuallyConfirmedInputFrameId, out ulong[] lastIndividuallyConfirmedInputList, out Vector[] effPushbacks, out Vector[][] hardPushbackNormsArr, out Vector[] softPushbacks, out InputFrameDecoded decodedInputHolder, out InputFrameDecoded prevDecodedInputHolder, out BattleResult confirmedBattleResult, out bool softPushbackEnabled, bool frameLogEnabled) {
+        public static void preallocateStepHolders(int roomCapacity, int renderBufferSize, int inputBufferSize, int preallocNpcCapacity, int preallocBulletCapacity, int preallocTrapCapacity, int preallocTriggerCapacity, int preallocPickableCount, out FrameRingBuffer<RoomDownsyncFrame> renderBuffer, out FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer, out FrameRingBuffer<InputFrameDownsync> inputBuffer, out int[] lastIndividuallyConfirmedInputFrameId, out ulong[] lastIndividuallyConfirmedInputList, out Vector[] effPushbacks, out Vector[][] hardPushbackNormsArr, out Vector[] softPushbacks, out InputFrameDecoded decodedInputHolder, out InputFrameDecoded prevDecodedInputHolder, out BattleResult confirmedBattleResult, out bool softPushbackEnabled, bool frameLogEnabled) {
             /*
             [WARNING] 
 
             The allocation of "CollisionSpace" instance and individual "Collider" instances are done in "refreshColliders" instead.
             */
+    
+            int inputBufferSizeLowerBound = (renderBufferSize >> INPUT_SCALE_FRAMES) + 2;
+            if (inputBufferSize < inputBufferSizeLowerBound) {
+                throw new ArgumentException($"inputBufferSize={inputBufferSize} < inputBufferSizeLowerBound={inputBufferSizeLowerBound}: renderBufferSize={renderBufferSize}, INPUT_SCALE_FRAMES={INPUT_SCALE_FRAMES}");
+            } 
+
             if (0 >= roomCapacity) {
                 throw new ArgumentException(String.Format("roomCapacity={0} is non-positive, please initialize it first!", roomCapacity));
             }
@@ -973,8 +979,6 @@ namespace shared {
             }
 
             // [WARNING] An "inputBufferSize" too small would make backend "Room.OnBattleCmdReceived" trigger "clientInputFrameId < inputBuffer.StFrameId (a.k.a. obsolete inputFrameUpsync#1)" too frequently!
-            bool renderBufferSizeTooSmall = (128 >= renderBufferSize);
-            int inputBufferSize = renderBufferSizeTooSmall ? renderBufferSize : (renderBufferSize >> 1) + 1;
             inputBuffer = new FrameRingBuffer<InputFrameDownsync>(inputBufferSize);
             for (int i = 0; i < inputBufferSize; i++) {
                 inputBuffer.Put(NewPreallocatedInputFrameDownsync(roomCapacity));
