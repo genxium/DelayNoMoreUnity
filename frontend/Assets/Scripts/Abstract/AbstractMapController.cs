@@ -439,6 +439,11 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     private int _markConfirmationIfApplicable() {
+        /*
+         TODO: Apply the same "BattleServer/Room.markConfirmationIfApplicable" trick here, yet this is not urgent because
+        - there's a much lower chance for a "inputBuffer.GetFirst()" to be evicted before all-confirmed (due to regular force resync and freezing mechanism)
+        - even if that happens, frontend will just rejoin to force resync for itself
+         */
         int newAllConfirmedCnt = 0;
         int candidateInputFrameId = (lastAllConfirmedInputFrameId + 1);
         if (candidateInputFrameId < inputBuffer.StFrameId) {

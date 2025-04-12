@@ -10,7 +10,6 @@ using Google.Protobuf;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
-using System.Timers;
 
 public class WsSessionManager {
     // Reference https://github.com/paulbatum/WebSocket-Samples/blob/master/HttpListenerWebSocketEcho/Client/Client.cs
@@ -63,6 +62,7 @@ public class WsSessionManager {
     private int roomId = Battle.ROOM_ID_NONE;
     private bool forReentry = false;
     private bool inArenaPracticeMode = false;
+    private int incCnt = 0;
     public bool getInArenaPracticeMode() {
         return inArenaPracticeMode;
     }
@@ -129,6 +129,7 @@ public class WsSessionManager {
         speciesId = Battle.SPECIES_NONE_CH;
         roomId = Battle.ROOM_ID_NONE;
         forReentry = false;
+        incCnt = 0;
     }
 
     public bool IsPossiblyLoggedIn() {
@@ -142,7 +143,7 @@ public class WsSessionManager {
         }
         while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, cancellationToken)) { }
         recvBuffer.Clear();
-        string fullUrl = wsEndpoint + $"?authToken={authToken}&playerId={playerId}&speciesId={speciesId}&roomId={roomId}&forReentry={forReentry}";
+        string fullUrl = wsEndpoint + $"?authToken={authToken}&playerId={playerId}&speciesId={speciesId}&roomId={roomId}&forReentry={forReentry}&&incCnt={incCnt++}";
         Debug.Log($"About to connect Ws to {fullUrl}, please wait...");
         using (ClientWebSocket ws = new ClientWebSocket()) {
             try {
@@ -182,6 +183,12 @@ public class WsSessionManager {
                     recvBuffer.Enqueue(exMsg);
                 }
             } finally {
+                /*
+                // Seems like there's no need to proactively tells the server to disconnect
+                if (WebSocketState.Aborted != ws.State && WebSocketState.Closed != ws.State) {
+                    ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None).Wait(3000);
+                }
+                */
                 var closeMsg = new WsResp {
                     Ret = ErrCode.Ok,
                     Act = Battle.DOWNSYNC_MSG_WS_CLOSED

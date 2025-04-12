@@ -33,8 +33,8 @@ public class OnlineMapController : AbstractMapController {
     /* 
     [WARNING] Lower the value of "freezeIfdLagThresHold" if you want to see more frequent freezing and verify that the graphics are continuous across the freezing point.
     */
-    private const int freezeIfdLagThresHold = (slowDownIfdLagThreshold*4); 
-    private const int acIfdLagThresHold = 200; // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
+    private const int freezeIfdLagThresHold = (slowDownIfdLagThreshold*3); 
+    private const int acIfdLagThresHold = BATTLE_DYNAMICS_FPS*3; // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
     public bool useFreezingLockStep = true; // [WARNING] If set to "false", expect more teleports due to "chaseRolledbackRdfs" but less frozen graphics when your device has above average network among all peers in the same battle -- yet "useFreezingLockStep" could NOT completely rule out teleports as long as potential floating point mismatch between devices exists (especially between backend .NET 7.0 and frontend .NET 2.1).
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;
@@ -55,16 +55,25 @@ public class OnlineMapController : AbstractMapController {
             // Debug.Log(String.Format("@playerRdfId={0}, handling wsResp in main thread: {0}", playerRdfId, wsRespHolder));
             if (ErrCode.Ok != wsRespHolder.Ret) {
                 if (ErrCode.PlayerNotAddableToRoom == wsRespHolder.Ret) {
-                    var msg = String.Format("@playerRdfId={0}, received ws error PlayerNotAddableToRoom for roomId={1}", playerRdfId, roomId);
+                    var msg = $"@playerRdfId={playerRdfId}, received ws error PlayerNotAddableToRoom for roomId={roomId} when roomBattleState={battleState}";
                     Debug.LogWarning(msg);
-                    popupErrStackPanel(msg);
+                    switch (battleState) {
+                        case ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN:
+                        case ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN:
+                        case ROOM_STATE_FRONTEND_REJOINING:
+                            cleanupNetworkSessions(false);
+                            break;
+                        default:
+                            popupErrStackPanel(msg);
+                            break;
+                    }
                 } else {
                     var msg = String.Format("@playerRdfId={0}, received ws error {1}", playerRdfId, wsRespHolder);
                     Debug.LogWarning(msg);
                     popupErrStackPanel(msg);
+                    Debug.LogWarning("Calling cleanupNetworkSessions(false) with remote non-OK resp @playerRdfId=" + playerRdfId);
+                    cleanupNetworkSessions(false);
                 }
-                Debug.LogWarning("Calling onWsSessionClosed with remote non-OK resp @playerRdfId=" + playerRdfId);
-                onWsSessionClosed();
                 break;
             }
             switch (wsRespHolder.Act) {
@@ -220,25 +229,33 @@ public class OnlineMapController : AbstractMapController {
                     readyGoPanel.playReadyAnim(() => { }, null);
                     break;
                 case DOWNSYNC_MSG_ACT_FORCED_RESYNC:
-                    if (null == wsRespHolder.InputFrameDownsyncBatch || 0 >= wsRespHolder.InputFrameDownsyncBatch.Count) {
-                        Debug.LogWarning(String.Format("Got empty inputFrameDownsyncBatch upon resync@localRenderFrameId={0}, @lastAllConfirmedInputFrameId={1}, @chaserRenderFrameId={2}, @inputBuffer:{3}", playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, inputBuffer.toSimpleStat()));
-                        return;
+                    switch (battleState) {
+                        case ROOM_STATE_IMPOSSIBLE:
+                        case ROOM_STATE_IN_SETTLEMENT:
+                        case ROOM_STATE_STOPPED:
+                            Debug.LogWarning("In roomBattleState={battleState}, shouldn't handle force-resync@playerRdfId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
+                            return;
+                        default:
+                            if (null == wsRespHolder.InputFrameDownsyncBatch || 0 >= wsRespHolder.InputFrameDownsyncBatch.Count) {
+                                Debug.LogWarning($"Got empty inputFrameDownsyncBatch upon resync@playerRdfId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
+                                return;
+                            }
+                            if (null == selfPlayerInfo) {
+                                Debug.LogWarning(String.Format("Got empty selfPlayerInfo upon resync@localRenderFrameId={0}, @lastAllConfirmedInputFrameId={1}, @chaserRenderFrameId={2}, @inputBuffer:{3}", playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, inputBuffer.toSimpleStat()));
+                                return;
+                            }
+                            //logForceResyncForChargeDebug(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
+                            readyGoPanel.hideReady();
+                            readyGoPanel.hideGo();
+                            onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
+                            battleState = ROOM_STATE_IN_BATTLE;
+                            if (ROOM_STATE_FRONTEND_REJOINING == battleState || ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN == battleState || ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN == battleState) {
+                                Debug.LogWarning($"Got force-resync during battleState={battleState}, transited to in battle@pbRdfId={wsRespHolder.Rdf.Id}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @localRenderFrameId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
+                                rejoinPrompt.gameObject.SetActive(false);
+                            }
+                            //Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}, @battleState={8}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), battleState);
+                            break;
                     }
-                    if (null == selfPlayerInfo) {
-                        Debug.LogWarning(String.Format("Got empty selfPlayerInfo upon resync@localRenderFrameId={0}, @lastAllConfirmedInputFrameId={1}, @chaserRenderFrameId={2}, @inputBuffer:{3}", playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, inputBuffer.toSimpleStat()));
-                        return;
-                    }
-                    //logForceResyncForChargeDebug(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
-                    readyGoPanel.hideReady();
-                    readyGoPanel.hideGo();
-                    onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
-                    if (ROOM_STATE_FRONTEND_REJOINING == battleState) {
-                        battleState = ROOM_STATE_IN_BATTLE;
-                        Debug.LogWarning($"Got force-resync during rejoining, transited to in battle@pbRdfId={wsRespHolder.Rdf.Id}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @localRenderFrameId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
-                        rejoinPrompt.gameObject.SetActive(false);
-                    }
-                    //Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}, @battleState={8}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), battleState);
-                    
                     break;
                 default:
                     break;
@@ -653,9 +670,9 @@ public class OnlineMapController : AbstractMapController {
             }
             //throw new NotImplementedException("Intended");
         } catch (Exception ex) {
-            var msg = String.Format("Error during OnlineMap.Update, calling onWsSessionClosed {0}", ex);
+            var msg = String.Format("Error during OnlineMap.Update, calling cleanupNetworkSessions(false) {0}", ex);
             Debug.LogError(msg);
-            onWsSessionClosed();
+            cleanupNetworkSessions(false);
         }
     }
 
@@ -826,8 +843,8 @@ public class OnlineMapController : AbstractMapController {
         if (null != wsTask && (TaskStatus.Canceled != wsTask.Status && TaskStatus.Faulted != wsTask.Status)) {
             try {
                 Debug.Log($"OnlineMapController.cleanupNetworkSessions, about to wait for wsTask with status={wsTask.Status}");
-                wsTask.Wait();
-                Debug.Log($"OnlineMapController.cleanupNetworkSessions, wsTask returns with status={wsTask.Status}");
+                var waitingSuccess = wsTask.Wait(3000);
+                Debug.Log($"OnlineMapController.cleanupNetworkSessions, wsTask returns with waitingSuccess={waitingSuccess}, status={wsTask.Status}");
             } catch (Exception ex) {
                 Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask is already cancelled: {0}", ex));
             } finally {
@@ -861,8 +878,8 @@ public class OnlineMapController : AbstractMapController {
                 if (TaskStatus.Canceled != udpTask.Status && TaskStatus.Faulted != udpTask.Status) {
                     try {
                         Debug.Log($"OnlineMapController.cleanupNetworkSessions, about to wait for udpTask with status={udpTask.Status}");
-                        udpTask.Wait();
-                        Debug.Log($"OnlineMapController.cleanupNetworkSessions, udpTask returns with status={udpTask.Status}");
+                        var waitingSuccess = udpTask.Wait(3000);
+                        Debug.Log($"OnlineMapController.cleanupNetworkSessions, udpTask returns with waitingSuccess={waitingSuccess}, status={udpTask.Status}");
                     } catch (Exception ex) {
                         Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, udpTask is already cancelled: {0}", ex));
                     } finally {
