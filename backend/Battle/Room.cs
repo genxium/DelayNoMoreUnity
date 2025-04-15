@@ -1068,18 +1068,7 @@ D:                     ([51,55],x)
 
         int joinIndex = player.CharacterDownsync.JoinIndex;
         int clientInputFrameIdEd = lastAllConfirmedInputFrameId + 1; 
-
-        var lastIfdUpsyncOfBatch = inputFrameUpsyncBatch[inputFrameUpsyncBatch.Count-1];
-        var lastIfdIdOfBatch = lastIfdUpsyncOfBatch.InputFrameId;
-        if (0 < backendTimerRdfId) {
-            int virtualBackendTimerGenIfdId = ConvertToDynamicallyGeneratedDelayInputFrameId(backendTimerRdfId, 0);
-            bool tooAdvanced = (virtualBackendTimerGenIfdId+1 < lastIfdIdOfBatch);
-            if (tooAdvanced) {
-                _logger.LogWarning($"[markConfirmationIfApplicable] early return because lastIfdIdOfBatch={lastIfdIdOfBatch} >= virtualBackendTimerGenIfdId+1={virtualBackendTimerGenIfdId+1}@inputBuffer={inputBuffer.toSimpleStat()} in this room: roomId={id}, backendTimerRdfId={backendTimerRdfId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: breaking and ignoring the rest inputFrameUpsyncs from this player");
-                return null;
-            }
-        }
-
+        var virtualBackendTimerGenIfdIdWithTolerance = (0 < backendTimerRdfId ? ConvertToDynamicallyGeneratedDelayInputFrameId(backendTimerRdfId + BATTLE_DYNAMICS_FPS*3, 0) : MAX_INT);
         foreach (var inputFrameUpsync in inputFrameUpsyncBatch) {
             var clientInputFrameId = inputFrameUpsync.InputFrameId;
             if (clientInputFrameId < inputBuffer.StFrameId) {
@@ -1116,10 +1105,15 @@ D:                     ([51,55],x)
                 var curDynamicsToUseIfdId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId);
                 bool toEvictIfdAlreadyUsed = (curDynamicsToUseIfdId > toEvictIfdId);
                 if (!toEvictIfdAlreadyUsed) {
+                    bool tooAdvanced = (virtualBackendTimerGenIfdIdWithTolerance < toEvictIfdId);
+                    if (tooAdvanced) {
+                        _logger.LogWarning($"[markConfirmationIfApplicable] early return because toEvictIfdId={toEvictIfdId} >= virtualBackendTimerGenIfdIdWithTolerance={virtualBackendTimerGenIfdIdWithTolerance}@inputBuffer={inputBuffer.toSimpleStat()} in this room: roomId={id}, backendTimerRdfId={backendTimerRdfId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: breaking and ignoring the rest inputFrameUpsyncs from this player");
+                        break;
+                    }
                     bool shouldBreakBatchTraversal = false;
                     int insituForceConfirmationInc = 0;
                     if (insituForceConfirmationEnabled) {
-                        // [WARNING] By now the whole "inputFrameUpsyncBatch" already passed "tooAdvanced" check.
+                        // [WARNING] By now "toEvictIfdId" has already passed "tooAdvanced" check.
 
                         /**
                         When "insituForceConfirmation" is triggered, the key pointers are always as follows. 

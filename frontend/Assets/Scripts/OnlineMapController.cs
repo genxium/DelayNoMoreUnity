@@ -627,7 +627,7 @@ public class OnlineMapController : AbstractMapController {
                 shouldLockStep = (
                     tooFastOrNot
                     ||
-                    (0 < ifdLag && (localRequiredIfdId > (lastAllConfirmedInputFrameId + acIfdLagThresHold)))
+                    (localRequiredIfdId > (lastAllConfirmedInputFrameId + acIfdLagThresHold))
                 );
                 
                 networkInfoPanel.SetValues(sendingFps, (localRequiredIfdId > lastAllConfirmedInputFrameId ? localRequiredIfdId - lastAllConfirmedInputFrameId : 0), peerUpsyncFps, ifdLag, lockedStepsCnt, rollbackFrames, udpPunchedCnt);
