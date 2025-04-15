@@ -35,8 +35,8 @@ public class OnlineMapController : AbstractMapController {
     */
     private const int freezeIfdLagThresHold = (slowDownIfdLagThreshold*3);
 
-    //private const int acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE << 1); // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
-    private const int acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE - 4); // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
+    private const int acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE/5); // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
+    //private const int acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE << 1); 
 
     /*****************************
      * The values "slowDownIfdLagThreshold" and "freezeIfdLagThresHold" are mostly used for tracking "UDP received packet front".
@@ -44,7 +44,8 @@ public class OnlineMapController : AbstractMapController {
      * The value "acIfdLagThresHold" is used for tracking "TCP received packet front". Its value should be a little smaller than "backend inputBuffer.N", see codes for "BattleServer/Room.insituForceConfirmationEnabled" for more information, roughly speacking
         - "acIfdLagThresHold" too small will trigger frequent frontend freezing
         - "acIfdLagThresHold" too big will trigger frequent backend insituForceConfirmation
-            - e.g. with "acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE << 1)" you can see lots of "insituForceConfirmation" and "lastIfdIdOfBatch tooAdvanced" logs on backend; while with "acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE - 2)" such logs are only seen in extreme cases (like PC#1 v.s. PC#2 via internet while PC#1's traffic is controlled by Clumsy v0.3 for various conditions).
+            - e.g. with "acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE << 1)" you can see lots of "insituForceConfirmation" and "lastIfdIdOfBatch tooAdvanced" logs on backend; while with "acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE - 4)" such logs are only seen in extreme cases (like PC#1 v.s. PC#2 via internet while PC#1's traffic is controlled by Clumsy v0.3 for various conditions)
+        - the trade-off result here is to have a large "DEFAULT_BACKEND_INPUT_BUFFER_SIZE" to hold 30 seconds of inputs, then "acIfdLagThresHold" small enough relative to "DEFAULT_BACKEND_INPUT_BUFFER_SIZE" to avoid frequent insituForceConfirmation, but not too small to trigger frequent frontend freezing
      */
     public bool useFreezingLockStep = true; // [WARNING] If set to "false", expect more teleports due to "chaseRolledbackRdfs" but less frozen graphics when your device has above average network among all peers in the same battle -- yet "useFreezingLockStep" could NOT completely rule out teleports as long as potential floating point mismatch between devices exists (especially between backend .NET 7.0 and frontend .NET 2.1).
     public NetworkDoctorInfo networkInfoPanel;
