@@ -36,7 +36,7 @@ public class OnlineMapController : AbstractMapController {
     private const int freezeIfdLagThresHold = (slowDownIfdLagThreshold*3);
 
     //private const int acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE << 1); // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
-    private const int acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE - 2); // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
+    private const int acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE - 4); // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
 
     /*****************************
      * The values "slowDownIfdLagThreshold" and "freezeIfdLagThresHold" are mostly used for tracking "UDP received packet front".

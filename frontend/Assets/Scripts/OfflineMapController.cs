@@ -73,6 +73,7 @@ public class OfflineMapController : AbstractMapController {
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
         isOnlineMode = false;
+        renderBufferSize = 1024;
         StoryModeSettings.SimpleDelegate onExitCallback = () => {
             onBattleStopped(); // [WARNING] Deliberately NOT calling "pauseAllAnimatingCharacters(false)" such that "iptmgr.gameObject" remains inactive, unblocking the keyboard control to "characterSelectPanel"! 
             gobackToSelection();
