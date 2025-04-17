@@ -274,7 +274,7 @@ public class OnlineMapController : AbstractMapController {
                             }
                             onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
                             if (pbRdfId < chaserRenderFrameIdLowerBound) {
-                                Debug.LogWarning($"Got obsolete force-resync pbRdfId={pbRdfId} < chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}: battleState={battleState}, calling cleanupNetworkSessions(true) for manual rejoin, @localRenderFrameId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
+                                Debug.LogWarning($"Got obsolete force-resync pbRdfId={pbRdfId} < chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}: battleState={battleState}, NOT SURE WHY THIS HAPPENS but calling cleanupNetworkSessions(true) for manual rejoin, @localRenderFrameId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
                                 cleanupNetworkSessions(true);
                             } else {
                                 battleState = ROOM_STATE_IN_BATTLE;

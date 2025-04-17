@@ -952,11 +952,11 @@ public class Room {
            That said, "markConfirmationIfApplicable" will still work as expected. Here's an example of weird call orders.
            ---------------------------------------------------
            now lastAllConfirmedInputFrameId: 42; each "()" below indicates a "Lock/Unlock cycle of inputBufferLock", and "x" indicates no new all-confirmed snapshot is created
-A: ([44,50],x)                                            ([49,54],snapshot=[51,53])
-B:           ([54,58],x)
-C:                               ([42,53],snapshot=[43,50])
-D:                     ([51,55],x)
----------------------------------------------------
+           A: ([44,50],x)                                            ([49,54],snapshot=[51,53])
+           B:           ([54,58],x)
+           C:                               ([42,53],snapshot=[43,50])
+           D:                     ([51,55],x)
+           ---------------------------------------------------
          */
         // TODO: Put a rate limiter on this function!
         var nowRoomState = Interlocked.Read(ref this.state);
@@ -1630,8 +1630,11 @@ D:                     ([51,55],x)
     private void doBattleMainLoopPerTickBackendDynamicsWithProperLocking(int prevRenderFrameId, ref ulong dynamicsDuration) {
         inputBufferLock.WaitOne();
         try {
-            // Force setting all-confirmed of buffered inputFrames periodically, kindly note that if "backendDynamicsEnabled", what we want to achieve is "recovery upon reconnection", which certainly requires "forceConfirmationIfApplicable" to move "lastAllConfirmedInputFrameId" forward as much as possible
             int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
+            // Confirming buffered inputFrames for inactive players.This step is necessary because in an extreme case where the BattleServer itself has a traffic jam such that no player input reaches it within each one's watchdog, the BattleServer will proactively disconnects everyone without calling "OnBattleCmdReceived > markConfirmationIfApplicable > _moveForwardLastAllConfirmedInputFrameIdWithoutForcing", leaving a DISCONTINUOUSLY CONFIRMED INPUTBUFFER AND NOT RECOVERABLE after any player rejoining.
+            int newAllConfirmedCount1 = _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(inputBuffer.EdFrameId);
+
+            // Force setting all-confirmed of buffered inputFrames periodically, kindly note that if "backendDynamicsEnabled", what we want to achieve is "recovery upon reconnection", which certainly requires "forceConfirmationIfApplicable" to move "lastAllConfirmedInputFrameId" forward as much as possible
             ulong unconfirmedMask = forceConfirmationIfApplicable();
 
             if (0 <= lastAllConfirmedInputFrameId) {
@@ -1650,7 +1653,7 @@ D:                     ([51,55],x)
                However, if player#1 remains connected but ticks very slowly (i.e. an "ACTIVE SLOW TICKER"), "markConfirmationIfApplicable" couldn't increment "LastAllConfirmedInputFrameId", thus "[type#1 forceConfirmation]" will be triggered, but what's worse is that after "[type#1 forceConfirmation]" if the "refRenderFrameId" is not advanced enough, player#1 could never catch up even if it resumed from slow ticking!
              */
 
-            if (0 < unconfirmedMask) {
+            if (0 < unconfirmedMask || 0 < newAllConfirmedCount1) {
                 // [WARNING] As "curDynamicsRenderFrameId" was just incremented above, "refSnapshotStFrameId" is most possibly larger than "oldLastAllConfirmedInputFrameId + 1", therefore this initial assignment is critical for `ACTIVE NORMAL TICKER`s to receive consecutive ids of inputFrameDownsync.
                 int snapshotStFrameId = oldLastAllConfirmedInputFrameId + 1;
                 int refSnapshotStFrameId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId - 1);
@@ -1670,8 +1673,8 @@ D:                     ([51,55],x)
                     if (refSnapshotStFrameId < snapshotStFrameId) {
                         snapshotStFrameId = refSnapshotStFrameId;
                     }
-                    unconfirmedMask = allConfirmedMask;
                     if (snapshotStFrameId < lastAllConfirmedInputFrameId + 1) {
+                        unconfirmedMask = allConfirmedMask;
                         var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
                         downsyncToAllPlayers(inputBufferSnapshot);
                         lastForceResyncedRdfId = backendTimerRdfId;
