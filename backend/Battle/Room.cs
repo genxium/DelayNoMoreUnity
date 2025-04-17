@@ -340,7 +340,7 @@ public class Room {
             if (PLAYER_BATTLE_STATE_DISCONNECTED != oldPlayerBattleState) {
                 _logger.LogInformation("The existingPlayer in active battle is not at required state when calling `ReAddPlayerIfPossible` for (roomId={0}, playerId={1}, joinIndex={2}, oldPlayerBattleState={3}): proactively disconnecting it", id, playerId, existingJoinIndex, oldPlayerBattleState);
                 OnPlayerDisconnected(playerId);
-                return (ErrCode.PlayerNotReaddableToRoom, null);
+                return (ErrCode.PlayerNotReAddableToRoom, null);
             }
 
             existingPlayer.BattleState = PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC;
@@ -355,12 +355,6 @@ public class Room {
 
             var t = Task.Run(async () => await downsyncToSinglePlayerAsyncLoop(playerId, existingPlayer));
             playerDownsyncLoopDict[playerId] = t;
-
-            // Broadcast re-added player info to all players in the same room
-            foreach (var (otherPlayerId, otherPlayer) in players) {
-                if (otherPlayerId == playerId) continue;
-                _ = sendSafelyAsync(null, null, null, DOWNSYNC_MSG_ACT_PLAYER_READDED_AND_ACKED, otherPlayerId, otherPlayer, existingPlayer.CharacterDownsync.JoinIndex);
-            }
 
             // [WARNING] If "!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled", make sure that an "extreme/malicious slow ticker" will be timed out by the watchdog before either "renderBuffer" or "inputBuffer" is drained!
             int newWatchdogKeepAliveMillis = (!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled) ? (getRenderBufferSize()*1000/BATTLE_DYNAMICS_FPS) - 1 : 10000;
@@ -377,7 +371,6 @@ public class Room {
     }
 
     public async void OnPlayerDisconnected(string playerId) {
-        // [WARNING] Unlike the Golang version, Room.OnDisconnected here is only triggered AFTER "signalToCloseConnOfThisPlayerCapture.Cancel()".
         bool shouldDismiss = false;
         joinerLock.WaitOne();
         try {
@@ -416,15 +409,16 @@ public class Room {
 
                     var tList = new List<Task>();
                     if (ROOM_STATE_IN_BATTLE == state) {
+                        // Notify other active players of the disconnection
                         foreach (var (otherPlayerId, otherWatchdog) in playerActiveWatchdogDict) {
                             if (otherPlayerId == playerId) continue;
                             Player? otherPlayer;
                             if (players.TryGetValue(otherPlayerId, out otherPlayer)) {
-                                if (null != otherPlayer && PLAYER_BATTLE_STATE_ACTIVE == otherPlayer.BattleState) {
-                                    int newWaiveCnt = otherWatchdog.incWaiveCnt(); // [WARNING] Such that it doesn't time out due to awaiting from this disconnected player
-                                    _logger.LogInformation("OnPlayerDisconnected newWaiveCnt={0}: [ roomId={1}, joinIndex={2}, playerId={3}, roomState={4}, nowRoomEffectivePlayerCount={5} ]", newWaiveCnt, id, otherPlayer.CharacterDownsync.JoinIndex, otherPlayerId, state, effectivePlayerCount);
-                                    tList.Add(sendSafelyAsync(null, null, null, DOWNSYNC_MSG_ACT_PLAYER_DISCONNECTED, otherPlayerId, otherPlayer, thatPlayer.CharacterDownsync.JoinIndex));
-                                }
+                                if (null == otherPlayer) continue;
+                                if (PLAYER_BATTLE_STATE_ACTIVE != otherPlayer.BattleState && PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC != otherPlayer.BattleState) continue;
+                                int newWaiveCnt = otherWatchdog.incWaiveCnt(); // [WARNING] Such that it doesn't time out due to awaiting from this disconnected player
+                                _logger.LogInformation($"OnPlayerDisconnected notifying [ roomId={id}, roomState={state}, otherPlayerJoinIndex={otherPlayer.CharacterDownsync.JoinIndex}, otherPlayerId={otherPlayerId}, newWaiveCnt={newWaiveCnt}, nowRoomEffectivePlayerCount={effectivePlayerCount} ]");
+                                tList.Add(sendSafelyAsync(null, null, null, DOWNSYNC_MSG_ACT_PLAYER_DISCONNECTED, otherPlayerId, otherPlayer, thatPlayer.CharacterDownsync.JoinIndex));
                             }
                         }
                     }
@@ -651,11 +645,7 @@ public class Room {
                 if (genOrderPreservedMsgs.TryTake(out (ArraySegment<byte> content, InputBufferSnapshot inputBufferSnapshot) msg, localPlayerWsDownsyncQueBattleReadTimeoutMillis, cancellationSignal.c2)) {
                     var inputBufferSnapshot = msg.inputBufferSnapshot;
                     var content = msg.content;
-                    int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
                     bool shouldResync = inputBufferSnapshot.ShouldForceResync;
-                    var toSendInputFrameIdSt = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
-                    var toSendInputFrameIdEd = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
-
                     /*
                        [WARNING] 
 
@@ -686,22 +676,29 @@ public class Room {
                     // [WARNING] Preserving generated order (of inputBufferSnapshot) while sending per player by simply "awaiting" the "wsSession.SendAsync(...)" calls
                     await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
 
+                    var toSendInputFrameIdEd = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
                     player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
 
                     if (backendDynamicsEnabled && shouldResync && PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC == oldPlayerBattleState) {
-                        _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex}, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: contentByteLength={content.Count}");
+                        int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
+                        var toSendInputFrameIdSt = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
                         Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
+                        _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: contentByteLength={content.Count}");
                         foreach (var (otherPlayerId, otherPlayer) in players) { 
                             if (otherPlayerId == playerId) continue;
                             var oldOtherPlayerBattleState = Interlocked.Read(ref otherPlayer.BattleState);
-                            if (oldOtherPlayerBattleState != PLAYER_BATTLE_STATE_DISCONNECTED) continue;    
-                            var resp = new WsResp {
-                                Ret = ErrCode.Ok,
-                                    Act = DOWNSYNC_MSG_ACT_PLAYER_DISCONNECTED,
-                                    PeerJoinIndex = otherPlayer.CharacterDownsync.JoinIndex
-                            };
-                            // Such that rejoined players know who to ignore for freezing!
-                            await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
+                            if (oldOtherPlayerBattleState == PLAYER_BATTLE_STATE_ACTIVE) {
+                                // Broadcast re-added player info to all active players in the same room
+                                _ = sendSafelyAsync(null, null, null, DOWNSYNC_MSG_ACT_PLAYER_READDED_AND_ACKED, otherPlayerId, otherPlayer, player.CharacterDownsync.JoinIndex);
+                            } else {
+                                // Tell the re-added player who's inactive in the same room
+                                var resp = new WsResp {
+                                    Ret = ErrCode.Ok,
+                                        Act = DOWNSYNC_MSG_ACT_PLAYER_DISCONNECTED,
+                                        PeerJoinIndex = otherPlayer.CharacterDownsync.JoinIndex
+                                };
+                                await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
+                            }
                         }
                     }
                 }

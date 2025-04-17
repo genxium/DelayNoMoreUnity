@@ -16,8 +16,11 @@ public class NetworkDoctorInfo: MonoBehaviour {
     public TMP_Text ifdLagTitle;
     public TMP_Text ifdLagValue;
 
-    public TMP_Text stepsLockedTitle;
-    public TMP_Text stepsLockedValue;
+    public TMP_Text acLagStepsLockedTitle;
+    public TMP_Text acLagStepsLockedValue;
+
+    public TMP_Text ifdFrontStepsLockedTitle;
+    public TMP_Text ifdFrontStepsLockedValue;
 
     public TMP_Text rollbackFramesTitle;
     public TMP_Text rollbackFramesValue;
@@ -40,12 +43,13 @@ public class NetworkDoctorInfo: MonoBehaviour {
 
     }
 
-    public void SetValues(float sendingFps, int lastAcIfdIdLag, float peerUpsyncFps, int ifdLag, int stepsLocked, int rollbackFrames, long udpPunchedCnt) {
+    public void SetValues(float sendingFps, int lastAcIfdIdLag, float peerUpsyncFps, int ifdLag, int acLagLockedStepsCnt, int ifdFrontLockedStepsCnt, int rollbackFrames, long udpPunchedCnt) {
         sendingFpsValue.text = sendingFps.ToString("0.0");
         acIfdIdLagValue.text = lastAcIfdIdLag.ToString();
         peerUpsyncFpsValue.text = peerUpsyncFps.ToString("0.0");
         ifdLagValue.text = ifdLag.ToString();
-        stepsLockedValue.text = stepsLocked.ToString();
+        acLagStepsLockedValue.text = acLagLockedStepsCnt.ToString();
+        ifdFrontStepsLockedValue.text = ifdFrontLockedStepsCnt.ToString();
         rollbackFramesValue.text = rollbackFrames.ToString();
         udpPunchedCntValue.text = udpPunchedCnt.ToString();
 

@@ -16,6 +16,7 @@ public class ReadyGo : MonoBehaviour {
     private int phase = 0;
 
     public void hideReady() {
+        if (Vector3.zero == ready.gameObject.transform.localScale) return;
         if (null != readyBoundSequence && readyBoundSequence.IsPlaying()) {
              readyBoundSequence.Kill();
              readyBoundSequence = null;
@@ -24,6 +25,7 @@ public class ReadyGo : MonoBehaviour {
     }
 
     public void hideGo() {
+        if (Vector3.zero == go.gameObject.transform.localScale) return;
         if (null != goBoundSequence && goBoundSequence.IsPlaying()) {
             goBoundSequence.Kill();
             goBoundSequence = null;

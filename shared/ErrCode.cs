@@ -16,7 +16,7 @@ namespace shared {
 		public const int LocallyNoSpecifiedRoom = 3008;                           
 		public const int PlayerNotAddableToRoom = 3009;                           
 		public const int PlayerNotFound = 3010;                                   
-		public const int PlayerNotReaddableToRoom = 3011;                         
+		public const int PlayerNotReAddableToRoom = 3011;                         
 		public const int SamePlayerAlreadyInSameRoom = 3012;                      
 		public const int PlayerCheating = 3013;                                   
 		public const int SmsCaptchaNotMatch = 3014;                               

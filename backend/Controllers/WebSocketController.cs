@@ -105,7 +105,7 @@ public class WebSocketController : ControllerBase {
                         }
 
                         effJoinIndex = player.CharacterDownsync.JoinIndex;
-                        _logger.LogInformation("Re-Added player to room [ roomId={0}, playerId={1}, joinIndex={2} ]", roomId, playerId, effJoinIndex);
+                        _logger.LogInformation("Re-Added player to room [ roomId={0}, playerId={1}, joinIndex={2} ], pending [readded-resync]", roomId, playerId, effJoinIndex);
                     } else {
                         room = _roomManager.PopAny(targetRoomId);
                         if (null == room) {
@@ -223,7 +223,7 @@ public class WebSocketController : ControllerBase {
             } catch (Exception ex) {
                 _logger.LogError(ex, "Session got an exception, by far roomId={0}, playerId={1}, joinIndex={2}", roomId, playerId, effJoinIndex);
             } finally {
-                _logger.LogInformation("Ending HandleNewPlayerPrimarySession in state={0} for [ roomId={1}, playerId={2}, joinIndex={3} ]", session.State, roomId, playerId, effJoinIndex);
+                _logger.LogInformation("Ending HandleNewPlayerPrimarySession in state={0} for [ roomId={1}, playerId={2}, joinIndex={3}, addPlayerToRoomResult={4} ]", session.State, roomId, playerId, effJoinIndex, addPlayerToRoomResult);
                 if (ErrCode.Ok == addPlayerToRoomResult && null != room) {
                     room.OnPlayerDisconnected(playerId);
                 }

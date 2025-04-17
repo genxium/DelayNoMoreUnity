@@ -46,12 +46,12 @@ public class NetworkDoctor {
 
     private int localRequiredIfdId;
     private float inputRateThreshold;
-    private float recvRateThreshold;
     private FrameRingBuffer<QEle> sendingQ;
     private FrameRingBuffer<QEle> inputFrameDownsyncQ;
     private FrameRingBuffer<QEle> peerInputFrameUpsyncQ;
     int immediateRollbackFrames;
-    int lockedStepsCnt;
+    int acLagLockedStepsCnt;
+    int ifdFrontLockedStepsCnt;
     long udpPunchedCnt;
 
     int lastForceResyncedIfdId;
@@ -73,10 +73,10 @@ public class NetworkDoctor {
     public void Reset() {
         localRequiredIfdId = 0;
         immediateRollbackFrames = 0;
-        lockedStepsCnt = 0;
+        acLagLockedStepsCnt = 0;
+        ifdFrontLockedStepsCnt = 0;
         udpPunchedCnt = 0;
         inputRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-1.0f) * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
-        recvRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-5.0f) * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
         lastForceResyncedIfdId = 0;
         exclusivelySelfConfirmedAtLastForceResync = false;
         exclusivelySelfUnconfirmedAtLastForceResync = false;
@@ -214,9 +214,14 @@ public class NetworkDoctor {
         immediateRollbackFrames = val;
     }
 
-    public void LogLockedStepCnt() {
-        lockedStepsCnt += 1;
+    public void LogAcLagLockedStepCnt() {
+        acLagLockedStepsCnt += 1;
     }
+
+    public void LogIfdFrontLockedStepCnt() {
+        ifdFrontLockedStepsCnt += 1;
+    }
+
     public void LogUdpPunchedCnt(long val) {
         long oldCnt = Interlocked.Read(ref udpPunchedCnt);
         if (oldCnt > val) return;
@@ -254,7 +259,7 @@ public class NetworkDoctor {
         return (sendingFps, srvDownsyncFps, peerUpsyncFps);
     }
 
-    public (bool, int, float, float, int, int, long) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int rdfLagTolerance, int ifdLagTolerance, HashSet<int> disconnectedPeerJoinIndices) {
+    public (bool, int, float, float, int, int, int, long) IsTooFast(int roomCapacity, int selfJoinIndex, int[] lastIndividuallyConfirmedInputFrameId, int rdfLagTolerance, int ifdLagTolerance, HashSet<int> disconnectedPeerJoinIndices) {
         var (sendingFps, _, peerUpsyncFps) = Stats();
         chasedToPlayerRdfIdIndicatorCountdown -= 1.0f;
         if (0 > chasedToPlayerRdfIdIndicatorCountdown) {
@@ -331,7 +336,7 @@ public class NetworkDoctor {
                 if (0 >= selfUnconfirmedLockStepSkipQuota) {
                     //Debug.Log(String.Format("Should lock step, [localRequiredIfdId={0}, minInputFrameIdFront={1}, lastForceResyncedIfdId={2}, ifdLagTolerance={3}]; [immediateRollbackFrames={4}, rdfLagTolerance={5}]; [sendingFps={6}, inputRateThreshold={7}]; [latestRecvMillis={8}, nowMillis={9}, latestRecvMillisTooOld={10}]; [exclusivelySelfConfirmedAtLastForceResync={11}, exclusivelySelfUnconfirmedAtLastForceResync={12}, lastForceResyncHasRollbackBurst={13}, exclusivelySelfConfirmedLockStepQuota={14}]", localRequiredIfdId, minInputFrameIdFront, lastForceResyncedIfdId, ifdLagTolerance, immediateRollbackFrames, rdfLagTolerance, sendingFps, inputRateThreshold, latestRecvMillis, nowMillis, latestRecvMillisTooOld, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, lastForceResyncHasRollbackBurst, exclusivelySelfConfirmedLockStepQuota));
 
-                    return (true, ifdIdLag, sendingFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
+                    return (true, ifdIdLag, sendingFps, peerUpsyncFps, immediateRollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
                 } else {
                     selfUnconfirmedLockStepSkipQuota -= 1;
                     if (0 > selfUnconfirmedLockStepSkipQuota) {
@@ -342,6 +347,6 @@ public class NetworkDoctor {
         }
 
         exclusivelySelfConfirmedLockStepQuota = 0; // Can only be applied consecutively together with "ifdLagSignificant".
-        return (false, ifdIdLag, sendingFps, peerUpsyncFps, immediateRollbackFrames, lockedStepsCnt, Interlocked.Read(ref udpPunchedCnt));
+        return (false, ifdIdLag, sendingFps, peerUpsyncFps, immediateRollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt,  Interlocked.Read(ref udpPunchedCnt));
     }
 }
