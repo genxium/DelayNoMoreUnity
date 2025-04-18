@@ -258,28 +258,49 @@ public class OnlineMapController : AbstractMapController {
                         default:
                             var pbRdfId = wsRespHolder.Rdf.Id;
                             if (null == wsRespHolder.InputFrameDownsyncBatch || 0 >= wsRespHolder.InputFrameDownsyncBatch.Count) {
-                                Debug.LogWarning($"Got empty inputFrameDownsyncBatch upon resync pbRdfId={pbRdfId} @playerRdfId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
+                                Debug.LogWarning($"Got empty inputFrameDownsyncBatch upon resync pbRdfId={pbRdfId} @playerRdfId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
                                 return;
                             }
                             if (null == selfPlayerInfo) {
-                                Debug.LogWarning(String.Format("Got empty selfPlayerInfo upon resync@localRenderFrameId={0}, @lastAllConfirmedInputFrameId={1}, @chaserRenderFrameId={2}, @inputBuffer:{3}", playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, inputBuffer.toSimpleStat()));
+                                Debug.LogWarning(String.Format("Got empty selfPlayerInfo upon resync@playerRdfId(local)={0}, @lastAllConfirmedInputFrameId={1}, @chaserRenderFrameId={2}, @inputBuffer:{3}", playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, inputBuffer.toSimpleStat()));
                                 return;
                             }
                             //logForceResyncForChargeDebug(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
                             readyGoPanel.hideReady();
                             readyGoPanel.hideGo();
                             if (ROOM_STATE_FRONTEND_REJOINING == battleState || ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN == battleState || ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN == battleState) {
-                                Debug.LogWarning($"Got force-resync during battleState={battleState}, transited to in battle@pbRdfId={pbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @localRenderFrameId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
+                                Debug.LogWarning($"Got force-resync during battleState={battleState} @pbRdfId={pbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
                                 rejoinPrompt.gameObject.SetActive(false);
                             }
                             onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
                             if (pbRdfId < chaserRenderFrameIdLowerBound) {
-                                Debug.LogWarning($"Got obsolete force-resync pbRdfId={pbRdfId} < chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}: battleState={battleState}, NOT SURE WHY THIS HAPPENS but calling cleanupNetworkSessions(true) for manual rejoin, @localRenderFrameId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
+                                Debug.LogWarning($"Got obsolete force-resync pbRdfId={pbRdfId} < chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @battleState={battleState}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: NOT SURE WHY THIS HAPPENS but calling cleanupNetworkSessions(true) for manual rejoin");
+                                autoRejoinQuota = 0;
                                 cleanupNetworkSessions(true);
                             } else {
-                                battleState = ROOM_STATE_IN_BATTLE;
+                                if (pbRdfId < playerRdfId && useFreezingLockStep) {
+                                    int localRequiredIfdId = ConvertToDelayedInputFrameId(playerRdfId);
+                                    var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (inputFrameUpsyncDelayTolerance << INPUT_SCALE_FRAMES), ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
+
+                                    ifdFrontShouldLockStep = (tooFastOrNot);
+                                    acLagShouldLockStep = (localRequiredIfdId > (lastAllConfirmedInputFrameId + acIfdLagThresHold));
+                                    
+                                    if (acLagShouldLockStep || ifdFrontShouldLockStep) {
+                                        Debug.LogWarning($"Force-resync pbRdfId={pbRdfId} cannot unfreeze the current player @battleState={battleState}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: calling cleanupNetworkSessions(true) for manual rejoin");
+                                        autoRejoinQuota = 0;
+                                        cleanupNetworkSessions(true);
+                                        acLagShouldLockStep = false;
+                                        ifdFrontShouldLockStep = false;
+                                    } else {
+                                        battleState = ROOM_STATE_IN_BATTLE;
+                                        Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#1");
+                                    }
+                                } else {
+                                    battleState = ROOM_STATE_IN_BATTLE;
+                                    Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#2");
+                                }
                             }
-                            //Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat());
+                            //Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @playerRdfId(local)={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat());
                             break;
                     }
                     break;
