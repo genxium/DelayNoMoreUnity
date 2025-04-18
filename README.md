@@ -1,5 +1,5 @@
 # Latest tag change notes
-v2.3.0
+v2.3.1
 - Added basic cutscene support for StoryMode.
 - Added slide-dodge (at critical timing) and defence-dodge (cost 1 slot-C).
 - Added beam emitting trap (rotary since v2.2.6).
@@ -10,6 +10,7 @@ v2.3.0
 - Added entry to arena practice mode.
 - Enhanced rejoining robustness.
 - Added `insitu force confirmation` on backend.
+- Enhanced force-resync handling.
 
 Please checkout the demo videos on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/iOgqfatRcn8)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)).
 

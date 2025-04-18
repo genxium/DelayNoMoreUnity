@@ -344,21 +344,27 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
         }
 
-        while (inputBuffer.EdFrameId <= inputFrameId) {
-            // Fill the gap
-            int gapInputFrameId = inputBuffer.EdFrameId;
-            inputBuffer.DryPut();
-            var (ok, ifdHolder) = inputBuffer.GetByFrameId(gapInputFrameId);
-            if (!ok || null == ifdHolder) {
-                throw new ArgumentNullException(String.Format("inputBuffer was not fully pre-allocated for gapInputFrameId={0}! Now inputBuffer StFrameId={1}, EdFrameId={2}, Cnt/N={3}/{4}", gapInputFrameId, inputBuffer.StFrameId, inputBuffer.EdFrameId, inputBuffer.Cnt, inputBuffer.N));
-            }
+        if (null != existingInputFrame) {
+            existingInputFrame.InputList[(joinIndex-1)] = currSelfInput;
+            existingInputFrame.ConfirmedList |= initConfirmedList;
+            existingInputFrame.UdpConfirmedList |= initConfirmedList;
+        } else {
+            while (inputBuffer.EdFrameId <= inputFrameId) {
+                // Fill the gap
+                int gapInputFrameId = inputBuffer.EdFrameId;
+                inputBuffer.DryPut();
+                var (ok, ifdHolder) = inputBuffer.GetByFrameId(gapInputFrameId);
+                if (!ok || null == ifdHolder) {
+                    throw new ArgumentNullException(String.Format("inputBuffer was not fully pre-allocated for gapInputFrameId={0}! Now inputBuffer StFrameId={1}, EdFrameId={2}, Cnt/N={3}/{4}", gapInputFrameId, inputBuffer.StFrameId, inputBuffer.EdFrameId, inputBuffer.Cnt, inputBuffer.N));
+                }
 
-            ifdHolder.InputFrameId = gapInputFrameId;
-            for (int k = 0; k < roomCapacity; ++k) {
-                ifdHolder.InputList[k] = prefabbedInputList[k];
+                ifdHolder.InputFrameId = gapInputFrameId;
+                for (int k = 0; k < roomCapacity; ++k) {
+                    ifdHolder.InputList[k] = prefabbedInputList[k];
+                }
+                ifdHolder.ConfirmedList = initConfirmedList;
+                ifdHolder.UdpConfirmedList = initConfirmedList;
             }
-            ifdHolder.ConfirmedList = initConfirmedList;
-            ifdHolder.UdpConfirmedList = initConfirmedList;
         }
 
         return (previousSelfInput, currSelfInput);
@@ -1509,6 +1515,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             lastAllConfirmedInputFrameId = inputFrameDownsyncId;
             var (res1, localInputFrame) = inputBuffer.GetByFrameId(inputFrameDownsyncId);
             int playerRdfId2 = ConvertToLastUsedRenderFrameId(inputFrameDownsyncId);
+            if (null != localInputFrame && localInputFrame.InputList[selfPlayerInfo.JoinIndex-1] != inputFrameDownsync.InputList[selfPlayerInfo.JoinIndex - 1]) {
+                Debug.LogWarning($"Overriding localSelfInput={localInputFrame.InputList[selfPlayerInfo.JoinIndex-1]} by backend generated {inputFrameDownsync.InputList[selfPlayerInfo.JoinIndex-1]} of ifdId={inputFrameDownsyncId}, inputBuffer={inputBuffer.toSimpleStat()}");
+            }
 
             if (null != localInputFrame
               &&
@@ -1542,7 +1551,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (RingBuffer<InputFrameDownsync>.RING_BUFF_FAILED_TO_SET == res2) {
                 throw new ArgumentException(String.Format("Failed to dump input cache(maybe recentInputCache too small)! inputFrameDownsync.inputFrameId={0}, lastAllConfirmedInputFrameId={1}, inputBuffer: {2}", inputFrameDownsyncId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat()));
             } else if (RingBuffer<InputFrameDownsync>.RING_BUFF_NON_CONSECUTIVE_SET == res2) {
-                Debug.LogWarning(String.Format("Possibly resyncing#2! Now inputBuffer: {0}", inputBuffer.toSimpleStat()));
+                Debug.LogWarning($"Possibly resyncing#2! Now playerRdfId={playerRdfId}, inputBuffer={inputBuffer.toSimpleStat()}");
             }
         }
         _markConfirmationIfApplicable();
@@ -1784,12 +1793,12 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (othersForcedDownsyncRenderFrameDict.ContainsKey(rdf.Id)) {
                 var othersForcedDownsyncRenderFrame = othersForcedDownsyncRenderFrameDict[rdf.Id];
                 if (!EqualRdfs(othersForcedDownsyncRenderFrame, rdf, roomCapacity)) {
-                    Debug.LogWarningFormat("Mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}:\nrdf={2}\nothersForcedDownsyncRenderFrame={3}\nnow inputBuffer:{4}, renderBuffer:{5}", rdf.Id, delayedInputFrameId, stringifyRdf(rdf), stringifyRdf(othersForcedDownsyncRenderFrame), inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat());
+                    //Debug.LogWarningFormat("Mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}:\nrdf={2}\nothersForcedDownsyncRenderFrame={3}\nnow inputBuffer:{4}, renderBuffer:{5}", rdf.Id, delayedInputFrameId, stringifyRdf(rdf), stringifyRdf(othersForcedDownsyncRenderFrame), inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat());
                     // [WARNING] When this happens, something is intrinsically wrong -- to avoid having an inconsistent history in the "renderBuffer", thus a wrong prediction all the way from here on, clear the history!
                     othersForcedDownsyncRenderFrame.ShouldForceResync = true;
                     othersForcedDownsyncRenderFrame.BackendUnconfirmedMask = ((1ul << roomCapacity) - 1);
                     onRoomDownsyncFrame(othersForcedDownsyncRenderFrame, null, true);
-                    Debug.LogWarningFormat("Handled mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}, playerRdfId={2}:\nnow inputBuffer:{3}, renderBuffer:{4}", rdf.Id, delayedInputFrameId, playerRdfId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat());
+                    //Debug.LogWarningFormat("Handled mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}, playerRdfId={2}:\nnow inputBuffer:{3}, renderBuffer:{4}", rdf.Id, delayedInputFrameId, playerRdfId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat());
                 }
                 othersForcedDownsyncRenderFrameDict.Remove(rdf.Id); // [WARNING] Removes anyway because we won't revisit the same "playerRdfId" in a same battle!
             }

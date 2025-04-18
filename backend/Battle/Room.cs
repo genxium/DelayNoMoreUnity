@@ -683,7 +683,11 @@ public class Room {
                         int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
                         var toSendInputFrameIdSt = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
                         Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
-                        _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: contentByteLength={content.Count}");
+                        _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: reentry watchdog started, contentByteLength={content.Count}");
+                        PlayerSessionAckWatchdog? watchdog;
+                        if (playerActiveWatchdogDict.TryGetValue(playerId, out watchdog)) {
+                            watchdog.Kick();
+                        }
                         foreach (var (otherPlayerId, otherPlayer) in players) { 
                             if (otherPlayerId == playerId) continue;
                             var oldOtherPlayerBattleState = Interlocked.Read(ref otherPlayer.BattleState);
@@ -1013,7 +1017,7 @@ public class Room {
         }
     }
 
-    private int _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(int proposedIfdEdFrameId) {
+    private int _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(int proposedIfdEdFrameId, ref ulong unconfirmedMask) {
         // [WARNING] This function MUST BE called while "inputBufferLock" is locked!
 
         int incCnt = 0;
@@ -1042,6 +1046,7 @@ public class Room {
                         break;
                     }
                     if (isSlowTicker) {
+                        unconfirmedMask |= (1ul << j);
                         inputFrameDownsync.InputList[j] = 0; // For UNCONFIRMED BUT INACTIVE player input, always predict it to zero.
                                                              //_logger.LogInformation("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.CharacterDownsync.Id, thatPlayer.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
                     }
@@ -1062,7 +1067,7 @@ public class Room {
         // [WARNING] This function MUST BE called while "inputBufferLock" is locked!
 
         int newAllConfirmedCount = 0;
-
+        ulong unconfirmedMask = 0;
         int joinIndex = player.CharacterDownsync.JoinIndex;
         int clientInputFrameIdEd = lastAllConfirmedInputFrameId + 1; 
         var virtualBackendTimerGenIfdIdWithTolerance = (0 < backendTimerRdfId ? ConvertToDynamicallyGeneratedDelayInputFrameId(backendTimerRdfId + BATTLE_DYNAMICS_FPS*3, 0) : MAX_INT);
@@ -1142,7 +1147,7 @@ public class Room {
                             }
                         }
                     }
-                    newAllConfirmedCount += _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(inputBuffer.EdFrameId);
+                    newAllConfirmedCount += _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(inputBuffer.EdFrameId, ref unconfirmedMask);
                     int nextDynamicsRenderFrameId = (0 <= lastAllConfirmedInputFrameId ? ConvertToLastUsedRenderFrameId(lastAllConfirmedInputFrameId) + 1 : -1);
                     if (0 < nextDynamicsRenderFrameId && nextDynamicsRenderFrameId > curDynamicsRenderFrameId) {
                         _logger.LogInformation($"[markConfirmationIfApplicable] moving forward curDynamicsRenderFrameId={curDynamicsRenderFrameId} to nextDynamicsRenderFrameId={nextDynamicsRenderFrameId} to resolve eviction of toEvictIfdId={toEvictIfdId}, insituForceConfirmationInc={insituForceConfirmationInc}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} n this room: roomId={id}, backendTimerRdfId={backendTimerRdfId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: continuing and accepting more inputFrameUpsyncs from this player");
@@ -1189,7 +1194,7 @@ public class Room {
         }
 
         if (clientInputFrameIdEd > inputBuffer.EdFrameId) clientInputFrameIdEd = inputBuffer.EdFrameId;
-        newAllConfirmedCount += _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(clientInputFrameIdEd);
+        newAllConfirmedCount += _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(clientInputFrameIdEd, ref unconfirmedMask);
 
         if (0 < newAllConfirmedCount) {
             /**
@@ -1216,7 +1221,7 @@ public class Room {
                }
              */
             if (snapshotStFrameId >= snapshotEdFrameId) return null;
-            return produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(0, snapshotStFrameId, snapshotEdFrameId);
+            return produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, snapshotEdFrameId);
         } else {
             return null;
         }
@@ -1632,10 +1637,10 @@ public class Room {
         try {
             int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
             // Confirming buffered inputFrames for inactive players.This step is necessary because in an extreme case where the BattleServer itself has a traffic jam such that no player input reaches it within each one's watchdog, the BattleServer will proactively disconnects everyone without calling "OnBattleCmdReceived > markConfirmationIfApplicable > _moveForwardLastAllConfirmedInputFrameIdWithoutForcing", leaving a DISCONTINUOUSLY CONFIRMED INPUTBUFFER AND NOT RECOVERABLE after any player rejoining.
-            int newAllConfirmedCount1 = _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(inputBuffer.EdFrameId);
-
+            ulong unconfirmedMask = 0;
+            int newAllConfirmedCount1 = _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(inputBuffer.EdFrameId, ref unconfirmedMask);
             // Force setting all-confirmed of buffered inputFrames periodically, kindly note that if "backendDynamicsEnabled", what we want to achieve is "recovery upon reconnection", which certainly requires "forceConfirmationIfApplicable" to move "lastAllConfirmedInputFrameId" forward as much as possible
-            ulong unconfirmedMask = forceConfirmationIfApplicable();
+            unconfirmedMask |= forceConfirmationIfApplicable();
 
             if (0 <= lastAllConfirmedInputFrameId) {
                 // Apply "all-confirmed inputFrames" to move forward "curDynamicsRenderFrameId"

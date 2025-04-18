@@ -293,11 +293,11 @@ public class OnlineMapController : AbstractMapController {
                                         ifdFrontShouldLockStep = false;
                                     } else {
                                         battleState = ROOM_STATE_IN_BATTLE;
-                                        Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#1");
+                                        //Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#1");
                                     }
                                 } else {
                                     battleState = ROOM_STATE_IN_BATTLE;
-                                    Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#2");
+                                    //Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#2");
                                 }
                             }
                             //Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @playerRdfId(local)={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat());
@@ -747,6 +747,7 @@ public class OnlineMapController : AbstractMapController {
             batchInputFrameIdEdClosed = inputBuffer.EdFrameId - 1;
         }
 
+        ulong selfJoinIndexMask = (1UL << (selfPlayerInfo.JoinIndex - 1));
         for (var i = batchInputFrameIdSt; i <= batchInputFrameIdEdClosed; i++) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(i);
             if (false == res1 || null == inputFrameDownsync) {
@@ -757,6 +758,9 @@ public class OnlineMapController : AbstractMapController {
                     Encoded = inputFrameDownsync.InputList[selfPlayerInfo.JoinIndex - 1]
                 };
                 inputFrameUpsyncBatch.Add(inputFrameUpsync);
+                // [WARNING] Once sent, we must prevent "getOrPrefabInputFrameUpsync" from changing "self input" of this InputFrameDownsync.
+                inputFrameDownsync.ConfirmedList |= selfJoinIndexMask;
+                inputFrameDownsync.UdpConfirmedList |= selfJoinIndexMask;
             }
         }
 
