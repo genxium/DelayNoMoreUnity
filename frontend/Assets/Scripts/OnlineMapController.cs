@@ -62,6 +62,16 @@ public class OnlineMapController : AbstractMapController {
 
     public RejoinPrompt rejoinPrompt;
 
+    bool startUdpTaskIfNotYet() {
+        if (null != udpTask) return false;
+        udpCancellationTokenSource = new CancellationTokenSource();
+        udpCancellationToken = udpCancellationTokenSource.Token;
+        udpTask = Task.Run(async () => {
+            await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, udpCancellationToken);
+        });
+        return true;
+    }
+
     void pollAndHandleWsRecvBuffer() {
         while (WsSessionManager.Instance.recvBuffer.TryDequeue(out wsRespHolder)) {
             // Debug.Log(String.Format("@playerRdfId={0}, handling wsResp in main thread: {0}", playerRdfId, wsRespHolder));
@@ -146,10 +156,9 @@ public class OnlineMapController : AbstractMapController {
                         JoinIndex = selfPlayerInfo.JoinIndex,
                         AuthKey = clientAuthKey
                     };
+                    
                     UdpSessionManager.Instance.ResetUdpClient(roomCapacity, selfPlayerInfo.JoinIndex, initialPeerUdpAddrList, serverHolePuncher, peerHolePuncher, udpCancellationToken);
-                    udpTask = Task.Run(async () => {
-                        await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, udpCancellationToken);
-                    });
+                    startUdpTaskIfNotYet();
 
                     // The following "Act=UPSYNC_MSG_ACT_PLAYER_COLLIDER_ACK" sets player battle state to PLAYER_BATTLE_STATE_ACTIVE on the backend Room. 
                     var reqData = new WsReq {
@@ -291,23 +300,22 @@ public class OnlineMapController : AbstractMapController {
                                         acLagShouldLockStep = false;
                                         ifdFrontShouldLockStep = false;
                                     } else {
-                                        udpCancellationTokenSource = new CancellationTokenSource();
-                                        udpCancellationToken = udpCancellationTokenSource.Token;
-                                        udpTask = Task.Run(async () => {
-                                            await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, udpCancellationToken);
-                                        });
+                                        bool startedUdpTask = startUdpTaskIfNotYet();
                                         battleState = ROOM_STATE_IN_BATTLE;
                                         UdpSessionManager.Instance.PunchAllPeers(wsCancellationToken);
+                                        if (startedUdpTask) {
+                                            Debug.LogWarning($"Started new udpTask upon force-resync pbRdfId={pbRdfId} @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: about to re-punch#1");
+                                            UdpSessionManager.Instance.PunchAllPeers(wsCancellationToken);
+                                        }
                                         //Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#1");
                                     }
                                 } else {
-                                    udpCancellationTokenSource = new CancellationTokenSource();
-                                    udpCancellationToken = udpCancellationTokenSource.Token;
-                                    udpTask = Task.Run(async () => {
-                                        await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, udpCancellationToken);
-                                    });
+                                    bool startedUdpTask = startUdpTaskIfNotYet();
                                     battleState = ROOM_STATE_IN_BATTLE;
-                                    UdpSessionManager.Instance.PunchAllPeers(wsCancellationToken);
+                                    if (startedUdpTask) {
+                                        Debug.LogWarning($"Started new udpTask upon force-resync pbRdfId={pbRdfId} @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: about to re-punch#2");
+                                        UdpSessionManager.Instance.PunchAllPeers(wsCancellationToken);
+                                    }
                                     //Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#2");
                                 }
                             }
@@ -440,9 +448,6 @@ public class OnlineMapController : AbstractMapController {
         wsCancellationTokenSource = new CancellationTokenSource();
         wsCancellationToken = wsCancellationTokenSource.Token;
         tcpJamEnabled = false;
-
-        udpCancellationTokenSource = new CancellationTokenSource();
-        udpCancellationToken = udpCancellationTokenSource.Token;
 
         bool guiCanProceedOnFailure = false;
         var guiCanProceedSignalSource = new CancellationTokenSource(); // by design a new token-source for each "onCharacterSelectGoAction"
@@ -936,6 +941,7 @@ public class OnlineMapController : AbstractMapController {
             } catch (ObjectDisposedException ex) {
                 Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, udpCancellationTokenSource is already disposed: {0}", ex));
             }
+            udpCancellationTokenSource = null;
         }
 
         if (null != udpTask) {
@@ -957,6 +963,7 @@ public class OnlineMapController : AbstractMapController {
                     }
                 }
             }
+            udpTask = null;
         }
     }
 

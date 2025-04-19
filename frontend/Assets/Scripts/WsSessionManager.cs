@@ -143,7 +143,8 @@ public class WsSessionManager {
         }
         while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, cancellationToken)) { }
         recvBuffer.Clear();
-        string fullUrl = wsEndpoint + $"?authToken={authToken}&playerId={playerId}&speciesId={speciesId}&roomId={roomId}&forReentry={forReentry}&&incCnt={incCnt++}";
+        ++incCnt;
+        string fullUrl = wsEndpoint + $"?authToken={authToken}&playerId={playerId}&speciesId={speciesId}&roomId={roomId}&forReentry={forReentry}&&incCnt={incCnt}";
         Debug.Log($"About to connect Ws to {fullUrl}, please wait...");
         using (ClientWebSocket ws = new ClientWebSocket()) {
             try {
@@ -152,10 +153,10 @@ public class WsSessionManager {
                  */
                 var successWithoutTimeout = ws.ConnectAsync(new Uri(fullUrl), cancellationToken).Wait(5000, cancellationToken);
                 if (!successWithoutTimeout) {
-                    Debug.LogWarning($"Ws connection to {fullUrl} timed out, would not start 'Receive' or 'Send' tasks.");
+                    Debug.LogWarning($"Ws connection to {fullUrl} timed out @incCnt={incCnt}, would not start 'Receive' or 'Send' tasks.");
                     if (!cancellationToken.IsCancellationRequested) {
                         cancellationTokenSource.Cancel();
-                        Debug.LogWarning($"Ws connection to {fullUrl} timed out, cancelled");
+                        Debug.LogWarning($"Ws connection to {fullUrl} timed out @incCnt={incCnt}, cancelled");
                     }
                 } else {
                     var openMsg = new WsResp {
@@ -165,10 +166,10 @@ public class WsSessionManager {
                     recvBuffer.Enqueue(openMsg);
                     guiCanProceedSignalSource.Cancel();
                     await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
-                    Debug.Log("Both WebSocket 'Receive' and 'Send' tasks are ended.");
+                    Debug.Log($"Both WebSocket 'Receive' and 'Send' tasks are ended @incCnt={incCnt}.");
                 }
             } catch (OperationCanceledException ocEx) {
-                Debug.LogWarningFormat("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message);
+                Debug.LogWarning($"WsSession is cancelled for 'ConnectAsync' @incCnt={incCnt}; ocEx.Message={ocEx.Message}");
             } catch (Exception ex) {
                 Debug.LogWarningFormat("WsSession is stopped by exception; ex={0}", ex);
                 // [WARNING] Edge case here, if by far we haven't signaled "guiCanProceedSignalSource", it means that the "characterSelectPanel" is still awaiting this signal to either proceed to battle or prompt an error message.  
@@ -185,23 +186,10 @@ public class WsSessionManager {
             } finally {
                 try {
                     if (null != ws) {
-                        if (WebSocketState.Aborted != ws.State && WebSocketState.Closed != ws.State) {
-                            var closingTask = ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
-                            if (null != closingTask) {
-                                bool closedWithoutTimeout = closingTask.Wait(3000);
-                                if (closedWithoutTimeout) {
-                                    Debug.LogWarning($"Ws connection proactively closed");
-                                } else {
-                                    Debug.LogWarning($"Ws connection failed to proactively close within timeout");
-                                }
-                            } else {
-                                Debug.LogWarning($"Ws connection failed to create closingTask");
-                            }
-                        }
                         ws.Abort();
                     }
                 } catch (Exception exUponProactiveClose) {
-                    Debug.LogWarning($"Ws connection exception upon proactive close: {exUponProactiveClose}");
+                    Debug.LogWarning($"Ws connection exception upon proactive aborting @incCnt={incCnt}: {exUponProactiveClose}");
                 }
                 var closeMsg = new WsResp {
                     Ret = ErrCode.Ok,
@@ -213,16 +201,16 @@ public class WsSessionManager {
                     try {
                         cancellationTokenSource.Cancel();
                     } catch (Exception ex) {
-                        Debug.LogErrorFormat("Error cancelling ws session token source as a safe wrapping while it was checked not cancelled by far: {0}", ex);
+                        Debug.LogError($"Error cancelling ws session token source as a safe wrapping while it was checked not cancelled by far @incCnt={incCnt}: {ex}");
                     }
                 }
-                Debug.LogWarningFormat("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread.");
+                Debug.LogWarningFormat("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread @incCnt={incCnt}.");
             }
         }
     }
 
     private async Task Send(ClientWebSocket ws, CancellationToken cancellationToken) {
-        Debug.Log(String.Format("Starts 'Send' loop, ws.State={0}", ws.State));
+        Debug.Log($"Starts 'Send' loop @incCnt={incCnt}, ws.State={ws.State}");
         WsReq toSendObj;
         try {
             while (WebSocketState.Open == ws.State && !cancellationToken.IsCancellationRequested) {
@@ -237,31 +225,23 @@ public class WsSessionManager {
                 }
             }
         } catch (OperationCanceledException ocEx) {
-            Debug.LogWarning(String.Format("WsSession is cancelled for 'Send'; ocEx.Message={0}", ocEx.Message));
+            Debug.LogWarning($"WsSession is cancelled for 'Send' @incCnt={incCnt}; ocEx.Message={ocEx.Message}");
         } catch (Exception ex) {
-            Debug.LogWarning(String.Format("WsSession is stopping for 'Send' upon exception; ex={0}", ex));
+            Debug.LogWarning($"WsSession is stopping for 'Send' @incCnt={incCnt} upon exception; ex={ex}");
         } finally {
-            Debug.Log(String.Format("Ends 'Send' loop, ws.State={0}", ws.State));
+            Debug.Log($"Ends 'Send' loop @incCnt={incCnt}, ws.State={ws.State}");
         }
     }
 
     private async Task Receive(ClientWebSocket ws, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource) {
-        Debug.Log(String.Format("Starts 'Receive' loop, ws.State={0}, cancellationToken.IsCancellationRequested={1}", ws.State, cancellationToken.IsCancellationRequested));
+        Debug.Log($"Starts 'Receive' loop @incCnt={incCnt}, ws.State={ws.State}, cancellationToken.IsCancellationRequested={cancellationToken.IsCancellationRequested}");
         byte[] byteBuff = new byte[Battle.FRONTEND_WS_RECV_BYTELENGTH];
         var arrSegBytes = new ArraySegment<byte>(byteBuff);
         //DateTime openedAt = DateTime.Now;
         try {
             while (WebSocketState.Open == ws.State) {
-                //Debug.Log("Ws session recv: before");
                 // FIXME: Without a "read timeout" parameter, it's unable to detect slow or halted ws session here!
                 var result = await ws.ReceiveAsync(arrSegBytes, cancellationToken);
-                /* 
-                var openedByNow = DateTime.Now - openedAt;
-                if (30 < openedByNow.TotalSeconds) {
-                    throw new Exception("Test exception");
-                }
-                */
-                //Debug.Log("Ws session recv: after");
                 if (WebSocketMessageType.Close == result.MessageType) {
                     Debug.Log(String.Format("WsSession is asked by remote to close in 'Receive'"));
                     if (!cancellationToken.IsCancellationRequested) {
@@ -274,24 +254,24 @@ public class WsSessionManager {
                     try {
                         WsResp resp = WsResp.Parser.ParseFrom(byteBuff, 0, result.Count);
                         if (ErrCode.Ok != resp.Ret) {
-                            Debug.LogWarning(String.Format("@playerRdfId={0}, unexpected Ret={1}, b64 content={2}", playerId, resp.Ret, Convert.ToBase64String(byteBuff, 0, result.Count)));
+                            Debug.LogWarning($"@incCnt={incCnt}, unexpected Ret={resp.Ret}, b64 content={Convert.ToBase64String(byteBuff, 0, result.Count)}");
                         }
                         recvBuffer.Enqueue(resp);
                     } catch (Exception pbEx) {
-                        Debug.LogWarning(String.Format("Protobuf parser exception is caught for 'Receive'; ex.Message={0}", pbEx.Message));
+                        Debug.LogWarning($"Protobuf parser exception is caught @incCnt={incCnt} for 'Receive'; ex.Message={pbEx.Message}");
                     }
                     cancellationToken.ThrowIfCancellationRequested();
                 }
             }
         } catch (OperationCanceledException ocEx) {
-            Debug.LogWarning(String.Format("WsSession is cancelled for 'Receive'; ocEx.Message={0}", ocEx.Message));
+            Debug.LogWarning($"WsSession is cancelled @incCnt={incCnt} for 'Receive'; ocEx.Message={ocEx.Message}");
         } catch (Exception ex) {
-            Debug.LogError(String.Format("WsSession is stopping for 'Receive' upon exception; ex={0}", ex));
+            Debug.LogError($"WsSession is stopping @incCnt={incCnt} for 'Receive' upon exception; ex={ex}");
             if (!cancellationToken.IsCancellationRequested) {
                 cancellationTokenSource.Cancel(); // To cancel the "Send" loop
             }
         } finally {
-            Debug.LogWarning(String.Format("Ends 'Receive' loop, ws.State={0}", ws.State));
+            Debug.LogWarning($"Ends 'Receive' loop @incCnt={incCnt}, ws.State={ws.State}");
         }
     }
 

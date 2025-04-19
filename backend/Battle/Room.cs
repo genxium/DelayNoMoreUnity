@@ -692,7 +692,8 @@ public class Room {
                         _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: REENTRY WATCHDOG STARTED, contentByteLength={content.Count}");
                         PlayerSessionAckWatchdog? watchdog;
                         if (playerActiveWatchdogDict.TryGetValue(playerId, out watchdog)) {
-                            watchdog.Kick();
+                            // Needs wait for frontend UDP start up which might be time consuming
+                            watchdog.KickWithOneoffInterval(8000);
                         }
                         foreach (var (otherPlayerId, otherPlayer) in players) { 
                             if (otherPlayerId == playerId) continue;

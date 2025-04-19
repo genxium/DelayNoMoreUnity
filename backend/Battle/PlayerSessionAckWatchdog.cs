@@ -56,6 +56,12 @@ public class PlayerSessionAckWatchdog {
         Interlocked.Exchange(ref waiveCnt, 0);
     }
 
+    public void KickWithOneoffInterval(int oneOffInterval) {
+        if (null == timer) return;
+        timer.Change(oneOffInterval, Timeout.Infinite);
+        Interlocked.Exchange(ref waiveCnt, 0);
+    }
+
     public int incWaiveCnt() {
         return Interlocked.Exchange(ref waiveCnt, 1);
     }
