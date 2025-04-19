@@ -307,8 +307,11 @@ public class Room {
             }
 
             // [WARNING] If "!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled", make sure that an "extreme/malicious slow ticker" will be timed out by the watchdog before either "renderBuffer" or "inputBuffer" is drained!
-            int newWatchdogKeepAliveMillis = (!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled) ? (getRenderBufferSize()*1000/BATTLE_DYNAMICS_FPS) - 1 : 10000;
-            //int newWatchdogKeepAliveMillis = 3000; // For easy testing
+            int newWatchdogKeepAliveMillis = (!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled) ? (getRenderBufferSize()*1000/BATTLE_DYNAMICS_FPS) - 1 : 3500;
+            if (newWatchdogKeepAliveMillis > 3500) {
+                // Avoid unreasonably long watchdog for a realtime battle game.
+                newWatchdogKeepAliveMillis = 3500;
+            }
             var onTickMsg = String.Format("[ roomId={0}, playerId={1}, joinIndex={2} ] session watchdog ticked.", id, playerId, pPlayerFromDbInit.CharacterDownsync.JoinIndex); 
             var newWatchdog = new PlayerSessionAckWatchdog(newWatchdogKeepAliveMillis, OnPlayerDisconnected, playerId, onTickMsg, _loggerFactory);
             newWatchdog.Stop();
@@ -357,8 +360,11 @@ public class Room {
             playerDownsyncLoopDict[playerId] = t;
 
             // [WARNING] If "!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled", make sure that an "extreme/malicious slow ticker" will be timed out by the watchdog before either "renderBuffer" or "inputBuffer" is drained!
-            int newWatchdogKeepAliveMillis = (!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled) ? (getRenderBufferSize()*1000/BATTLE_DYNAMICS_FPS) - 1 : 10000;
-            //int newWatchdogKeepAliveMillis = 3000; // for easy testing
+            int newWatchdogKeepAliveMillis = (!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled) ? (getRenderBufferSize()*1000/BATTLE_DYNAMICS_FPS) - 1 : 3500;
+            if (newWatchdogKeepAliveMillis > 3500) {
+                // Avoid unreasonably long watchdog for a realtime battle game.
+                newWatchdogKeepAliveMillis = 3500;
+            }
             var onTickMsg = String.Format("[ roomId={0}, playerId={1}, joinIndex={2} ] reentry session watchdog ticked.", id, playerId, existingJoinIndex); 
             var newWatchdog = new PlayerSessionAckWatchdog(newWatchdogKeepAliveMillis, OnPlayerDisconnected, playerId, onTickMsg, _loggerFactory);
             newWatchdog.Stop();
@@ -683,7 +689,7 @@ public class Room {
                         int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
                         var toSendInputFrameIdSt = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
                         Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
-                        _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: reentry watchdog started, contentByteLength={content.Count}");
+                        _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: REENTRY WATCHDOG STARTED, contentByteLength={content.Count}");
                         PlayerSessionAckWatchdog? watchdog;
                         if (playerActiveWatchdogDict.TryGetValue(playerId, out watchdog)) {
                             watchdog.Kick();

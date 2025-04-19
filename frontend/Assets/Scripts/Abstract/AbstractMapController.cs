@@ -1515,9 +1515,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             lastAllConfirmedInputFrameId = inputFrameDownsyncId;
             var (res1, localInputFrame) = inputBuffer.GetByFrameId(inputFrameDownsyncId);
             int playerRdfId2 = ConvertToLastUsedRenderFrameId(inputFrameDownsyncId);
+            /*
             if (null != localInputFrame && localInputFrame.InputList[selfPlayerInfo.JoinIndex-1] != inputFrameDownsync.InputList[selfPlayerInfo.JoinIndex - 1]) {
                 Debug.LogWarning($"Overriding localSelfInput={localInputFrame.InputList[selfPlayerInfo.JoinIndex-1]} by backend generated {inputFrameDownsync.InputList[selfPlayerInfo.JoinIndex-1]} of ifdId={inputFrameDownsyncId}, inputBuffer={inputBuffer.toSimpleStat()}");
             }
+            */
 
             if (null != localInputFrame
               &&

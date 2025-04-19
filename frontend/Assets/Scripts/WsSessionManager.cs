@@ -165,7 +165,7 @@ public class WsSessionManager {
                     recvBuffer.Enqueue(openMsg);
                     guiCanProceedSignalSource.Cancel();
                     await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
-                    Debug.LogFormat("Both WebSocket 'Receive' and 'Send' tasks are ended.");
+                    Debug.Log("Both WebSocket 'Receive' and 'Send' tasks are ended.");
                 }
             } catch (OperationCanceledException ocEx) {
                 Debug.LogWarningFormat("WsSession is cancelled for 'ConnectAsync'; ocEx.Message={0}", ocEx.Message);
@@ -183,12 +183,26 @@ public class WsSessionManager {
                     recvBuffer.Enqueue(exMsg);
                 }
             } finally {
-                /*
-                // Seems like there's no need to proactively tells the server to disconnect
-                if (WebSocketState.Aborted != ws.State && WebSocketState.Closed != ws.State) {
-                    ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None).Wait(3000);
+                try {
+                    if (null != ws) {
+                        if (WebSocketState.Aborted != ws.State && WebSocketState.Closed != ws.State) {
+                            var closingTask = ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+                            if (null != closingTask) {
+                                bool closedWithoutTimeout = closingTask.Wait(3000);
+                                if (closedWithoutTimeout) {
+                                    Debug.LogWarning($"Ws connection proactively closed");
+                                } else {
+                                    Debug.LogWarning($"Ws connection failed to proactively close within timeout");
+                                }
+                            } else {
+                                Debug.LogWarning($"Ws connection failed to create closingTask");
+                            }
+                        }
+                        ws.Abort();
+                    }
+                } catch (Exception exUponProactiveClose) {
+                    Debug.LogWarning($"Ws connection exception upon proactive close: {exUponProactiveClose}");
                 }
-                */
                 var closeMsg = new WsResp {
                     Ret = ErrCode.Ok,
                     Act = Battle.DOWNSYNC_MSG_WS_CLOSED
