@@ -116,6 +116,7 @@ public class Room {
 
     Dictionary<string, Player> players;
     Dictionary<string, PlayerSessionAckWatchdog> playerActiveWatchdogDict;
+    int stdWatchdogKeepAliveMillis = 3500;
     /**
      * The following `CharacterDownsyncSessionDict` is NOT individually put
      * under `type Player struct` for a reason.
@@ -198,6 +199,13 @@ public class Room {
         historyRdfHolder = NewPreallocatedRoomDownsyncFrame(capacity, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocPickableCapacity);
 
         int renderBufferSize = getRenderBufferSize();
+        if (!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled) {
+            // [WARNING] If "!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled", make sure that an "extreme/malicious slow ticker" will be timed out by the watchdog before either "renderBuffer" or "inputBuffer" is drained!
+            int newWatchdogKeepAliveMillis = (getRenderBufferSize()*1000/BATTLE_DYNAMICS_FPS) - 1;
+            if (newWatchdogKeepAliveMillis < stdWatchdogKeepAliveMillis) {
+                stdWatchdogKeepAliveMillis = newWatchdogKeepAliveMillis; 
+            } 
+        } 
 
         // Preallocate battle dynamic fields other than "Collider related" ones
         preallocateStepHolders(capacity, renderBufferSize, DEFAULT_BACKEND_INPUT_BUFFER_SIZE, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocPickableCapacity, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
@@ -306,14 +314,8 @@ public class Room {
                 break;
             }
 
-            // [WARNING] If "!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled", make sure that an "extreme/malicious slow ticker" will be timed out by the watchdog before either "renderBuffer" or "inputBuffer" is drained!
-            int newWatchdogKeepAliveMillis = (!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled) ? (getRenderBufferSize()*1000/BATTLE_DYNAMICS_FPS) - 1 : 3500;
-            if (newWatchdogKeepAliveMillis > 3500) {
-                // Avoid unreasonably long watchdog for a realtime battle game.
-                newWatchdogKeepAliveMillis = 3500;
-            }
             var onTickMsg = String.Format("[ roomId={0}, playerId={1}, joinIndex={2} ] session watchdog ticked.", id, playerId, pPlayerFromDbInit.CharacterDownsync.JoinIndex); 
-            var newWatchdog = new PlayerSessionAckWatchdog(newWatchdogKeepAliveMillis, OnPlayerDisconnected, playerId, onTickMsg, _loggerFactory);
+            var newWatchdog = new PlayerSessionAckWatchdog(stdWatchdogKeepAliveMillis, OnPlayerDisconnected, playerId, onTickMsg, _loggerFactory);
             newWatchdog.Stop();
             playerActiveWatchdogDict[playerId] = newWatchdog;
 
@@ -359,14 +361,8 @@ public class Room {
             var t = Task.Run(async () => await downsyncToSinglePlayerAsyncLoop(playerId, existingPlayer));
             playerDownsyncLoopDict[playerId] = t;
 
-            // [WARNING] If "!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled", make sure that an "extreme/malicious slow ticker" will be timed out by the watchdog before either "renderBuffer" or "inputBuffer" is drained!
-            int newWatchdogKeepAliveMillis = (!type1ForceConfirmationEnabled && !type3ForceConfirmationEnabled) ? (getRenderBufferSize()*1000/BATTLE_DYNAMICS_FPS) - 1 : 3500;
-            if (newWatchdogKeepAliveMillis > 3500) {
-                // Avoid unreasonably long watchdog for a realtime battle game.
-                newWatchdogKeepAliveMillis = 3500;
-            }
             var onTickMsg = String.Format("[ roomId={0}, playerId={1}, joinIndex={2} ] reentry session watchdog ticked.", id, playerId, existingJoinIndex); 
-            var newWatchdog = new PlayerSessionAckWatchdog(newWatchdogKeepAliveMillis, OnPlayerDisconnected, playerId, onTickMsg, _loggerFactory);
+            var newWatchdog = new PlayerSessionAckWatchdog(stdWatchdogKeepAliveMillis, OnPlayerDisconnected, playerId, onTickMsg, _loggerFactory);
             newWatchdog.Stop();
             playerActiveWatchdogDict[playerId] = newWatchdog;
 
@@ -416,16 +412,11 @@ public class Room {
                     var tList = new List<Task>();
                     if (ROOM_STATE_IN_BATTLE == state) {
                         // Notify other active players of the disconnection
-                        foreach (var (otherPlayerId, otherWatchdog) in playerActiveWatchdogDict) {
-                            if (otherPlayerId == playerId) continue;
-                            Player? otherPlayer;
-                            if (players.TryGetValue(otherPlayerId, out otherPlayer)) {
-                                if (null == otherPlayer) continue;
-                                if (PLAYER_BATTLE_STATE_ACTIVE != otherPlayer.BattleState && PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC != otherPlayer.BattleState) continue;
-                                int newWaiveCnt = otherWatchdog.incWaiveCnt(); // [WARNING] Such that it doesn't time out due to awaiting from this disconnected player
-                                _logger.LogInformation($"OnPlayerDisconnected notifying [ roomId={id}, roomState={state}, otherPlayerJoinIndex={otherPlayer.CharacterDownsync.JoinIndex}, otherPlayerId={otherPlayerId}, newWaiveCnt={newWaiveCnt}, nowRoomEffectivePlayerCount={effectivePlayerCount} ]");
-                                tList.Add(sendSafelyAsync(null, null, null, DOWNSYNC_MSG_ACT_PLAYER_DISCONNECTED, otherPlayerId, otherPlayer, thatPlayer.CharacterDownsync.JoinIndex));
-                            }
+                        foreach (var (otherPlayerId, otherPlayer) in players) {
+                            if (otherPlayerId == playerId || null == otherPlayer) continue;
+                            if (PLAYER_BATTLE_STATE_ACTIVE != otherPlayer.BattleState && PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC != otherPlayer.BattleState) continue;
+                            _logger.LogInformation($"OnPlayerDisconnected notifying [ roomId={id}, roomState={state}, otherPlayerJoinIndex={otherPlayer.CharacterDownsync.JoinIndex}, otherPlayerId={otherPlayerId}, nowRoomEffectivePlayerCount={effectivePlayerCount} ]");
+                            tList.Add(sendSafelyAsync(null, null, null, DOWNSYNC_MSG_ACT_PLAYER_DISCONNECTED, otherPlayerId, otherPlayer, thatPlayer.CharacterDownsync.JoinIndex));
                         }
                     }
                     await Task.WhenAll(tList);
@@ -688,12 +679,16 @@ public class Room {
                     if (backendDynamicsEnabled && shouldResync && PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC == oldPlayerBattleState) {
                         int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
                         var toSendInputFrameIdSt = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
-                        Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
-                        _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: REENTRY WATCHDOG STARTED, contentByteLength={content.Count}");
                         PlayerSessionAckWatchdog? watchdog;
                         if (playerActiveWatchdogDict.TryGetValue(playerId, out watchdog)) {
                             // Needs wait for frontend UDP start up which might be time consuming
                             watchdog.KickWithOneoffInterval(8000);
+                            Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
+                            _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: REENTRY WATCHDOG STARTED, contentByteLength={content.Count}");
+                        } else {
+                            _logger.LogWarning($"[readded-resync FAILED] roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: REENTRY WATCHDOG NOT FOUND, proactively disconnecting this player");
+                            OnPlayerDisconnected(playerId);
+                            return;
                         }
                         foreach (var (otherPlayerId, otherPlayer) in players) { 
                             if (otherPlayerId == playerId) continue;
