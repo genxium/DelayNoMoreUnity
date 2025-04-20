@@ -78,7 +78,7 @@ public class UdpSessionManager {
                             Debug.LogWarning($"udpSession cannot punch SRV_UDP_TUNNEL#1: null endPoint");
                             continue;
                         }
-                        Debug.Log($"udpSession sending serverHolePuncher to, endPoint={peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]}");
+                        Debug.Log($"udpSession sending serverHolePuncher to endPoint={peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]}");
                         await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]);
                     } else if (toSendObj.Act == peerHolePuncher.Act) {
                         for (int otherJoinIndex = 1; otherJoinIndex <= roomCapacity; otherJoinIndex++) {
@@ -114,6 +114,7 @@ public class UdpSessionManager {
         } catch (Exception ex) {
             Debug.LogWarning(String.Format("UdpSession is stopping for 'Send' upon exception; ex={0}", ex));
         } finally {
+            while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, sessionCancellationToken)) { }
             Debug.Log(String.Format("Ends udpSession 'Send' loop"));
         }
     }
@@ -129,7 +130,7 @@ public class UdpSessionManager {
     }
 
     private async Task Receive(UdpClient udpSession, int roomCapacity, CancellationToken sessionCancellationToken) {
-        Debug.Log(String.Format("Starts udpSession 'Receive' loop"));
+        Debug.Log($"Starts udpSession 'Receive' loop");
         try {
             while (!sessionCancellationToken.IsCancellationRequested) {
                 var recvResult = await udpSession.ReceiveAsync(); // by experiment, "udpSession.Close()" would unblock it even at the absence of a cancellation token!
@@ -152,6 +153,7 @@ public class UdpSessionManager {
         } catch (Exception ex) {
             Debug.LogWarning(String.Format("UdpSession is stopping for 'Receive' upon exception; ex={0}", ex));
         } finally {
+            recvBuffer.Clear();
             Debug.Log(String.Format("Ends udpSession 'Receive' loop"));
         }
     }
@@ -194,6 +196,12 @@ public class UdpSessionManager {
     public void CloseUdpSession() {
         if (null != udpSession) {
             udpSession.Close();
+            // "UdpClient.Close()" might effectively dispose the underlying resources, but just to be safe I'm still explicitly calling "Dispose()" here.
+            try {
+                udpSession.Dispose();
+            } catch (Exception ex) {
+                Debug.LogWarning($"Error during `CloseUdpSession`: {ex}");
+            }
         }
     }
 

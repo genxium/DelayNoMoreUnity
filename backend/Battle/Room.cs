@@ -438,56 +438,67 @@ public class Room {
     }
 
     private async void clearPlayerNetworkSession(string playerId) {
-        if (playerDownsyncSessionDict.ContainsKey(playerId)) {
-            // [WARNING] No need to close "pR.CharacterDownsyncChanDict[playerId]" immediately!
-            if (playerActiveWatchdogDict.ContainsKey(playerId)) {
-                if (null != playerActiveWatchdogDict[playerId]) {
-                    playerActiveWatchdogDict[playerId].Stop();
-                    playerActiveWatchdogDict[playerId].ExplicitlyDispose();
-                }
-                playerActiveWatchdogDict.Remove(playerId);
-            }
-
-            if (playerSignalToCloseDict.ContainsKey(playerId)) {
-                var (cancellationTokenSource, _) = playerSignalToCloseDict[playerId];
-                /*
-                   [WARNING]
-
-                   "clearPlayerNetworkSession" will only be called by 
-                   - OnPlayerDisconnected(...) which will only be called by "WebSocketController.HandleNewPlayerPrimarySession" after proactive close received or cancelled on the same signal
-                   - DismissBattleAsync()
-
-                   thus calling "cancellationTokenSource.Cancel()" here would NOT by any chance interrupt this function itself.
-                 */
-                try { 
-                    if (!cancellationTokenSource.IsCancellationRequested) {
-                        cancellationTokenSource.Cancel();
+        Player? player;
+        if (players.TryGetValue(playerId, out player)) {
+            var joinIndex = player.CharacterDownsync.JoinIndex;
+            if (null != peerUdpAddrList) {      
+                peerUdpAddrList[joinIndex] = new PeerUdpAddr { }; // invalidate UDP addr
+            } 
+            if (playerDownsyncSessionDict.ContainsKey(playerId)) {
+                // [WARNING] No need to close "pR.CharacterDownsyncChanDict[playerId]" immediately!
+                if (playerActiveWatchdogDict.ContainsKey(playerId)) {
+                    if (null != playerActiveWatchdogDict[playerId]) {
+                        playerActiveWatchdogDict[playerId].Stop();
+                        playerActiveWatchdogDict[playerId].ExplicitlyDispose();
                     }
-                } catch (Exception ex) {
-                    _logger.LogWarning($"clearPlayerNetworkSession exception when cancelling cancellationTokenSource of playerSignalToCloseDict[{playerId}]: {ex}");
+                    playerActiveWatchdogDict.Remove(playerId);
                 }
-                playerSignalToCloseDict.Remove(playerId);
-                // [WARNING] Disposal of each "playerSignalToClose" is automatically managed in "WebSocketController"
+
+                if (playerSignalToCloseDict.ContainsKey(playerId)) {
+                    var (cancellationTokenSource, _) = playerSignalToCloseDict[playerId];
+                    /*
+                       [WARNING]
+
+                       "clearPlayerNetworkSession" will only be called by 
+                       - OnPlayerDisconnected(...) which will only be called by "WebSocketController.HandleNewPlayerPrimarySession" after proactive close received or cancelled on the same signal
+                       - DismissBattleAsync()
+
+                       thus calling "cancellationTokenSource.Cancel()" here would NOT by any chance interrupt this function itself.
+                     */
+                    try { 
+                        if (!cancellationTokenSource.IsCancellationRequested) {
+                            cancellationTokenSource.Cancel();
+                        }
+                    } catch (Exception ex) {
+                        _logger.LogWarning($"clearPlayerNetworkSession exception when cancelling cancellationTokenSource of playerSignalToCloseDict[{playerId}] and joinIndex={joinIndex}: {ex}");
+                    }
+                    playerSignalToCloseDict.Remove(playerId);
+                    // [WARNING] Disposal of each "playerSignalToClose" is automatically managed in "WebSocketController"
+                }
+
+                if (playerWsDownsyncQueDict.ContainsKey(playerId)) {
+                    var genOrderPreservedMsgs = playerWsDownsyncQueDict[playerId]; 
+                    while (genOrderPreservedMsgs.TryTake(out _, localPlayerWsDownsyncQueClearingReadTimeoutMillis)) { }
+                    genOrderPreservedMsgs.Dispose();
+                    playerWsDownsyncQueDict.Remove(playerId);
+                }
+
+                if (playerDownsyncLoopDict.ContainsKey(playerId)) {
+                    var downsyncLoop = playerDownsyncLoopDict[playerId];
+                    await downsyncLoop;
+                    downsyncLoop.Dispose();
+                    playerDownsyncLoopDict.Remove(playerId);
+                }
+
+                playerDownsyncSessionDict.Remove(playerId);
+                // [WARNING] Disposal of each "wsSession" is automatically managed in "WebSocketController"
+
+                _logger.LogInformation($"clearPlayerNetworkSession finished: [ roomId={id}, playerId={playerId}, joinIndex={joinIndex}, roomState={state}, nowRoomEffectivePlayerCount={effectivePlayerCount} ]");
+            } else {
+                _logger.LogWarning($"clearPlayerNetworkSession couldn't playerDownsyncSession for: [ roomId={id}, playerId={playerId}, joinIndex={joinIndex}, roomState={state}, nowRoomEffectivePlayerCount={effectivePlayerCount} ]");
             }
-
-            if (playerWsDownsyncQueDict.ContainsKey(playerId)) {
-                var genOrderPreservedMsgs = playerWsDownsyncQueDict[playerId]; 
-                while (genOrderPreservedMsgs.TryTake(out _, localPlayerWsDownsyncQueClearingReadTimeoutMillis)) { }
-                genOrderPreservedMsgs.Dispose();
-                playerWsDownsyncQueDict.Remove(playerId);
-            }
-
-            if (playerDownsyncLoopDict.ContainsKey(playerId)) {
-                var downsyncLoop = playerDownsyncLoopDict[playerId];
-                await downsyncLoop;
-                downsyncLoop.Dispose();
-                playerDownsyncLoopDict.Remove(playerId);
-            }
-
-            playerDownsyncSessionDict.Remove(playerId);
-            // [WARNING] Disposal of each "wsSession" is automatically managed in "WebSocketController"
-
-            _logger.LogInformation("clearPlayerNetworkSession finished: [ roomId={0}, playerId={1}, roomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
+        } else {
+            _logger.LogWarning("clearPlayerNetworkSession couldn't find player info for: [ roomId={0}, playerId={1}, roomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
         }
     }
 
@@ -664,6 +675,25 @@ public class Room {
                             return;
                     }
 
+                    int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
+                    var toSendInputFrameIdSt = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
+                    var toSendInputFrameIdEd = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
+                    if (backendDynamicsEnabled && shouldResync && PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC == oldPlayerBattleState) {
+                        // [WARNING] It's important to notify "PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC" peer the up-to-date disconnected information of other peers BEFORE "[readded-resync] RoomDownsyncFrame", because in extreme cases even "doBattleMainLoopPerTickBackendDynamicsWithProperLocking > _moveForwardLastAllConfirmedInputFrameIdWithoutForcing" couldn't guarantee to unfreeze the "PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC" peer. 
+                        foreach (var (otherPlayerId, otherPlayer) in players) { 
+                            if (otherPlayerId == playerId) continue;
+                            var oldOtherPlayerBattleState = Interlocked.Read(ref otherPlayer.BattleState);
+                            if (PLAYER_BATTLE_STATE_ACTIVE == oldOtherPlayerBattleState) continue;
+                            // Tell the re-added player who's inactive in the same room
+                            var resp = new WsResp {
+                                Ret = ErrCode.Ok,
+                                    Act = DOWNSYNC_MSG_ACT_PLAYER_DISCONNECTED,
+                                    PeerJoinIndex = otherPlayer.CharacterDownsync.JoinIndex
+                            };
+                            await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
+                        }
+                    }
+
                     /*
                        Resync helps
                        1. when player with a slower frontend clock lags significantly behind and thus wouldn't get its inputUpsync recognized due to faster "forceConfirmation"
@@ -673,12 +703,9 @@ public class Room {
                     // [WARNING] Preserving generated order (of inputBufferSnapshot) while sending per player by simply "awaiting" the "wsSession.SendAsync(...)" calls
                     await wsSession.SendAsync(content, WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
 
-                    var toSendInputFrameIdEd = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
                     player.LastSentInputFrameId = toSendInputFrameIdEd - 1;
 
                     if (backendDynamicsEnabled && shouldResync && PLAYER_BATTLE_STATE_READDED_PENDING_FORCE_RESYNC == oldPlayerBattleState) {
-                        int refRenderFrameId = inputBufferSnapshot.RefRenderFrameId;
-                        var toSendInputFrameIdSt = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[0].InputFrameId;
                         PlayerSessionAckWatchdog? watchdog;
                         if (playerActiveWatchdogDict.TryGetValue(playerId, out watchdog)) {
                             // Needs wait for frontend UDP start up which might be time consuming
@@ -686,7 +713,7 @@ public class Room {
                             Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
                             _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: REENTRY WATCHDOG STARTED, contentByteLength={content.Count}, now inputBuffer={inputBuffer.toSimpleStat()}");
                         } else {
-                            _logger.LogWarning($"[readded-resync FAILED] roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: REENTRY WATCHDOG NOT FOUND, proactively disconnecting this player, now inputBuffer={inputBuffer.toSimpleStat()}");
+                            _logger.LogWarning($"[readded-resync FAILED] roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} REENTRY WATCHDOG NOT FOUND, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: proactively disconnecting this player, now inputBuffer={inputBuffer.toSimpleStat()}");
                             OnPlayerDisconnected(playerId);
                             return;
                         }
@@ -696,14 +723,6 @@ public class Room {
                             if (oldOtherPlayerBattleState == PLAYER_BATTLE_STATE_ACTIVE) {
                                 // Broadcast re-added player info to all active players in the same room
                                 _ = sendSafelyAsync(null, null, null, DOWNSYNC_MSG_ACT_PLAYER_READDED_AND_ACKED, otherPlayerId, otherPlayer, player.CharacterDownsync.JoinIndex);
-                            } else {
-                                // Tell the re-added player who's inactive in the same room
-                                var resp = new WsResp {
-                                    Ret = ErrCode.Ok,
-                                        Act = DOWNSYNC_MSG_ACT_PLAYER_DISCONNECTED,
-                                        PeerJoinIndex = otherPlayer.CharacterDownsync.JoinIndex
-                                };
-                                await wsSession.SendAsync(new ArraySegment<byte>(resp.ToByteArray()), WebSocketMessageType.Binary, true, cancellationSignal.c2).WaitAsync(DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT);
                             }
                         }
                     }
