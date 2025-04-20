@@ -441,6 +441,7 @@ public class Room {
         Player? player;
         if (players.TryGetValue(playerId, out player)) {
             var joinIndex = player.CharacterDownsync.JoinIndex;
+            player.BattleUdpTunnelAddr = null; // [WARNING] "player.BattleUdpTunnelAuthKey" remains the same in a same battle!
             if (null != peerUdpAddrList) {      
                 peerUdpAddrList[joinIndex] = new PeerUdpAddr { }; // invalidate UDP addr
             } 
@@ -1573,8 +1574,9 @@ public class Room {
 
             while (!battleUdpTunnelCancellationTokenSource.IsCancellationRequested) {
                 var recvResult = await battleUdpTunnel.ReceiveAsync(battleUdpTunnelCancellationToken);
+                //_logger.LogInformation("`battleUdpTunnel` received for roomId={0}: recvResult.Buffer.Length={1}", id, recvResult.Buffer.Length);
                 WsReq pReq = WsReq.Parser.ParseFrom(recvResult.Buffer);
-                // _logger.LogInformation("`battleUdpTunnel` received for roomId={0}: pReq={1}", id, pReq);
+                //_logger.LogInformation("`battleUdpTunnel` received for roomId={0}: pReq={1}", id, pReq);
                 string playerId = pReq.PlayerId;
                 Player? player;
                 if (players.TryGetValue(playerId, out player)) {

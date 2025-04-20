@@ -44,8 +44,6 @@ public class UdpSessionManager {
         Debug.Log(String.Format("ResetUdpClient#1: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
         serverHolePuncher = theServerHolePuncher;
         peerHolePuncher = thePeerHolePuncher;
-        while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, sessionCancellationToken)) { }
-        recvBuffer.Clear();
         Debug.Log(String.Format("ResetUdpClient#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
 
         UpdatePeerAddr(roomCapacity, selfJoinIndex, initialPeerAddrList);
@@ -54,9 +52,19 @@ public class UdpSessionManager {
     public async Task OpenUdpSession(int roomCapacity, int selfJoinIndex, CancellationToken sessionCancellationToken) {
         try {
             Debug.Log(String.Format("OpenUdpSession#1: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
+            while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, sessionCancellationToken)) { }
+            recvBuffer.Clear();
             udpSession = new UdpClient(port: 0);
+            /*
+            try {
+                udpSession.AllowNatTraversal(true);
+            } catch (Exception innerEx) {
+                Debug.LogWarning($"OpenUdpSession allow NAT traversal exception: {innerEx}, thread id={Thread.CurrentThread.ManagedThreadId}.");
+            }
+            */
+            var localUdpEndpoint = (IPEndPoint)udpSession.Client.LocalEndPoint;
             // [WARNING] UdpClient class in .NET Standard 2.1 doesn't support CancellationToken yet! See https://learn.microsoft.com/en-us/dotnet/api/system.net.sockets.udpclient?view=netstandard-2.1 for more information. The cancellationToken here is still used to keep in pace with the WebSocket session, i.e. is WebSocket Session is closed, then UdpSession should be closed too.
-            Debug.Log(String.Format("OpenUdpSession#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
+            Debug.Log($"OpenUdpSession#2: roomCapacity={roomCapacity}, localUdpEndpoint={localUdpEndpoint}, thread id={Thread.CurrentThread.ManagedThreadId}.");
             UdpSessionManager.Instance.PunchBackendUdpTunnel(sessionCancellationToken); // [WARNING] After clearing of "senderBuffer"
             await Task.WhenAll(Receive(udpSession, roomCapacity, sessionCancellationToken), Send(udpSession, roomCapacity, selfJoinIndex, sessionCancellationToken));
             Debug.Log("Both UdpSession 'Receive' and 'Send' tasks are ended.");
@@ -111,6 +119,8 @@ public class UdpSessionManager {
                     }
                 }
             }
+        } catch (ObjectDisposedException ex1) {
+    
         } catch (Exception ex) {
             Debug.LogWarning(String.Format("UdpSession is stopping for 'Send' upon exception; ex={0}", ex));
         } finally {
@@ -150,6 +160,8 @@ public class UdpSessionManager {
                         break;
                 }
             }
+        } catch (ObjectDisposedException ex1) {
+
         } catch (Exception ex) {
             Debug.LogWarning(String.Format("UdpSession is stopping for 'Receive' upon exception; ex={0}", ex));
         } finally {
@@ -211,7 +223,7 @@ public class UdpSessionManager {
             while (0 <= Interlocked.Decrement(ref c)) {
                 //Debug.LogFormat("Enqueues peerHolePuncher c={0}");
                 senderBuffer.Add(peerHolePuncher);
-                await Task.Delay(1000 + c * 50, cancellationToken);
+                await Task.Delay(50 + c * 250, cancellationToken);
             }
         }, cancellationToken);
     }
@@ -219,11 +231,11 @@ public class UdpSessionManager {
     public void PunchBackendUdpTunnel(CancellationToken cancellationToken) {
         // Will trigger DOWNSYNC_MSG_ACT_PEER_UDP_ADDR for all players, including itself
         _ = Task.Run(async () => {
-            int c = 5;
+            int c = 8;
             while (0 <= Interlocked.Decrement(ref c)) {
                 //Debug.LogFormat("Enqueues serverHolePuncher c={0}", c);
                 senderBuffer.Add(serverHolePuncher);
-                await Task.Delay(1000 + c * 50, cancellationToken);
+                await Task.Delay(50 + c * 250, cancellationToken);
             }
         }, cancellationToken);
     }

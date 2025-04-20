@@ -23,9 +23,9 @@ public class WebSocketController : ControllerBase {
     [Route("/Ws")]
     public async Task Get([FromQuery] string authToken, [FromQuery] string playerId, [FromQuery] uint speciesId, [FromQuery] int roomId, [FromQuery] bool forReentry) {
         if (HttpContext.WebSockets.IsWebSocketRequest) {
-            _logger.LogInformation("Got a websocket connection request#1 [ authToken={0}, playerId={1}, roomId={2}, forReentry={3}]", authToken, playerId, roomId, forReentry);
+            //_logger.LogInformation("Got a websocket connection request#1 [ authToken={0}, playerId={1}, roomId={2}, forReentry={3}]", authToken, playerId, roomId, forReentry);
             if (_tokenCache.ValidateToken(authToken, playerId)) {
-                _logger.LogInformation("Got a websocket connection request#2 Validated successfully [ authToken={0}, playerId={1}, speciesId={2}, roomId={3}, forReentry={4} ]", authToken, playerId, speciesId, roomId, forReentry);
+                //_logger.LogInformation("Got a websocket connection request#2 Validated successfully [ authToken={0}, playerId={1}, speciesId={2}, roomId={3}, forReentry={4} ]", authToken, playerId, speciesId, roomId, forReentry);
                 using (var session = await HttpContext.WebSockets.AcceptWebSocketAsync()) {
                     await HandleNewPlayerPrimarySession(session, playerId, speciesId, roomId, forReentry);
                 }

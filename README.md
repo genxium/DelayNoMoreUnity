@@ -10,7 +10,7 @@ v2.3.1
 - Added entry to arena practice mode.
 - Enhanced rejoining robustness.
 - Added `insitu force confirmation` on backend.
-- Enhanced force-resync handling.
+- Added support for `rejoin after network switch`.
 
 Please checkout the demo videos on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/iOgqfatRcn8)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)).
 
@@ -109,6 +109,12 @@ proj-root> grep -ri "shouldPredictBtnAHold" --color ./frontend/Assets/Scripts/
 proj-root> grep -ri "shouldPredictBtnAHold" --color ./backend/
 proj-root> grep -ri "shouldPredictBtnAHold" --color ./shared/
 ```
+
+# How to sniff on UDP port on Linux
+```
+sudo tcpdump -i eth0 -c 4096 -s 65535 udp and dst port <room listening port>  -w dllm_inbound.pcap
+```
+Download and view the pcap file in `Wireshark` is recommended.
 
 # FAQ
 Please refer to [FAQ.md](FAQ.md).
