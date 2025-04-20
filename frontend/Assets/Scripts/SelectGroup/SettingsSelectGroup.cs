@@ -23,7 +23,7 @@ public class SettingsSelectGroup : AbstractSingleSelectGroup {
         if (!currentSelectGroupEnabled) return;
         bool rising = context.ReadValueAsButton();
         if (rising && InputActionPhase.Performed == context.phase) {
-            Debug.Log("StoryModeSettingsSelectGroup OnBtnConfirm");
+            Debug.Log("SettingsSelectGroup OnBtnConfirm");
             toggleUIInteractability(false);
             ConfirmSelection();
         }

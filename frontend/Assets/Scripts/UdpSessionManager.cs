@@ -40,49 +40,56 @@ public class UdpSessionManager {
         recvBuffer = new ConcurrentQueue<WsReq>();
     }
 
-    public void ResetUdpClient(int roomCapacity, int selfJoinIndex, RepeatedField<PeerUdpAddr> initialPeerAddrList, WsReq theServerHolePuncher, WsReq thePeerHolePuncher, CancellationToken wsSessionCancellationToken) {
+    public void ResetUdpClient(int roomCapacity, int selfJoinIndex, RepeatedField<PeerUdpAddr> initialPeerAddrList, WsReq theServerHolePuncher, WsReq thePeerHolePuncher, CancellationToken sessionCancellationToken) {
         Debug.Log(String.Format("ResetUdpClient#1: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
         serverHolePuncher = theServerHolePuncher;
         peerHolePuncher = thePeerHolePuncher;
-        while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, wsSessionCancellationToken)) { }
+        while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, sessionCancellationToken)) { }
         recvBuffer.Clear();
         Debug.Log(String.Format("ResetUdpClient#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
 
         UpdatePeerAddr(roomCapacity, selfJoinIndex, initialPeerAddrList);
     }
 
-    public async Task OpenUdpSession(int roomCapacity, int selfJoinIndex, CancellationToken wsSessionCancellationToken) {
+    public async Task OpenUdpSession(int roomCapacity, int selfJoinIndex, CancellationToken sessionCancellationToken) {
         try {
             Debug.Log(String.Format("OpenUdpSession#1: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
             udpSession = new UdpClient(port: 0);
             // [WARNING] UdpClient class in .NET Standard 2.1 doesn't support CancellationToken yet! See https://learn.microsoft.com/en-us/dotnet/api/system.net.sockets.udpclient?view=netstandard-2.1 for more information. The cancellationToken here is still used to keep in pace with the WebSocket session, i.e. is WebSocket Session is closed, then UdpSession should be closed too.
             Debug.Log(String.Format("OpenUdpSession#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
-            UdpSessionManager.Instance.PunchBackendUdpTunnel(wsSessionCancellationToken); // [WARNING] After clearing of "senderBuffer"
-            await Task.WhenAll(Receive(udpSession, roomCapacity, wsSessionCancellationToken), Send(udpSession, roomCapacity, selfJoinIndex, wsSessionCancellationToken));
+            UdpSessionManager.Instance.PunchBackendUdpTunnel(sessionCancellationToken); // [WARNING] After clearing of "senderBuffer"
+            await Task.WhenAll(Receive(udpSession, roomCapacity, sessionCancellationToken), Send(udpSession, roomCapacity, selfJoinIndex, sessionCancellationToken));
             Debug.Log("Both UdpSession 'Receive' and 'Send' tasks are ended.");
         } catch (Exception ex) {
             Debug.LogError(String.Format("Error opening udpSession: {0}", ex));
         }
     }
 
-    private async Task Send(UdpClient udpSession, int roomCapacity, int selfJoinIndex, CancellationToken wsSessionCancellationToken) {
+    private async Task Send(UdpClient udpSession, int roomCapacity, int selfJoinIndex, CancellationToken sessionCancellationToken) {
         // TODO: Make this method thread-safe for "this.peerUdpAddrList"
-        Debug.Log(String.Format("Starts udpSession 'Send' loop, now senderBuffer={0}", senderBuffer.Count));
+        Debug.Log(String.Format("Starts udpSession 'Send' loop, now senderBuffer.Count={0}", senderBuffer.Count));
         WsReq toSendObj;
         try {
-            while (!wsSessionCancellationToken.IsCancellationRequested) {
-                if (senderBuffer.TryTake(out toSendObj, sendBufferReadTimeoutMillis, wsSessionCancellationToken)) {
+            while (!sessionCancellationToken.IsCancellationRequested) {
+                if (senderBuffer.TryTake(out toSendObj, sendBufferReadTimeoutMillis, sessionCancellationToken)) {
                     var toSendBuffer = toSendObj.ToByteArray();
                     if (toSendObj.Act == serverHolePuncher.Act) {
-                        if (null == peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]) continue;
+                        if (null == peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]) {
+                            Debug.LogWarning($"udpSession cannot punch SRV_UDP_TUNNEL#1: null endPoint");
+                            continue;
+                        }
+                        Debug.Log($"udpSession sending serverHolePuncher to, endPoint={peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]}");
                         await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]);
                     } else if (toSendObj.Act == peerHolePuncher.Act) {
-                        for (int i = 1; i <= roomCapacity; i++) {
-                            if (i == selfJoinIndex) continue;
-                            if (null == peerUdpEndPointList[i]) continue;
+                        for (int otherJoinIndex = 1; otherJoinIndex <= roomCapacity; otherJoinIndex++) {
+                            if (otherJoinIndex == selfJoinIndex) continue;
+                            if (null == peerUdpEndPointList[otherJoinIndex]) {
+                                //Debug.Log($"udpSession cannot punch otherJoinIndex={otherJoinIndex}#1: null endPoint");
+                                continue;
+                            }
                             // [WARNING] Deliberately keep sending even if "1 == Interlocked.Read(ref peerUdpEndPointPunched[i])"
-                            Debug.Log(String.Format("udpSession sending holePuncher to joinIndex={0}, endPoint={1}", i, peerUdpEndPointList[i]));
-                            await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[i]);
+                            //Debug.Log($"udpSession sending peerHolePuncher to otherJoinIndex={otherJoinIndex}, endPoint={peerUdpEndPointList[otherJoinIndex]}");
+                            await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[otherJoinIndex]);
                         }
                     } else {
                         int successPeerCnt = 0;
@@ -121,10 +128,10 @@ public class UdpSessionManager {
         NetworkDoctor.Instance.LogUdpPunchedCnt(newUdpPunchedCnt);
     }
 
-    private async Task Receive(UdpClient udpSession, int roomCapacity, CancellationToken wsSessionCancellationToken) {
+    private async Task Receive(UdpClient udpSession, int roomCapacity, CancellationToken sessionCancellationToken) {
         Debug.Log(String.Format("Starts udpSession 'Receive' loop"));
         try {
-            while (!wsSessionCancellationToken.IsCancellationRequested) {
+            while (!sessionCancellationToken.IsCancellationRequested) {
                 var recvResult = await udpSession.ReceiveAsync(); // by experiment, "udpSession.Close()" would unblock it even at the absence of a cancellation token!
                 WsReq req = WsReq.Parser.ParseFrom(recvResult.Buffer);
                 switch (req.Act) {
@@ -194,7 +201,7 @@ public class UdpSessionManager {
         _ = Task.Run(async () => {
             int c = 8;
             while (0 <= Interlocked.Decrement(ref c)) {
-                Debug.LogFormat("Enqueues peerHolePuncher c={0}");
+                //Debug.LogFormat("Enqueues peerHolePuncher c={0}");
                 senderBuffer.Add(peerHolePuncher);
                 await Task.Delay(1000 + c * 50, cancellationToken);
             }
@@ -206,7 +213,7 @@ public class UdpSessionManager {
         _ = Task.Run(async () => {
             int c = 5;
             while (0 <= Interlocked.Decrement(ref c)) {
-                // Debug.LogFormat("Enqueues serverHolePuncher c={0}", c);
+                //Debug.LogFormat("Enqueues serverHolePuncher c={0}", c);
                 senderBuffer.Add(serverHolePuncher);
                 await Task.Delay(1000 + c * 50, cancellationToken);
             }

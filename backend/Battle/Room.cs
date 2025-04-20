@@ -684,9 +684,9 @@ public class Room {
                             // Needs wait for frontend UDP start up which might be time consuming
                             watchdog.KickWithOneoffInterval(8000);
                             Interlocked.Exchange(ref player.BattleState, PLAYER_BATTLE_STATE_ACTIVE);
-                            _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: REENTRY WATCHDOG STARTED, contentByteLength={content.Count}");
+                            _logger.LogInformation($"[readded-resync] @LastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}; Sent refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: REENTRY WATCHDOG STARTED, contentByteLength={content.Count}, now inputBuffer={inputBuffer.toSimpleStat()}");
                         } else {
-                            _logger.LogWarning($"[readded-resync FAILED] roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: REENTRY WATCHDOG NOT FOUND, proactively disconnecting this player");
+                            _logger.LogWarning($"[readded-resync FAILED] roomId={id}, playerId={playerId}, playerJoinIndex={joinIndex} just became ACTIVE, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, playerLastSentInputFrameId={player.LastSentInputFrameId}: REENTRY WATCHDOG NOT FOUND, proactively disconnecting this player, now inputBuffer={inputBuffer.toSimpleStat()}");
                             OnPlayerDisconnected(playerId);
                             return;
                         }
@@ -1561,11 +1561,10 @@ public class Room {
                 if (players.TryGetValue(playerId, out player)) {
                     int reqAuthKey = pReq.AuthKey;
                     if (reqAuthKey != player.BattleUdpTunnelAuthKey) {
+                        _logger.LogWarning("In `battleUdpTask`, received mismatch BattleUdpTunnelAuthKey for (roomId: {0}, playerId: {1}, reqAuthKey: {2}, requiredKey: {3}): ", id, playerId, reqAuthKey, player.BattleUdpTunnelAuthKey);
                         continue;
                     }
-                }
-
-                if (null == player) {
+                } else {
                     _logger.LogWarning("In `battleUdpTask`, player for (roomId: {0}, playerId: {1}) doesn't exist!", id, playerId);
                     continue;
                 }
@@ -1642,7 +1641,8 @@ public class Room {
             ulong unconfirmedMask = 0;
             int newAllConfirmedCount1 = _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(inputBuffer.EdFrameId, ref unconfirmedMask);
             // Force setting all-confirmed of buffered inputFrames periodically, kindly note that if "backendDynamicsEnabled", what we want to achieve is "recovery upon reconnection", which certainly requires "forceConfirmationIfApplicable" to move "lastAllConfirmedInputFrameId" forward as much as possible
-            unconfirmedMask |= forceConfirmationIfApplicable();
+            ulong forceUnconfirmedMask = forceConfirmationIfApplicable();
+            unconfirmedMask |= forceUnconfirmedMask;
 
             if (0 <= lastAllConfirmedInputFrameId) {
                 // Apply "all-confirmed inputFrames" to move forward "curDynamicsRenderFrameId"
@@ -1660,7 +1660,7 @@ public class Room {
                However, if player#1 remains connected but ticks very slowly (i.e. an "ACTIVE SLOW TICKER"), "markConfirmationIfApplicable" couldn't increment "LastAllConfirmedInputFrameId", thus "[type#1 forceConfirmation]" will be triggered, but what's worse is that after "[type#1 forceConfirmation]" if the "refRenderFrameId" is not advanced enough, player#1 could never catch up even if it resumed from slow ticking!
              */
 
-            if (0 < unconfirmedMask || 0 < newAllConfirmedCount1) {
+            if (0 < forceUnconfirmedMask) {
                 // [WARNING] As "curDynamicsRenderFrameId" was just incremented above, "refSnapshotStFrameId" is most possibly larger than "oldLastAllConfirmedInputFrameId + 1", therefore this initial assignment is critical for `ACTIVE NORMAL TICKER`s to receive consecutive ids of inputFrameDownsync.
                 int snapshotStFrameId = oldLastAllConfirmedInputFrameId + 1;
                 int refSnapshotStFrameId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId - 1);

@@ -232,6 +232,10 @@ public class OnlineMapController : AbstractMapController {
                     var newPeerUdpAddrList = wsRespHolder.PeerUdpAddrList;
                     Debug.Log(String.Format("Handling DOWNSYNC_MSG_ACT_PEER_UDP_ADDR in main thread, newPeerUdpAddrList: {0}", newPeerUdpAddrList));
                     UdpSessionManager.Instance.UpdatePeerAddr(roomCapacity, selfPlayerInfo.JoinIndex, newPeerUdpAddrList);
+                    /*
+                    [WARNING] This is also a punch timing roughly the same for all peers, useful for rejoining.
+                    */
+                    UdpSessionManager.Instance.PunchAllPeers(wsCancellationToken);
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START:
                     /*
@@ -302,10 +306,8 @@ public class OnlineMapController : AbstractMapController {
                                     } else {
                                         bool startedUdpTask = startUdpTaskIfNotYet();
                                         battleState = ROOM_STATE_IN_BATTLE;
-                                        UdpSessionManager.Instance.PunchAllPeers(wsCancellationToken);
                                         if (startedUdpTask) {
-                                            Debug.LogWarning($"Started new udpTask upon force-resync pbRdfId={pbRdfId} @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: about to re-punch#1");
-                                            UdpSessionManager.Instance.PunchAllPeers(wsCancellationToken);
+                                            Debug.Log($"Started new udpTask upon force-resync pbRdfId={pbRdfId} @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: will re-punch server#1");
                                         }
                                         //Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#1");
                                     }
@@ -313,8 +315,7 @@ public class OnlineMapController : AbstractMapController {
                                     bool startedUdpTask = startUdpTaskIfNotYet();
                                     battleState = ROOM_STATE_IN_BATTLE;
                                     if (startedUdpTask) {
-                                        Debug.LogWarning($"Started new udpTask upon force-resync pbRdfId={pbRdfId} @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: about to re-punch#2");
-                                        UdpSessionManager.Instance.PunchAllPeers(wsCancellationToken);
+                                        Debug.Log($"Started new udpTask upon force-resync pbRdfId={pbRdfId} @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: will re-punch server#2");
                                     }
                                     //Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#2");
                                 }
