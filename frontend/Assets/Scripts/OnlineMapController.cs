@@ -77,7 +77,6 @@ public class OnlineMapController : AbstractMapController {
             // Debug.Log(String.Format("@playerRdfId={0}, handling wsResp in main thread: {0}", playerRdfId, wsRespHolder));
             if (ErrCode.Ok != wsRespHolder.Ret) {
                 if (ErrCode.BattleStopped == wsRespHolder.Ret) {
-                    onBattleStopped();
                     Debug.LogWarning("Calling onBattleStopped with remote errCode=BattleStopped @playerRdfId=" + playerRdfId + " with battleState=" + battleState);
                     settlementRdfId = playerRdfId;
                     onBattleStopped();
