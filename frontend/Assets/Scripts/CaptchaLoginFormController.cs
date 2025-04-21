@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 using UnityEngine.InputSystem;
 using System.Collections;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using shared;
 
 public class CaptchaLoginFormController : MonoBehaviour {
@@ -94,10 +93,10 @@ public class CaptchaLoginFormController : MonoBehaviour {
                     Debug.LogError("HTTP Error: " + webRequest.error);
                     break;
                 case UnityWebRequest.Result.Success:
-                    var res = JsonConvert.DeserializeObject<JObject>(webRequest.downloadHandler.text);
-                    Debug.Log(String.Format("Received: {0}", res));
-                    if (ErrCode.IsTestAcc == res["retCode"].Value<int>()) {
-                        CaptchaInput.text = res["captcha"].Value<string>();
+                    var res = JsonConvert.DeserializeObject<AuthResult>(webRequest.downloadHandler.text);
+                    Debug.Log($"Received: {res}");
+                    if (ErrCode.IsTestAcc == res.RetCode) {
+                        CaptchaInput.text = res.Captcha;
                     }
                     break;
             }

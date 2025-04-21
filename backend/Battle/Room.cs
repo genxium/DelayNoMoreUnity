@@ -441,9 +441,14 @@ public class Room {
         Player? player;
         if (players.TryGetValue(playerId, out player)) {
             var joinIndex = player.CharacterDownsync.JoinIndex;
-            player.BattleUdpTunnelAddr = null; // [WARNING] "player.BattleUdpTunnelAuthKey" remains the same in a same battle!
-            if (null != peerUdpAddrList) {      
-                peerUdpAddrList[joinIndex] = new PeerUdpAddr { }; // invalidate UDP addr
+            if (null != player.BattleUdpTunnelAddr) {
+                // [WARNING] "player.BattleUdpTunnelAuthKey" remains the same in a same battle!
+                player.BattleUdpTunnelAddr = null;
+            }
+            if (null != peerUdpAddrList && null != peerUdpAddrList[joinIndex]) {      
+                // [WARNING] Invalidates UDP addr but keeps "AuthKey & SeqNo"
+                peerUdpAddrList[joinIndex].Ip = ""; 
+                peerUdpAddrList[joinIndex].Port = 0; 
             } 
             if (playerDownsyncSessionDict.ContainsKey(playerId)) {
                 // [WARNING] No need to close "pR.CharacterDownsyncChanDict[playerId]" immediately!
@@ -1590,13 +1595,17 @@ public class Room {
                     continue;
                 }
 
-                if (UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL == pReq.Act && null == player.BattleUdpTunnelAddr) {
+                if (UPSYNC_MSG_ACT_HOLEPUNCH_BACKEND_UDP_TUNNEL == pReq.Act) {
+                    if (null != peerUdpAddrList[player.CharacterDownsync.JoinIndex] && peerUdpAddrList[player.CharacterDownsync.JoinIndex].SeqNo >= pReq.SeqNo) {
+                       continue; 
+                    }
                     player.BattleUdpTunnelAddr = recvResult.RemoteEndPoint;
                     peerUdpAddrList[player.CharacterDownsync.JoinIndex] = new PeerUdpAddr {
                         Ip = recvResult.RemoteEndPoint.Address.ToString(),
-                           Port = recvResult.RemoteEndPoint.Port
+                           Port = recvResult.RemoteEndPoint.Port,
+                           SeqNo = pReq.SeqNo
                     };
-                    _logger.LogInformation("`battleUdpTask` for roomId={0} updated udp addr for playerId={1} to be {2}", id, playerId, peerUdpAddrList[player.CharacterDownsync.JoinIndex]);
+                    //_logger.LogInformation("`battleUdpTask` for roomId={0} updated udp addr for playerId={1} to be {2}", id, playerId, peerUdpAddrList[player.CharacterDownsync.JoinIndex]);
                     // Need broadcast to all, including the current "pReq.PlayerId", to favor p2p holepunching
                     broadcastPeerUdpAddrList(player.CharacterDownsync.JoinIndex);
 

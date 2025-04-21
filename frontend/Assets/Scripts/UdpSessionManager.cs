@@ -30,10 +30,12 @@ public class UdpSessionManager {
     public BlockingCollection<WsReq> senderBuffer;
     public ConcurrentQueue<WsReq> recvBuffer;
     private IPEndPoint[] peerUdpEndPointList;
+    private PeerUdpAddr[] peerUdpAddrList;
     private long[] peerUdpEndPointPunched;
     private UdpClient udpSession;
     private WsReq serverHolePuncher, peerHolePuncher;
     private int sendBufferReadTimeoutMillis = 512;
+    private uint localSeqNo = 0;
 
     private UdpSessionManager() {
         senderBuffer = new BlockingCollection<WsReq>();
@@ -45,15 +47,16 @@ public class UdpSessionManager {
         serverHolePuncher = theServerHolePuncher;
         peerHolePuncher = thePeerHolePuncher;
         Debug.Log(String.Format("ResetUdpClient#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
-
+        localSeqNo = 0;
         UpdatePeerAddr(roomCapacity, selfJoinIndex, initialPeerAddrList);
     }
 
     public async Task OpenUdpSession(int roomCapacity, int selfJoinIndex, CancellationToken sessionCancellationToken) {
         try {
-            Debug.Log(String.Format("OpenUdpSession#1: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
-            while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, sessionCancellationToken)) { }
-            recvBuffer.Clear();
+            ++localSeqNo;
+            Debug.Log($"OpenUdpSession#1: roomCapacity={roomCapacity}, thread id={Thread.CurrentThread.ManagedThreadId}...");
+            peerHolePuncher.SeqNo = localSeqNo;
+            serverHolePuncher.SeqNo = localSeqNo;
             udpSession = new UdpClient(port: 0);
             /*
             try {
@@ -67,9 +70,9 @@ public class UdpSessionManager {
             Debug.Log($"OpenUdpSession#2: roomCapacity={roomCapacity}, localUdpEndpoint={localUdpEndpoint}, thread id={Thread.CurrentThread.ManagedThreadId}.");
             UdpSessionManager.Instance.PunchBackendUdpTunnel(sessionCancellationToken); // [WARNING] After clearing of "senderBuffer"
             await Task.WhenAll(Receive(udpSession, roomCapacity, sessionCancellationToken), Send(udpSession, roomCapacity, selfJoinIndex, sessionCancellationToken));
-            Debug.Log("Both UdpSession 'Receive' and 'Send' tasks are ended.");
+            Debug.Log($"Both UdpSession 'Receive' and 'Send' tasks are ended @localSeqNo={localSeqNo}.");
         } catch (Exception ex) {
-            Debug.LogError(String.Format("Error opening udpSession: {0}", ex));
+            Debug.LogError($"Error opening udpSession @localSeqNo={localSeqNo}: {ex}");
         }
     }
 
@@ -83,10 +86,10 @@ public class UdpSessionManager {
                     var toSendBuffer = toSendObj.ToByteArray();
                     if (toSendObj.Act == serverHolePuncher.Act) {
                         if (null == peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]) {
-                            Debug.LogWarning($"udpSession cannot punch SRV_UDP_TUNNEL#1: null endPoint");
+                            Debug.LogWarning($"udpSession cannot punch SRV_UDP_TUNNEL#1 @localSeqNo={localSeqNo}: null endPoint");
                             continue;
                         }
-                        Debug.Log($"udpSession sending serverHolePuncher to endPoint={peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]}");
+                        Debug.Log($"udpSession sending serverHolePuncher to endPoint={peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]} @localSeqNo={localSeqNo}");
                         await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]);
                     } else if (toSendObj.Act == peerHolePuncher.Act) {
                         for (int otherJoinIndex = 1; otherJoinIndex <= roomCapacity; otherJoinIndex++) {
@@ -122,10 +125,10 @@ public class UdpSessionManager {
         } catch (ObjectDisposedException ex1) {
     
         } catch (Exception ex) {
-            Debug.LogWarning(String.Format("UdpSession is stopping for 'Send' upon exception; ex={0}", ex));
+            Debug.LogWarning($"UdpSession is stopping for 'Send' upon exception @localSeqNo={localSeqNo}; ex={ex}");
         } finally {
             while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, sessionCancellationToken)) { }
-            Debug.Log(String.Format("Ends udpSession 'Send' loop"));
+            Debug.Log($"Ends udpSession 'Send' loop @localSeqNo={localSeqNo}");
         }
     }
 
@@ -140,7 +143,7 @@ public class UdpSessionManager {
     }
 
     private async Task Receive(UdpClient udpSession, int roomCapacity, CancellationToken sessionCancellationToken) {
-        Debug.Log($"Starts udpSession 'Receive' loop");
+        Debug.Log($"Starts udpSession 'Receive' loop @localSeqNo={localSeqNo}");
         try {
             while (!sessionCancellationToken.IsCancellationRequested) {
                 var recvResult = await udpSession.ReceiveAsync(); // by experiment, "udpSession.Close()" would unblock it even at the absence of a cancellation token!
@@ -163,10 +166,10 @@ public class UdpSessionManager {
         } catch (ObjectDisposedException ex1) {
 
         } catch (Exception ex) {
-            Debug.LogWarning(String.Format("UdpSession is stopping for 'Receive' upon exception; ex={0}", ex));
+            Debug.LogWarning($"UdpSession is stopping for 'Receive' upon exception @localSeqNo={localSeqNo}; ex={ex}");
         } finally {
             recvBuffer.Clear();
-            Debug.Log(String.Format("Ends udpSession 'Receive' loop"));
+            Debug.Log($"Ends udpSession 'Receive' loop @localSeqNo={localSeqNo}");
         }
     }
 
@@ -175,6 +178,7 @@ public class UdpSessionManager {
         if (null == peerUdpEndPointList || roomCapacity+1 >= peerUdpEndPointList.Length
             || null == peerUdpEndPointPunched || roomCapacity + 1 >= peerUdpEndPointPunched.Length) {
             peerUdpEndPointList = new IPEndPoint[roomCapacity + 1];
+            peerUdpAddrList = new PeerUdpAddr[roomCapacity + 1];
             peerUdpEndPointPunched = new long[roomCapacity + 1];
         }
         int updatedCnt = 0;
@@ -185,24 +189,29 @@ public class UdpSessionManager {
                 break;
             }
             if (0 < i && String.IsNullOrEmpty(newPeerUdpAddrList[i].Ip)) continue;
+            if (null != peerUdpAddrList[i] && newPeerUdpAddrList[i].SeqNo <= peerUdpAddrList[i].SeqNo) {
+                // Ignore obsolete packets
+                continue;
+            }
             IPAddress newEndpointIp;
             if (!IPAddress.TryParse(Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL == i ? Env.Instance.getHostnameOnly() : newPeerUdpAddrList[i].Ip, out newEndpointIp)) {
-                var msg = String.Format("Invalid newEndpointIpStr {0} for joinIndex={1}", newPeerUdpAddrList[i].Ip, i);
+                var msg = $"Invalid newEndpointIpStr {newPeerUdpAddrList[i].Ip} for joinIndex={i} @localSeqNo={localSeqNo}";
                 Debug.LogError(msg);
                 throw new FormatException(msg);
             }
             if (null != peerUdpEndPointList[i] && null != newEndpointIp && newEndpointIp.Equals(peerUdpEndPointList[i].Address) && newPeerUdpAddrList[i].Port == peerUdpEndPointList[i].Port) continue;
             try {
                 peerUdpEndPointList[i] = new IPEndPoint(newEndpointIp, newPeerUdpAddrList[i].Port);
+                peerUdpAddrList[i] = new PeerUdpAddr(newPeerUdpAddrList[i]);
             } catch (Exception ex) {
                 Debug.LogError(String.Format("Error updating peerUdpEndPointList at i={0} indice with newPeerUdpAddrList={1}; ex={2} breaking", i, newPeerUdpAddrList, ex));
                 break;
-            } 
+            }
             
             updatedCnt++;
         } 
 
-        Debug.Log(String.Format("Ends updatePeerAddr with newPeerUdpAddrList={0}, updatedCnt={1}", newPeerUdpAddrList, updatedCnt));
+        Debug.Log($"Ends updatePeerAddr with newPeerUdpAddrList={newPeerUdpAddrList}, updatedCnt={updatedCnt} @localSeqNo={localSeqNo}");
     }
 
     public void CloseUdpSession() {

@@ -302,6 +302,7 @@ message WsReq {
     repeated SerializedCompletelyStaticTriggerCollider serializedStaticTriggers = 15;
     SerializedTrapLocalIdToColliderAttrs serializedTrapLocalIdToColliderAttrs = 16; 
     SerializedTriggerEditorIdToLocalId serializedTriggerEditorIdToLocalId = 18;
+    uint32 seqNo = 19;
 }
 
 message InputBufferSnapshot {
@@ -749,6 +750,7 @@ message PeerUdpAddr {
     string ip = 1;
     int32 port = 2;
     int32 authKey = 3;
+    uint32 seqNo = 4;
 }
 
 message BattleColliderInfo {

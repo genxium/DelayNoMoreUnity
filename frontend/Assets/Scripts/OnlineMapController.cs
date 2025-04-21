@@ -257,11 +257,16 @@ public class OnlineMapController : AbstractMapController {
                     readyGoPanel.playReadyAnim(() => { }, null);
                     break;
                 case DOWNSYNC_MSG_ACT_FORCED_RESYNC:
+                    // By now backend has transited the current player to "PLAYER_BATTLE_STATE_ACTIVE" regardless of initial joining or re-joining.
                     switch (battleState) {
                         case ROOM_STATE_IMPOSSIBLE:
                         case ROOM_STATE_IN_SETTLEMENT:
                         case ROOM_STATE_STOPPED:
-                            Debug.LogWarning("In roomBattleState={battleState}, shouldn't handle force-resync@playerRdfId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
+                            Debug.LogWarning("In roomBattleState={battleState}, shouldn't handle force-resync#1@playerRdfId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
+                            return;
+                        case ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN:
+                        case ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN:
+                            Debug.LogWarning("In roomBattleState={battleState}, shouldn't handle force-resync#2@playerRdfId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer:{inputBuffer.toSimpleStat()}");
                             return;
                         default:
                             var pbRdf = wsRespHolder.Rdf;
@@ -277,7 +282,9 @@ public class OnlineMapController : AbstractMapController {
                             //logForceResyncForChargeDebug(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
                             readyGoPanel.hideReady();
                             readyGoPanel.hideGo();
-                            if (ROOM_STATE_FRONTEND_REJOINING == battleState || ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN == battleState || ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN == battleState) {
+                            ulong selfJoinIndexMask = (1UL << (selfPlayerInfo.JoinIndex - 1));
+                            bool selfUnconfirmed = (0 < (pbRdf.BackendUnconfirmedMask & selfJoinIndexMask));
+                            if (ROOM_STATE_FRONTEND_REJOINING == battleState) {
                                 Debug.LogWarning($"Got force-resync during battleState={battleState} @pbRdfId={pbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
                                 rejoinPrompt.gameObject.SetActive(false);
                             }
@@ -287,11 +294,11 @@ public class OnlineMapController : AbstractMapController {
                                 autoRejoinQuota = 0;
                                 cleanupNetworkSessions();
                             } else {
-                                if (pbRdfId < playerRdfId && useFreezingLockStep) {
+                                if (pbRdfId < playerRdfId && useFreezingLockStep && ROOM_STATE_FRONTEND_REJOINING == battleState && selfUnconfirmed) {
                                     int localRequiredIfdId = ConvertToDelayedInputFrameId(playerRdfId);
                                     var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (inputFrameUpsyncDelayTolerance << INPUT_SCALE_FRAMES), ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
 
-                                    // [WARNING] DON'T check "acIfdLagThresHold" here because it's mostly likely to be true in a battle where both peers disconnected for a while before one reconnects
+                                    // [WARNING] DON'T check "acLagShouldLockStep" here because it's mostly likely to be true in a battle where both peers disconnected for a while before one reconnects
                                     ifdFrontShouldLockStep = (tooFastOrNot);
                                     
                                     if (ifdFrontShouldLockStep) {
@@ -300,13 +307,6 @@ public class OnlineMapController : AbstractMapController {
                                         cleanupNetworkSessions();
                                         ifdFrontShouldLockStep = false;
                                     } else {
-                                        ulong selfJoinIndexMask = (1UL << (selfPlayerInfo.JoinIndex - 1));
-                                        bool selfUnconfirmed = (0 < (pbRdf.BackendUnconfirmedMask & selfJoinIndexMask));
-                                        bool selfConfirmed = !selfUnconfirmed;
-                                        bool exclusivelySelfConfirmedAtLastForceResync = ((0 < pbRdf.BackendUnconfirmedMask) && selfConfirmed);
-                                        ulong allConfirmedMask = (1UL << roomCapacity) - 1;
-                                        bool exclusivelySelfUnconfirmedAtLastForceResync = (allConfirmedMask != pbRdf.BackendUnconfirmedMask && selfUnconfirmed);
-                                        NetworkDoctor.Instance.LogForceResyncedIfdId(lastAllConfirmedInputFrameId, selfConfirmed, !selfConfirmed, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, false, inputFrameUpsyncDelayTolerance); // To gain a waiver for "acLagShouldLockStep"
                                         bool startedUdpTask = startUdpTaskIfNotYet();
                                         battleState = ROOM_STATE_IN_BATTLE;
                                         if (startedUdpTask) {
@@ -677,7 +677,7 @@ public class OnlineMapController : AbstractMapController {
                 var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (inputFrameUpsyncDelayTolerance << INPUT_SCALE_FRAMES), ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
 
                 ifdFrontShouldLockStep = (tooFastOrNot);
-                acLagShouldLockStep = (localRequiredIfdId > (lastAllConfirmedInputFrameId + acIfdLagThresHold));
+                acLagShouldLockStep = (0 < ifdLag) && (localRequiredIfdId > (lastAllConfirmedInputFrameId + acIfdLagThresHold)); //[WARNING] If "0 == ifdLag", the other peers are possibly all disconnected, no need to freeze
 
                 networkInfoPanel.SetValues(sendingFps, (localRequiredIfdId > lastAllConfirmedInputFrameId ? localRequiredIfdId - lastAllConfirmedInputFrameId : 0), peerUpsyncFps, ifdLag, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, rollbackFrames, udpPunchedCnt);
             }
@@ -900,6 +900,8 @@ public class OnlineMapController : AbstractMapController {
     }
 
     protected void cleanupNetworkSessions() {
+        NetworkDoctor.Instance.Reset();
+        networkInfoPanel.SetValues(0, 0, 0, 0, 0, 0, 0, 0);
         // [WARNING] This method is reentrant-safe!
         if (null != wsCancellationTokenSource) {
             try {
@@ -915,24 +917,27 @@ public class OnlineMapController : AbstractMapController {
             } finally {
                 Debug.Log("OnlineMapController.cleanupNetworkSessions, wsTask disposed");
             }
+            wsCancellationTokenSource = null;
         }
 
-        if (null != wsTask && (TaskStatus.Canceled != wsTask.Status && TaskStatus.Faulted != wsTask.Status)) {
-            try {
-                //Debug.Log($"OnlineMapController.cleanupNetworkSessions, about to wait for wsTask with status={wsTask.Status}");
-                var waitingSuccess = wsTask.Wait(3000);
-                //Debug.Log($"OnlineMapController.cleanupNetworkSessions, wsTask returns with waitingSuccess={waitingSuccess}, status={wsTask.Status}");
-            } catch (Exception ex) {
-                //Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask is already cancelled: {0}", ex));
-            } finally {
+        if (null != wsTask) {
+            if (TaskStatus.Canceled != wsTask.Status && TaskStatus.Faulted != wsTask.Status) {
                 try {
-                    wsTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
-                } catch (ObjectDisposedException ex) {
-                    //Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask is already disposed: {0}", ex));
-                } finally {
-                    Debug.Log("OnlineMapController.cleanupNetworkSessions, wsTask disposed");
+                    //Debug.Log($"OnlineMapController.cleanupNetworkSessions, about to wait for wsTask with status={wsTask.Status}");
+                    var waitingSuccess = wsTask.Wait(3000);
+                    //Debug.Log($"OnlineMapController.cleanupNetworkSessions, wsTask returns with waitingSuccess={waitingSuccess}, status={wsTask.Status}");
+                } catch (Exception ex) {
+                    //Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask is already cancelled: {0}", ex));
                 }
             }
+            try {
+                wsTask.Dispose(); // frontend of this project targets ".NET Standard 2.1", thus calling "Task.Dispose()" explicitly, reference, reference https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.dispose?view=net-7.0
+            } catch (ObjectDisposedException ex) {
+                //Debug.LogWarning(String.Format("OnlineMapController.cleanupNetworkSessions, wsTask is already disposed: {0}", ex));
+            } finally {
+                Debug.Log("OnlineMapController.cleanupNetworkSessions, wsTask disposed");
+            }
+            wsTask = null;
         }
 
         if (null != udpCancellationTokenSource) {
