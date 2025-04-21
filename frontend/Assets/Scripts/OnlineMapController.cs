@@ -901,7 +901,6 @@ public class OnlineMapController : AbstractMapController {
 
     protected void cleanupNetworkSessions() {
         NetworkDoctor.Instance.Reset();
-        networkInfoPanel.SetValues(0, 0, 0, 0, 0, 0, 0, 0);
         // [WARNING] This method is reentrant-safe!
         if (null != wsCancellationTokenSource) {
             try {

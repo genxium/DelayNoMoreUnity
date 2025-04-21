@@ -141,8 +141,6 @@ public class WsSessionManager {
             string errMsg = $"ConnectWs not having enough credentials, authToken={authToken}, playerId={playerId}, please go back to LoginPage!";
             throw new Exception(errMsg);
         }
-        while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, cancellationToken)) { }
-        recvBuffer.Clear();
         ++incCnt;
         string fullUrl = wsEndpoint + $"?authToken={authToken}&playerId={playerId}&speciesId={speciesId}&roomId={roomId}&forReentry={forReentry}&&incCnt={incCnt}";
         Debug.Log($"About to connect Ws to {fullUrl}, please wait...");
@@ -165,6 +163,14 @@ public class WsSessionManager {
                     };
                     recvBuffer.Enqueue(openMsg);
                     guiCanProceedSignalSource.Cancel();
+                    /*
+                    [WARNING] 
+                    C# ClientWebSocket caveats
+
+                    - Even upon proactive network adapter switching off, there is no in-time event callback to favor "immediate UI prompt to remind the player", hence frontend might have to wait for some extreme timeout callback before prompting to player.
+                    
+                    - Listening to "OS network condition changed hook" can help show the prompt more quickly than a timeout event, but it requires elevated access/privileges which might irritate certain players.
+                    */
                     await Task.WhenAll(Receive(ws, cancellationToken, cancellationTokenSource), Send(ws, cancellationToken));
                     Debug.Log($"Both WebSocket 'Receive' and 'Send' tasks are ended @incCnt={incCnt}.");
                 }
@@ -229,6 +235,7 @@ public class WsSessionManager {
         } catch (Exception ex) {
             Debug.LogWarning($"WsSession is stopping for 'Send' @incCnt={incCnt} upon exception; ex={ex}");
         } finally {
+            while (senderBuffer.TryTake(out _, sendBufferReadTimeoutMillis, cancellationToken)) { }
             Debug.Log($"Ends 'Send' loop @incCnt={incCnt}, ws.State={ws.State}");
         }
     }
@@ -271,6 +278,7 @@ public class WsSessionManager {
                 cancellationTokenSource.Cancel(); // To cancel the "Send" loop
             }
         } finally {
+            recvBuffer.Clear();
             Debug.LogWarning($"Ends 'Receive' loop @incCnt={incCnt}, ws.State={ws.State}");
         }
     }
