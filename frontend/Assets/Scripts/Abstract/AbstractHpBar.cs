@@ -4,12 +4,12 @@ public class AbstractHpBar : MonoBehaviour {
     protected Vector3 newScaleHolder = new Vector3();
     protected Vector2 newSizeHolder = new Vector2();
 
-    protected static int HP_PER_SECTION = 100;
-    protected static float HP_PER_SECTION_F = (float)HP_PER_SECTION;
+    protected const int HP_PER_SECTION = 100;
+    protected float HP_PER_SECTION_F = (float)HP_PER_SECTION;
 
-    protected static float DEFAULT_HP100_WIDTH = 32.0f;
-    protected static float DEFAULT_HP100_HEIGHT = 5.0f;
-    protected static float DEFAULT_HOLDER_PADDING = 5.0f;
+    protected float DEFAULT_HP100_WIDTH = 32.0f;
+    protected float DEFAULT_HP100_HEIGHT = 5.0f;
+    protected float DEFAULT_HOLDER_PADDING = 5.0f;
 
     protected static Color[] hpColors = new Color[] {
         new Color(0x77 / 255f, 0xE9 / 255f, 0x35 / 255f),

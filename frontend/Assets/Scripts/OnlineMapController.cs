@@ -136,6 +136,16 @@ public class OnlineMapController : AbstractMapController {
                     preallocateFrontendOnlyHolders();
                     tempSpeciesIdList[selfPlayerInfo.JoinIndex - 1] = WsSessionManager.Instance.GetSpeciesId();
                     var (thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, battleDurationSeconds) = mockStartRdf(tempSpeciesIdList);
+                    foreach (var ch in thatStartRdf.PlayersArr) {
+                        if (ch.JoinIndex == selfPlayerInfo.JoinIndex) {
+                            selfPlayerInfo.BulletTeamId = ch.BulletTeamId;
+                            break;
+                        }
+                    } 
+
+                    if (null != teamTowerHeading && 0 < mainTowersDict.Count) {
+                        teamTowerHeading.Init(selfPlayerInfo.BulletTeamId, mainTowersDict);
+                    }
 
                     battleDurationFrames = battleDurationSeconds * BATTLE_DYNAMICS_FPS;
                     renderBuffer.Put(thatStartRdf);
@@ -395,6 +405,7 @@ public class OnlineMapController : AbstractMapController {
         if (inArenaPracticeMode) {
             selfPlayerInfo = new PlayerMetaInfo();
             roomCapacity = 2;
+            selfPlayerInfo.BulletTeamId = 1;
             selfPlayerInfo.JoinIndex = 1;
             selfPlayerInfo.SpeciesId = speciesId;
             uint[] speciesIdList = new uint[roomCapacity];
@@ -410,6 +421,9 @@ public class OnlineMapController : AbstractMapController {
             preallocateNpcNodes();
          
             var (thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, battleDurationSeconds) = mockStartRdf(speciesIdList);
+            if (null != teamTowerHeading && 0 < mainTowersDict.Count) {
+                teamTowerHeading.Init(selfPlayerInfo.BulletTeamId, mainTowersDict);
+            }
             renderBuffer.Put(thatStartRdf);
             battleDurationFrames = battleDurationSeconds * BATTLE_DYNAMICS_FPS;
             refreshColliders(thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, (int)collisionSpaceHalfWidth, (int)collisionSpaceHalfHeight, ref collisionSys, ref maxTouchingCellsCnt, ref dynamicRectangleColliders, ref staticColliders, out int staticCollidersCnt, ref collisionHolder, ref residueCollided, ref completelyStaticTrapColliders, ref trapLocalIdToColliderAttrs, ref triggerEditorIdToLocalId, ref triggerEditorIdToConfigFromTiled);

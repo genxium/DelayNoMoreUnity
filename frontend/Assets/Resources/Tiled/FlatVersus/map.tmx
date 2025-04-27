@@ -308,6 +308,7 @@
   </object>
   <object id="785" gid="1600" x="672" y="464" width="32" height="70">
    <properties>
+    <property name="isMainTowerOfTeam" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="5"/>
     <property name="teamId" value="1"/>
@@ -315,6 +316,7 @@
   </object>
   <object id="786" gid="2147485248" x="1856" y="464" width="32" height="70">
    <properties>
+    <property name="isMainTowerOfTeam" value="1"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="5"/>
     <property name="teamId" value="2"/>

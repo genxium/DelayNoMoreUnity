@@ -1093,6 +1093,7 @@ public class Room {
     private InputBufferSnapshot? markConfirmationIfApplicable(Pbc.RepeatedField<InputFrameUpsync> inputFrameUpsyncBatch, string playerId, Player player, bool fromUDP, bool fromReentryWsSession=false) {
         // [WARNING] This function MUST BE called while "inputBufferLock" is locked!
 
+        int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
         int newAllConfirmedCount = 0;
         ulong unconfirmedMask = 0;
         int joinIndex = player.CharacterDownsync.JoinIndex;
@@ -1160,9 +1161,11 @@ public class Room {
 
                         where (lastAllConfirmedRdfId - inputBuffer.StFrameId) >= (clientInputFrameId - inputBuffer.EdFrameId)
                         */
-                        int headGap = (lastAllConfirmedInputFrameId - inputBuffer.StFrameId), tailGap = (clientInputFrameId - inputBuffer.EdFrameId);
-                        while (headGap < tailGap && toEvictIfdId < inputBuffer.EdFrameId) {
-                            onInputFrameDownsyncAllConfirmed(toEvictIfd, INVALID_DEFAULT_PLAYER_ID);
+                        int headGap = (lastAllConfirmedInputFrameId - inputBuffer.StFrameId), fixedTailGap = (clientInputFrameId - inputBuffer.EdFrameId);
+                        while (headGap < fixedTailGap && toEvictIfdId < inputBuffer.EdFrameId) {
+                            unconfirmedMask |= (allConfirmedMask ^ toEvictIfd.ConfirmedList);
+                            toEvictIfd.ConfirmedList = allConfirmedMask;
+                            onInputFrameDownsyncAllConfirmed(toEvictIfd, INVALID_DEFAULT_PLAYER_ID); // i.e. Moves forward "lastAllConfirmedInputFrameId" such that "multiStep" can advance "curDynamicsRenderFrameId".
                             headGap = (lastAllConfirmedInputFrameId - inputBuffer.StFrameId);
                             ++toEvictIfdId;
                             insituForceConfirmationInc++;
@@ -1174,10 +1177,9 @@ public class Room {
                             }
                         }
                     }
-                    newAllConfirmedCount += _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(inputBuffer.EdFrameId, ref unconfirmedMask);
                     int nextDynamicsRenderFrameId = (0 <= lastAllConfirmedInputFrameId ? ConvertToLastUsedRenderFrameId(lastAllConfirmedInputFrameId) + 1 : -1);
                     if (0 < nextDynamicsRenderFrameId && nextDynamicsRenderFrameId > curDynamicsRenderFrameId) {
-                        _logger.LogInformation($"[markConfirmationIfApplicable] moving forward curDynamicsRenderFrameId={curDynamicsRenderFrameId} to nextDynamicsRenderFrameId={nextDynamicsRenderFrameId} to resolve eviction of toEvictIfdId={toEvictIfdId}, insituForceConfirmationInc={insituForceConfirmationInc}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} n this room: roomId={id}, backendTimerRdfId={backendTimerRdfId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: continuing and accepting more inputFrameUpsyncs from this player");
+                        _logger.LogInformation($"[markConfirmationIfApplicable] advancing curDynamicsRenderFrameId={curDynamicsRenderFrameId} to nextDynamicsRenderFrameId={nextDynamicsRenderFrameId} to resolve eviction of toEvictIfdId={toEvictIfdId}, insituForceConfirmationInc={insituForceConfirmationInc}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} n this room: roomId={id}, backendTimerRdfId={backendTimerRdfId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: continuing and accepting more inputFrameUpsyncs from this player");
                         // Apply "all-confirmed inputFrames" to move forward "curDynamicsRenderFrameId"
                         multiStep(curDynamicsRenderFrameId, nextDynamicsRenderFrameId);
                         if (shouldBreakBatchTraversal) {
@@ -1304,7 +1306,12 @@ public class Room {
     private void onInputFrameDownsyncAllConfirmed(InputFrameDownsync inputFrameDownsync, int playerId) {
         // [WARNING] This function MUST BE called while "inputBufferLock" is locked!
         int inputFrameId = inputFrameDownsync.InputFrameId;
+        if (lastAllConfirmedInputFrameId >= inputFrameId) {
+            // Such that "lastAllConfirmedInputFrameId" is monotonic.
+            return;
+        }
         lastAllConfirmedInputFrameId = inputFrameId;
+        inputFrameDownsync.ConfirmedList = allConfirmedMask; // Most likely a redundancy here, but still it's safer this way.
         inputFrameDownsync.InputList.CopyTo(lastAllConfirmedInputList, 0);
         /*
            if (INVALID_DEFAULT_PLAYER_ID == playerId) {

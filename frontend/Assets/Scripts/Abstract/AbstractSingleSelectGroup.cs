@@ -38,10 +38,14 @@ public abstract class AbstractSingleSelectGroup : MonoBehaviour {
         currentSelectGroupEnabled = val;
     }
 
-    public virtual void ResetCells(AbstractSingleSelectCell[] newCells) {
+    public virtual void ResetCells(AbstractSingleSelectCell[] newCells, bool deleteComponent) {
         if (null != cells) {
             foreach (var cell in cells) {
-                Destroy(cell);
+                if (deleteComponent) {
+                    Destroy(cell);
+                } else {
+                    Destroy(cell.gameObject);
+                }
             }
         }
 

@@ -141,6 +141,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected KvPriorityQueue<int, InplaceHpBar> cachedHpBars;
     protected KvPriorityQueue<int, KeyChPointer> cachedKeyChPointers;
 
+    protected Dictionary<int, int> mainTowersDict;
     protected bool shouldDetectRealtimeRenderHistoryCorrection = false; // Not recommended to enable in production, it might have some memory performance impact.
     protected bool frameLogEnabled = false;
     protected Dictionary<int, InputFrameDownsync> rdfIdToActuallyUsedInput;
@@ -166,6 +167,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     public SelfBattleHeading selfBattleHeading;
     public BossBattleHeading bossBattleHeading;
+    public TeamTowerHeading teamTowerHeading;
 
     public GameObject playerLightsPrefab;
     protected PlayerLights selfPlayerLights;
@@ -633,8 +635,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 newBrPosHolder.Set(wx + halfBoxCw, wy - halfBoxCh, characterZ);
 
                 if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) {
-                    // No need to update the actual anim if the other players are out of
-                    
+                    // No need to update the actual anim if the other players are out of viewport
                     if (isOnlineMode && CharacterState.Dying != currCharacterDownsync.CharacterState && CharacterState.Dimmed != currCharacterDownsync.CharacterState) {
                         showKeyChPointer(rdf.Id, currCharacterDownsync, wx, wy, halfBoxCw, halfBoxCh, teamRibbonLookupKey);
                     }
@@ -691,6 +692,16 @@ public abstract class AbstractMapController : MonoBehaviour {
                 bossBattleHeading.SetCharacter(currNpcDownsync);
             }
 
+            if (mainTowersDict.ContainsKey(currNpcDownsync.BulletTeamId) && currNpcDownsync.Id == mainTowersDict[currNpcDownsync.BulletTeamId]) {
+                if (0 < currNpcDownsync.FramesSinceLastDamaged && null != toast && isOnlineMode && currNpcDownsync.BulletTeamId == selfPlayerInfo.BulletTeamId) {
+                    toast.showAdvice("Main tower under attack!");
+                }
+                if (null != teamTowerHeading) {
+                    TeamTowerHpBar targetTeamTowerHpBar = teamTowerHeading.GetByTeamId(currNpcDownsync.BulletTeamId);  
+                    targetTeamTowerHpBar.SetCharacter(currNpcDownsync);
+                }
+            }
+
             if (!isGameObjPositionWithinCamera(newTlPosHolder) && !isGameObjPositionWithinCamera(newTrPosHolder) && !isGameObjPositionWithinCamera(newBlPosHolder) && !isGameObjPositionWithinCamera(newBrPosHolder)) {
                 if (isOnlineMode && chConfig.IsKeyCh && CharacterState.Dying != currNpcDownsync.CharacterState && CharacterState.Dimmed != currNpcDownsync.CharacterState) {
                     showKeyChPointer(rdf.Id, currNpcDownsync, wx, wy, halfBoxCw, halfBoxCh, lookupKey);
@@ -727,6 +738,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             var spr = npcGameObj.GetComponent<SpriteRenderer>();
             var material = spr.material;
             if (isOnlineMode) {
+                /*
                 int colorSwapRuleOrder = currNpcDownsync.BulletTeamId;
                 if (TeamRibbon.COLOR_SWAP_RULE.ContainsKey(currNpcDownsync.SpeciesId) && TeamRibbon.COLOR_SWAP_RULE[currNpcDownsync.SpeciesId].ContainsKey(colorSwapRuleOrder)) {
                     var rule = TeamRibbon.COLOR_SWAP_RULE[currNpcDownsync.SpeciesId][colorSwapRuleOrder];
@@ -736,7 +748,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     material.SetFloat("_Palette1ToFuzziness", rule.P1ToFuzziness);
                     hasColorSwapByTeam = true;
                 }
-
+                */
                 // Add teamRibbon if same team as self, allowing characters of other teams to hide under foreground
                 if (!hasColorSwapByTeam && CharacterState.Dying != currNpcDownsync.CharacterState && selfPlayerInfo.BulletTeamId == currNpcDownsync.BulletTeamId) {
                     showTeamRibbon(rdf.Id, currNpcDownsync, wx, wy, halfBoxCw, halfBoxCh, lookupKey);
@@ -761,6 +773,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             playCharacterSfx(currNpcDownsync, prevNpcDownsync, chConfig, wx, wy, rdf.Id, distanceAttenuationZ);
             playCharacterVfx(currNpcDownsync, prevNpcDownsync, chConfig, npcAnimHolder, wx, wy, rdf.Id);
         }
+
         foreach (var entry in cachedNpcs) {
             var speciesId = entry.Key;
             var speciesKvPq = entry.Value;
@@ -1461,6 +1474,10 @@ public abstract class AbstractMapController : MonoBehaviour {
         bigChasingRenderFramesPerUpdate = (int)(2UL << INPUT_SCALE_FRAMES) - 1;
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         unconfirmedBattleResult = new Dictionary<int, BattleResult>();
+        mainTowersDict = new Dictionary<int, int>();
+        if (null != teamTowerHeading) {
+            teamTowerHeading.ResetSelf();
+        }
 
         playerGameObjs = new GameObject[roomCapacity];
         currRdfNpcAnimHolders = new CharacterAnimController[DEFAULT_PREALLOC_NPC_CAPACITY];
@@ -1871,6 +1888,9 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (null != iptmgr) {
             iptmgr.ResetSelf();
         }
+        if (null != teamTowerHeading) {
+            teamTowerHeading.ResetSelf();
+        }
 
         Debug.LogWarningFormat("onBattleStopped; now battleState={0}", battleState);
     }
@@ -1940,7 +1960,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         var grid = underlyingMap.GetComponentInChildren<Grid>();
         var playerStartingCposList = new List<(Vector, int, int)>();
-        var npcsStartingCposList = new List<(Vector, int, int, uint, int, NpcGoal, int, ulong, int, uint, uint, uint)>();
+        var npcsStartingCposList = new List<(Vector, int, int, uint, int, NpcGoal, int, ulong, int, uint, uint, uint, bool)>();
         var trapList = new List<Trap>();
         var triggerList = new List<(Trigger, float, float)>();
         var pickableList = new List<(Pickable, float, float)>();
@@ -2048,7 +2068,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                             (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tiledRectCenterX, tiledRectCenterY, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         }
                         
-                        CustomProperty dirY, speciesId, teamId, initGoal, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId, killedToDropPickupSkillId;
+                        CustomProperty dirY, speciesId, teamId, initGoal, publishingEvtSubIdUponKilled, publishingEvtMaskUponKilled, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId, killedToDropPickupSkillId, isMainTowerOfTeam;
                         tileProps.TryGetCustomProperty("dirY", out dirY);
                         tileProps.TryGetCustomProperty("speciesId", out speciesId);
                         tileProps.TryGetCustomProperty("teamId", out teamId);
@@ -2059,11 +2079,14 @@ public abstract class AbstractMapController : MonoBehaviour {
                         tileProps.TryGetCustomProperty("killedToDropConsumableSpeciesId", out killedToDropConsumableSpeciesId);
                         tileProps.TryGetCustomProperty("killedToDropBuffSpeciesId", out killedToDropBuffSpeciesId);
                         tileProps.TryGetCustomProperty("killedToDropPickupSkillId", out killedToDropPickupSkillId);
+                        tileProps.TryGetCustomProperty("isMainTowerOfTeam", out isMainTowerOfTeam);
 
                         uint speciesIdVal = null == speciesId || speciesId.IsEmpty ? SPECIES_NONE_CH : (uint)speciesId.GetValueAsInt();
                         if (SPECIES_BRICK1 == speciesIdVal) {
                             (cx, cy) = TiledLayerPositionToCollisionSpacePosition(tileObj.m_X + 0.5f*tileObj.m_Width, tileObj.m_Y - 0.5f*tileObj.m_Height, tilemapHalfHeight, collisionSpacePaddingLeft, collisionSpacePaddingBottom);
                         }
+
+                        bool isMainTowerOfTeamVal = null == isMainTowerOfTeam || isMainTowerOfTeam.IsEmpty ? false : (0 < isMainTowerOfTeam.GetValueAsInt());
 
                         NpcGoal initGoalVal = NpcGoal.Npatrol;
                         if (null != initGoal && !initGoal.IsEmpty) {
@@ -2085,7 +2108,8 @@ public abstract class AbstractMapController : MonoBehaviour {
                                                     null == subscriptionId || subscriptionId.IsEmpty ? TERMINATING_EVTSUB_ID_INT : subscriptionId.GetValueAsInt(),
                                                     null == killedToDropConsumableSpeciesId || killedToDropConsumableSpeciesId.IsEmpty ? TERMINATING_CONSUMABLE_SPECIES_ID : (uint)killedToDropConsumableSpeciesId.GetValueAsInt(),
                                                     null == killedToDropBuffSpeciesId || killedToDropBuffSpeciesId.IsEmpty ? TERMINATING_BUFF_SPECIES_ID : (uint)killedToDropBuffSpeciesId.GetValueAsInt(),
-                                                    null == killedToDropPickupSkillId || killedToDropPickupSkillId.IsEmpty ? NO_SKILL : (uint)killedToDropPickupSkillId.GetValueAsInt()
+                                                    null == killedToDropPickupSkillId || killedToDropPickupSkillId.IsEmpty ? NO_SKILL : (uint)killedToDropPickupSkillId.GetValueAsInt(),
+                                                    isMainTowerOfTeamVal
                         ));
                     }
                     Destroy(child.gameObject); // Delete the whole "ObjectLayer"
@@ -2726,7 +2750,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         int npcLocalId = 1;
         for (int i = 0; i < npcsStartingCposList.Count; i++) {
             int joinIndex = roomCapacity + i + 1;
-            var (cpos, dirX, dirY, characterSpeciesId, teamId, initGoal, publishingEvtSubIdUponKilledVal, publishingEvtMaskUponKilledVal, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId, killedToDropPickupSkillId) = npcsStartingCposList[i];
+            var (cpos, dirX, dirY, characterSpeciesId, teamId, initGoal, publishingEvtSubIdUponKilledVal, publishingEvtMaskUponKilledVal, subscriptionId, killedToDropConsumableSpeciesId, killedToDropBuffSpeciesId, killedToDropPickupSkillId, isMainTowerOfTeamVal) = npcsStartingCposList[i];
             if (TERMINATING_EVTSUB_ID_INT != publishingEvtSubIdUponKilledVal && !serializedTriggerEditorIdToLocalId.Dict.ContainsKey(publishingEvtSubIdUponKilledVal)) {
                 throw new ArgumentException(String.Format("Preset NPC with speciesId={0}, teamId={1} is set to publish to an non-existent trigger editor id={2}", characterSpeciesId, teamId, publishingEvtSubIdUponKilledVal));
             }
@@ -2785,6 +2809,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
 
             startRdf.NpcsArr[i] = npcInRdf;
+            if (isMainTowerOfTeamVal) {
+                mainTowersDict[npcInRdf.BulletTeamId] = npcLocalId;
+            }
             
             npcLocalId++;
         }
@@ -3318,11 +3345,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         var spr = theGameObj.GetComponent<SpriteRenderer>();
         material.SetFloat("_CrackOpacity", 0f);
 
-        if (!isActiveBoss && currCharacterDownsync.JoinIndex != selfPlayerInfo.JoinIndex && CharacterState.Dying != currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesSinceLastDamaged) {
+        if (!isActiveBoss && currCharacterDownsync.JoinIndex != selfPlayerInfo.JoinIndex && CharacterState.Dying != currCharacterDownsync.CharacterState && 0 < currCharacterDownsync.FramesSinceLastDamaged && !(mainTowersDict.ContainsKey(currCharacterDownsync.BulletTeamId) && currCharacterDownsync.Id == mainTowersDict[currCharacterDownsync.BulletTeamId])) {
             showInplaceHpBar(rdfId, currCharacterDownsync, wx, wy, halfBoxCh, inplaceHpBarZ, lookupKey); 
-            if (null != toast && isOnlineMode && Battle.SPECIES_DARKBEAMTOWER == currCharacterDownsync.SpeciesId && currCharacterDownsync.BulletTeamId == selfPlayerInfo.BulletTeamId) {
-                toast.showAdvice("Main tower under attack!"); 
-            } 
         }
 
         if (null != currCharacterDownsync.DebuffList) {
