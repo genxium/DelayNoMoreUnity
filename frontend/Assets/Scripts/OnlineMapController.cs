@@ -96,11 +96,10 @@ public class OnlineMapController : AbstractMapController {
                             break;
                     }
                 } else {
-                    var msg = String.Format("@playerRdfId={0}, received ws error {1}", playerRdfId, wsRespHolder);
+                    var msg = String.Format("@playerRdfId={0}, received ws error and prompting for manual rejoin: {1}", playerRdfId, wsRespHolder);
                     Debug.LogWarning(msg);
-                    popupErrStackPanel(msg);
-                    Debug.LogWarning("Calling onBattleStopped with remote non-OK resp @playerRdfId=" + playerRdfId);
-                    onBattleStopped();
+                    autoRejoinQuota = 0; // To require manual rejoin.
+                    cleanupNetworkSessions();
                 }
                 break;
             }
