@@ -210,7 +210,7 @@ public class Room {
         // Preallocate battle dynamic fields other than "Collider related" ones
         preallocateStepHolders(capacity, renderBufferSize, DEFAULT_BACKEND_INPUT_BUFFER_SIZE, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocPickableCapacity, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
 
-        // "Collider related" fields Will be reset in "refreshCollider" anyway
+        // "Collider related" fields will be reset in "refreshColliders" anyway
         dynamicRectangleColliders = new Collider[0];
         staticColliders = new Collider[0];
         completelyStaticTrapColliders = new List<Collider>();
