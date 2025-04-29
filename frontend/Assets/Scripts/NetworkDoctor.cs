@@ -59,7 +59,7 @@ public class NetworkDoctor {
     bool exclusivelySelfUnconfirmedAtLastForceResync;
     bool lastForceResyncHasRollbackBurst;
 
-    int exclusivelySelfConfirmedLockStepQuota;
+    //int exclusivelySelfConfirmedLockStepQuota;
     int selfUnconfirmedLockStepSkipQuota;
 
     // For display on NetworkDoctorInfo panel only
@@ -76,13 +76,13 @@ public class NetworkDoctor {
         acLagLockedStepsCnt = 0;
         ifdFrontLockedStepsCnt = 0;
         udpPunchedCnt = 0;
-        inputRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-1.0f) * 1f / (1 << Battle.INPUT_SCALE_FRAMES);
+        inputRateThreshold = (Battle.BATTLE_DYNAMICS_FPS-1.0f) / (1 << Battle.INPUT_SCALE_FRAMES);
         lastForceResyncedIfdId = 0;
         exclusivelySelfConfirmedAtLastForceResync = false;
         exclusivelySelfUnconfirmedAtLastForceResync = false;
         lastForceResyncHasRollbackBurst = false;
 
-        exclusivelySelfConfirmedLockStepQuota = 0;
+        //exclusivelySelfConfirmedLockStepQuota = 0;
         selfUnconfirmedLockStepSkipQuota = 0;
 
         chasedToPlayerRdfIdIndicatorCountdown = 0;
@@ -119,18 +119,18 @@ public class NetworkDoctor {
         lastForceResyncHasRollbackBurst = hasRollbackBurst;
 
         if (exclusivelySelfConfirmed) {
-            exclusivelySelfConfirmedLockStepQuota = (inputFrameUpsyncDelayTolerance << Battle.INPUT_SCALE_FRAMES);    
+            //exclusivelySelfConfirmedLockStepQuota = (inputFrameUpsyncDelayTolerance << Battle.INPUT_SCALE_FRAMES);    
             selfUnconfirmedLockStepSkipQuota = 0;
         } else if (selfConfirmed) {
             selfUnconfirmedLockStepSkipQuota = 0;
         }
 
         if (exclusivelySelfUnconfirmed) {
-            exclusivelySelfConfirmedLockStepQuota = 0;
-            selfUnconfirmedLockStepSkipQuota = (inputFrameUpsyncDelayTolerance << Battle.INPUT_SCALE_FRAMES);
+            //exclusivelySelfConfirmedLockStepQuota = 0;
+            selfUnconfirmedLockStepSkipQuota = (shared.Battle.BATTLE_DYNAMICS_FPS >> 2);
         } else if (selfUnconfirmed) {
-            exclusivelySelfConfirmedLockStepQuota = 0;    
-            selfUnconfirmedLockStepSkipQuota = ((inputFrameUpsyncDelayTolerance << Battle.INPUT_SCALE_FRAMES) >> 1);
+            //exclusivelySelfConfirmedLockStepQuota = 0;    
+            selfUnconfirmedLockStepSkipQuota = (shared.Battle.BATTLE_DYNAMICS_FPS >> 3);
         }
     }
 
@@ -346,7 +346,7 @@ public class NetworkDoctor {
             }
         }
 
-        exclusivelySelfConfirmedLockStepQuota = 0; // Can only be applied consecutively together with "ifdLagSignificant".
+        //exclusivelySelfConfirmedLockStepQuota = 0; // Can only be applied consecutively together with "ifdLagSignificant".
         return (false, ifdIdLag, sendingFps, peerUpsyncFps, immediateRollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt,  Interlocked.Read(ref udpPunchedCnt));
     }
 }

@@ -951,7 +951,7 @@ namespace shared {
 
             The allocation of "CollisionSpace" instance and individual "Collider" instances are done in "refreshColliders" instead.
             */
-    
+
             int inputBufferSizeLowerBound = (renderBufferSize >> INPUT_SCALE_FRAMES) + 2;
             if (inputBufferSize < inputBufferSizeLowerBound) {
                 throw new ArgumentException($"inputBufferSize={inputBufferSize} < inputBufferSizeLowerBound={inputBufferSizeLowerBound}: renderBufferSize={renderBufferSize}, INPUT_SCALE_FRAMES={INPUT_SCALE_FRAMES}");
@@ -1088,12 +1088,13 @@ namespace shared {
             }
 
             if (null != residueCollided) {
-                for (int i = 0; i < residueCollided.Eles.Length; i++) {
-                    var c = residueCollided.Eles[i];
-                    if (null == c) continue;
+                while (0 < residueCollided.Cnt) {
+                    var (exists, c) = residueCollided.Pop();
+                    if (null == c || !exists) continue;
                     c.clearTouchingCellsAndData();
-                }  
-                residueCollided = new FrameRingBuffer<shared.Collider>(0); // dereferencing existing "Colliders"
+                    c = null; // dereferencing link between "FrameRingBuffer<Collider>.Eles" and the underlying "Collider" instance
+                }
+                residueCollided = new FrameRingBuffer<shared.Collider>(0); // an extra safety guarantee by dereferencing the whole "FrameRingBuffer<Collider>"  
             }
 
             collisionHolder.ClearDeep();

@@ -211,11 +211,21 @@ public class Room {
         preallocateStepHolders(capacity, renderBufferSize, DEFAULT_BACKEND_INPUT_BUFFER_SIZE, preallocNpcCapacity, preallocBulletCapacity, preallocTrapCapacity, preallocTriggerCapacity, preallocPickableCapacity, out renderBuffer, out pushbackFrameLogBuffer, out inputBuffer, out lastIndividuallyConfirmedInputFrameId, out lastIndividuallyConfirmedInputList, out effPushbacks, out hardPushbackNormsArr, out softPushbacks, out decodedInputHolder, out prevDecodedInputHolder, out confirmedBattleResult, out softPushbackEnabled, frameLogEnabled);
 
         // "Collider related" fields will be reset in "refreshColliders" anyway
+        /**
+        [WARNING] 
+
+        - When not null, a "CollisionSpace" instance holds memory of at least 1 cell even if "0 == spaceWidth and 0 == spaceHeight", where each cell holds memory of "FrameRingBuffer<Collider> Colliders(128)".
+        - When not null, a "Collision" instance holds memory of a "FrameRingBuffer<Collider> ContactedColliders(128)".
+
+        To reduce unnecessary memory holding by idle rooms, I'm only proactively calling "CollisionSpace.RemoveAll()" and "Collision.ClearDeep()" in "Room()" constructor without touching the constructors of "CollisionSpace" or "Collision", because the implicit memory allocation in the latter makes "Battle_builder.refreshColliders" for a new battle quite convenient.
+        */
         dynamicRectangleColliders = new Collider[0];
         staticColliders = new Collider[0];
         completelyStaticTrapColliders = new List<Collider>();
-        collisionSys = new CollisionSpace(1, 1, 1, 1); 
+        collisionSys = new CollisionSpace(0, 0, 1, 1);  
+        collisionSys.RemoveAll(); // immediately cleans up memory allocated to "Cells" during "CollisionSpace" constructor, see comments above. 
         collisionHolder = new Collision();
+        collisionHolder.ClearDeep(); // immediately cleans up memory allocated to "ContactedColliders" during "Collision" constructor, see comments above. 
         residueCollided = new FrameRingBuffer<Collider>(0);
 
         // Preallocate network management fields
@@ -501,7 +511,7 @@ public class Room {
 
                 _logger.LogInformation($"clearPlayerNetworkSession finished: [ roomId={id}, playerId={playerId}, joinIndex={joinIndex}, roomState={state}, nowRoomEffectivePlayerCount={effectivePlayerCount} ]");
             } else {
-                _logger.LogWarning($"clearPlayerNetworkSession couldn't find playerDownsyncSession for: [ roomId={id}, playerId={playerId}, joinIndex={joinIndex}, roomState={state}, nowRoomEffectivePlayerCount={effectivePlayerCount} ]");
+                _logger.LogWarning($"clearPlayerNetworkSession couldn't playerDownsyncSession for: [ roomId={id}, playerId={playerId}, joinIndex={joinIndex}, roomState={state}, nowRoomEffectivePlayerCount={effectivePlayerCount} ]");
             }
         } else {
             _logger.LogWarning("clearPlayerNetworkSession couldn't find player info for: [ roomId={0}, playerId={1}, roomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
@@ -941,7 +951,7 @@ public class Room {
                         if (backendDynamicsEnabled) {
                             int oldCurDynamicsRenderFrameId = curDynamicsRenderFrameId;
                             doBattleMainLoopPerTickBackendDynamicsWithProperLocking(prevRenderFrameId, ref dynamicsDuration);
-                            if (oldCurDynamicsRenderFrameId < curDynamicsRenderFrameId && curDynamicsRenderFrameId+(int)(4UL << INPUT_SCALE_FRAMES) >= battleDurationFrames) {
+                            if (oldCurDynamicsRenderFrameId < curDynamicsRenderFrameId && curDynamicsRenderFrameId+(BATTLE_DYNAMICS_FPS >> 2) >= battleDurationFrames) {
                                 int oldElongatedBattleDurationFrame = elongatedBattleDurationFrames; 
                                 int proposedElongatedBattleDurationFrame = (backendTimerRdfId + 3*BATTLE_DYNAMICS_FPS); // [WARNING] Now that CONFIRMED LAST INPUT FRAMES from all players are received, we shouldn't be awaiting too long from here on.
                                 if (false == elongatedBattleDurationFramesShortenedOnce) {
@@ -1177,11 +1187,11 @@ public class Room {
                             }
                         }
                     }
-                    int nextDynamicsRenderFrameIdUpperBound = (0 <= lastAllConfirmedInputFrameId ? ConvertToLastUsedRenderFrameId(lastAllConfirmedInputFrameId) + 1 : -1);
-                    if (0 < nextDynamicsRenderFrameIdUpperBound && nextDynamicsRenderFrameIdUpperBound > curDynamicsRenderFrameId) {
-                        _logger.LogInformation($"[markConfirmationIfApplicable] advancing curDynamicsRenderFrameId={curDynamicsRenderFrameId} to nextDynamicsRenderFrameId={nextDynamicsRenderFrameIdUpperBound-1} to resolve eviction of toEvictIfdId={toEvictIfdId}, insituForceConfirmationInc={insituForceConfirmationInc}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} n this room: roomId={id}, backendTimerRdfId={backendTimerRdfId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}: continuing and accepting more inputFrameUpsyncs from this player");
+                    int nextDynamicsRenderFrameId = (0 <= lastAllConfirmedInputFrameId ? ConvertToLastUsedRenderFrameId(lastAllConfirmedInputFrameId) + 1 : -1);
+                    if (0 < nextDynamicsRenderFrameId && nextDynamicsRenderFrameId > curDynamicsRenderFrameId) {
+                        _logger.LogInformation($"[markConfirmationIfApplicable] advancing curDynamicsRenderFrameId={curDynamicsRenderFrameId} to nextDynamicsRenderFrameId={nextDynamicsRenderFrameId} to resolve eviction of toEvictIfdId={toEvictIfdId}, insituForceConfirmationInc={insituForceConfirmationInc}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} n this room: roomId={id}, backendTimerRdfId={backendTimerRdfId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: continuing and accepting more inputFrameUpsyncs from this player");
                         // Apply "all-confirmed inputFrames" to move forward "curDynamicsRenderFrameId"
-                        multiStep(curDynamicsRenderFrameId, nextDynamicsRenderFrameIdUpperBound);
+                        multiStep(curDynamicsRenderFrameId, nextDynamicsRenderFrameId);
                         if (shouldBreakBatchTraversal) {
                             break;
                         }
@@ -1410,7 +1420,7 @@ public class Room {
         var toSendInputFrameIdEd = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
 
         if (FRONTEND_WS_RECV_BYTELENGTH < content.Count) {
-            _logger.LogWarning(String.Format("[content too big!] refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, backendTimerRdfId={4}, curDynamicsRenderFrameId={5}, lastAllConfirmedInputFrameId={8}: contentByteLength={6} > FRONTEND_WS_RECV_BYTELENGTH={7}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, backendTimerRdfId, curDynamicsRenderFrameId, content.Count, FRONTEND_WS_RECV_BYTELENGTH, lastAllConfirmedInputFrameId));
+            _logger.LogWarning(String.Format("[content too big!] refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, backendTimerRdfId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6} > FRONTEND_WS_RECV_BYTELENGTH={7}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, backendTimerRdfId, curDynamicsRenderFrameId, content.Count, FRONTEND_WS_RECV_BYTELENGTH));
         }
 
         foreach (var (playerId, player) in players) {

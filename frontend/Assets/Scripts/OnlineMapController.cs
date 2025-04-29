@@ -28,7 +28,7 @@ public class OnlineMapController : AbstractMapController {
     slowDown:              | no      | no        | yes         | yes         | yes  ...  | no
     freeze:                | no      | no        | no          | no          | yes  ...  | yes
     */
-    private const int slowDownIfdLagThreshold = 3;
+    private const int slowDownIfdLagThreshold = ((int)(BATTLE_DYNAMICS_FPS*.2f) >> INPUT_SCALE_FRAMES);
     /* 
     [WARNING] Lower the value of "freezeIfdLagThresHold" if you want to see more frequent freezing and verify that the graphics are continuous across the freezing point.
     */
@@ -46,6 +46,7 @@ public class OnlineMapController : AbstractMapController {
             - e.g. with "acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE << 1)" you can see lots of "insituForceConfirmation" and "lastIfdIdOfBatch tooAdvanced" logs on backend; while with "acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE - 4)" such logs are only seen in extreme cases (like PC#1 v.s. PC#2 via internet while PC#1's traffic is controlled by Clumsy v0.3 for various conditions)
         - the trade-off result here is to have a large "DEFAULT_BACKEND_INPUT_BUFFER_SIZE" to hold 30 seconds of inputs, then "acIfdLagThresHold" small enough relative to "DEFAULT_BACKEND_INPUT_BUFFER_SIZE" to avoid frequent insituForceConfirmation, but not too small to trigger frequent frontend freezing
      */
+
     public bool useFreezingLockStep = true; // [WARNING] If set to "false", expect more teleports due to "chaseRolledbackRdfs" but less frozen graphics when your device has above average network among all peers in the same battle -- yet "useFreezingLockStep" could NOT completely rule out teleports as long as potential floating point mismatch between devices exists (especially between backend .NET 7.0 and frontend .NET 2.1).
     public NetworkDoctorInfo networkInfoPanel;
     int clientAuthKey;
@@ -295,6 +296,7 @@ public class OnlineMapController : AbstractMapController {
                             if (ROOM_STATE_FRONTEND_REJOINING == battleState) {
                                 Debug.LogWarning($"Got force-resync during battleState={battleState} @pbRdfId={pbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
                                 rejoinPrompt.gameObject.SetActive(false);
+                                skipInterpolation = true;
                             }
                             onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
                             if (pbRdfId < chaserRenderFrameIdLowerBound) {
@@ -304,7 +306,7 @@ public class OnlineMapController : AbstractMapController {
                             } else {
                                 if (pbRdfId < playerRdfId && useFreezingLockStep && ROOM_STATE_FRONTEND_REJOINING == battleState && selfUnconfirmed) {
                                     int localRequiredIfdId = ConvertToDelayedInputFrameId(playerRdfId);
-                                    var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (inputFrameUpsyncDelayTolerance << INPUT_SCALE_FRAMES), ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
+                                    var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (BATTLE_DYNAMICS_FPS >> 2), ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
 
                                     // [WARNING] DON'T check "acLagShouldLockStep" here because it's mostly likely to be true in a battle where both peers disconnected for a while before one reconnects
                                     ifdFrontShouldLockStep = (tooFastOrNot);
@@ -686,7 +688,7 @@ public class OnlineMapController : AbstractMapController {
 
             // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
             if (!WsSessionManager.Instance.getInArenaPracticeMode() && useFreezingLockStep && !acLagShouldLockStep && !ifdFrontShouldLockStep) {
-                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (inputFrameUpsyncDelayTolerance << INPUT_SCALE_FRAMES), ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
+                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (BATTLE_DYNAMICS_FPS >> 2), ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
 
                 ifdFrontShouldLockStep = (tooFastOrNot);
                 acLagShouldLockStep = (0 < ifdLag) && (localRequiredIfdId > (lastAllConfirmedInputFrameId + acIfdLagThresHold)); //[WARNING] If "0 == ifdLag", the other peers are possibly all disconnected, no need to freeze
@@ -730,7 +732,7 @@ public class OnlineMapController : AbstractMapController {
             doUpdate();
 
             if (!WsSessionManager.Instance.getInArenaPracticeMode()) {
-                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: ((inputFrameUpsyncDelayTolerance >> 1) << INPUT_SCALE_FRAMES), ifdLagTolerance: slowDownIfdLagThreshold, disconnectedPeerJoinIndices);
+                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (BATTLE_DYNAMICS_FPS >> 3), ifdLagTolerance: slowDownIfdLagThreshold, disconnectedPeerJoinIndices);
 
                 ifdFrontShouldLockStep = tooFastOrNot;
 

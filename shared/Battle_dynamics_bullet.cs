@@ -602,7 +602,7 @@ namespace shared {
             }
         }
 
-        private static void _calcSingleBulletCollision(RoomDownsyncFrame currRenderFrame, Bullet bulletNextFrame, BulletConfig bulletConfig, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool dummyHasLockVel, Collider bulletCollider, Vector[] hardPushbackNorms, Vector effPushback, FrameRingBuffer<Collider> residueCollided, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ILoggerBridge logger) {
+        private static void _calcSingleBulletCollision(RoomDownsyncFrame currRenderFrame, bool rdfAllConfirmed, Bullet bulletNextFrame, BulletConfig bulletConfig, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, ref int bulletLocalIdCounter, ref int bulletCnt, ref bool dummyHasLockVel, Collider bulletCollider, Vector[] hardPushbackNorms, Vector effPushback, FrameRingBuffer<Collider> residueCollided, Collision collision, ref SatResult overlapResult, ref SatResult primaryOverlapResult, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ILoggerBridge logger) {
             CharacterDownsync? offender = null, offenderNextFrame = null;
             if (1 <= bulletNextFrame.OffenderJoinIndex && bulletNextFrame.OffenderJoinIndex <= (roomCapacity + npcCnt)) {
                 offender = getChdFromRdf(bulletNextFrame.OffenderJoinIndex, roomCapacity, currRenderFrame);
@@ -1254,7 +1254,7 @@ namespace shared {
             }
         }
 
-        private static void _calcAllBulletsCollisions(RoomDownsyncFrame currRenderFrame, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, CollisionSpace collisionSys, Collision collision, Collider[] dynamicRectangleColliders, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, FrameRingBuffer<Collider> residueCollided, ref SatResult primaryOverlapResult, int iSt, int iEd, ref int bulletLocalIdCounter, ref int bulletCnt, ref ulong fulfilledEvtSubscriptionSetMask, int colliderCnt, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ILoggerBridge logger) {
+        private static void _calcAllBulletsCollisions(RoomDownsyncFrame currRenderFrame, bool rdfAllConfirmed, int roomCapacity, int npcCnt, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Trap> nextRenderFrameTraps, RepeatedField<Bullet> nextRenderFrameBullets, RepeatedField<Trigger> nextRenderFrameTriggers, ref SatResult overlapResult, CollisionSpace collisionSys, Collision collision, Collider[] dynamicRectangleColliders, Vector[] effPushbacks, Vector[][] hardPushbackNormsArr, FrameRingBuffer<Collider> residueCollided, ref SatResult primaryOverlapResult, int iSt, int iEd, ref int bulletLocalIdCounter, ref int bulletCnt, ref ulong fulfilledEvtSubscriptionSetMask, int colliderCnt, Dictionary<int, TriggerConfigFromTiled> triggerEditorIdToTiledConfig, ILoggerBridge logger) {
             bool dummyHasLockVel = false;
             // [WARNING] Bullet collision doesn't result in immediate pushbacks but instead imposes a "velocity" on the impacted characters to simplify pushback handling! 
             // Check bullet-anything collisions
@@ -1273,7 +1273,7 @@ namespace shared {
                 }
                 var effPushback = effPushbacks[i];
                 var hardPushbackNorms = hardPushbackNormsArr[i]; 
-                _calcSingleBulletCollision(currRenderFrame, bulletNextFrame, bulletConfig, roomCapacity, npcCnt, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFrameBullets, nextRenderFrameTriggers, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletCollider, hardPushbackNorms, effPushback, residueCollided, collision, ref overlapResult, ref primaryOverlapResult, triggerEditorIdToTiledConfig, logger);
+                _calcSingleBulletCollision(currRenderFrame, rdfAllConfirmed, bulletNextFrame, bulletConfig, roomCapacity, npcCnt, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFrameBullets, nextRenderFrameTriggers, ref bulletLocalIdCounter, ref bulletCnt, ref dummyHasLockVel, bulletCollider, hardPushbackNorms, effPushback, residueCollided, collision, ref overlapResult, ref primaryOverlapResult, triggerEditorIdToTiledConfig, logger);
             }
         }
 

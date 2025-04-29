@@ -202,6 +202,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected bool isOnlineMode;
     protected int localExtraInputDelayFrames = 0;
 
+    protected bool skipInterpolation = false;
+
     public Camera gameplayCamera;
     protected GameObject loadCharacterPrefab(CharacterConfig chConfig) {
         string path = String.Format("Prefabs/{0}", chConfig.SpeciesName);
@@ -1470,8 +1472,8 @@ public abstract class AbstractMapController : MonoBehaviour {
         
          The current combination is having much better field test results in terms of graphical consistencies.
          */
-        smallChasingRenderFramesPerUpdate = (int)(1UL << INPUT_SCALE_FRAMES); // [WARNING] When using "smallChasingRenderFramesPerUpdate", we're giving more chance to "lockstep"
-        bigChasingRenderFramesPerUpdate = (int)(2UL << INPUT_SCALE_FRAMES) - 1;
+        smallChasingRenderFramesPerUpdate = 5; // [WARNING] When using "smallChasingRenderFramesPerUpdate", we're giving more chance to "lockstep"
+        bigChasingRenderFramesPerUpdate = 15;
         rdfIdToActuallyUsedInput = new Dictionary<int, InputFrameDownsync>();
         unconfirmedBattleResult = new Dictionary<int, BattleResult>();
         mainTowersDict = new Dictionary<int, int>();
@@ -3979,6 +3981,11 @@ public abstract class AbstractMapController : MonoBehaviour {
 #nullable enable
     protected void setCharacterGameObjectPosByInterpolation(CharacterDownsync? prevCharacterDownsync, CharacterDownsync currCharacterDownsync, CharacterConfig chConfig, GameObject chGameObj, float newWx, float newWy) {
         float effZ = calcEffCharacterZ(currCharacterDownsync, chConfig);
+        if (skipInterpolation) {
+            newPosHolder.Set(newWx, newWy, effZ);
+            skipInterpolation = false;
+            return;
+        }
         bool justDead = (null != prevCharacterDownsync && (CharacterState.Dying == prevCharacterDownsync.CharacterState || 0 >= prevCharacterDownsync.Hp));
         justDead |= currCharacterDownsync.NewBirth;
         if (justDead) {

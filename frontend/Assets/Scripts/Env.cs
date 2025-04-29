@@ -19,11 +19,13 @@ public partial class Env {
 #endif
     }
 
+    private static int fixedTcpPort = 8081;
+
     public string getHttpHost() {
-        return "http://" + getHostnameOnly() + ":6061";
+        return $"http://{getHostnameOnly()}:{fixedTcpPort}";
     }
 
     public string getWsEndpoint() {
-        return "ws://" + getHostnameOnly() + ":6061/Ws";
+        return $"ws://{getHostnameOnly()}:{fixedTcpPort}/Ws";
     }
 }

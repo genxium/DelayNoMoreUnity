@@ -1809,7 +1809,7 @@ namespace shared {
             }
         }
 
-        private static void _calcFallenDeath(RoomDownsyncFrame currRenderFrame, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Pickable> nextRenderFramePickables, ILoggerBridge logger) {
+        private static void _calcFallenDeath(RoomDownsyncFrame currRenderFrame, bool rdfAllConfirmed, int roomCapacity, int currNpcI, RepeatedField<CharacterDownsync> nextRenderFramePlayers, RepeatedField<CharacterDownsync> nextRenderFrameNpcs, RepeatedField<Pickable> nextRenderFramePickables, ILoggerBridge logger) {
             for (int i = 0; i < roomCapacity + currNpcI; i++) {
                 int joinIndex = i+1;
                 var currCharacterDownsync = getChdFromRdf(joinIndex, roomCapacity, currRenderFrame);
@@ -2404,11 +2404,12 @@ namespace shared {
             if (0 < delayedInputFrameId) {
                 var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
                 if (!ok || null == delayedInputFrameDownsync) {
-                    throw new ArgumentNullException($"Null delayedInputFrameDownsync for delayedInputFrameId={delayedInputFrameId} in `Step`! renderBuffer={renderBuffer.toSimpleStat()}, inputBuffer={inputBuffer.toSimpleStat()}");
+                    throw new ArgumentNullException($"Null delayedInputFrameDownsync for delayedInputFrameId={delayedInputFrameId} in `Step`!");
                 }
                 _processPlayerInputs(currRenderFrame, delayedInputFrameDownsync, roomCapacity, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
             }
 
+            var (rdfAllConfirmed, _) = isRdfAllConfirmed(currRenderFrame.Id, inputBuffer, roomCapacity);
             _moveAndInsertCharacterColliders(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, effPushbacks, collisionSys, dynamicRectangleColliders, ref colliderCnt, 0, roomCapacity + currNpcI, logger);
             
             int trapColliderCntOffset = colliderCnt;
@@ -2457,7 +2458,7 @@ namespace shared {
 
             _calcAllCharactersCollisions(currRenderFrame, roomCapacity, currNpcI, inputBuffer, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameBullets, nextRenderFrameTriggers, nextRenderFrameTraps, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref overlapResult, ref primaryOverlapResult, collision, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, 0, roomCapacity + currNpcI, residueCollided, unconfirmedBattleResults, ref confirmedBattleResult, trapLocalIdToColliderAttrs, triggerEditorIdToTiledConfig, currRdfPushbackFrameLog, pushbackFrameLogEnabled, logger);
 
-            _calcAllBulletsCollisions(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collisionSys, collision, dynamicRectangleColliders, effPushbacks, hardPushbackNormsArr, residueCollided, ref primaryOverlapResult, bulletColliderCntOffset, colliderCnt, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref fulfilledTriggerSetMask, colliderCnt, triggerEditorIdToTiledConfig, logger);
+            _calcAllBulletsCollisions(currRenderFrame, rdfAllConfirmed, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFrameBullets, nextRenderFrameTriggers, ref overlapResult, collisionSys, collision, dynamicRectangleColliders, effPushbacks, hardPushbackNormsArr, residueCollided, ref primaryOverlapResult, bulletColliderCntOffset, colliderCnt, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, ref fulfilledTriggerSetMask, colliderCnt, triggerEditorIdToTiledConfig, logger);
          
             // ---------[WARNING] Deliberately put "_calcTriggerReactions" after "_calcAllBulletsCollisions", "_calcDynamicTrapMovementCollisions" and "_calcCompletelyStaticTrapDamage", such that it could capture the just-fulfilled ones. --------- 
             _calcTriggerReactions(currRenderFrame, candidate, roomCapacity, nextRenderFrameTriggers, nextRenderFrameNpcs, triggerEditorIdToLocalId, triggerEditorIdToTiledConfig, decodedInputHolder, ref nextRenderFrameNpcLocalIdCounter, ref nextNpcI, ref nextRenderFramePickableLocalIdCounter, ref pickableCnt, nextRenderFramePickables, ref fulfilledTriggerSetMask, ref justTriggeredStoryPointId, ref justTriggeredBgmId, logger);
@@ -2513,7 +2514,7 @@ namespace shared {
 
             _processEffPushbacks(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFrameTraps, nextRenderFramePickables, effPushbacks, dynamicRectangleColliders, trapColliderCntOffset, bulletColliderCntOffset, pickableColliderCntOffset, colliderCnt, trapLocalIdToColliderAttrs, logger);
 
-            _calcFallenDeath(currRenderFrame, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFramePickables, logger);
+            _calcFallenDeath(currRenderFrame, rdfAllConfirmed, roomCapacity, currNpcI, nextRenderFramePlayers, nextRenderFrameNpcs, nextRenderFramePickables, logger);
 
             bool isRemapNeeded = false;
 
@@ -2531,7 +2532,6 @@ namespace shared {
                         confirmedBattleResult.WinnerJoinIndex = targetTrigger.OffenderJoinIndex;
                         confirmedBattleResult.WinnerBulletTeamId = targetTrigger.OffenderBulletTeamId;
                     } else {
-                        var (rdfAllConfirmed, _) = isRdfAllConfirmed(currRenderFrame.Id, inputBuffer, roomCapacity);
                         if (rdfAllConfirmed) {
                             confirmedBattleResult.WinnerJoinIndex = targetTrigger.OffenderJoinIndex;
                             confirmedBattleResult.WinnerBulletTeamId = targetTrigger.OffenderBulletTeamId;
@@ -2543,7 +2543,7 @@ namespace shared {
                 }
             }
 
-            for (int i = 0; i < colliderCnt; i++) {
+            for (int i = colliderCnt-1; i >=0; i--) {
                 Collider dynamicCollider = dynamicRectangleColliders[i];
                 if (null == dynamicCollider.Space) {
                     throw new ArgumentNullException("Null dynamicCollider.Space is not allowed in `Step`!");
