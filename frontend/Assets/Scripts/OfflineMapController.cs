@@ -72,6 +72,7 @@ public class OfflineMapController : AbstractMapController {
         Application.targetFrameRate = 60;
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
+        Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.None);
         isOnlineMode = false;
         renderBufferSize = 1024;
         StoryModeSettings.SimpleDelegate onExitCallback = () => {
@@ -118,13 +119,17 @@ public class OfflineMapController : AbstractMapController {
                 preallocateNpcNodes();
                 selfPlayerInfo.JoinIndex = 1;
                 selfPlayerInfo.SpeciesId = PlayerStoryProgressManager.Instance.GetCachedChSpeciesId();
+                selfJoinIndex = selfPlayerInfo.JoinIndex; 
+                selfJoinIndexArrIdx = selfJoinIndex - 1; 
+                selfJoinIndexMask = (1UL << selfJoinIndexArrIdx); 
+                allConfirmedMask = (1UL << roomCapacity) - 1;
                 shouldPlayStoryLvIntro = false;
                 initSeqNo++; // To avoid accessing "gameObject.transform" in the same renderFrame right after "resetCurrentMatch" and the "preallocations"
             } else if (3 == initSeqNo) {
                 Debug.Log("About to mock start rdf");
                 // Mimics "shared.Battle.DOWNSYNC_MSG_ACT_BATTLE_READY_TO_START"
                 uint[] speciesIdList = new uint[roomCapacity];
-                speciesIdList[selfPlayerInfo.JoinIndex - 1] = selfPlayerInfo.SpeciesId;
+                speciesIdList[selfJoinIndexArrIdx] = selfPlayerInfo.SpeciesId;
                 var (startRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, battleDurationSecondsVal) = mockStartRdf(speciesIdList, PlayerStoryProgressManager.Instance.GetCachedFinishedLvOption());
                 
                 Debug.LogFormat("mockStartRdf with {0} bytes", startRdf.ToByteArray().Length);
@@ -194,7 +199,7 @@ public class OfflineMapController : AbstractMapController {
                 } else {
                     cameraTrack(cachedStartRdf, null, false, true); // Move camera first, such that NPCs can be rendered in cam view
                     applyRoomDownsyncFrameDynamics(cachedStartRdf, null);
-                    var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
+                    var playerGameObj = playerGameObjs[selfJoinIndexArrIdx];
                     Debug.LogFormat("Battle ready to start, teleport camera to selfPlayer dst={0}, thread id={1}", playerGameObj.transform.position, Thread.CurrentThread.ManagedThreadId);
                     readyGoPanel.playReadyAnim(null, () => {
                         Debug.LogFormat("played ready animation, thread id={0}", Thread.CurrentThread.ManagedThreadId);
@@ -501,7 +506,7 @@ public class OfflineMapController : AbstractMapController {
             storySettlementPanel.toggleUIInteractability(true);
             var (ok, rdf) = renderBuffer.GetByFrameId(settlementRdfId-1);
             if (ok && null != rdf) {
-                storySettlementPanel.SetCharacter(rdf.PlayersArr[selfPlayerInfo.JoinIndex - 1]);
+                storySettlementPanel.SetCharacter(rdf.PlayersArr[selfJoinIndexArrIdx]);
             }
             storySettlementPanel.SetTimeUsed(settlementRdfId);
             // TODO: In versus mode, should differentiate between "winnerJoinIndex == selfPlayerIndex" and otherwise

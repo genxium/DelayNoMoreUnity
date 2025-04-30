@@ -923,7 +923,9 @@ public class Room {
                 int nextRenderFrameId = (int)((totalElapsedMillis + estimatedMillisPerFrame - 1) / estimatedMillisPerFrame); // fast ceiling
 
                 if (curDynamicsRenderFrameId >= battleDurationFrames) {
-                    _logger.LogInformation("In `battleMainLoop` for roomId={0}, curDynamicsRenderFrameId={1} already surpassed battleDurationFrames={2}@backendTimerRdfId={3}, elongatedBattleDurationFrames={4}; awaiting backendTimerRdfId to surpass elongatedBattleDurationFrames", id, curDynamicsRenderFrameId, battleDurationFrames, backendTimerRdfId, elongatedBattleDurationFrames);
+                    if (0 < (backendTimerRdfId & (15))) {
+                        _logger.LogInformation("In `battleMainLoop` for roomId={0}, curDynamicsRenderFrameId={1} already surpassed battleDurationFrames={2}@backendTimerRdfId={3}, elongatedBattleDurationFrames={4}; awaiting backendTimerRdfId to surpass elongatedBattleDurationFrames", id, curDynamicsRenderFrameId, battleDurationFrames, backendTimerRdfId, elongatedBattleDurationFrames);
+                    }
                     backendTimerRdfId = nextRenderFrameId; 
                 } else {
                     toSleepMillis = (estimatedMillisPerFrame >> 1); // Sleep half-frame time by default
@@ -960,7 +962,9 @@ public class Room {
                                 } else {
                                     elongatedBattleDurationFrames = oldElongatedBattleDurationFrame > proposedElongatedBattleDurationFrame ? oldElongatedBattleDurationFrame : proposedElongatedBattleDurationFrame;  
                                 }
-                                _logger.LogInformation("In `battleMainLoop` for roomId={0}, curDynamicsRenderFrameId={1} just surpassed battleDurationFrames={2}, elongating per required: backendTimerRdfId={3}, oldElongatedBattleDurationFrame={4}, newElongatedBattleDurationFrames={5}", id, curDynamicsRenderFrameId, battleDurationFrames, backendTimerRdfId, oldElongatedBattleDurationFrame, elongatedBattleDurationFrames);
+                                if (0 < (backendTimerRdfId & (15))) {
+                                    _logger.LogInformation("In `battleMainLoop` for roomId={0}, curDynamicsRenderFrameId={1} just surpassed battleDurationFrames={2}, elongating per required: backendTimerRdfId={3}, oldElongatedBattleDurationFrame={4}, newElongatedBattleDurationFrames={5}", id, curDynamicsRenderFrameId, battleDurationFrames, backendTimerRdfId, oldElongatedBattleDurationFrame, elongatedBattleDurationFrames);
+                                }
                             }
                         }
 
@@ -1029,6 +1033,7 @@ public class Room {
             PlayerSessionAckWatchdog? watchdog;
             if (playerActiveWatchdogDict.TryGetValue(playerId, out watchdog)) {
                 watchdog.Kick();
+                //_logger.LogInformation($"OnBattleCmdReceived kicked fromPlayerId={playerId}, joinIndex={player.CharacterDownsync.JoinIndex}: roomId={id}");
             }
             /*
                if (fromReentryWsSession) {
