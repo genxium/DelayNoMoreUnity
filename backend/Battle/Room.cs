@@ -511,7 +511,7 @@ public class Room {
 
                 _logger.LogInformation($"clearPlayerNetworkSession finished: [ roomId={id}, playerId={playerId}, joinIndex={joinIndex}, roomState={state}, nowRoomEffectivePlayerCount={effectivePlayerCount} ]");
             } else {
-                _logger.LogWarning($"clearPlayerNetworkSession couldn't playerDownsyncSession for: [ roomId={id}, playerId={playerId}, joinIndex={joinIndex}, roomState={state}, nowRoomEffectivePlayerCount={effectivePlayerCount} ]");
+                _logger.LogWarning($"clearPlayerNetworkSession couldn't find playerDownsyncSession for: [ roomId={id}, playerId={playerId}, joinIndex={joinIndex}, roomState={state}, nowRoomEffectivePlayerCount={effectivePlayerCount} ]");
             }
         } else {
             _logger.LogWarning("clearPlayerNetworkSession couldn't find player info for: [ roomId={0}, playerId={1}, roomState={2}, nowRoomEffectivePlayerCount={3} ]", id, playerId, state, effectivePlayerCount);
@@ -1189,7 +1189,7 @@ public class Room {
                     }
                     int nextDynamicsRenderFrameId = (0 <= lastAllConfirmedInputFrameId ? ConvertToLastUsedRenderFrameId(lastAllConfirmedInputFrameId) + 1 : -1);
                     if (0 < nextDynamicsRenderFrameId && nextDynamicsRenderFrameId > curDynamicsRenderFrameId) {
-                        _logger.LogInformation($"[markConfirmationIfApplicable] advancing curDynamicsRenderFrameId={curDynamicsRenderFrameId} to nextDynamicsRenderFrameId={nextDynamicsRenderFrameId} to resolve eviction of toEvictIfdId={toEvictIfdId}, insituForceConfirmationInc={insituForceConfirmationInc}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} n this room: roomId={id}, backendTimerRdfId={backendTimerRdfId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}: continuing and accepting more inputFrameUpsyncs from this player");
+                        _logger.LogInformation($"[markConfirmationIfApplicable] advancing curDynamicsRenderFrameId={curDynamicsRenderFrameId} to nextDynamicsRenderFrameId={nextDynamicsRenderFrameId} to resolve eviction of toEvictIfdId={toEvictIfdId}, insituForceConfirmationInc={insituForceConfirmationInc}, curDynamicsToUseIfdId={curDynamicsToUseIfdId} while clientInputFrameId={clientInputFrameId} is evicting inputBuffer={inputBuffer.toSimpleStat()} n this room: roomId={id}, backendTimerRdfId={backendTimerRdfId}, fromPlayerId={playerId}, fromPlayerJoinIndex={joinIndex}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}: continuing and accepting more inputFrameUpsyncs from this player");
                         // Apply "all-confirmed inputFrames" to move forward "curDynamicsRenderFrameId"
                         multiStep(curDynamicsRenderFrameId, nextDynamicsRenderFrameId);
                         if (shouldBreakBatchTraversal) {
@@ -1420,7 +1420,7 @@ public class Room {
         var toSendInputFrameIdEd = (null == inputBufferSnapshot.ToSendInputFrameDownsyncs || 0 >= inputBufferSnapshot.ToSendInputFrameDownsyncs.Count) ? TERMINATING_INPUT_FRAME_ID : inputBufferSnapshot.ToSendInputFrameDownsyncs[inputBufferSnapshot.ToSendInputFrameDownsyncs.Count - 1].InputFrameId + 1;
 
         if (FRONTEND_WS_RECV_BYTELENGTH < content.Count) {
-            _logger.LogWarning(String.Format("[content too big!] refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, backendTimerRdfId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6} > FRONTEND_WS_RECV_BYTELENGTH={7}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, backendTimerRdfId, curDynamicsRenderFrameId, content.Count, FRONTEND_WS_RECV_BYTELENGTH));
+            _logger.LogWarning($"[content too big!] refRenderFrameId={refRenderFrameId} & inputFrameIds [{toSendInputFrameIdSt}, {toSendInputFrameIdEd}), for roomId={id}, backendTimerRdfId={backendTimerRdfId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}: contentByteLength={content.Count} > FRONTEND_WS_RECV_BYTELENGTH={FRONTEND_WS_RECV_BYTELENGTH}");
         }
 
         foreach (var (playerId, player) in players) {

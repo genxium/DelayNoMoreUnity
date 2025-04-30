@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+service InternalCtrl {
+  rpc Gc (GcReq) returns (GcResp);
+}
+
+message GcReq {
+}
+
+message GcResp {
+  int64 usedMillis = 1;
+}

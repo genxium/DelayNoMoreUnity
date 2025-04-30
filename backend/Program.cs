@@ -1,5 +1,6 @@
 using backend.Battle;
 using backend.Storage;
+using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
@@ -15,6 +16,8 @@ Log.Logger = new LoggerConfiguration()
     .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddGrpc();
 
 // Add services to the container.
 //if (builder.Environment.IsDevelopment()) {
@@ -52,14 +55,14 @@ var webSocketOptions = new WebSocketOptions {
 };
 app.UseWebSockets(webSocketOptions);
 
-// The following 2 lines make "app" use "wwwroot" as the default web root for serving static file, e.g. "index.html". 
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
 if (app.Environment.IsDevelopment()) {
     // Enable swagger in Development
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    // The following 2 lines make "app" use "wwwroot" as the default web root for serving static file, e.g. "index.html". 
+    app.UseDefaultFiles();
+    app.UseStaticFiles();
 }
 
 app.Lifetime.ApplicationStopping.Register(async () => {
@@ -74,5 +77,31 @@ app.Lifetime.ApplicationStopping.Register(async () => {
     }
 });
 app.MapControllers();
+
+/*
+[WARNING] Deliberately choosing "custom routing middleware" for port-multiplexing among "internalCtrl" and "publicfacing" endpoints. 
+
+An alternative solution, "RequireHost", is NOT secure and prone to host spoofing because it only looks at HttpHeader! https://learn.microsoft.com/en-us/aspnet/core/fundamentals/routing?view=aspnetcore-9.0#host-matching-in-routes-with-requirehost.
+
+Yet another alternative solution, "Kestrel configured from appsetting.json (https://learn.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/endpoints?view=aspnetcore-9.0#configure-http-protocols)" doesn't provide any routing configuration entry.
+*/
+int publicfacingPort = 8081;
+int internalCtrlPort = 8334;
+app.MapWhen(context => {
+    return context.Connection.LocalPort == publicfacingPort;
+}, newApp => {
+    newApp.UseRouting();
+    newApp.UseEndpoints(endpoints => {
+        endpoints.MapControllers();
+    });
+});
+app.MapWhen(context => {
+    return context.Connection.LocalPort == internalCtrlPort;
+}, newApp => {
+    newApp.UseRouting();
+    newApp.UseEndpoints(endpoints => {
+        endpoints.MapGrpcService<InternalCtrlService>();
+    });
+});
 
 app.Run();

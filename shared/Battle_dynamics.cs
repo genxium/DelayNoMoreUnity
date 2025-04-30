@@ -2404,7 +2404,7 @@ namespace shared {
             if (0 < delayedInputFrameId) {
                 var (ok, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
                 if (!ok || null == delayedInputFrameDownsync) {
-                    throw new ArgumentNullException($"Null delayedInputFrameDownsync for delayedInputFrameId={delayedInputFrameId} in `Step`!");
+                    throw new ArgumentNullException($"Null delayedInputFrameDownsync for delayedInputFrameId={delayedInputFrameId} in `Step`: renderBuffer={renderBuffer.toSimpleStat()}, inputBuffer={inputBuffer.toSimpleStat()}");
                 }
                 _processPlayerInputs(currRenderFrame, delayedInputFrameDownsync, roomCapacity, inputBuffer, nextRenderFramePlayers, nextRenderFrameBullets, decodedInputHolder, ref nextRenderFrameBulletLocalIdCounter, ref bulletCnt, selfPlayerJoinIndex, ref selfNotEnoughMp, logger);
             }
@@ -2543,7 +2543,12 @@ namespace shared {
                 }
             }
 
-            for (int i = colliderCnt-1; i >=0; i--) {
+            /*
+            Forward or even random traversal of "dynamicRectangleColliders[]" is also correct here. 
+
+            Given a cell "foo" containing 4 colliders "a", "b", "c" and "d", as long as "dynamicRectangleColliders[]" is fully traversed below, it will invoke "foo.unregisterFromTail" exactly 4 times regardless of the order of traversal, e.g. ["b" -> "d" -> "a" -> "c"] works for this specific cleanup just as well as ["d" -> "c" -> "b" -> "a"] or ["a" -> "b" -> "c" -> "d"].
+            */
+            for (int i = colliderCnt-1; i >= 0; i--) {
                 Collider dynamicCollider = dynamicRectangleColliders[i];
                 if (null == dynamicCollider.Space) {
                     throw new ArgumentNullException("Null dynamicCollider.Space is not allowed in `Step`!");

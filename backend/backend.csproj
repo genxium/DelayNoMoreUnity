@@ -21,6 +21,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.71.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
@@ -31,10 +36,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Storage\Dao\" />
+    <Folder Include="Storage\Dao\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Storage\Dao\" />
+    <Protobuf Include="..\GrpcProtos\InternalCtrl.proto" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\shared\shared.csproj" />
