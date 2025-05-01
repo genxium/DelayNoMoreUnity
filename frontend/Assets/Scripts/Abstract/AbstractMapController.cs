@@ -351,7 +351,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         if (null != existingInputFrame) {
-            existingInputFrame.InputList[(selfJoinIndex-1)] = currSelfInput;
+            existingInputFrame.InputList[selfJoinIndexArrIdx] = currSelfInput;
             existingInputFrame.UdpConfirmedList |= initConfirmedList;
         } else {
             while (inputBuffer.EdFrameId <= inputFrameId) {
@@ -362,7 +362,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 if (!ok || null == ifdHolder) {
                     throw new ArgumentNullException(String.Format("inputBuffer was not fully pre-allocated for gapInputFrameId={0}! Now inputBuffer StFrameId={1}, EdFrameId={2}, Cnt/N={3}/{4}", gapInputFrameId, inputBuffer.StFrameId, inputBuffer.EdFrameId, inputBuffer.Cnt, inputBuffer.N));
                 }
-
+                ifdHolder.ConfirmedList = 0u; // [WARNING] Important to provision first to avoid RingBuff reuse contamination!
                 ifdHolder.InputFrameId = gapInputFrameId;
                 for (int k = 0; k < roomCapacity; ++k) {
                     ifdHolder.InputList[k] = prefabbedInputList[k];
@@ -398,12 +398,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 if (hasInputBeenMutated) {
                     int ii = ConvertToFirstUsedRenderFrameId(j);
                     if (ii < i) {
-                        /*
-                           [WARNING] 
-                           If we don't rollback at this spot, when the mutated "delayedInputFrame.inputList" a.k.a. "inputFrame#j" matches the later downsynced version, rollback WOULDN'T be triggered for the incorrectly rendered "renderFrame#(ii+1)", and it would STAY IN HISTORY FOREVER -- as the history becomes incorrect, EVERY LATEST renderFrame since "inputFrame#j" was mutated would be ALWAYS incorrectly rendering too!
-
-                           The update to chaserRenderFrameId here would NOT impact the current cycle of rollbackAndChase !
-                         */
+                         // [WARNING] If we don't rollback at this spot, when the mutated "delayedInputFrame.inputList" a.k.a. "inputFrame#j" matches the later downsynced version, rollback WOULDN'T be triggered for the incorrectly rendered "renderFrame#(ii+1)", and it would STAY IN HISTORY FOREVER -- as the history becomes incorrect, EVERY LATEST renderFrame since "inputFrame#j" was mutated would be ALWAYS incorrectly rendering too! The update to chaserRenderFrameId here would NOT impact the current cycle of rollbackAndChase!
                         _handleIncorrectlyRenderedPrediction(j, false);
                     }
                 }
@@ -468,6 +463,14 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
         if (0 < newAllConfirmedCnt) {
             lastAllConfirmedInputFrameId = candidateInputFrameId - 1;
+            var (_, lastAllConfirmedInputFrame) = inputBuffer.GetByFrameId(lastAllConfirmedInputFrameId);
+            if (null != lastAllConfirmedInputFrame) {
+                for (int j = 0; j < roomCapacity; j++) {
+                    if (lastAllConfirmedInputFrameId <= lastIndividuallyConfirmedInputFrameId[j]) continue;
+                    lastIndividuallyConfirmedInputFrameId[j] = lastAllConfirmedInputFrameId;
+                    lastIndividuallyConfirmedInputList[j] = lastAllConfirmedInputFrame.InputList[j];
+                }
+            } 
         }
         return newAllConfirmedCnt;
     }
@@ -1520,18 +1523,18 @@ public abstract class AbstractMapController : MonoBehaviour {
             return;
         }
 
-        NetworkDoctor.Instance.LogInputFrameDownsync(batch[0].InputFrameId, batch[batch.Count - 1].InputFrameId);
+        var firstInBatch = batch[0];
+        var lastInBatch = batch[batch.Count - 1];
+        if (lastInBatch.InputFrameId <= lastAllConfirmedInputFrameId) {
+            return;
+        }
+
+        NetworkDoctor.Instance.LogInputFrameDownsync(firstInBatch.InputFrameId, lastInBatch.InputFrameId);
         int firstPredictedYetIncorrectInputFrameId = TERMINATING_INPUT_FRAME_ID;
-        var selfJoinIndex = selfPlayerInfo.JoinIndex;
-        var selfJoinIndexArrIdx = selfJoinIndex - 1;
-        var selfJoinIndexMask = (1UL << selfJoinIndexArrIdx);
         foreach (var inputFrameDownsync in batch) {
             int inputFrameDownsyncId = inputFrameDownsync.InputFrameId;
             if (inputFrameDownsyncId <= lastAllConfirmedInputFrameId) {
                 continue;
-            }
-            if (inputFrameDownsyncId > inputBuffer.EdFrameId) {
-                //Debug.LogWarning(String.Format("Possibly resyncing#1 for inputFrameDownsyncId={0}! Now inputBuffer: {1}", inputFrameDownsyncId, inputBuffer.toSimpleStat()));
             }
             // [WARNING] Now that "inputFrameDownsyncId > self.lastAllConfirmedInputFrameId", we should make an update immediately because unlike its backend counterpart "Room.LastAllConfirmedInputFrameId", the frontend "mapIns.lastAllConfirmedInputFrameId" might inevitably get gaps among discrete values due to "either type#1 or type#2 forceConfirmation" -- and only "onInputFrameDownsyncBatch" can catch this! 
             lastAllConfirmedInputFrameId = inputFrameDownsyncId;
@@ -1562,13 +1565,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             // [WARNING] Take all "inputFrameDownsyncBatch" from backend as all-confirmed, it'll be later checked by "rollbackAndChase". 
             inputFrameDownsync.ConfirmedList = allConfirmedMask;
 
-            for (int j = 0; j < roomCapacity; j++) {
-                if (inputFrameDownsync.InputFrameId > lastIndividuallyConfirmedInputFrameId[j]) {
-                    lastIndividuallyConfirmedInputFrameId[j] = inputFrameDownsync.InputFrameId;
-                    lastIndividuallyConfirmedInputList[j] = inputFrameDownsync.InputList[j];
-                }
-            }
-            //console.log(`Confirmed inputFrameId=${inputFrameDownsync.inputFrameId}`);
             var (res2, oldStFrameId, oldEdFrameId) = inputBuffer.SetByFrameId(inputFrameDownsync, inputFrameDownsync.InputFrameId);
             if (RingBuffer<InputFrameDownsync>.RING_BUFF_FAILED_TO_SET == res2) {
                 throw new ArgumentException(String.Format("Failed to dump input cache(maybe recentInputCache too small)! inputFrameDownsync.inputFrameId={0}, lastAllConfirmedInputFrameId={1}, inputBuffer: {2}", inputFrameDownsyncId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat()));
@@ -1576,8 +1572,16 @@ public abstract class AbstractMapController : MonoBehaviour {
                 Debug.LogWarning($"Possibly resyncing#2! Now playerRdfId={playerRdfId}, lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}: inputBuffer={inputBuffer.toSimpleStat()}");
             }
         }
+
+        for (int j = 0; j < roomCapacity; j++) {
+            if (lastInBatch.InputFrameId > lastIndividuallyConfirmedInputFrameId[j]) {
+                lastIndividuallyConfirmedInputFrameId[j] = lastInBatch.InputFrameId;
+                lastIndividuallyConfirmedInputList[j] = lastInBatch.InputList[j];
+            }
+        }
         _markConfirmationIfApplicable();
         _handleIncorrectlyRenderedPrediction(firstPredictedYetIncorrectInputFrameId, false);
+        //Debug.Log($"[onInputFrameDownsyncBatch/end] batch=[St:{firstInBatch.InputFrameId}, EdClosed:{lastInBatch.InputFrameId}], @playerRdfId={playerRdfId}, @chaserRenderFrameId={chaserRenderFrameId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}: inputBuffer={inputBuffer.toSimpleStat()}");
     }
 
     public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch, bool usingOthersForcedDownsyncRenderFrameDict = false) {
@@ -1857,14 +1861,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected virtual void onBattleStopped() {
-        if (
-            ROOM_STATE_IMPOSSIBLE != battleState && ROOM_STATE_IN_BATTLE != battleState && ROOM_STATE_IN_SETTLEMENT != battleState
-            && 
-            ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN != battleState && ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN != battleState && ROOM_STATE_FRONTEND_REJOINING != battleState
-            ) {
-            Debug.LogWarning($"@playerRdfId={playerRdfId}, chaserRenderFrameId={chaserRenderFrameId}, chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, battleState={battleState}: unable to stop battle due to invalid state transition");
-            return;
-        }
         Debug.LogWarning($"onBattleStopped; now playerRdfId={playerRdfId}, chaserRenderFrameId={chaserRenderFrameId}, chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, battleState={battleState}");
         playerRdfId = 0;
         bgmSource.Stop();
@@ -1951,7 +1947,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected (RoomDownsyncFrame, RepeatedField<SerializableConvexPolygon>, RepeatedField<SerializedCompletelyStaticPatrolCueCollider>, RepeatedField<SerializedCompletelyStaticTrapCollider>, RepeatedField<SerializedCompletelyStaticTriggerCollider>, SerializedTrapLocalIdToColliderAttrs, SerializedTriggerEditorIdToLocalId, int) mockStartRdf(uint[] speciesIdList, FinishedLvOption finishedLvOption = FinishedLvOption.StoryAndBoss) {
-        Debug.LogFormat("mockStartRdf with speciesIdList={0} for selfJoinIndex={1}, finishedLvOption={2}", ArrToString(speciesIdList), selfPlayerInfo.JoinIndex, finishedLvOption);
+        Debug.LogFormat("mockStartRdf with speciesIdList={0} for selfJoinIndex={1}, finishedLvOption={2}", ArrToString(speciesIdList), selfJoinIndex, finishedLvOption);
         var serializedBarrierPolygons = new RepeatedField<SerializableConvexPolygon>();
         var serializedStaticPatrolCues = new RepeatedField<SerializedCompletelyStaticPatrolCueCollider>();
         var serializedCompletelyStaticTraps = new RepeatedField<SerializedCompletelyStaticTrapCollider>();
@@ -4006,6 +4002,14 @@ public abstract class AbstractMapController : MonoBehaviour {
             newPosHolder.Set(newWx, newWy, effZ);
         } else {
             // dis2 > tolerance2 >= 0
+            if (dis2 > 5000*tolerance2 && selfJoinIndex == currCharacterDownsync.JoinIndex) {
+                var (ok1, playerRdf) = renderBuffer.GetByFrameId(playerRdfId);
+                var delayedInputFrameId = ConvertToDelayedInputFrameId(playerRdfId);
+                var (ok2, delayedIfd) = inputBuffer.GetByFrameId(delayedInputFrameId);
+                if (ok1 && ok2 && null != playerRdf && null != delayedIfd) {
+                    Debug.Log($"@playerRdfId={playerRdfId}, self teleported @selfJoinIndex={selfJoinIndex}, dWx={dWx}, dWy={dWy}, newWPos=[{newWx}, {newWy}]: delayedIfd={delayedIfd}, chaserRenderFrameId={chaserRenderFrameId}, chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, renderBuffer={renderBuffer.toSimpleStat()}, inputBuffer={inputBuffer.toSimpleStat()}");
+                } 
+            }
             float invMag = InvSqrt32(dis2);
             float ratio = 0;
             if (0 < speedReachable2 && speedReachable2 > defaultSpeedReachable2) {

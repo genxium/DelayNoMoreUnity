@@ -2238,6 +2238,7 @@ namespace shared {
                 if (nextRenderFrameId == renderBuffer.EdFrameId) {
                     renderBuffer.DryPut();
                     (_, candidate) = renderBuffer.GetByFrameId(nextRenderFrameId);
+                    // [WARNING] "candidate" is possibly a reused element in RingBuff, make sure it's either properly provisioned, or fully covered in the assignment below! 
                 }
             }
             if (null == candidate) {

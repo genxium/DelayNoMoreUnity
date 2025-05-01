@@ -73,6 +73,7 @@ public class OfflineMapController : AbstractMapController {
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.None);
+        Application.SetStackTraceLogType(LogType.Exception, StackTraceLogType.None);
         isOnlineMode = false;
         renderBufferSize = 1024;
         StoryModeSettings.SimpleDelegate onExitCallback = () => {

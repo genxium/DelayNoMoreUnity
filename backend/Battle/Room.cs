@@ -176,7 +176,7 @@ public class Room {
         stageName = _availableStageNames[_randGenerator.Next(_availableStageNames.Length)];
         curDynamicsRenderFrameId = 0;
         lastForceResyncedRdfId = 0;
-        frameLogEnabled = false;
+        frameLogEnabled = true;
         battleDurationFrames = 0;
         elongatedBattleDurationFrames = 0;
         elongatedBattleDurationFramesShortenedOnce = false;
@@ -923,8 +923,8 @@ public class Room {
                 int nextRenderFrameId = (int)((totalElapsedMillis + estimatedMillisPerFrame - 1) / estimatedMillisPerFrame); // fast ceiling
 
                 if (curDynamicsRenderFrameId >= battleDurationFrames) {
-                    if (0 < (backendTimerRdfId & (15))) {
-                        _logger.LogInformation("In `battleMainLoop` for roomId={0}, curDynamicsRenderFrameId={1} already surpassed battleDurationFrames={2}@backendTimerRdfId={3}, elongatedBattleDurationFrames={4}; awaiting backendTimerRdfId to surpass elongatedBattleDurationFrames", id, curDynamicsRenderFrameId, battleDurationFrames, backendTimerRdfId, elongatedBattleDurationFrames);
+                    if (0 == (backendTimerRdfId & 127)) {
+                        _logger.LogInformation("In `battleMainLoop` for roomId={0}, curDynamicsRenderFrameId={1} already surpassed battleDurationFrames={2}@backendTimerRdfId={3}, elongatedBattleDurationFrames={4}; awaiting backendTimerRdfId to surpass elongatedBattleDurationFrames #1", id, curDynamicsRenderFrameId, battleDurationFrames, backendTimerRdfId, elongatedBattleDurationFrames);
                     }
                     backendTimerRdfId = nextRenderFrameId; 
                 } else {
@@ -962,9 +962,7 @@ public class Room {
                                 } else {
                                     elongatedBattleDurationFrames = oldElongatedBattleDurationFrame > proposedElongatedBattleDurationFrame ? oldElongatedBattleDurationFrame : proposedElongatedBattleDurationFrame;  
                                 }
-                                if (0 < (backendTimerRdfId & (15))) {
-                                    _logger.LogInformation("In `battleMainLoop` for roomId={0}, curDynamicsRenderFrameId={1} just surpassed battleDurationFrames={2}, elongating per required: backendTimerRdfId={3}, oldElongatedBattleDurationFrame={4}, newElongatedBattleDurationFrames={5}", id, curDynamicsRenderFrameId, battleDurationFrames, backendTimerRdfId, oldElongatedBattleDurationFrame, elongatedBattleDurationFrames);
-                                }
+                                _logger.LogInformation("In `battleMainLoop` for roomId={0}, curDynamicsRenderFrameId={1} just surpassed battleDurationFrames={2}, elongating per required: backendTimerRdfId={3}, oldElongatedBattleDurationFrame={4}, newElongatedBattleDurationFrames={5}", id, curDynamicsRenderFrameId, battleDurationFrames, backendTimerRdfId, oldElongatedBattleDurationFrame, elongatedBattleDurationFrames);
                             }
                         }
 

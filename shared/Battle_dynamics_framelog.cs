@@ -117,7 +117,7 @@ namespace shared {
             if (trimConfirmedList) {
                 return String.Format("{{ ifId:{0},ipts:{1} }}", ifd.InputFrameId, String.Join(',', inputListSb));
             } else {
-                return String.Format("{{ ifId:{0},ipts:{1},cfd:{2},ucfd::{3} }}", ifd.InputFrameId, String.Join(',', inputListSb), ifd.ConfirmedList, ifd.UdpConfirmedList);
+                return String.Format("{{ ifId:{0},ipts:{1},cfd:{2},ucfd:{3} }}", ifd.InputFrameId, String.Join(',', inputListSb), ifd.ConfirmedList, ifd.UdpConfirmedList);
             }
         }
 

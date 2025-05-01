@@ -28,7 +28,7 @@ public class OnlineMapController : AbstractMapController {
     slowDown:              | no      | no        | yes         | yes         | yes  ...  | no
     freeze:                | no      | no        | no          | no          | yes  ...  | yes
     */
-    private const int slowDownIfdLagThreshold = ((int)(BATTLE_DYNAMICS_FPS*.4f) >> INPUT_SCALE_FRAMES);
+    private const int slowDownIfdLagThreshold = ((int)(BATTLE_DYNAMICS_FPS*.15f) >> INPUT_SCALE_FRAMES);
     /* 
     [WARNING] Lower the value of "freezeIfdLagThresHold" if you want to see more frequent freezing and verify that the graphics are continuous across the freezing point.
     */
@@ -315,7 +315,7 @@ public class OnlineMapController : AbstractMapController {
                             } else {
                                 if (pbRdfId < playerRdfId && useFreezingLockStep && ROOM_STATE_FRONTEND_REJOINING == battleState && selfUnconfirmed) {
                                     int localRequiredIfdId = ConvertToDelayedInputFrameId(playerRdfId);
-                                    var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (BATTLE_DYNAMICS_FPS >> 2), ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
+                                    var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
 
                                     // [WARNING] DON'T check "acLagShouldLockStep" here because it's mostly likely to be true in a battle where both peers disconnected for a while before one reconnects
                                     ifdFrontShouldLockStep = (tooFastOrNot);
@@ -406,12 +406,7 @@ public class OnlineMapController : AbstractMapController {
 
     public void onCharacterSelectGoAction(uint speciesId) {
         bool inArenaPracticeMode = WsSessionManager.Instance.getInArenaPracticeMode();
-        Debug.Log($"Executing OnlineMapController.onCharacterSelectGoAction with selectedSpeciesId={speciesId}, inArenaPracticeMode={inArenaPracticeMode}");
-        if (ROOM_STATE_IMPOSSIBLE != battleState && ROOM_STATE_STOPPED != battleState) {
-            Debug.LogWarningFormat("OnlineMapController.onCharacterSelectGoAction having invalid battleState={0}, calling `onBattleStopped`", battleState);
-            onBattleStopped();
-            showCharacterSelection();
-        }
+        Debug.Log($"Executing OnlineMapController.onCharacterSelectGoAction with selectedSpeciesId={speciesId}, battleState={battleState}, inArenaPracticeMode={inArenaPracticeMode}");
         if (inArenaPracticeMode) {
             selfPlayerInfo = new PlayerMetaInfo();
             roomCapacity = 2;
@@ -558,6 +553,7 @@ public class OnlineMapController : AbstractMapController {
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.None);
+        Application.SetStackTraceLogType(LogType.Exception, StackTraceLogType.None);
         renderBufferSize = 384;
         selfPlayerInfo = new PlayerMetaInfo();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
@@ -641,7 +637,7 @@ public class OnlineMapController : AbstractMapController {
 
         // Reference https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html
         if (frameLogEnabled) {
-            wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, true, pushbackFrameLogBuffer, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
+            wrapUpFrameLogs(renderBuffer, inputBuffer, rdfIdToActuallyUsedInput, false, pushbackFrameLogBuffer, Application.persistentDataPath, String.Format("p{0}.log", selfPlayerInfo.JoinIndex));
         }
     }
 
@@ -702,12 +698,16 @@ public class OnlineMapController : AbstractMapController {
 
             // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
             if (frozenRdfCount < frozenRdfCountLimit && !WsSessionManager.Instance.getInArenaPracticeMode() && useFreezingLockStep && !acLagShouldLockStep && !ifdFrontShouldLockStep) {
-                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (BATTLE_DYNAMICS_FPS >> 2), ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
-
+                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
+                int acIfdLag = (localRequiredIfdId - lastAllConfirmedInputFrameId);
+                if (0 > acIfdLag) acIfdLag = 0;
+                if (acIfdLag < ifdLag) {
+                    Debug.LogWarning($"@playerRdfId={playerRdfId}, acIfdLag={acIfdLag} < ifdLag={ifdLag}, how is this possible#1? localRequiredIfdId={localRequiredIfdId}, lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, lastIndividuallyConfirmedInputFrameId[]={String.Join(',', lastIndividuallyConfirmedInputFrameId)}");
+                }
                 ifdFrontShouldLockStep = (tooFastOrNot);
-                acLagShouldLockStep = (0 < ifdLag) && (localRequiredIfdId > (lastAllConfirmedInputFrameId + acIfdLagThresHold)); //[WARNING] If "0 == ifdLag", the other peers are possibly all disconnected, no need to freeze
+                acLagShouldLockStep = (0 < ifdLag) && (acIfdLag > acIfdLagThresHold); //[WARNING] If "0 == ifdLag", the other peers are possibly all disconnected, no need to freeze
 
-                networkInfoPanel.SetValues(sendingFps, (localRequiredIfdId > lastAllConfirmedInputFrameId ? localRequiredIfdId - lastAllConfirmedInputFrameId : 0), peerUpsyncFps, ifdLag, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, rollbackFrames, udpPunchedCnt);
+                networkInfoPanel.SetValues(sendingFps, acIfdLag, peerUpsyncFps, ifdLag, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, rollbackFrames, udpPunchedCnt);
             }
 
             // [WARNING] Chasing should be executed regardless of whether or not "shouldLockStep" -- in fact it's even better to chase during "shouldLockStep"!
@@ -734,10 +734,10 @@ public class OnlineMapController : AbstractMapController {
             if (acLagShouldLockStep || ifdFrontShouldLockStep) {
                 if (acLagShouldLockStep) {
                     NetworkDoctor.Instance.LogAcLagLockedStepCnt();
-                    Debug.LogWarning($"Frozen by acLagShouldLockStep @playerRdfId={playerRdfId}, frozenRdfCount={frozenRdfCount}/{frozenRdfCountLimit}");
+                    //Debug.LogWarning($"Frozen by acLagShouldLockStep @playerRdfId={playerRdfId}, frozenRdfCount={frozenRdfCount}/{frozenRdfCountLimit}");
                 } else {
                     NetworkDoctor.Instance.LogIfdFrontLockedStepCnt();
-                    Debug.LogWarning($"Frozen by ifdFrontShouldLockStep @playerRdfId={playerRdfId}, frozenRdfCount={frozenRdfCount}/{frozenRdfCountLimit}");
+                    //Debug.LogWarning($"Frozen by ifdFrontShouldLockStep @playerRdfId={playerRdfId}, frozenRdfCount={frozenRdfCount}/{frozenRdfCountLimit}");
                 }
                 ifdFrontShouldLockStep = false;
                 acLagShouldLockStep = false;
@@ -759,11 +759,15 @@ public class OnlineMapController : AbstractMapController {
             doUpdate();
 
             if (frozenRdfCount < frozenRdfCountLimit && !WsSessionManager.Instance.getInArenaPracticeMode()) {
-                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (BATTLE_DYNAMICS_FPS >> 3), ifdLagTolerance: slowDownIfdLagThreshold, disconnectedPeerJoinIndices);
+                var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ifdLagTolerance: slowDownIfdLagThreshold, disconnectedPeerJoinIndices);
 
                 ifdFrontShouldLockStep = tooFastOrNot;
-
-                networkInfoPanel.SetValues(sendingFps, (localRequiredIfdId > lastAllConfirmedInputFrameId ? localRequiredIfdId - lastAllConfirmedInputFrameId : 0), peerUpsyncFps, ifdLag, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, rollbackFrames, udpPunchedCnt);
+                int acIfdLag = (localRequiredIfdId - lastAllConfirmedInputFrameId);
+                if (0 > acIfdLag) acIfdLag = 0;
+                if (acIfdLag < ifdLag) {
+                    Debug.LogWarning($"@playerRdfId={playerRdfId}, acIfdLag={acIfdLag} < ifdLag={ifdLag}, how is this possible#2? localRequiredIfdId={localRequiredIfdId}, lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, lastIndividuallyConfirmedInputFrameId[]={String.Join(',', lastIndividuallyConfirmedInputFrameId)}");
+                }
+                networkInfoPanel.SetValues(sendingFps, acIfdLag, peerUpsyncFps, ifdLag, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, rollbackFrames, udpPunchedCnt);
             }
 
             if (playerRdfId > battleDurationFrames) {
@@ -899,7 +903,7 @@ public class OnlineMapController : AbstractMapController {
 
             bool isPeerEncodedInputUpdated = (existingInputFrame.InputList[peerJ] != peerEncodedInput);
             existingInputFrame.InputList[peerJ] = peerEncodedInput;
-            existingInputFrame.UdpConfirmedList = (existingUdpConfirmedList | peerJoinIndexMask);
+            existingInputFrame.UdpConfirmedList |= peerJoinIndexMask;
 
             int playerRdfId2 = ConvertToLastUsedRenderFrameId(inputFrameId);
             if (
@@ -1038,6 +1042,7 @@ public class OnlineMapController : AbstractMapController {
     }
 
     protected void showCharacterSelection() {
+        if (characterSelectPanel.gameObject.activeSelf) return;
         characterSelectPanel.gameObject.SetActive(true);
         characterSelectPanel.ResetSelf();
     }
