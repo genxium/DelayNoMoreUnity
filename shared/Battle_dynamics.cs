@@ -2385,7 +2385,7 @@ namespace shared {
                [WARNING]
                1. The dynamic colliders will all be removed from "Space" at the end of this function due to the need for being rollback-compatible.
 
-               2. To achieve "zero gc" in "ApplyInputFrameDownsyncDynamicsOnSingleRenderFrame", I deliberately chose a collision system that doesn't use dynamic tree node alloc.
+               2. To achieve "zero gc" in "Step(...)", I deliberately chose a collision system that doesn't use dynamic tree node alloc.
 
                3. Before generating inputs for Npcs, the colliders for "Players" should be inserted such that "Npc Visions" can interact with the players in collision system. 
 

@@ -78,6 +78,10 @@ public abstract class AbstractMapController : MonoBehaviour {
     protected int[] lastIndividuallyConfirmedInputFrameId;
     protected ulong[] lastIndividuallyConfirmedInputList;
     protected PlayerMetaInfo selfPlayerInfo = null;
+    protected int selfJoinIndex = 0;
+    protected int selfJoinIndexArrIdx = -1;
+    protected ulong selfJoinIndexMask = 0u;
+    protected ulong allConfirmedMask = 0u;
     protected FrameRingBuffer<RoomDownsyncFrame> renderBuffer = null;
     protected FrameRingBuffer<RdfPushbackFrameLog> pushbackFrameLogBuffer = null;
     protected FrameRingBuffer<InputFrameDownsync> inputBuffer = null;
@@ -285,13 +289,11 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         ulong previousSelfInput = 0,
           currSelfInput = 0;
-        int joinIndex = selfPlayerInfo.JoinIndex;
-        ulong selfJoinIndexMask = (1UL << (joinIndex - 1));
         var (_, existingInputFrame) = inputBuffer.GetByFrameId(inputFrameId);
         var (_, previousInputFrameDownsync) = inputBuffer.GetByFrameId(inputFrameId - 1);
-        previousSelfInput = (null == previousInputFrameDownsync ? 0 : previousInputFrameDownsync.InputList[joinIndex - 1]);
+        previousSelfInput = (null == previousInputFrameDownsync ? 0 : previousInputFrameDownsync.InputList[selfJoinIndexArrIdx]);
 
-        bool selfConfirmedInExistingInputFrame = (null != existingInputFrame && 0 < (existingInputFrame.ConfirmedList & selfJoinIndexMask)); 
+        bool selfConfirmedInExistingInputFrame = (null != existingInputFrame && (0 < (existingInputFrame.ConfirmedList & selfJoinIndexMask) || 0 < (existingInputFrame.UdpConfirmedList & selfJoinIndexMask))); 
         if (selfConfirmedInExistingInputFrame) {
             /*
             [WARNING] 
@@ -300,14 +302,14 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             The only possibility that "true == selfConfirmedInExistingInputFrame" is met here would be due to "putting `getOrPrefabInputFrameUpsync(..., canConfirmSelf=true, ...) > sendInputFrameUpsyncBatch(...)` before `lockstep`" by mistake -- in that case, "playerRdfId" is stuck at the same value thus we might be overwriting already confirmed input history for self (yet backend and other peers will certainly reject the overwrite!).
             */ 
-            return (previousSelfInput, existingInputFrame.InputList[joinIndex - 1]);
+            return (previousSelfInput, existingInputFrame.InputList[selfJoinIndexArrIdx]);
         }
         if (
           null != existingInputFrame
           &&
           (true != canConfirmSelf)
         ) {
-            return (previousSelfInput, existingInputFrame.InputList[joinIndex - 1]);
+            return (previousSelfInput, existingInputFrame.InputList[selfJoinIndexArrIdx]);
         }
 
         Array.Fill<ulong>(prefabbedInputList, 0);
@@ -331,7 +333,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         // [WARNING] Do not blindly use "selfJoinIndexMask" here, as the "actuallyUsedInput for self" couldn't be confirmed while prefabbing, otherwise we'd have confirmed a wrong self input by "_markConfirmationIfApplicable()"!
         currSelfInput = iptmgr.GetEncodedInput(); // When "null == existingInputFrame", it'd be safe to say that "GetImmediateEncodedInput()" is for the requested "inputFrameId"
-        prefabbedInputList[(joinIndex - 1)] = currSelfInput;
+        prefabbedInputList[selfJoinIndexArrIdx] = currSelfInput;
 
         ulong initConfirmedList = 0;
         if (canConfirmSelf) {
@@ -349,8 +351,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         if (null != existingInputFrame) {
-            existingInputFrame.InputList[(joinIndex-1)] = currSelfInput;
-            existingInputFrame.ConfirmedList |= initConfirmedList;
+            existingInputFrame.InputList[(selfJoinIndex-1)] = currSelfInput;
             existingInputFrame.UdpConfirmedList |= initConfirmedList;
         } else {
             while (inputBuffer.EdFrameId <= inputFrameId) {
@@ -366,7 +367,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                 for (int k = 0; k < roomCapacity; ++k) {
                     ifdHolder.InputList[k] = prefabbedInputList[k];
                 }
-                ifdHolder.ConfirmedList = initConfirmedList;
                 ifdHolder.UdpConfirmedList = initConfirmedList;
             }
         }
@@ -394,7 +394,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             bool allowUpdateInputFrameInPlaceUponDynamics = (!isChasing);
             if (allowUpdateInputFrameInPlaceUponDynamics && !WsSessionManager.Instance.getInArenaPracticeMode()) {
-                bool hasInputBeenMutated = UpdateInputFrameInPlaceUponDynamics(currRdf, inputBuffer, j, lastAllConfirmedInputFrameId, roomCapacity, delayedInputFrame.ConfirmedList, delayedInputFrame.InputList, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, selfPlayerInfo.JoinIndex, disconnectedPeerJoinIndices, _loggerBridge);
+                bool hasInputBeenMutated = UpdateInputFrameInPlaceUponDynamics(currRdf, inputBuffer, j, lastAllConfirmedInputFrameId, roomCapacity, (delayedInputFrame.ConfirmedList | delayedInputFrame.UdpConfirmedList), delayedInputFrame.InputList, lastIndividuallyConfirmedInputFrameId, lastIndividuallyConfirmedInputList, selfPlayerInfo.JoinIndex, disconnectedPeerJoinIndices, _loggerBridge);
                 if (hasInputBeenMutated) {
                     int ii = ConvertToFirstUsedRenderFrameId(j);
                     if (ii < i) {
@@ -1522,6 +1522,9 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         NetworkDoctor.Instance.LogInputFrameDownsync(batch[0].InputFrameId, batch[batch.Count - 1].InputFrameId);
         int firstPredictedYetIncorrectInputFrameId = TERMINATING_INPUT_FRAME_ID;
+        var selfJoinIndex = selfPlayerInfo.JoinIndex;
+        var selfJoinIndexArrIdx = selfJoinIndex - 1;
+        var selfJoinIndexMask = (1UL << selfJoinIndexArrIdx);
         foreach (var inputFrameDownsync in batch) {
             int inputFrameDownsyncId = inputFrameDownsync.InputFrameId;
             if (inputFrameDownsyncId <= lastAllConfirmedInputFrameId) {
@@ -1534,11 +1537,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             lastAllConfirmedInputFrameId = inputFrameDownsyncId;
             var (res1, localInputFrame) = inputBuffer.GetByFrameId(inputFrameDownsyncId);
             int playerRdfId2 = ConvertToLastUsedRenderFrameId(inputFrameDownsyncId);
-            /*
-            if (null != localInputFrame && localInputFrame.InputList[selfPlayerInfo.JoinIndex-1] != inputFrameDownsync.InputList[selfPlayerInfo.JoinIndex - 1]) {
-                Debug.LogWarning($"Overriding localSelfInput={localInputFrame.InputList[selfPlayerInfo.JoinIndex-1]} by backend generated {inputFrameDownsync.InputList[selfPlayerInfo.JoinIndex-1]} of ifdId={inputFrameDownsyncId}, inputBuffer={inputBuffer.toSimpleStat()}");
+            if (null != localInputFrame && 0 < (localInputFrame.UdpConfirmedList & selfJoinIndexMask) && localInputFrame.InputList[selfJoinIndexArrIdx] != inputFrameDownsync.InputList[selfJoinIndexArrIdx]) {
+                Debug.LogWarning($"@playerRdfId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, overriding localSelfInput={localInputFrame.InputList[selfJoinIndexArrIdx]} by backend generated {inputFrameDownsync.InputList[selfJoinIndexArrIdx]} of ifdId={inputFrameDownsyncId}: inputBuffer={inputBuffer.toSimpleStat()}");
             }
-            */
 
             if (null != localInputFrame
               &&
@@ -1559,7 +1560,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 unconfirmedBattleResult.Remove(inputFrameDownsyncId);
             }
             // [WARNING] Take all "inputFrameDownsyncBatch" from backend as all-confirmed, it'll be later checked by "rollbackAndChase". 
-            inputFrameDownsync.ConfirmedList = (1UL << roomCapacity) - 1;
+            inputFrameDownsync.ConfirmedList = allConfirmedMask;
 
             for (int j = 0; j < roomCapacity; j++) {
                 if (inputFrameDownsync.InputFrameId > lastIndividuallyConfirmedInputFrameId[j]) {
@@ -1572,7 +1573,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (RingBuffer<InputFrameDownsync>.RING_BUFF_FAILED_TO_SET == res2) {
                 throw new ArgumentException(String.Format("Failed to dump input cache(maybe recentInputCache too small)! inputFrameDownsync.inputFrameId={0}, lastAllConfirmedInputFrameId={1}, inputBuffer: {2}", inputFrameDownsyncId, lastAllConfirmedInputFrameId, inputBuffer.toSimpleStat()));
             } else if (RingBuffer<InputFrameDownsync>.RING_BUFF_NON_CONSECUTIVE_SET == res2) {
-                Debug.LogWarning($"Possibly resyncing#2! Now playerRdfId={playerRdfId}, inputBuffer={inputBuffer.toSimpleStat()}");
+                Debug.LogWarning($"Possibly resyncing#2! Now playerRdfId={playerRdfId}, lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}: inputBuffer={inputBuffer.toSimpleStat()}");
             }
         }
         _markConfirmationIfApplicable();
@@ -1597,7 +1598,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         bool shouldForceDumping1 = (DOWNSYNC_MSG_ACT_BATTLE_START == rdfId || usingOthersForcedDownsyncRenderFrameDict);
         bool shouldForceDumping2 = (rdfId > playerRdfId); // In "OnlineMapController", the call sequence per "Update" is "[pollAndHandleWsRecvBuffer >> onRoomDownsyncFrame] > [doUpdate >> rollbackAndChase(playerRdfId, playerRdfId+1)]", thus using strict inequality here.
         bool shouldForceResync = pbRdf.ShouldForceResync;
-        ulong selfJoinIndexMask = ((ulong)1 << (selfPlayerInfo.JoinIndex - 1));
         bool selfUnconfirmed = (0 < (pbRdf.BackendUnconfirmedMask & selfJoinIndexMask));
         bool selfConfirmed = !selfUnconfirmed;
         if (selfConfirmed && shouldForceDumping2) {
@@ -1734,7 +1734,6 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             if (pbRdf.ShouldForceResync) {
                 bool exclusivelySelfConfirmedAtLastForceResync = ((0 < pbRdf.BackendUnconfirmedMask) && selfConfirmed);
-                ulong allConfirmedMask = (1UL << roomCapacity) - 1;
                 bool exclusivelySelfUnconfirmedAtLastForceResync = (allConfirmedMask != pbRdf.BackendUnconfirmedMask && selfUnconfirmed);
                 int lastForceResyncedIfdId = lastAllConfirmedInputFrameId; // Because "[onInputFrameDownsyncBatch > _markConfirmationIfApplicable]" is already called
                 NetworkDoctor.Instance.LogForceResyncedIfdId(lastForceResyncedIfdId, selfConfirmed, selfUnconfirmed, exclusivelySelfConfirmedAtLastForceResync, exclusivelySelfUnconfirmedAtLastForceResync, hasRollbackBurst, inputFrameUpsyncDelayTolerance);
@@ -1801,7 +1800,8 @@ public abstract class AbstractMapController : MonoBehaviour {
             var (ok1, delayedInputFrameDownsync) = inputBuffer.GetByFrameId(delayedInputFrameId);
             if (ok1 && null != delayedInputFrameDownsync) {
                 delayedInputFrameDownsync.InputList[0] = latestTriggerForceCtrlCmd;
-                delayedInputFrameDownsync.ConfirmedList = ((1u << roomCapacity) - 1);
+                delayedInputFrameDownsync.ConfirmedList = allConfirmedMask;
+                delayedInputFrameDownsync.UdpConfirmedList = allConfirmedMask;
             }
             --remainingTriggerForceCtrlRdfCount;
         }
@@ -1818,7 +1818,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     // [WARNING] When this happens, something is intrinsically wrong -- to avoid having an inconsistent history in the "renderBuffer", thus a wrong prediction all the way from here on, clear the history!
                     othersForcedDownsyncRenderFrame.ShouldForceResync = true;
                     othersForcedDownsyncRenderFrame.BackendUnconfirmedMask = ((1ul << roomCapacity) - 1);
-                    onRoomDownsyncFrame(othersForcedDownsyncRenderFrame, null, true);
+                    onRoomDownsyncFrame(othersForcedDownsyncRenderFrame, null, true); // [WARNING] Will set "chaserRenderFrameId" and "chaserRenderFrameIdLowerBound" respectively
                     //Debug.LogWarningFormat("Handled mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}, playerRdfId={2}:\nnow inputBuffer:{3}, renderBuffer:{4}", rdf.Id, delayedInputFrameId, playerRdfId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat());
                 }
                 othersForcedDownsyncRenderFrameDict.Remove(rdf.Id); // [WARNING] Removes anyway because we won't revisit the same "playerRdfId" in a same battle!
@@ -1862,9 +1862,10 @@ public abstract class AbstractMapController : MonoBehaviour {
             && 
             ROOM_STATE_FRONTEND_AWAITING_MANUAL_REJOIN != battleState && ROOM_STATE_FRONTEND_AWAITING_AUTO_REJOIN != battleState && ROOM_STATE_FRONTEND_REJOINING != battleState
             ) {
-            Debug.LogWarningFormat("@playerRdfId={0}, unable to stop battle due to invalid state transition; now battleState={1}", playerRdfId, battleState);
+            Debug.LogWarning($"@playerRdfId={playerRdfId}, chaserRenderFrameId={chaserRenderFrameId}, chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, battleState={battleState}: unable to stop battle due to invalid state transition");
             return;
         }
+        Debug.LogWarning($"onBattleStopped; now playerRdfId={playerRdfId}, chaserRenderFrameId={chaserRenderFrameId}, chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, battleState={battleState}");
         playerRdfId = 0;
         bgmSource.Stop();
         battleState = ROOM_STATE_STOPPED;
@@ -1893,8 +1894,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (null != teamTowerHeading) {
             teamTowerHeading.ResetSelf();
         }
-
-        Debug.LogWarningFormat("onBattleStopped; now battleState={0}", battleState);
     }
 
     protected abstract IEnumerator delayToShowSettlementPanel();
@@ -4062,7 +4061,7 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     protected void logForceResyncForChargeDebug(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch) {
-        Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @localRenderFrameId={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}, @battleState={8}", pbRdf.Id, pbRdf.BackendUnconfirmedMask, selfPlayerInfo.JoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat(), battleState);
+        Debug.Log($"Received a force-resync frame pbRdfId={pbRdf.Id}, backendUnconfirmedMask={pbRdf.BackendUnconfirmedMask}, selfJoinIndex={selfJoinIndex} @localRenderFrameId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @renderBuffer={renderBuffer.toSimpleStat()}, @inputBuffer={inputBuffer.toSimpleStat()}, @battleState={battleState}");
         var playersArr = pbRdf.PlayersArr;
         foreach (var player in playersArr) {
             if (player.JoinIndex == selfPlayerInfo.JoinIndex) {

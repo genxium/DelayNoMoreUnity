@@ -28,11 +28,15 @@ public class OnlineMapController : AbstractMapController {
     slowDown:              | no      | no        | yes         | yes         | yes  ...  | no
     freeze:                | no      | no        | no          | no          | yes  ...  | yes
     */
-    private const int slowDownIfdLagThreshold = ((int)(BATTLE_DYNAMICS_FPS*.2f) >> INPUT_SCALE_FRAMES);
+    private const int slowDownIfdLagThreshold = ((int)(BATTLE_DYNAMICS_FPS*.4f) >> INPUT_SCALE_FRAMES);
     /* 
     [WARNING] Lower the value of "freezeIfdLagThresHold" if you want to see more frequent freezing and verify that the graphics are continuous across the freezing point.
     */
-    private const int freezeIfdLagThresHold = (slowDownIfdLagThreshold*3);
+    private const int freezeIfdLagThresHold = (slowDownIfdLagThreshold*7);
+    private int frozenRdfCount = 0;
+    private int frozenGracingRdfCnt = 0;
+    private const int frozenRdfCountLimit = (BATTLE_DYNAMICS_FPS >> 1);
+    private const int frozenGracePeriodRdfCount = (BATTLE_DYNAMICS_FPS);
 
     private const int acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE/5); // "ac == all-confirmed"; when INPUT_SCALE_FRAMES == 2, 1 InputFrameDownsync maps to 4*16ms = 64ms 
     //private const int acIfdLagThresHold = (DEFAULT_BACKEND_INPUT_BUFFER_SIZE << 1); 
@@ -68,7 +72,7 @@ public class OnlineMapController : AbstractMapController {
         udpCancellationTokenSource = new CancellationTokenSource();
         udpCancellationToken = udpCancellationTokenSource.Token;
         udpTask = Task.Run(async () => {
-            await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfPlayerInfo.JoinIndex, udpCancellationToken);
+            await UdpSessionManager.Instance.OpenUdpSession(roomCapacity, selfJoinIndex, udpCancellationToken);
         });
         return true;
     }
@@ -122,7 +126,10 @@ public class OnlineMapController : AbstractMapController {
                     frameLogEnabled = wsRespHolder.BciFrame.FrameLogEnabled;
                     clientAuthKey = wsRespHolder.BciFrame.BattleUdpTunnel.AuthKey;
                     selfPlayerInfo.JoinIndex = wsRespHolder.PeerJoinIndex;
-
+                    selfJoinIndex = selfPlayerInfo.JoinIndex; 
+                    selfJoinIndexArrIdx = selfJoinIndex - 1; 
+                    selfJoinIndexMask = (1UL << selfJoinIndexArrIdx); 
+                    allConfirmedMask = (1UL << roomCapacity) - 1;
                     playerWaitingPanel.InitPlayerSlots(roomCapacity);
                     resetCurrentMatch(wsRespHolder.BciFrame.StageName);
                     calcCameraCaps();
@@ -134,7 +141,7 @@ public class OnlineMapController : AbstractMapController {
                     }
 
                     preallocateFrontendOnlyHolders();
-                    tempSpeciesIdList[selfPlayerInfo.JoinIndex - 1] = WsSessionManager.Instance.GetSpeciesId();
+                    tempSpeciesIdList[selfJoinIndexArrIdx] = WsSessionManager.Instance.GetSpeciesId();
                     var (thatStartRdf, serializedBarrierPolygons, serializedStaticPatrolCues, serializedCompletelyStaticTraps, serializedStaticTriggers, serializedTrapLocalIdToColliderAttrs, serializedTriggerEditorIdToLocalId, battleDurationSeconds) = mockStartRdf(tempSpeciesIdList);
                     foreach (var ch in thatStartRdf.PlayersArr) {
                         if (ch.JoinIndex == selfPlayerInfo.JoinIndex) {
@@ -220,6 +227,8 @@ public class OnlineMapController : AbstractMapController {
                     bgmSource.Play();
                     onRoomDownsyncFrame(startRdf, null);
                     enableBattleInput(true);
+                    frozenRdfCount = 0;
+                    frozenGracingRdfCnt = 0;
                     break;
                 case DOWNSYNC_MSG_ACT_BATTLE_STOPPED:
                     Debug.LogWarning("Calling onBattleStopped with remote act=DOWNSYNC_MSG_ACT_BATTLE_STOPPED @playerRdfId=" + playerRdfId + " with battleState=" + battleState);
@@ -258,7 +267,7 @@ public class OnlineMapController : AbstractMapController {
                     patchStartRdf(toPatchStartRdf, speciesIdList);
                     cameraTrack(toPatchStartRdf, null, false);
                     applyRoomDownsyncFrameDynamics(toPatchStartRdf, null);
-                    var playerGameObj = playerGameObjs[selfPlayerInfo.JoinIndex - 1];
+                    var playerGameObj = playerGameObjs[selfJoinIndexArrIdx];
                     networkInfoPanel.gameObject.SetActive(true);
                     playerWaitingPanel.gameObject.SetActive(false);
                     battleState = ROOM_STATE_PREPARE; 
@@ -291,7 +300,7 @@ public class OnlineMapController : AbstractMapController {
                             //logForceResyncForChargeDebug(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
                             readyGoPanel.hideReady();
                             readyGoPanel.hideGo();
-                            ulong selfJoinIndexMask = (1UL << (selfPlayerInfo.JoinIndex - 1));
+                            frozenRdfCount = 0;
                             bool selfUnconfirmed = (0 < (pbRdf.BackendUnconfirmedMask & selfJoinIndexMask));
                             if (ROOM_STATE_FRONTEND_REJOINING == battleState) {
                                 Debug.LogWarning($"Got force-resync during battleState={battleState} @pbRdfId={pbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
@@ -409,8 +418,12 @@ public class OnlineMapController : AbstractMapController {
             selfPlayerInfo.BulletTeamId = 1;
             selfPlayerInfo.JoinIndex = 1;
             selfPlayerInfo.SpeciesId = speciesId;
+            selfJoinIndex = selfPlayerInfo.JoinIndex; 
+            selfJoinIndexArrIdx = selfJoinIndex - 1; 
+            selfJoinIndexMask = (1UL << selfJoinIndexArrIdx); 
+            allConfirmedMask = (1UL << roomCapacity) - 1;
             uint[] speciesIdList = new uint[roomCapacity];
-            speciesIdList[selfPlayerInfo.JoinIndex - 1] = speciesId;
+            speciesIdList[selfJoinIndexArrIdx] = speciesId;
             speciesIdList[1] = SPECIES_BLADEGIRL;
             //resetCurrentMatch("FlatVersus");
             resetCurrentMatch("FlatVersusTraining");
@@ -544,6 +557,7 @@ public class OnlineMapController : AbstractMapController {
         Physics2D.simulationMode = SimulationMode2D.Script;
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
+        Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.None);
         renderBufferSize = 384;
         selfPlayerInfo = new PlayerMetaInfo();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
@@ -687,7 +701,7 @@ public class OnlineMapController : AbstractMapController {
             */
 
             // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
-            if (!WsSessionManager.Instance.getInArenaPracticeMode() && useFreezingLockStep && !acLagShouldLockStep && !ifdFrontShouldLockStep) {
+            if (frozenRdfCount < frozenRdfCountLimit && !WsSessionManager.Instance.getInArenaPracticeMode() && useFreezingLockStep && !acLagShouldLockStep && !ifdFrontShouldLockStep) {
                 var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (BATTLE_DYNAMICS_FPS >> 2), ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
 
                 ifdFrontShouldLockStep = (tooFastOrNot);
@@ -707,7 +721,7 @@ public class OnlineMapController : AbstractMapController {
                     // TODO: Popup some GUI hint to tell the player that we're awaiting downsync only, as the local "playerRdfId" is monotonically increasing, there's no way to rewind and change any input from here!
                     timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync -= 16; // hardcoded for now
                 } else {
-                    Debug.LogWarning("Calling onBattleStopped with localTimerEnded @playerRdfId=" + playerRdfId);
+                    Debug.LogWarning($"Calling onBattleStopped with localTimerEnded @playerRdfId={playerRdfId}");
                     settlementRdfId = playerRdfId;
                     onBattleStopped();
                     StartCoroutine(delayToShowSettlementPanel());
@@ -720,18 +734,31 @@ public class OnlineMapController : AbstractMapController {
             if (acLagShouldLockStep || ifdFrontShouldLockStep) {
                 if (acLagShouldLockStep) {
                     NetworkDoctor.Instance.LogAcLagLockedStepCnt();
+                    Debug.LogWarning($"Frozen by acLagShouldLockStep @playerRdfId={playerRdfId}, frozenRdfCount={frozenRdfCount}/{frozenRdfCountLimit}");
                 } else {
                     NetworkDoctor.Instance.LogIfdFrontLockedStepCnt();
+                    Debug.LogWarning($"Frozen by ifdFrontShouldLockStep @playerRdfId={playerRdfId}, frozenRdfCount={frozenRdfCount}/{frozenRdfCountLimit}");
                 }
                 ifdFrontShouldLockStep = false;
                 acLagShouldLockStep = false;
+                ++frozenRdfCount;
+                if (frozenRdfCount >= frozenRdfCountLimit) {
+                    frozenGracingRdfCnt = 0;
+                }
                 
                 return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
             }
 
+            if (frozenGracingRdfCnt >= frozenGracePeriodRdfCount) {
+                frozenRdfCount = 0;
+                frozenGracingRdfCnt = 0;
+            } else if (frozenRdfCount >= frozenRdfCountLimit) {
+                ++frozenGracingRdfCnt;
+            }
+
             doUpdate();
 
-            if (!WsSessionManager.Instance.getInArenaPracticeMode()) {
+            if (frozenRdfCount < frozenRdfCountLimit && !WsSessionManager.Instance.getInArenaPracticeMode()) {
                 var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, rdfLagTolerance: (BATTLE_DYNAMICS_FPS >> 3), ifdLagTolerance: slowDownIfdLagThreshold, disconnectedPeerJoinIndices);
 
                 ifdFrontShouldLockStep = tooFastOrNot;
@@ -784,7 +811,6 @@ public class OnlineMapController : AbstractMapController {
             batchInputFrameIdEdClosed = inputBuffer.EdFrameId - 1;
         }
 
-        ulong selfJoinIndexMask = (1UL << (selfPlayerInfo.JoinIndex - 1));
         for (var i = batchInputFrameIdSt; i <= batchInputFrameIdEdClosed; i++) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(i);
             if (false == res1 || null == inputFrameDownsync) {
@@ -792,11 +818,10 @@ public class OnlineMapController : AbstractMapController {
             } else {
                 var inputFrameUpsync = new InputFrameUpsync {
                     InputFrameId = i,
-                    Encoded = inputFrameDownsync.InputList[selfPlayerInfo.JoinIndex - 1]
+                    Encoded = inputFrameDownsync.InputList[selfJoinIndexArrIdx]
                 };
                 inputFrameUpsyncBatch.Add(inputFrameUpsync);
                 // [WARNING] Once sent, we must prevent "getOrPrefabInputFrameUpsync" from changing "self input" of this InputFrameDownsync.
-                inputFrameDownsync.ConfirmedList |= selfJoinIndexMask;
                 inputFrameDownsync.UdpConfirmedList |= selfJoinIndexMask;
             }
         }
@@ -811,7 +836,7 @@ public class OnlineMapController : AbstractMapController {
         var reqData = new WsReq {
             PlayerId = selfPlayerInfo.PlayerId,
             Act = Battle.UPSYNC_MSG_ACT_PLAYER_CMD,
-            JoinIndex = selfPlayerInfo.JoinIndex,
+            JoinIndex = selfJoinIndex,
             AckingInputFrameId = lastAllConfirmedInputFrameId,
             AuthKey = clientAuthKey
         };
@@ -822,6 +847,7 @@ public class OnlineMapController : AbstractMapController {
         }
         UdpSessionManager.Instance.senderBuffer.Add(reqData);
         lastUpsyncInputFrameId = batchInputFrameIdEdClosed;
+        //Debug.Log($"sendInputFrameUpsyncBatch ends at playerRdfId={playerRdfId}, lastUpsyncInputFrameId={lastUpsyncInputFrameId}, latestLocalInputFrameId={latestLocalInputFrameId}, batchInputFrameIdSt={batchInputFrameIdSt}, batchInputFrameIdEdClosed={batchInputFrameIdEdClosed}; inputBuffer={inputBuffer.toSimpleStat()}");
         /*
         if (true == WsSessionManager.Instance.GetForReentry()) {
             Debug.LogFormat("[AFTER REENTRY] sendInputFrameUpsyncBatch ends at playerRdfId={0}, lastUpsyncInputFrameId={1}, latestLocalInputFrameId={2}, batchInputFrameIdSt={3}, batchInputFrameIdEdClosed={4}; inputBuffer={5}", playerRdfId, lastUpsyncInputFrameId, latestLocalInputFrameId, batchInputFrameIdSt, batchInputFrameIdEdClosed, inputBuffer.toSimpleStat());
@@ -907,6 +933,8 @@ public class OnlineMapController : AbstractMapController {
         // Reset lockstep
         acLagShouldLockStep = false;
         ifdFrontShouldLockStep = false;
+        frozenRdfCount = 0;
+        frozenGracingRdfCnt = 0;
         localTimerEnded = false;
         timerEndedRdfDerivedFromAllConfirmedInputFrameDownsync = false;
         timeoutMillisAwaitingLastAllConfirmedInputFrameDownsync = DEFAULT_TIMEOUT_FOR_LAST_ALL_CONFIRMED_IFD;
