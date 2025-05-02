@@ -34,6 +34,10 @@ public class OnlineMapController : AbstractMapController {
     [WARNING] Lower the value of "freezeIfdLagThresHold" if you want to see more frequent freezing and verify that the graphics are continuous across the freezing point.
     */
     private const int freezeIfdLagThresHold = ((int)(BATTLE_DYNAMICS_FPS*1.5f) >> INPUT_SCALE_FRAMES);
+
+    /*
+    [WARNING] The following fields "frozenRdfCount", "frozenGracingRdfCnt", "frozenRdfCountLimit", "frozenGracePeriodRdfCount" are NOT APPLICABLE to "acIfdLag-induced-freezing", see comments around "acIfdLagThresHold" for how it's used to try avoiding "insituForceConfirmation" as much as possible.
+    */
     private int frozenRdfCount = 0;
     private int frozenGracingRdfCnt = 0;
     private const int frozenRdfCountLimit = (BATTLE_DYNAMICS_FPS >> 1);
@@ -698,14 +702,14 @@ public class OnlineMapController : AbstractMapController {
             */
 
             // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
-            if (frozenRdfCount < frozenRdfCountLimit && !WsSessionManager.Instance.getInArenaPracticeMode() && useFreezingLockStep && !acLagShouldLockStep && !ifdFrontShouldLockStep) {
+            if (!WsSessionManager.Instance.getInArenaPracticeMode() && useFreezingLockStep && !acLagShouldLockStep && !ifdFrontShouldLockStep) {
                 var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfPlayerInfo.JoinIndex, lastIndividuallyConfirmedInputFrameId, ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
                 int acIfdLag = (localRequiredIfdId - lastAllConfirmedInputFrameId);
                 if (0 > acIfdLag) acIfdLag = 0;
                 if (acIfdLag < ifdLag) {
                     Debug.LogWarning($"@playerRdfId={playerRdfId}, acIfdLag={acIfdLag} < ifdLag={ifdLag}, how is this possible#1? localRequiredIfdId={localRequiredIfdId}, lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, lastIndividuallyConfirmedInputFrameId[]={String.Join(',', lastIndividuallyConfirmedInputFrameId)}");
                 }
-                ifdFrontShouldLockStep = (tooFastOrNot);
+                ifdFrontShouldLockStep = (frozenRdfCount < frozenRdfCountLimit && tooFastOrNot);
                 acLagShouldLockStep = (0 < ifdLag) && (acIfdLag > acIfdLagThresHold); //[WARNING] If "0 == ifdLag", the other peers are possibly all disconnected, no need to freeze
 
                 networkInfoPanel.SetValues(sendingFps, acIfdLag, peerUpsyncFps, ifdLag, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, rollbackFrames, udpPunchedCnt);
@@ -731,21 +735,23 @@ public class OnlineMapController : AbstractMapController {
             }
 
             NetworkDoctor.Instance.LogRollbackFrames(playerRdfId > chaserRenderFrameId ? (playerRdfId - chaserRenderFrameId) : 0);
-
+        
             if (acLagShouldLockStep || ifdFrontShouldLockStep) {
                 if (acLagShouldLockStep) {
                     NetworkDoctor.Instance.LogAcLagLockedStepCnt();
-                    //Debug.LogWarning($"Frozen by acLagShouldLockStep @playerRdfId={playerRdfId}, frozenRdfCount={frozenRdfCount}/{frozenRdfCountLimit}");
+                    //Debug.LogWarning($"Frozen by acLagShouldLockStep @playerRdfId={playerRdfId}");
+                    frozenRdfCount = 0;
+                    frozenGracingRdfCnt = 0;
                 } else {
                     NetworkDoctor.Instance.LogIfdFrontLockedStepCnt();
                     //Debug.LogWarning($"Frozen by ifdFrontShouldLockStep @playerRdfId={playerRdfId}, frozenRdfCount={frozenRdfCount}/{frozenRdfCountLimit}");
+                    if (frozenRdfCount < frozenRdfCountLimit && frozenRdfCount+1 >= frozenRdfCountLimit) {
+                        frozenGracingRdfCnt = 0;
+                    }
+                    ++frozenRdfCount;
                 }
                 ifdFrontShouldLockStep = false;
                 acLagShouldLockStep = false;
-                ++frozenRdfCount;
-                if (frozenRdfCount >= frozenRdfCountLimit) {
-                    frozenGracingRdfCnt = 0;
-                }
                 
                 return; // An early return here only stops "inputFrameIdFront" from incrementing, "int[] lastIndividuallyConfirmedInputFrameId" would keep increasing by the "pollXxx" calls above. 
             }
