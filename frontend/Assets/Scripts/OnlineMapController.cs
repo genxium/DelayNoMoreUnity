@@ -18,6 +18,7 @@ public class OnlineMapController : AbstractMapController {
 
     CancellationTokenSource udpCancellationTokenSource;
     CancellationToken udpCancellationToken;
+    // TODO: Make "slowDownIfdLagThreshold" and "freezeIfdLagThresHold" configurable from UI.
     /*
     An example for slowDownIfdLagThreshold = 1, freezeIfdLagThresHold = 3, acIfdLagThresHold = 14.
 
@@ -28,11 +29,11 @@ public class OnlineMapController : AbstractMapController {
     slowDown:              | no      | no        | yes         | yes         | yes  ...  | no
     freeze:                | no      | no        | no          | no          | yes  ...  | yes
     */
-    private const int slowDownIfdLagThreshold = ((int)(BATTLE_DYNAMICS_FPS*.15f) >> INPUT_SCALE_FRAMES);
+    private const int slowDownIfdLagThreshold = ((int)(BATTLE_DYNAMICS_FPS*0.20f) >> INPUT_SCALE_FRAMES);
     /* 
     [WARNING] Lower the value of "freezeIfdLagThresHold" if you want to see more frequent freezing and verify that the graphics are continuous across the freezing point.
     */
-    private const int freezeIfdLagThresHold = (slowDownIfdLagThreshold*7);
+    private const int freezeIfdLagThresHold = ((int)(BATTLE_DYNAMICS_FPS*1.5f) >> INPUT_SCALE_FRAMES);
     private int frozenRdfCount = 0;
     private int frozenGracingRdfCnt = 0;
     private const int frozenRdfCountLimit = (BATTLE_DYNAMICS_FPS >> 1);

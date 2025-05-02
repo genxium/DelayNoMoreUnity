@@ -4002,6 +4002,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             newPosHolder.Set(newWx, newWy, effZ);
         } else {
             // dis2 > tolerance2 >= 0
+            /*
             if (dis2 > 5000*tolerance2 && selfJoinIndex == currCharacterDownsync.JoinIndex) {
                 var (ok1, playerRdf) = renderBuffer.GetByFrameId(playerRdfId);
                 var delayedInputFrameId = ConvertToDelayedInputFrameId(playerRdfId);
@@ -4010,6 +4011,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     Debug.Log($"@playerRdfId={playerRdfId}, self teleported @selfJoinIndex={selfJoinIndex}, dWx={dWx}, dWy={dWy}, newWPos=[{newWx}, {newWy}]: delayedIfd={delayedIfd}, chaserRenderFrameId={chaserRenderFrameId}, chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, renderBuffer={renderBuffer.toSimpleStat()}, inputBuffer={inputBuffer.toSimpleStat()}");
                 } 
             }
+            */
             float invMag = InvSqrt32(dis2);
             float ratio = 0;
             if (0 < speedReachable2 && speedReachable2 > defaultSpeedReachable2) {

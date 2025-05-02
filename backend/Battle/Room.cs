@@ -176,7 +176,7 @@ public class Room {
         stageName = _availableStageNames[_randGenerator.Next(_availableStageNames.Length)];
         curDynamicsRenderFrameId = 0;
         lastForceResyncedRdfId = 0;
-        frameLogEnabled = true;
+        frameLogEnabled = false;
         battleDurationFrames = 0;
         elongatedBattleDurationFrames = 0;
         elongatedBattleDurationFramesShortenedOnce = false;
