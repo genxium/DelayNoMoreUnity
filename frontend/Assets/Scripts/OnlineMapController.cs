@@ -71,7 +71,6 @@ public class OnlineMapController : AbstractMapController {
     public ArenaModeSettings arenaModeSettings;
 
     public RejoinPrompt rejoinPrompt;
-
     bool startUdpTaskIfNotYet() {
         if (null != udpTask) return false;
         udpCancellationTokenSource = new CancellationTokenSource();
@@ -308,6 +307,7 @@ public class OnlineMapController : AbstractMapController {
                             readyGoPanel.hideReady();
                             readyGoPanel.hideGo();
                             frozenRdfCount = 0;
+                            frozenGracingRdfCnt = 0;
                             bool selfUnconfirmed = (0 < (pbRdf.BackendUnconfirmedMask & selfJoinIndexMask));
                             if (ROOM_STATE_FRONTEND_REJOINING == battleState) {
                                 Debug.LogWarning($"Got force-resync during battleState={battleState} @pbRdfId={pbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
@@ -404,8 +404,8 @@ public class OnlineMapController : AbstractMapController {
             // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message to trigger "cleanupNetworkSessions" to clean up ws session resources!
         }, wsCancellationToken)
         .ContinueWith(failedTask => {
-            Debug.LogWarning(String.Format("Failed to start rejoining ws session#1: thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] NOT YET in MainThread
-            if (!wsCancellationToken.IsCancellationRequested) {
+            Debug.LogWarning($"Failed to start ws session#1: thread id={Thread.CurrentThread.ManagedThreadId}: {failedTask.Exception}"); // NOT YET in MainThread
+            if (!wsCancellationTokenSource.IsCancellationRequested) {
                 wsCancellationTokenSource.Cancel();
             }
         }, TaskContinuationOptions.OnlyOnFaulted);
@@ -486,71 +486,60 @@ public class OnlineMapController : AbstractMapController {
         tcpJamEnabled = false;
 
         bool guiCanProceedOnFailure = false;
-        var guiCanProceedSignalSource = new CancellationTokenSource(); // by design a new token-source for each "onCharacterSelectGoAction"
-        var guiCanProceedSignal = guiCanProceedSignalSource.Token;
-        var pseudoQ = new BlockingCollection<int>();
-        Task guiWaitToProceedTask = Task.Run(async () => {
-            await Task.Delay(int.MaxValue, guiCanProceedSignal);
-        });
 
-        try {
-            wsTask = Task.Run(async () => {
-                Debug.LogWarning(String.Format("About to start ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] By design switched to another thread other than the MainThread!
-                await wsSessionTaskAsync(guiCanProceedSignalSource);
-                Debug.LogWarning(String.Format("Ends ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
-
-                // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message to trigger "onWsSessionClosed" to clean up ws session resources!
-            }, wsCancellationToken)
-            .ContinueWith(failedTask => {
-                Debug.LogWarning(String.Format("Failed to start ws session#1: thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] NOT YET in MainThread
-                guiCanProceedOnFailure = true;
-                if (!wsCancellationToken.IsCancellationRequested) {
-                    wsCancellationTokenSource.Cancel();
-                }
-                if (!guiCanProceedSignal.IsCancellationRequested) {
-                    guiCanProceedSignalSource.Cancel();
-                }
-            }, TaskContinuationOptions.OnlyOnFaulted);
-
-            // [WARNING] returned to MainThread
-            if (!guiCanProceedSignal.IsCancellationRequested && (TaskStatus.Canceled != guiWaitToProceedTask.Status && TaskStatus.Faulted != guiWaitToProceedTask.Status)) {
-                try {
-                    guiWaitToProceedTask.Wait(guiCanProceedSignal);
-                } catch (Exception guiWaitCancelledEx) {
-                    Debug.LogWarning(String.Format("guiWaitToProceedTask was cancelled before proactive awaiting#1: thread id={0} a.k.a. the MainThread, ex={1}.", Thread.CurrentThread.ManagedThreadId, guiWaitCancelledEx));
-                }
-            }
-
-            if (false == guiCanProceedOnFailure) {
-                Debug.Log(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
-                characterSelectPanel.gameObject.SetActive(false);
-            } else {
-                var msg = String.Format("Failed to start ws session#2: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId);
-                Debug.LogWarning(msg);
-                popupErrStackPanel(msg);
-                WsSessionManager.Instance.ClearCredentials();
-                onBattleStopped();
-                showCharacterSelection();
-            }
-        } finally {
+        using (var guiCanProceedSignalSource = new CancellationTokenSource()) {
+            var guiCanProceedSignal = guiCanProceedSignalSource.Token;
+            var pseudoQ = new BlockingCollection<int>();
+            Task guiWaitToProceedTask = Task.Run(async () => {
+                await Task.Delay(int.MaxValue, guiCanProceedSignal);
+            });
             try {
-                if (!guiCanProceedSignal.IsCancellationRequested) {
-                    guiCanProceedSignalSource.Cancel();
+                wsTask = Task.Run(async () => {
+                    Debug.LogWarning(String.Format("About to start ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId)); // [WARNING] By design switched to another thread other than the MainThread!
+                    await wsSessionTaskAsync(guiCanProceedSignalSource);
+                    Debug.LogWarning(String.Format("Ends ws session within Task.Run(async lambda): thread id={0}.", Thread.CurrentThread.ManagedThreadId));
+
+                    // [WARNING] At the end of "wsSessionTaskAsync", we'll have a "DOWNSYNC_MSG_WS_CLOSED" message to trigger "onWsSessionClosed" to clean up ws session resources!
+                }, wsCancellationToken)
+                .ContinueWith(failedTask => {
+                    Debug.LogWarning($"Failed to start ws session#1: thread id={Thread.CurrentThread.ManagedThreadId}: {failedTask.Exception}"); // [WARNING] NOT YET in MainThread
+                    guiCanProceedOnFailure = true;
+                    if (!wsCancellationToken.IsCancellationRequested) {
+                        wsCancellationTokenSource.Cancel();
+                    }
+                    if (!guiCanProceedSignalSource.IsCancellationRequested) {
+                        guiCanProceedSignalSource.Cancel();
+                    }
+                }, TaskContinuationOptions.OnlyOnFaulted);
+
+                // [WARNING] returned to MainThread
+                if (!guiCanProceedSignal.IsCancellationRequested && (TaskStatus.Canceled != guiWaitToProceedTask.Status && TaskStatus.Faulted != guiWaitToProceedTask.Status)) {
+                    try {
+                        guiWaitToProceedTask.Wait(guiCanProceedSignal);
+                    } catch (Exception guiWaitCancelledEx) {
+                        // Debug.LogWarning($"guiWaitToProceedTask was cancelled before proactive awaiting#1: thread id={Thread.CurrentThread.ManagedThreadId} a.k.a. the MainThread, ex={guiWaitCancelledEx}.");
+                    }
                 }
-                guiWaitToProceedTask.Wait();
-            } catch (Exception guiWaitEx) {
-                Debug.LogWarning(String.Format("guiWaitToProceedTask was cancelled before proactive awaiting#2: thread id={0} a.k.a. the MainThread, ex={1}.", Thread.CurrentThread.ManagedThreadId, guiWaitEx));
+
+                if (false == guiCanProceedOnFailure) {
+                    Debug.Log(String.Format("Started ws session: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId));
+                    characterSelectPanel.gameObject.SetActive(false);
+                } else {
+                    var msg = String.Format("Failed to start ws session#2: thread id={0} a.k.a. the MainThread.", Thread.CurrentThread.ManagedThreadId);
+                    Debug.LogWarning(msg);
+                    popupErrStackPanel(msg);
+                    WsSessionManager.Instance.ClearCredentials();
+                    onBattleStopped();
+                    showCharacterSelection();
+                }
             } finally {
                 try {
                     guiWaitToProceedTask.Dispose();
-                } catch (Exception guiWaitTaskDisposedEx) {
-                    Debug.LogWarning(String.Format("guiWaitToProceedTask couldn't be disposed: thread id={0} a.k.a. the MainThread: {1}", Thread.CurrentThread.ManagedThreadId, guiWaitTaskDisposedEx));
+                } catch (Exception _) {
+
                 }
             }
-
-            guiCanProceedSignalSource.Dispose();
         }
-
         //wsTask = Task.Run(wsSessionActionAsync(guiCanProceedSignalSource)); // This couldn't make `wsTask.Wait()` synchronous in "cleanupNetworkSessions" -- the behaviour of "async void (a.k.a. C# Action)" is different from "async Task (a.k.a. C# Task)" in a few subtleties, e.g. "an async method that returns void can't be awaited", see https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/async-return-types#void-return-type for more information.
 
         //wsSessionActionAsync(guiCanProceedSignalSource); // [c] no immediate thread switch till AFTER THE FIRST AWAIT
