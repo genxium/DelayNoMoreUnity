@@ -154,5 +154,7 @@ namespace shared {
 
         public ImmutableDictionary<CharacterState, int> LoopingChStates; 
         public HashSet<CharacterState> BtnBAutoUnholdChStates; // e.g. If "Atk1" is in "BtnBAutoUnholdChStates", then holding "BtnB" will automatically keep firing "Atk1" (respecting its CancellableSt/EdFrames and RecoveryFrames); otherwise holding "BtnB" will start charging after the first fire 
+
+        public bool NoFlee;
     }
 }

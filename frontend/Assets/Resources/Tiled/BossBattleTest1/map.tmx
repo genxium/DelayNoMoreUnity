@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="23" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="606">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="100" height="23" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="606">
  <properties>
   <property name="battleDurationSeconds" value="600"/>
   <property name="levelId" value="2"/>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="113" height="48" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="602">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="113" height="48" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="606">
  <properties>
   <property name="battleDurationSeconds" value="1600"/>
   <property name="levelId" value="2"/>
   <property name="missionEvtSubId" value="6"/>
-  <property name="npcPreallocCapDict" value="4106:3;4102:1;4103:3;4097:8;4102:1;4105:1;1:2;4108:2;4109:2;4099:2;4110:1;4112:4;4098:1;4096:1;4104:1;16:1"/>
+  <property name="npcPreallocCapDict" value="4106:3;4102:1;4103:3;4097:8;4102:1;4105:1;1:2;4108:2;4109:2;4099:2;4110:1;4112:4;4098:1;4096:1;4104:1;16:1;4113:2"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="11" source="../triggers/switch/triggers_switch.tsx"/>
@@ -171,13 +171,6 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="468" gid="14628" x="1376" y="576" width="40" height="37">
-   <properties>
-    <property name="dirX" value="+2"/>
-    <property name="initGoal" value="Nidle"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
   <object id="504" gid="2147498275" x="336" y="624" width="33" height="36">
    <properties>
     <property name="dirX" value="-2"/>
@@ -208,14 +201,6 @@
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="509" gid="2147498276" x="1492" y="575.5" width="40" height="37">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="initGoal" value="Nidle"/>
-    <property name="killedToDropConsumableSpeciesId" value="3"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
   <object id="510" gid="14628" x="704" y="432" width="40" height="37">
    <properties>
     <property name="dirX" value="+2"/>
@@ -224,13 +209,6 @@
    </properties>
   </object>
   <object id="512" gid="2147498269" x="432" y="480" width="96" height="64">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="initGoal" value="Nidle"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="513" gid="2147498273" x="1424" y="624" width="41" height="41">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="initGoal" value="Nidle"/>
@@ -253,14 +231,12 @@
   </object>
   <object id="521" gid="14619" x="640" y="208" width="32" height="23">
    <properties>
-    <property name="dirX" value="+2"/>
     <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="522" gid="14619" x="720" y="208" width="32" height="23">
+  <object id="522" gid="2147498267" x="736" y="208" width="32" height="23">
    <properties>
-    <property name="dirX" value="+2"/>
     <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
@@ -309,15 +285,9 @@
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="593" gid="2147498270" x="1488" y="672" width="40" height="41">
+  <object id="594" gid="2147498270" x="1360" y="672" width="40" height="41">
    <properties>
-    <property name="dirX" value="-2"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="594" gid="2147498270" x="1376" y="672" width="40" height="41">
-   <properties>
-    <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -326,6 +296,24 @@
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
     <property name="subscriptionId" value="9"/>
+    <property name="teamId" value="3"/>
+   </properties>
+  </object>
+  <object id="603" gid="2147498274" x="1488" y="672" width="32" height="43">
+   <properties>
+    <property name="initGoal" value="Nidle"/>
+    <property name="teamId" value="3"/>
+   </properties>
+  </object>
+  <object id="604" gid="2147498274" x="1488" y="576" width="32" height="43">
+   <properties>
+    <property name="initGoal" value="Nidle"/>
+    <property name="teamId" value="3"/>
+   </properties>
+  </object>
+  <object id="605" gid="2147498271" x="1376" y="576" width="42" height="42">
+   <properties>
+    <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>

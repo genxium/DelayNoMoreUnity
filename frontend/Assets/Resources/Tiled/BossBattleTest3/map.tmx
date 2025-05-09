@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="26" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="596">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="26" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="596">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="1800"/>
@@ -14,11 +14,10 @@
  <tileset firstgid="1046" source="../shared_comps/bkg-shrinked/colorpad-bkg.tsx"/>
  <tileset firstgid="1054" source="../shared_comps/bkg-shrinked/mountain2-bkg.tsx"/>
  <tileset firstgid="1070" source="../shared_comps/bkg-shrinked/mountain4-bkg.tsx"/>
- <tileset firstgid="1086" source="../shared_comps/tiles0.tsx"/>
- <tileset firstgid="1150" source="../shared_comps/deep_cave16.tsx"/>
- <tileset firstgid="1345" source="../shared_comps/pickable.tsx"/>
- <tileset firstgid="1777" source="../towers/towers.tsx"/>
- <tileset firstgid="1801" source="../traps/machinery/traps_machinery.tsx"/>
+ <tileset firstgid="1086" source="../shared_comps/deep_cave16.tsx"/>
+ <tileset firstgid="1281" source="../shared_comps/pickable.tsx"/>
+ <tileset firstgid="1713" source="../towers/towers.tsx"/>
+ <tileset firstgid="1737" source="../traps/machinery/traps_machinery.tsx"/>
  <layer id="160" name="Background2" width="64" height="26">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -37,7 +36,7 @@
  </layer>
  <layer id="163" name="Ground" width="64" height="26">
   <data encoding="base64" compression="zlib">
-   eJzt2MEKgkAQBuCRdh8gqLuP0qP0KL1Mh249ghDSfelSBG2XooROUUSXxlAYD5pgzoo7A/9Rdj5XF525Agg02LsCC57UQ0E40BAu0J4w5qbKe7oy95LnxZh3hf/J3IuLdNV/UDCxmJEGaDNjXe4ftrw2DVojNEe536B9hfl5cPSk0BoZ4o/RvvXo/EfrNCb+qveyr0XPG/G77oa/xC9+8Ytf/OJv4sdvKdhl2TPex6br/st/wmvPWS6M/qbryvNf378Miul61elX9l/85P/fu1oTv1HfmYg3hdbZpjj/S2diTubPLpJaj8Tvcz6olJza
+   eJzt2D0KwkAQBeAR9iAexaPYWHgLQYJ9sFGEaKOoIBaiSJqIJxC09yg+NYGxMAbWzIbsDDxIE2a+/CzJdgzRydB9h5AntTfUPCNd2NeC2ZjvM62EZ8lyFEyc4z8Iz+IiVfVHhlpT5IrjMnPL8V9K7s0DawJzkvlD2PvIz4WjJgVrEjJ/APvIo/Uf1nbA/HnvZV2Lrzfqdz2NfKlf/epXv/rVb+PHtxSN00wEr6Nt33/55zh3kWYp6Lftq89/cf+28ZmqV5F59f6rn/3/e1cD5g/Na0/Em4K1N2T+6L0n5mT/2UWe1hnz+5wHjTpepA==
   </data>
  </layer>
  <layer id="64" name="Foreground" width="64" height="26">
@@ -45,7 +44,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztyrkNgEAUQ8Ef7ELftEHMIWiA8rAEGQWQzEhPTlz1WFrVmra0v/X+bUjju3M+VzrSmaZWAAAAAAAA/OwGlTIG6Q==
+   eJztxbsJgEAURcEXbGW2YewHbcAG1ba84IbmJjNwOFWvqVXNaUlr7/zoSnf/mI60pT0NrQAAAAAAAPjZAzjQCmE=
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos" opacity="0.96">
@@ -81,7 +80,7 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="595" gid="2147485446" x="656" y="400" width="61" height="74">
+  <object id="595" gid="2147485382" x="656" y="400" width="61" height="74">
    <properties>
     <property name="publishingEvtMaskUponKilled" value="1"/>
     <property name="publishingEvtSubIdUponKilled" value="6"/>
@@ -110,8 +109,8 @@
    </properties>
   </object>
   <object id="544" gid="1042" x="448" y="80" width="96" height="64"/>
-  <object id="578" gid="1802" x="256" y="272" width="21" height="16"/>
-  <object id="579" gid="1802" x="780" y="272" width="21" height="16"/>
+  <object id="578" gid="1738" x="256" y="272" width="21" height="16"/>
+  <object id="579" gid="1738" x="780" y="272" width="21" height="16"/>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
@@ -143,12 +142,12 @@
  </objectgroup>
  <objectgroup id="5" name="PatrolCue"/>
  <objectgroup id="164" name="Pickable">
-  <object id="556" gid="1524" x="144" y="288" width="32" height="32">
+  <object id="556" gid="1460" x="144" y="288" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>
   </object>
-  <object id="590" gid="1524" x="864" y="288" width="32" height="32">
+  <object id="590" gid="1460" x="864" y="288" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>

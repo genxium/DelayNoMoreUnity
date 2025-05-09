@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="601">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="47" tilewidth="16" tileheight="16" infinite="0" nextlayerid="165" nextobjectid="601">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="1800"/>
@@ -14,11 +14,10 @@
  <tileset firstgid="1046" source="../shared_comps/bkg-shrinked/colorpad-bkg.tsx"/>
  <tileset firstgid="1054" source="../shared_comps/bkg-shrinked/mountain2-bkg.tsx"/>
  <tileset firstgid="1070" source="../shared_comps/bkg-shrinked/mountain4-bkg.tsx"/>
- <tileset firstgid="1086" source="../shared_comps/tiles0.tsx"/>
- <tileset firstgid="1150" source="../shared_comps/deep_cave16.tsx"/>
- <tileset firstgid="1345" source="../shared_comps/pickable.tsx"/>
- <tileset firstgid="1777" source="../towers/towers.tsx"/>
- <tileset firstgid="1801" source="../traps/machinery/traps_machinery.tsx"/>
+ <tileset firstgid="1086" source="../shared_comps/deep_cave16.tsx"/>
+ <tileset firstgid="1281" source="../shared_comps/pickable.tsx"/>
+ <tileset firstgid="1713" source="../towers/towers.tsx"/>
+ <tileset firstgid="1737" source="../traps/machinery/traps_machinery.tsx"/>
  <layer id="160" name="Background2" width="64" height="47">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -37,7 +36,7 @@
  </layer>
  <layer id="163" name="Ground" width="64" height="47">
   <data encoding="base64" compression="zlib">
-   eJztms1KxDAURu9o+gCC7vMoPso8iXQ/iE/hQkEQUbdWh8GNfxQ3imDcKCrMalTUjV9gCpmhpu00ph1zL5xNSyY57Ue4KdMTRIsRqXdBigKpkSDZiUhuwH1HUDdUf7irbfgvwP8tIH+4SjhLuKse55/zz/kP8v1z/jn/dfK/hrFxRU5AX/yBVIVylX/97NYrcgmufvEfCopfcc/GMGfsEa4lFo6nxrjK/x5+d78iB+Awx0G7f4FP3LPxnTP2DNfOLVxMjWnj/g+v+H5G/6rVxv1/KSJaLsFKVH8u3v/bl3+f1cb8+yzOP+ef88/51/nfRAbwLNQoIH9kXSLzcqug13ZNXu+e1YvntWQU9ZsusfWuH57X0gRt9ce5Y1WBMv13HWy9e9n+3wVwTeCcZP4p3PugcOP4JwXXJDX8B3C/CWj/h2t3YPi7OFPPW5n7Dfs3vRr/xf7sz/7sz/7sP6s/+ii6HXPn+RnWnduF/yPGPY159uxfd27Ofzn/3c4k81Bl1szvn/2N839wdWr4p6L5/6T4LLjG15Pf//Q3sUa+PzeBdn0w/EPmB1jpal0=
+   eJztms1Kw0AURkeYB5knke6L+ArduFBwI9at0VLc+EfoRhGqG0WF4qIq6ibqEwi6z6P4hTYwljiZacbJxLkXDoWEaeakH5eb0DZn7J2z9AGwQGrMmXgFy3Bf56wTqj/c0zX4v+HzPiB/uAo4C7inbco/5Z/yH+TvT/mn/FfJ/yLWtgzZBT3+B1IGZSv/2b1bMuQIHP/iP+IsusU5FaOCtds4FinYmVljK/8b+N5NQ7pgq8Ahc38GTzin4qVg7T6OHSg4BHcLP/Gt/8MrGs7pb1o+9v8P7OVTgy+L/tT//cm/y7KV/9me0pQKMf++93+X5WP/d1kh5l8uuf+vIAO4F+k4IH9kXSDzYrVk1rZN0eye143jveSUzZs2Uc2uj473Uge++uO5o3UOdObvKqhmd9353wZwTeCc5P4x3HugtHH8k4JrEkv+fbifBNT/4drpS/42nqmbVnK/If+6d+O+yJ/8yZ/8yZ/85/XHHMVOp5w5vodVr23D/xLrrqZcO/avem3Kv55/E9/x6+yZfn/yl57/g6s9yT/m9f8nxWXBNRpI/sPJO7Fa3j/XQeZ6IfmHzDfpvS2M
   </data>
  </layer>
  <layer id="64" name="Foreground" width="64" height="47">
@@ -45,7 +44,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztlDtOw0AURccSgQUxLII6sBL7bYAaeoIFVHwE9CRV+LT8CtgLdFxLY3HzEpPannukoxlnvm/mTaoiBIMRVrBMWvq29N22Rfo9UhlpTKSS5zU3j1/Ht3Mfc+uXtCa3d61Trdh3WSzHVpI8f9cYnpPXN9en3bc/C3N9zK0d3fzRjTM3B98Ht/93F039M4SwV+ThV1g8n6a+A3Nhm+6/zYmc4h9TDlQp9/czir9hTO8ht9iFECIndjcWFUL8McebeICP8Ak+Z/ZGXhDvK3yD7/ADnsIzeN5xFkP6TznG/ifwBNbJG3gL7+gs+sq6u1oV/z2cwhmdxbqc6Csc/3WKfeLK6cBygvHxN34na6r/wEN4NLCcuMDeL+EVxT8aLbsJt1JZu5w46HH8QgghhBBCCCGEEEIIIYQQQ+EXJIuLWA==
+   eJztk0lOAzEQRd1SboS5AGtYBSRCC1gxCNh1l0hWTFum48ABgAvAffiW3NKn6LAEYf8nPdkd22WXXembEAxG2MMua/nb8vcwFun3SG2kNZFajmsujt/Hj/Mcc/t3tCePL9unHzl313zPrSM5/rI1HJP3NzdnOLe/C3NzzO0dXfzo1pmLwe/B4z+9Req/hxA2mzr8CF/vJ/VXYS2s0PsPNVFT/lOqgT7X/lZF+Sem9H+oLXchhBBCiMTFJIRLeAWv4c3kr0/0u9wi3zt4Dx/gI9yFe3C/grvYRo4zuAPb7Ak8hWd0F6Uylv85nMMF3UWpNcH5H+fcZ66dF1wTPv/kU7al/jNchxuF1cQBzn4Ijyj/lxFf4VtuW1cTa/84fyGEEEIIIYQQQgghhBBCiFL4BOmkefQ=
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos" opacity="0.96">
@@ -162,21 +161,21 @@
    </properties>
    <point/>
   </object>
-  <object id="574" gid="1782" x="704" y="96" width="32" height="23">
+  <object id="574" gid="1718" x="704" y="96" width="32" height="23">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="575" gid="2147485430" x="160" y="96" width="32" height="23">
+  <object id="575" gid="2147485366" x="160" y="96" width="32" height="23">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="576" gid="2147485429" x="848" y="464" width="32" height="23">
+  <object id="576" gid="2147485365" x="848" y="464" width="32" height="23">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
@@ -184,7 +183,7 @@
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="577" gid="1781" x="96" y="464" width="32" height="23">
+  <object id="577" gid="1717" x="96" y="464" width="32" height="23">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="killedToDropConsumableSpeciesId" value="1"/>
@@ -245,8 +244,8 @@
     <property name="subscribesToIdAfterInitialFire" value="8"/>
    </properties>
   </object>
-  <object id="578" gid="1802" x="240" y="608" width="21" height="16"/>
-  <object id="579" gid="1802" x="780" y="608" width="21" height="16"/>
+  <object id="578" gid="1738" x="240" y="608" width="21" height="16"/>
+  <object id="579" gid="1738" x="780" y="608" width="21" height="16"/>
  </objectgroup>
  <objectgroup id="2" name="Barrier">
   <properties>
@@ -345,37 +344,37 @@
   </object>
  </objectgroup>
  <objectgroup id="164" name="Pickable">
-  <object id="556" gid="1524" x="144" y="624" width="32" height="32">
+  <object id="556" gid="1460" x="144" y="624" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>
   </object>
-  <object id="557" gid="1524" x="288" y="160" width="32" height="32">
+  <object id="557" gid="1460" x="288" y="160" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>
   </object>
-  <object id="588" gid="1524" x="400" y="160" width="32" height="32">
+  <object id="588" gid="1460" x="400" y="160" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>
   </object>
-  <object id="589" gid="1524" x="608" y="160" width="32" height="32">
+  <object id="589" gid="1460" x="608" y="160" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>
   </object>
-  <object id="590" gid="1524" x="864" y="624" width="32" height="32">
+  <object id="590" gid="1460" x="864" y="624" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>
   </object>
-  <object id="591" gid="1524" x="32" y="256" width="32" height="32">
+  <object id="591" gid="1460" x="32" y="256" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>
   </object>
-  <object id="592" gid="1524" x="656" y="160" width="32" height="32">
+  <object id="592" gid="1460" x="656" y="160" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>

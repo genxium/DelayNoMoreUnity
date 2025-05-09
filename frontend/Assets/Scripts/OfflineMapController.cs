@@ -119,11 +119,11 @@ public class OfflineMapController : AbstractMapController {
                 preallocatePixelVfxNodes();
                 preallocateNpcNodes();
                 selfPlayerInfo.JoinIndex = 1;
-                selfPlayerInfo.SpeciesId = PlayerStoryProgressManager.Instance.GetCachedChSpeciesId();
                 selfJoinIndex = selfPlayerInfo.JoinIndex; 
                 selfJoinIndexArrIdx = selfJoinIndex - 1; 
                 selfJoinIndexMask = (1UL << selfJoinIndexArrIdx); 
                 allConfirmedMask = (1UL << roomCapacity) - 1;
+                selfPlayerInfo.SpeciesId = PlayerStoryProgressManager.Instance.GetCachedChSpeciesId();
                 shouldPlayStoryLvIntro = false;
                 initSeqNo++; // To avoid accessing "gameObject.transform" in the same renderFrame right after "resetCurrentMatch" and the "preallocations"
             } else if (3 == initSeqNo) {
@@ -438,7 +438,7 @@ public class OfflineMapController : AbstractMapController {
             bool mockSelfNotEnoughMp = false;
             var (_, currRdf) = renderBuffer.GetByFrameId(mockRdfId);
 
-            Step(inputBuffer, mockRdfId, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, triggerEditorIdToConfigFromTiled, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out mockHasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionTriggerLocalId, selfPlayerInfo.JoinIndex, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadNpcIndices, out fulfilledTriggerSetMask, ref mockSelfNotEnoughMp, _loggerBridge);
+            Step(inputBuffer, mockRdfId, roomCapacity, collisionSys, renderBuffer, ref overlapResult, ref primaryOverlapResult, collisionHolder, effPushbacks, hardPushbackNormsArr, softPushbacks, softPushbackEnabled, dynamicRectangleColliders, decodedInputHolder, prevDecodedInputHolder, residueCollided, triggerEditorIdToLocalId, triggerEditorIdToConfigFromTiled, trapLocalIdToColliderAttrs, completelyStaticTrapColliders, unconfirmedBattleResult, ref confirmedBattleResult, pushbackFrameLogBuffer, frameLogEnabled, playerRdfId, shouldDetectRealtimeRenderHistoryCorrection, out mockHasIncorrectlyPredictedRenderFrame, historyRdfHolder, missionTriggerLocalId, selfJoinIndex, joinIndexRemap, ref justTriggeredStoryPointId, ref justTriggeredBgmId, justDeadNpcIndices, out fulfilledTriggerSetMask, ref mockSelfNotEnoughMp, _loggerBridge);
 
             ulong forceCtrlMask = (fulfilledTriggerSetMask & triggerForceCtrlMask);
             if (0 < forceCtrlMask) {

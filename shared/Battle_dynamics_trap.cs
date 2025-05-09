@@ -448,6 +448,7 @@ namespace shared {
                     }
                 break;
                 case TRIGGER_SPECIES_TRAP_ATK_TRIGGER_MV:
+                case TRIGGER_SPECIES_CTRL_PROMPT_MV:
                     mainCycleFulfilled &= (TriggerState.Tready == currTrigger.State);
                     if (!isSubcycleConfigured) {
                         if (mainCycleFulfilled) {

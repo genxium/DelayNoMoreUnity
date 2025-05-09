@@ -4,7 +4,7 @@
 # To import these sprites into your Unity project, download "TexturePackerImporter":
 # https://www.codeandweb.com/texturepacker/unity
 #
-# $TexturePacker:SmartUpdate:aa92988b7cbf1f4d696ec3c3a077cdb4:edd031a63d5c0dcbd59ec25c690d88b7:af07a270991875b2434fad93268b7c38$
+# $TexturePacker:SmartUpdate:68a59f80ae8ea97a5da9a8813cea7efe:edd031a63d5c0dcbd59ec25c690d88b7:af07a270991875b2434fad93268b7c38$
 #
 :format=40300
 :texture=ArcherGuardRed.png
@@ -46,5 +46,5 @@ ArcherGuardRed_29;119;118;32;43; 0.5;0.5; 0;0;0;0
 ArcherGuardRed_30;216;75;32;41; 0.5;0.5; 0;0;0;0
 ArcherGuardRed_31;50;112;33;39; 0.5;0.5; 0;0;0;0
 ArcherGuardRed_32;55;170;51;38; 0.5;0.5; 0;0;0;0
-ArcherGuardRed_33;55;153;51;15; 0.5;0.5; 0;0;0;0
-ArcherGuardRed_34;1;2;51;16; 0.5;0.5; 0;0;0;0
+ArcherGuardRed_33;55;153;51;15; 0.50980392;1.26666667; 0;0;0;0
+ArcherGuardRed_34;1;2;51;16; 0.50980392;1.1875; 0;0;0;0

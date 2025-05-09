@@ -989,7 +989,7 @@ namespace shared {
                                      */
                                 }
                             } else {
-                                if (!(successfulDef1 && bulletConfig.TakesDef1AsHardPushback)) {
+                                if (!(successfulDef1 && bulletConfig.TakesDef1AsHardPushback) && (0 >= bulletConfig.HitStunFrames || shouldOmitHitPushback)) {
                                     exploded = true;
                                     explodedOnAnotherHarderBullet = true;
                                 }
@@ -1674,7 +1674,7 @@ namespace shared {
                     successfulDef1 = true;
                 }
             }
-            if (!bulletInFrontOfVictim) {
+            if (!bulletInFrontOfVictim && 0 != victimNextFrame.DirX) {
                 victimNextFrame.CachedCueCmd = EncodeInput(-victimNextFrame.DirX, -victimNextFrame.DirY, 0, 0, 0, 0, 0);
                 switch (victimNextFrame.GoalAsNpc) {
                     case NpcGoal.Nidle:

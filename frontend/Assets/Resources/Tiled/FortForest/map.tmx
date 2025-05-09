@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="113" height="48" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="612">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="113" height="48" tilewidth="16" tileheight="16" infinite="0" parallaxoriginx="64" parallaxoriginy="0" nextlayerid="50" nextobjectid="614">
  <properties>
   <property name="battleDurationSeconds" value="3200"/>
   <property name="levelId" value="8"/>
   <property name="missionEvtSubId" value="6"/>
-  <property name="npcPreallocCapDict" value="4106:3;4102:1;4103:3;4097:8;4102:1;4105:1;1:2;4108:2;4109:2;4099:2;4110:1;4112:4;4098:1;4096:1;4104:1;16:1"/>
+  <property name="npcPreallocCapDict" value="4106:3;4102:1;4103:3;4097:8;4102:1;4105:1;1:2;4108:2;4109:2;4099:2;4110:1;4112:4;4098:1;4096:1;4104:1;16:1;4114:1;4115:1;"/>
  </properties>
  <tileset firstgid="1" source="../traps/spike/traps_spike.tsx"/>
  <tileset firstgid="11" source="../triggers/switch/triggers_switch.tsx"/>
@@ -25,10 +25,10 @@
  <tileset firstgid="11926" source="../shared_comps/bkg-shrinked/gh_bg_4.tsx"/>
  <tileset firstgid="13270" source="../shared_comps/bkg-shrinked/gh_bg_5.tsx"/>
  <tileset firstgid="14614" source="../towers/towers.tsx"/>
- <tileset firstgid="14629" source="../shared_comps/CastlePrisonProps16.tsx"/>
- <tileset firstgid="14734" source="../decoration/Swayable/Campfire.tsx"/>
- <tileset firstgid="14774" source="../decoration/Swayable/CampfireWithFood.tsx"/>
- <tileset firstgid="14814" source="../decoration/Swayable/GhWater.tsx"/>
+ <tileset firstgid="14638" source="../shared_comps/CastlePrisonProps16.tsx"/>
+ <tileset firstgid="14743" source="../decoration/Swayable/Campfire.tsx"/>
+ <tileset firstgid="14783" source="../decoration/Swayable/CampfireWithFood.tsx"/>
+ <tileset firstgid="14823" source="../decoration/Swayable/GhWater.tsx"/>
  <layer id="45" name="Background1" width="113" height="48">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -82,7 +82,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztlztPFGEUhr8Cq9mKZpfIRVpu1lvaYGNiIhdbQfwXUIILiqFS0YTbT4CC1U1AobUAteYiXlgWTUy80fkYQtzg5zILk2FO8j7Jk509mTk7yZudN+OcEEIIIYQQQgghqqUz7dzV9HnfhTgLg+Q3pAxNM09+C8rQNLvkV1SGJqnPONeAjdiEl7A5c953JarhBnl1YTf2YC/eVIamyJHXKI7hPbyP48rQFEvktYwv8CWu4KoyNMU38vqOP/An/sIDZWiKljrnWrEN27EDL9f9//wH2fjuLckMB86N4F3M4Wjgn8XBLfLqw368jQN4p0KG4pAp8pnGGZzFucA/iwM9S0/HIvnk8Rk+x0Lgn8VBtc9Sccga+azja3yDbwP/LA70LD0dRfLZwxLu4+fAP4uDh+T1CB/jJD7Bp8rwRC6mnKvHhtS/x+Xf40B9aB/1oX3Uh/ZRH9pHfWgf9aF91If2UR/aR31oH/WhfdSH9lEf2kd9aB/1YfRcqIlmT5o9mRC71IfRcyWiDLvY0x1iV5g+vFb79/h6rRMnMBRRhn+YCLFLfZhsXoXIMEwf5sv+ewX9DxNHmD78UpbbV2WYOPR+aB/1oX30fmgfvR/aJ8l9uJF1bhO3cBvfZSvPd/h8jx/wI37K+s89PvNd5zuv0sy3I+y1cc52sYh7WML9CH7Dt/PovN8rbjDT
+   eJztlztPFGEUhr8CqqGi2SWAQMtF6i1ttDEh4WargP8CSrmJiZWoJIL+BChYJBGBlgKQ/wDL/X7peAwhbOBzmcXJMCd5n+TJzp7MnJ3kzc6bcU4IIYQQQgghhBDF8jzl3IvUY9+F+B96ya9PGZpmkvymlKFpNsgvpwxNUpV2rhqfYA3WYl36se9KFEMrebVhO3ZgJ75ShqYYJK8hHMb3OIIflKEpfpHXHP7GeVzARWVoimPyOsFTPMNzvFCGpqivcK4BG7EJn2Jzxb/PH83Ed29J5l3gXD8O4CAOBf5ZHLwmrzfYhd3Yg28LZCiu+EY+4ziB3/FH4J/FgZ6lD2OafLI4gz9xNvDP4qDYZ6m4Ypl8VnAV/+Ba4J/FgZ6lDyNHPpu4hdu4E/hncfCJvEbxM37BrzimDO+lssy5Kqwuu3uc/z0O1If2UR/aR31oH/WhfdSH9lEf2kd9aB/1oX3Uh/ZRH9pHfWgf9aF91If2UR9GT2lJNHtS7EmH2KU+jJ5nEWXYxp72ELvC9OHL8pvjlnIn7qEvogz/8jHELvVhslkKkWGYPszm/fdm9T9MHGH6cDcvtwNlmDj0fmgf9aF99H5oH70f2ifJfbiecW4Dc7iJW5nC820+d3AX93A/4z/39sx3ne+8QjPfjrDXxjk7wEM8wmM8ieA3fDuvz7sEeHk0ww==
   </data>
  </layer>
  <layer id="20" name="Ground1" width="113" height="48">
@@ -179,48 +179,18 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="NpcStartingPos">
-  <object id="468" gid="14628" x="1376" y="576" width="40" height="37">
+  <object id="468" gid="14628" x="1072" y="432" width="40" height="37">
    <properties>
     <property name="dirX" value="+2"/>
     <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="506" gid="2147498275" x="816" y="704" width="33" height="36">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="initGoal" value="Nidle"/>
-    <property name="killedToDropConsumableSpeciesId" value="1"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="507" gid="2147498275" x="848" y="704" width="33" height="36">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="initGoal" value="Nidle"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="508" gid="2147498276" x="1040" y="704" width="40" height="37">
+  <object id="509" gid="2147498276" x="1120" y="672" width="40" height="37">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="initGoal" value="Nidle"/>
     <property name="killedToDropConsumableSpeciesId" value="3"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="509" gid="2147498276" x="1492" y="575.5" width="40" height="37">
-   <properties>
-    <property name="dirX" value="-2"/>
-    <property name="initGoal" value="Nidle"/>
-    <property name="killedToDropConsumableSpeciesId" value="3"/>
-    <property name="teamId" value="3"/>
-   </properties>
-  </object>
-  <object id="510" gid="14628" x="704" y="432" width="40" height="37">
-   <properties>
-    <property name="dirX" value="+2"/>
-    <property name="initGoal" value="Nidle"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -281,15 +251,17 @@
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="593" gid="2147498270" x="1488" y="672" width="40" height="41">
+  <object id="612" gid="2147498280" x="1456" y="496" width="65" height="60">
    <properties>
-    <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
+    <property name="killedToDropConsumableSpeciesId" value="1"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
-  <object id="594" gid="2147498270" x="1376" y="672" width="40" height="41">
+  <object id="613" gid="2147498282" x="1472" y="672" width="51" height="49">
    <properties>
-    <property name="dirX" value="-2"/>
+    <property name="initGoal" value="Nidle"/>
+    <property name="killedToDropConsumableSpeciesId" value="3"/>
     <property name="teamId" value="3"/>
    </properties>
   </object>
@@ -439,7 +411,7 @@
  </objectgroup>
  <objectgroup id="28" name="Pickable">
   <object id="544" gid="168" x="656" y="432" width="32" height="32"/>
-  <object id="545" gid="167" x="992" y="704" width="32" height="32"/>
+  <object id="545" gid="167" x="1024" y="704" width="32" height="32"/>
   <object id="546" gid="167" x="1168" y="496" width="32" height="32"/>
   <object id="547" gid="332" x="448" y="256" width="32" height="32"/>
   <object id="548" gid="331" x="1072" y="256" width="32" height="32"/>

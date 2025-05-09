@@ -19,6 +19,7 @@ namespace shared {
         public const int TRIGGER_SPECIES_TIMED_WAVE_PICKABLE_DROPPER = 14;
 
         public const int TRIGGER_SPECIES_TRAP_ATK_TRIGGER_MV = 15;
+        public const int TRIGGER_SPECIES_CTRL_PROMPT_MV = 16;
 
         public const int TRIGGER_SPECIES_VICTORY_TRIGGER_TRIVIAL = 1024;
         public const int TRIGGER_SPECIES_NPC_AWAKER_MV = 1025;
@@ -144,6 +145,13 @@ namespace shared {
             CollisionTypeMask = COLLISION_TRIGGER_INDEX_PREFIX
         };
 
+        public static TriggerConfig CtrlPromptMv = new TriggerConfig {
+            SpeciesId = TRIGGER_SPECIES_CTRL_PROMPT_MV,
+            SpeciesName = "CtrlPromptMv",
+            TriggerType = TriggerType.TtMovement,
+            CollisionTypeMask = COLLISION_TRIGGER_INDEX_PREFIX
+        };
+
         public static ImmutableDictionary<int, TriggerConfig> triggerConfigs = ImmutableDictionary.Create<int, TriggerConfig>().AddRange(
                 new[]
                 {
@@ -164,6 +172,7 @@ namespace shared {
                     new KeyValuePair<int, TriggerConfig>(NpcAwakerMv.SpeciesId, NpcAwakerMv),
                     new KeyValuePair<int, TriggerConfig>(BossSavepoint.SpeciesId, BossSavepoint),
                     new KeyValuePair<int, TriggerConfig>(BossAwakerMv.SpeciesId, BossAwakerMv),
+                    new KeyValuePair<int, TriggerConfig>(CtrlPromptMv.SpeciesId, CtrlPromptMv),
                 }
         );
     }

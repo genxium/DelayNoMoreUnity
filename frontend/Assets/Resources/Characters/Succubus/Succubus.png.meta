@@ -108,8 +108,8 @@ TextureImporter:
       name: Succubus-0
       rect:
         serializedVersion: 2
-        x: 876
-        y: 555
+        x: 849
+        y: 1155
         width: 51
         height: 49
       alignment: 0
@@ -129,8 +129,8 @@ TextureImporter:
       name: Succubus-1
       rect:
         serializedVersion: 2
-        x: 607
-        y: 561
+        x: 106
+        y: 1186
         width: 50
         height: 49
       alignment: 0
@@ -150,8 +150,8 @@ TextureImporter:
       name: Succubus-10
       rect:
         serializedVersion: 2
-        x: 982
-        y: 470
+        x: 936
+        y: 1376
         width: 41
         height: 52
       alignment: 0
@@ -171,12 +171,12 @@ TextureImporter:
       name: Succubus-100
       rect:
         serializedVersion: 2
-        x: 103
-        y: 781
+        x: 615
+        y: 1692
         width: 94
         height: 64
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.26595744, y: 0.40625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -192,12 +192,12 @@ TextureImporter:
       name: Succubus-101
       rect:
         serializedVersion: 2
-        x: 339
-        y: 897
+        x: 812
+        y: 1798
         width: 95
         height: 66
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.2631579, y: 0.39393938}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -213,12 +213,12 @@ TextureImporter:
       name: Succubus-102
       rect:
         serializedVersion: 2
-        x: 331
-        y: 729
+        x: 961
+        y: 1991
         width: 62
         height: 56
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.43548387, y: 0.48214287}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -234,12 +234,12 @@ TextureImporter:
       name: Succubus-103
       rect:
         serializedVersion: 2
-        x: 456
-        y: 969
+        x: 615
+        y: 1811
         width: 97
         height: 54
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.26804125, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -255,12 +255,12 @@ TextureImporter:
       name: Succubus-104
       rect:
         serializedVersion: 2
-        x: 117
-        y: 901
+        x: 615
+        y: 1867
         width: 101
         height: 60
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.22772276, y: 0.46666667}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -276,12 +276,12 @@ TextureImporter:
       name: Succubus-105
       rect:
         serializedVersion: 2
-        x: 1
-        y: 840
+        x: 834
+        y: 1866
         width: 100
         height: 63
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.26, y: 0.46031746}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -297,12 +297,12 @@ TextureImporter:
       name: Succubus-106
       rect:
         serializedVersion: 2
-        x: 236
-        y: 900
+        x: 731
+        y: 1920
         width: 101
         height: 65
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.23762377, y: 0.44615385}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -318,8 +318,8 @@ TextureImporter:
       name: Succubus-107
       rect:
         serializedVersion: 2
-        x: 929
-        y: 505
+        x: 793
+        y: 1113
         width: 51
         height: 49
       alignment: 0
@@ -339,8 +339,8 @@ TextureImporter:
       name: Succubus-108
       rect:
         serializedVersion: 2
-        x: 659
-        y: 542
+        x: 53
+        y: 1185
         width: 50
         height: 49
       alignment: 0
@@ -360,8 +360,8 @@ TextureImporter:
       name: Succubus-109
       rect:
         serializedVersion: 2
-        x: 974
-        y: 418
+        x: 52
+        y: 1091
         width: 49
         height: 50
       alignment: 0
@@ -381,8 +381,8 @@ TextureImporter:
       name: Succubus-11
       rect:
         serializedVersion: 2
-        x: 155
-        y: 574
+        x: 816
+        y: 1261
         width: 41
         height: 52
       alignment: 0
@@ -402,8 +402,8 @@ TextureImporter:
       name: Succubus-110
       rect:
         serializedVersion: 2
-        x: 303
-        y: 575
+        x: 54
+        y: 1236
         width: 50
         height: 50
       alignment: 0
@@ -423,8 +423,8 @@ TextureImporter:
       name: Succubus-111
       rect:
         serializedVersion: 2
-        x: 303
-        y: 678
+        x: 902
+        y: 1131
         width: 51
         height: 49
       alignment: 0
@@ -444,8 +444,8 @@ TextureImporter:
       name: Succubus-112
       rect:
         serializedVersion: 2
-        x: 711
-        y: 515
+        x: 1
+        y: 1169
         width: 50
         height: 49
       alignment: 0
@@ -465,8 +465,8 @@ TextureImporter:
       name: Succubus-113
       rect:
         serializedVersion: 2
-        x: 252
-        y: 548
+        x: 1
+        y: 1060
         width: 49
         height: 50
       alignment: 0
@@ -486,8 +486,8 @@ TextureImporter:
       name: Succubus-114
       rect:
         serializedVersion: 2
-        x: 198
-        y: 544
+        x: 1
+        y: 1220
         width: 50
         height: 50
       alignment: 0
@@ -507,8 +507,8 @@ TextureImporter:
       name: Succubus-115
       rect:
         serializedVersion: 2
-        x: 355
-        y: 477
+        x: 461
+        y: 1182
         width: 48
         height: 49
       alignment: 0
@@ -528,8 +528,8 @@ TextureImporter:
       name: Succubus-116
       rect:
         serializedVersion: 2
-        x: 556
-        y: 485
+        x: 50
+        y: 954
         width: 47
         height: 49
       alignment: 0
@@ -549,8 +549,8 @@ TextureImporter:
       name: Succubus-117
       rect:
         serializedVersion: 2
-        x: 107
-        y: 486
+        x: 413
+        y: 1056
         width: 46
         height: 50
       alignment: 0
@@ -570,8 +570,8 @@ TextureImporter:
       name: Succubus-118
       rect:
         serializedVersion: 2
-        x: 248
-        y: 420
+        x: 364
+        y: 1078
         width: 47
         height: 50
       alignment: 0
@@ -591,8 +591,8 @@ TextureImporter:
       name: Succubus-119
       rect:
         serializedVersion: 2
-        x: 457
-        y: 497
+        x: 365
+        y: 1130
         width: 48
         height: 49
       alignment: 0
@@ -612,8 +612,8 @@ TextureImporter:
       name: Succubus-12
       rect:
         serializedVersion: 2
-        x: 112
-        y: 538
+        x: 418
+        y: 1159
         width: 41
         height: 52
       alignment: 0
@@ -633,8 +633,8 @@ TextureImporter:
       name: Succubus-120
       rect:
         serializedVersion: 2
-        x: 455
-        y: 446
+        x: 611
+        y: 1169
         width: 47
         height: 49
       alignment: 0
@@ -654,8 +654,8 @@ TextureImporter:
       name: Succubus-121
       rect:
         serializedVersion: 2
-        x: 397
-        y: 358
+        x: 609
+        y: 1117
         width: 46
         height: 50
       alignment: 0
@@ -675,8 +675,8 @@ TextureImporter:
       name: Succubus-122
       rect:
         serializedVersion: 2
-        x: 195
-        y: 406
+        x: 311
+        y: 1058
         width: 47
         height: 50
       alignment: 0
@@ -696,8 +696,8 @@ TextureImporter:
       name: Succubus-123
       rect:
         serializedVersion: 2
-        x: 199
-        y: 647
+        x: 846
+        y: 1104
         width: 51
         height: 49
       alignment: 0
@@ -717,8 +717,8 @@ TextureImporter:
       name: Succubus-124
       rect:
         serializedVersion: 2
-        x: 155
-        y: 521
+        x: 648
+        y: 950
         width: 41
         height: 51
       alignment: 0
@@ -738,8 +738,8 @@ TextureImporter:
       name: Succubus-125
       rect:
         serializedVersion: 2
-        x: 293
-        y: 341
+        x: 709
+        y: 1110
         width: 46
         height: 49
       alignment: 0
@@ -759,8 +759,8 @@ TextureImporter:
       name: Succubus-126
       rect:
         serializedVersion: 2
-        x: 715
-        y: 650
+        x: 632
+        y: 1220
         width: 52
         height: 44
       alignment: 0
@@ -780,8 +780,8 @@ TextureImporter:
       name: Succubus-127
       rect:
         serializedVersion: 2
-        x: 769
-        y: 647
+        x: 742
+        y: 1258
         width: 52
         height: 41
       alignment: 0
@@ -801,8 +801,8 @@ TextureImporter:
       name: Succubus-128
       rect:
         serializedVersion: 2
-        x: 231
-        y: 768
+        x: 769
+        y: 1420
         width: 70
         height: 33
       alignment: 0
@@ -822,8 +822,8 @@ TextureImporter:
       name: Succubus-129
       rect:
         serializedVersion: 2
-        x: 231
-        y: 819
+        x: 696
+        y: 1464
         width: 71
         height: 17
       alignment: 0
@@ -843,8 +843,8 @@ TextureImporter:
       name: Succubus-13
       rect:
         serializedVersion: 2
-        x: 564
-        y: 647
+        x: 696
+        y: 976
         width: 41
         height: 52
       alignment: 0
@@ -864,8 +864,8 @@ TextureImporter:
       name: Succubus-130
       rect:
         serializedVersion: 2
-        x: 409
-        y: 784
+        x: 696
+        y: 1483
         width: 71
         height: 18
       alignment: 0
@@ -885,8 +885,8 @@ TextureImporter:
       name: Succubus-131
       rect:
         serializedVersion: 2
-        x: 231
-        y: 803
+        x: 696
+        y: 1448
         width: 71
         height: 14
       alignment: 0
@@ -906,8 +906,8 @@ TextureImporter:
       name: Succubus-132
       rect:
         serializedVersion: 2
-        x: 515
-        y: 732
+        x: 519
+        y: 1285
         width: 53
         height: 15
       alignment: 0
@@ -927,8 +927,8 @@ TextureImporter:
       name: Succubus-133
       rect:
         serializedVersion: 2
-        x: 1
-        y: 749
+        x: 860
+        y: 1378
         width: 58
         height: 29
       alignment: 0
@@ -948,8 +948,8 @@ TextureImporter:
       name: Succubus-134
       rect:
         serializedVersion: 2
-        x: 827
-        y: 675
+        x: 577
+        y: 1307
         width: 54
         height: 31
       alignment: 0
@@ -969,8 +969,8 @@ TextureImporter:
       name: Succubus-135
       rect:
         serializedVersion: 2
-        x: 101
-        y: 306
+        x: 757
+        y: 1074
         width: 45
         height: 37
       alignment: 0
@@ -990,8 +990,8 @@ TextureImporter:
       name: Succubus-136
       rect:
         serializedVersion: 2
-        x: 250
-        y: 506
+        x: 53
+        y: 1143
         width: 50
         height: 40
       alignment: 0
@@ -1011,8 +1011,8 @@ TextureImporter:
       name: Succubus-137
       rect:
         serializedVersion: 2
-        x: 715
-        y: 608
+        x: 796
+        y: 1219
         width: 52
         height: 40
       alignment: 0
@@ -1032,8 +1032,8 @@ TextureImporter:
       name: Succubus-138
       rect:
         serializedVersion: 2
-        x: 883
-        y: 648
+        x: 633
+        y: 1266
         width: 53
         height: 40
       alignment: 0
@@ -1053,8 +1053,8 @@ TextureImporter:
       name: Succubus-139
       rect:
         serializedVersion: 2
-        x: 355
-        y: 528
+        x: 105
+        y: 1139
         width: 50
         height: 45
       alignment: 0
@@ -1074,8 +1074,8 @@ TextureImporter:
       name: Succubus-14
       rect:
         serializedVersion: 2
-        x: 662
-        y: 642
+        x: 796
+        y: 1164
         width: 51
         height: 53
       alignment: 0
@@ -1095,8 +1095,8 @@ TextureImporter:
       name: Succubus-140
       rect:
         serializedVersion: 2
-        x: 59
-        y: 588
+        x: 955
+        y: 1125
         width: 51
         height: 49
       alignment: 0
@@ -1116,8 +1116,8 @@ TextureImporter:
       name: Succubus-141
       rect:
         serializedVersion: 2
-        x: 922
-        y: 452
+        x: 107
+        y: 1237
         width: 50
         height: 51
       alignment: 0
@@ -1138,7 +1138,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 369
+        y: 1010
         width: 49
         height: 48
       alignment: 0
@@ -1158,8 +1158,8 @@ TextureImporter:
       name: Succubus-143
       rect:
         serializedVersion: 2
-        x: 763
-        y: 492
+        x: 369
+        y: 1267
         width: 50
         height: 49
       alignment: 0
@@ -1179,8 +1179,8 @@ TextureImporter:
       name: Succubus-144
       rect:
         serializedVersion: 2
-        x: 1
-        y: 574
+        x: 899
+        y: 1080
         width: 51
         height: 49
       alignment: 0
@@ -1200,8 +1200,8 @@ TextureImporter:
       name: Succubus-145
       rect:
         serializedVersion: 2
-        x: 823
-        y: 578
+        x: 740
+        y: 1161
         width: 51
         height: 53
       alignment: 0
@@ -1221,8 +1221,8 @@ TextureImporter:
       name: Succubus-146
       rect:
         serializedVersion: 2
-        x: 436
-        y: 856
+        x: 785
+        y: 1562
         width: 79
         height: 58
       alignment: 0
@@ -1242,8 +1242,8 @@ TextureImporter:
       name: Succubus-147
       rect:
         serializedVersion: 2
-        x: 926
-        y: 962
+        x: 936
+        y: 1862
         width: 85
         height: 61
       alignment: 0
@@ -1263,8 +1263,8 @@ TextureImporter:
       name: Succubus-148
       rect:
         serializedVersion: 2
-        x: 1
-        y: 780
+        x: 934
+        y: 1802
         width: 89
         height: 58
       alignment: 0
@@ -1284,8 +1284,8 @@ TextureImporter:
       name: Succubus-149
       rect:
         serializedVersion: 2
-        x: 916
-        y: 845
+        x: 873
+        y: 1627
         width: 81
         height: 53
       alignment: 0
@@ -1305,8 +1305,8 @@ TextureImporter:
       name: Succubus-15
       rect:
         serializedVersion: 2
-        x: 553
-        y: 838
+        x: 700
+        y: 1503
         width: 79
         height: 58
       alignment: 0
@@ -1326,8 +1326,8 @@ TextureImporter:
       name: Succubus-150
       rect:
         serializedVersion: 2
-        x: 715
-        y: 791
+        x: 781
+        y: 1507
         width: 77
         height: 53
       alignment: 0
@@ -1347,8 +1347,8 @@ TextureImporter:
       name: Succubus-151
       rect:
         serializedVersion: 2
-        x: 395
-        y: 729
+        x: 696
+        y: 1393
         width: 61
         height: 53
       alignment: 0
@@ -1368,8 +1368,8 @@ TextureImporter:
       name: Succubus-152
       rect:
         serializedVersion: 2
-        x: 409
-        y: 617
+        x: 562
+        y: 1210
         width: 47
         height: 53
       alignment: 0
@@ -1389,8 +1389,8 @@ TextureImporter:
       name: Succubus-153
       rect:
         serializedVersion: 2
-        x: 1
-        y: 692
+        x: 860
+        y: 1321
         width: 57
         height: 55
       alignment: 0
@@ -1410,8 +1410,8 @@ TextureImporter:
       name: Succubus-154
       rect:
         serializedVersion: 2
-        x: 634
-        y: 788
+        x: 615
+        y: 1447
         width: 79
         height: 58
       alignment: 0
@@ -1431,8 +1431,8 @@ TextureImporter:
       name: Succubus-155
       rect:
         serializedVersion: 2
-        x: 922
-        y: 900
+        x: 615
+        y: 1567
         width: 83
         height: 60
       alignment: 0
@@ -1452,8 +1452,8 @@ TextureImporter:
       name: Succubus-156
       rect:
         serializedVersion: 2
-        x: 554
-        y: 898
+        x: 702
+        y: 1623
         width: 84
         height: 61
       alignment: 0
@@ -1473,12 +1473,12 @@ TextureImporter:
       name: Succubus-157
       rect:
         serializedVersion: 2
-        x: 766
-        y: 543
+        x: 973
+        y: 1176
         width: 50
         height: 60
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.72, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1494,12 +1494,12 @@ TextureImporter:
       name: Succubus-158
       rect:
         serializedVersion: 2
-        x: 347
-        y: 965
+        x: 850
+        y: 1931
         width: 107
         height: 58
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.345794, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1515,12 +1515,12 @@ TextureImporter:
       name: Succubus-159
       rect:
         serializedVersion: 2
-        x: 103
-        y: 847
+        x: 718
+        y: 1866
         width: 98
         height: 52
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.326531, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1536,8 +1536,8 @@ TextureImporter:
       name: Succubus-16
       rect:
         serializedVersion: 2
-        x: 835
-        y: 908
+        x: 615
+        y: 1629
         width: 85
         height: 61
       alignment: 0
@@ -1557,12 +1557,12 @@ TextureImporter:
       name: Succubus-160
       rect:
         serializedVersion: 2
-        x: 236
-        y: 838
+        x: 713
+        y: 1740
         width: 95
         height: 60
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.326316, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1578,12 +1578,12 @@ TextureImporter:
       name: Succubus-161
       rect:
         serializedVersion: 2
-        x: 555
-        y: 961
+        x: 714
+        y: 1802
         width: 96
         height: 62
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.322917, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1599,8 +1599,8 @@ TextureImporter:
       name: Succubus-162
       rect:
         serializedVersion: 2
-        x: 333
-        y: 787
+        x: 860
+        y: 1409
         width: 74
         height: 53
       alignment: 0
@@ -1620,12 +1620,12 @@ TextureImporter:
       name: Succubus-163
       rect:
         serializedVersion: 2
-        x: 236
-        y: 967
+        x: 850
+        y: 1991
         width: 109
         height: 56
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.344037, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1641,12 +1641,12 @@ TextureImporter:
       name: Succubus-164
       rect:
         serializedVersion: 2
-        x: 1
-        y: 968
+        x: 615
+        y: 1992
         width: 116
         height: 55
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.353448, y: 0.490909}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1662,8 +1662,8 @@ TextureImporter:
       name: Succubus-165
       rect:
         serializedVersion: 2
-        x: 119
-        y: 963
+        x: 733
+        y: 1987
         width: 115
         height: 60
       alignment: 0
@@ -1683,8 +1683,8 @@ TextureImporter:
       name: Succubus-166
       rect:
         serializedVersion: 2
-        x: 1
-        y: 905
+        x: 615
+        y: 1929
         width: 114
         height: 61
       alignment: 0
@@ -1704,8 +1704,8 @@ TextureImporter:
       name: Succubus-167
       rect:
         serializedVersion: 2
-        x: 356
-        y: 678
+        x: 952
+        y: 1074
         width: 51
         height: 49
       alignment: 0
@@ -1725,8 +1725,8 @@ TextureImporter:
       name: Succubus-168
       rect:
         serializedVersion: 2
-        x: 660
-        y: 593
+        x: 107
+        y: 1290
         width: 51
         height: 47
       alignment: 0
@@ -1746,8 +1746,8 @@ TextureImporter:
       name: Succubus-169
       rect:
         serializedVersion: 2
-        x: 242
-        y: 344
+        x: 657
+        y: 1106
         width: 46
         height: 45
       alignment: 0
@@ -1767,8 +1767,8 @@ TextureImporter:
       name: Succubus-17
       rect:
         serializedVersion: 2
-        x: 653
-        y: 965
+        x: 909
+        y: 1742
         width: 89
         height: 58
       alignment: 0
@@ -1788,8 +1788,8 @@ TextureImporter:
       name: Succubus-170
       rect:
         serializedVersion: 2
-        x: 155
-        y: 628
+        x: 745
+        y: 1025
         width: 42
         height: 47
       alignment: 0
@@ -1809,8 +1809,8 @@ TextureImporter:
       name: Succubus-171
       rect:
         serializedVersion: 2
-        x: 951
-        y: 756
+        x: 407
+        y: 1352
         width: 55
         height: 53
       alignment: 0
@@ -1830,8 +1830,8 @@ TextureImporter:
       name: Succubus-172
       rect:
         serializedVersion: 2
-        x: 665
-        y: 697
+        x: 975
+        y: 1238
         width: 48
         height: 53
       alignment: 0
@@ -1851,8 +1851,8 @@ TextureImporter:
       name: Succubus-173
       rect:
         serializedVersion: 2
-        x: 257
-        y: 657
+        x: 979
+        y: 1403
         width: 44
         height: 53
       alignment: 0
@@ -1872,8 +1872,8 @@ TextureImporter:
       name: Succubus-174
       rect:
         serializedVersion: 2
-        x: 407
-        y: 512
+        x: 512
+        y: 1215
         width: 48
         height: 51
       alignment: 0
@@ -1893,8 +1893,8 @@ TextureImporter:
       name: Succubus-175
       rect:
         serializedVersion: 2
-        x: 299
-        y: 421
+        x: 461
+        y: 1129
         width: 47
         height: 51
       alignment: 0
@@ -1914,8 +1914,8 @@ TextureImporter:
       name: Succubus-176
       rect:
         serializedVersion: 2
-        x: 562
-        y: 595
+        x: 655
+        y: 1054
         width: 43
         height: 50
       alignment: 0
@@ -1935,8 +1935,8 @@ TextureImporter:
       name: Succubus-177
       rect:
         serializedVersion: 2
-        x: 59
-        y: 656
+        x: 678
+        y: 1360
         width: 56
         height: 31
       alignment: 0
@@ -1957,7 +1957,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 625
+        y: 1374
         width: 56
         height: 31
       alignment: 0
@@ -1977,8 +1977,8 @@ TextureImporter:
       name: Succubus-179
       rect:
         serializedVersion: 2
-        x: 608
-        y: 718
+        x: 406
+        y: 1318
         width: 55
         height: 32
       alignment: 0
@@ -1998,8 +1998,8 @@ TextureImporter:
       name: Succubus-18
       rect:
         serializedVersion: 2
-        x: 810
-        y: 793
+        x: 873
+        y: 1572
         width: 81
         height: 53
       alignment: 0
@@ -2019,8 +2019,8 @@ TextureImporter:
       name: Succubus-180
       rect:
         serializedVersion: 2
-        x: 1
-        y: 658
+        x: 917
+        y: 1272
         width: 56
         height: 32
       alignment: 0
@@ -2040,8 +2040,8 @@ TextureImporter:
       name: Succubus-181
       rect:
         serializedVersion: 2
-        x: 199
-        y: 735
+        x: 919
+        y: 1343
         width: 57
         height: 31
       alignment: 0
@@ -2061,8 +2061,8 @@ TextureImporter:
       name: Succubus-182
       rect:
         serializedVersion: 2
-        x: 249
-        y: 472
+        x: 103
+        y: 1053
         width: 48
         height: 32
       alignment: 0
@@ -2082,8 +2082,8 @@ TextureImporter:
       name: Succubus-183
       rect:
         serializedVersion: 2
-        x: 198
-        y: 458
+        x: 103
+        y: 1019
         width: 48
         height: 32
       alignment: 0
@@ -2103,8 +2103,8 @@ TextureImporter:
       name: Succubus-184
       rect:
         serializedVersion: 2
-        x: 509
-        y: 577
+        x: 461
+        y: 1233
         width: 49
         height: 33
       alignment: 0
@@ -2124,8 +2124,8 @@ TextureImporter:
       name: Succubus-185
       rect:
         serializedVersion: 2
-        x: 509
-        y: 542
+        x: 367
+        y: 1181
         width: 49
         height: 33
       alignment: 0
@@ -2145,8 +2145,8 @@ TextureImporter:
       name: Succubus-186
       rect:
         serializedVersion: 2
-        x: 103
-        y: 397
+        x: 52
+        y: 1005
         width: 48
         height: 32
       alignment: 0
@@ -2166,8 +2166,8 @@ TextureImporter:
       name: Succubus-187
       rect:
         serializedVersion: 2
-        x: 297
-        y: 392
+        x: 304
+        y: 1029
         width: 47
         height: 27
       alignment: 0
@@ -2187,8 +2187,8 @@ TextureImporter:
       name: Succubus-188
       rect:
         serializedVersion: 2
-        x: 193
-        y: 349
+        x: 607
+        y: 1088
         width: 46
         height: 27
       alignment: 0
@@ -2208,8 +2208,8 @@ TextureImporter:
       name: Succubus-189
       rect:
         serializedVersion: 2
-        x: 192
-        y: 320
+        x: 558
+        y: 1078
         width: 46
         height: 27
       alignment: 0
@@ -2229,8 +2229,8 @@ TextureImporter:
       name: Succubus-19
       rect:
         serializedVersion: 2
-        x: 333
-        y: 842
+        x: 860
+        y: 1464
         width: 77
         height: 53
       alignment: 0
@@ -2250,8 +2250,8 @@ TextureImporter:
       name: Succubus-190
       rect:
         serializedVersion: 2
-        x: 244
-        y: 391
+        x: 660
+        y: 1181
         width: 47
         height: 27
       alignment: 0
@@ -2271,8 +2271,8 @@ TextureImporter:
       name: Succubus-191
       rect:
         serializedVersion: 2
-        x: 193
-        y: 378
+        x: 660
+        y: 1153
         width: 47
         height: 26
       alignment: 0
@@ -2293,7 +2293,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 984
-        y: 524
+        y: 1514
         width: 38
         height: 52
       alignment: 0
@@ -2313,8 +2313,8 @@ TextureImporter:
       name: Succubus-193
       rect:
         serializedVersion: 2
-        x: 155
-        y: 415
+        x: 939
+        y: 1430
         width: 38
         height: 52
       alignment: 0
@@ -2334,8 +2334,8 @@ TextureImporter:
       name: Succubus-194
       rect:
         serializedVersion: 2
-        x: 705
-        y: 462
+        x: 720
+        y: 1307
         width: 37
         height: 51
       alignment: 0
@@ -2355,8 +2355,8 @@ TextureImporter:
       name: Succubus-195
       rect:
         serializedVersion: 2
-        x: 152
-        y: 310
+        x: 819
+        y: 1315
         width: 38
         height: 50
       alignment: 0
@@ -2376,8 +2376,8 @@ TextureImporter:
       name: Succubus-196
       rect:
         serializedVersion: 2
-        x: 153
-        y: 362
+        x: 820
+        y: 1367
         width: 38
         height: 51
       alignment: 0
@@ -2397,8 +2397,8 @@ TextureImporter:
       name: Succubus-197
       rect:
         serializedVersion: 2
-        x: 851
-        y: 708
+        x: 984
+        y: 1600
         width: 39
         height: 52
       alignment: 0
@@ -2418,8 +2418,8 @@ TextureImporter:
       name: Succubus-198
       rect:
         serializedVersion: 2
-        x: 237
-        y: 279
+        x: 804
+        y: 1040
         width: 38
         height: 34
       alignment: 0
@@ -2439,8 +2439,8 @@ TextureImporter:
       name: Succubus-199
       rect:
         serializedVersion: 2
-        x: 148
-        y: 273
+        x: 421
+        y: 1250
         width: 38
         height: 35
       alignment: 0
@@ -2460,8 +2460,8 @@ TextureImporter:
       name: Succubus-2
       rect:
         serializedVersion: 2
-        x: 407
-        y: 565
+        x: 316
+        y: 1183
         width: 49
         height: 50
       alignment: 0
@@ -2481,8 +2481,8 @@ TextureImporter:
       name: Succubus-20
       rect:
         serializedVersion: 2
-        x: 92
-        y: 726
+        x: 615
+        y: 1392
         width: 61
         height: 53
       alignment: 0
@@ -2502,8 +2502,8 @@ TextureImporter:
       name: Succubus-200
       rect:
         serializedVersion: 2
-        x: 341
-        y: 338
+        x: 421
+        y: 1213
         width: 38
         height: 35
       alignment: 0
@@ -2523,8 +2523,8 @@ TextureImporter:
       name: Succubus-201
       rect:
         serializedVersion: 2
-        x: 286
-        y: 304
+        x: 804
+        y: 1076
         width: 38
         height: 35
       alignment: 0
@@ -2544,8 +2544,8 @@ TextureImporter:
       name: Succubus-202
       rect:
         serializedVersion: 2
-        x: 548
-        y: 396
+        x: 789
+        y: 1003
         width: 37
         height: 35
       alignment: 0
@@ -2565,8 +2565,8 @@ TextureImporter:
       name: Succubus-203
       rect:
         serializedVersion: 2
-        x: 117
-        y: 640
+        x: 739
+        y: 976
         width: 36
         height: 47
       alignment: 0
@@ -2586,8 +2586,8 @@ TextureImporter:
       name: Succubus-204
       rect:
         serializedVersion: 2
-        x: 570
-        y: 701
+        x: 928
+        y: 1026
         width: 36
         height: 46
       alignment: 0
@@ -2607,8 +2607,8 @@ TextureImporter:
       name: Succubus-205
       rect:
         serializedVersion: 2
-        x: 117
-        y: 592
+        x: 883
+        y: 983
         width: 36
         height: 46
       alignment: 0
@@ -2628,8 +2628,8 @@ TextureImporter:
       name: Succubus-206
       rect:
         serializedVersion: 2
-        x: 653
-        y: 441
+        x: 889
+        y: 1031
         width: 37
         height: 47
       alignment: 0
@@ -2649,8 +2649,8 @@ TextureImporter:
       name: Succubus-207
       rect:
         serializedVersion: 2
-        x: 601
-        y: 409
+        x: 844
+        y: 1004
         width: 37
         height: 47
       alignment: 0
@@ -2670,8 +2670,8 @@ TextureImporter:
       name: Succubus-208
       rect:
         serializedVersion: 2
-        x: 744
-        y: 444
+        x: 828
+        y: 956
         width: 36
         height: 46
       alignment: 0
@@ -2691,8 +2691,8 @@ TextureImporter:
       name: Succubus-209
       rect:
         serializedVersion: 2
-        x: 633
-        y: 752
+        x: 859
+        y: 1248
         width: 55
         height: 34
       alignment: 0
@@ -2712,8 +2712,8 @@ TextureImporter:
       name: Succubus-21
       rect:
         serializedVersion: 2
-        x: 106
-        y: 431
+        x: 511
+        y: 1160
         width: 47
         height: 53
       alignment: 0
@@ -2733,8 +2733,8 @@ TextureImporter:
       name: Succubus-210
       rect:
         serializedVersion: 2
-        x: 551
-        y: 749
+        x: 916
+        y: 1236
         width: 55
         height: 34
       alignment: 0
@@ -2754,8 +2754,8 @@ TextureImporter:
       name: Succubus-211
       rect:
         serializedVersion: 2
-        x: 199
-        y: 698
+        x: 919
+        y: 1306
         width: 56
         height: 35
       alignment: 0
@@ -2775,8 +2775,8 @@ TextureImporter:
       name: Succubus-212
       rect:
         serializedVersion: 2
-        x: 60
-        y: 689
+        x: 859
+        y: 1284
         width: 56
         height: 35
       alignment: 0
@@ -2796,8 +2796,8 @@ TextureImporter:
       name: Succubus-213
       rect:
         serializedVersion: 2
-        x: 458
-        y: 715
+        x: 464
+        y: 1319
         width: 55
         height: 34
       alignment: 0
@@ -2817,8 +2817,8 @@ TextureImporter:
       name: Succubus-214
       rect:
         serializedVersion: 2
-        x: 304
-        y: 789
+        x: 956
+        y: 1583
         width: 26
         height: 47
       alignment: 0
@@ -2838,8 +2838,8 @@ TextureImporter:
       name: Succubus-215
       rect:
         serializedVersion: 2
-        x: 303
-        y: 740
+        x: 956
+        y: 1534
         width: 26
         height: 47
       alignment: 0
@@ -2859,8 +2859,8 @@ TextureImporter:
       name: Succubus-216
       rect:
         serializedVersion: 2
-        x: 203
-        y: 801
+        x: 956
+        y: 1632
         width: 26
         height: 48
       alignment: 0
@@ -2880,8 +2880,8 @@ TextureImporter:
       name: Succubus-217
       rect:
         serializedVersion: 2
-        x: 203
-        y: 851
+        x: 947
+        y: 1484
         width: 31
         height: 48
       alignment: 0
@@ -2901,8 +2901,8 @@ TextureImporter:
       name: Succubus-218
       rect:
         serializedVersion: 2
-        x: 491
-        y: 751
+        x: 759
+        y: 1343
         width: 58
         height: 52
       alignment: 0
@@ -2922,8 +2922,8 @@ TextureImporter:
       name: Succubus-219
       rect:
         serializedVersion: 2
-        x: 552
-        y: 785
+        x: 866
+        y: 1519
         width: 79
         height: 51
       alignment: 0
@@ -2943,8 +2943,8 @@ TextureImporter:
       name: Succubus-22
       rect:
         serializedVersion: 2
-        x: 831
-        y: 848
+        x: 788
+        y: 1622
         width: 83
         height: 58
       alignment: 0
@@ -2964,8 +2964,8 @@ TextureImporter:
       name: Succubus-220
       rect:
         serializedVersion: 2
-        x: 653
-        y: 908
+        x: 802
+        y: 1682
         width: 85
         height: 55
       alignment: 0
@@ -2985,8 +2985,8 @@ TextureImporter:
       name: Succubus-221
       rect:
         serializedVersion: 2
-        x: 835
-        y: 971
+        x: 711
+        y: 1686
         width: 89
         height: 52
       alignment: 0
@@ -3006,8 +3006,8 @@ TextureImporter:
       name: Succubus-222
       rect:
         serializedVersion: 2
-        x: 412
-        y: 804
+        x: 781
+        y: 1455
         width: 77
         height: 50
       alignment: 0
@@ -3027,8 +3027,8 @@ TextureImporter:
       name: Succubus-223
       rect:
         serializedVersion: 2
-        x: 303
-        y: 627
+        x: 59
+        y: 1339
         width: 51
         height: 49
       alignment: 0
@@ -3048,8 +3048,8 @@ TextureImporter:
       name: Succubus-224
       rect:
         serializedVersion: 2
-        x: 199
-        y: 596
+        x: 1
+        y: 1323
         width: 51
         height: 49
       alignment: 0
@@ -3069,8 +3069,8 @@ TextureImporter:
       name: Succubus-225
       rect:
         serializedVersion: 2
-        x: 815
-        y: 467
+        x: 317
+        y: 1235
         width: 50
         height: 49
       alignment: 0
@@ -3090,8 +3090,8 @@ TextureImporter:
       name: Succubus-226
       rect:
         serializedVersion: 2
-        x: 198
-        y: 492
+        x: 263
+        y: 1132
         width: 49
         height: 50
       alignment: 0
@@ -3111,8 +3111,8 @@ TextureImporter:
       name: Succubus-227
       rect:
         serializedVersion: 2
-        x: 54
-        y: 485
+        x: 265
+        y: 1287
         width: 50
         height: 50
       alignment: 0
@@ -3132,8 +3132,8 @@ TextureImporter:
       name: Succubus-228
       rect:
         serializedVersion: 2
-        x: 931
-        y: 556
+        x: 904
+        y: 1182
         width: 51
         height: 52
       alignment: 0
@@ -3153,8 +3153,8 @@ TextureImporter:
       name: Succubus-229
       rect:
         serializedVersion: 2
-        x: 608
-        y: 663
+        x: 688
+        y: 1252
         width: 52
         height: 53
       alignment: 0
@@ -3174,8 +3174,8 @@ TextureImporter:
       name: Succubus-23
       rect:
         serializedVersion: 2
-        x: 640
-        y: 848
+        x: 700
+        y: 1563
         width: 83
         height: 58
       alignment: 0
@@ -3195,8 +3195,8 @@ TextureImporter:
       name: Succubus-230
       rect:
         serializedVersion: 2
-        x: 870
-        y: 499
+        x: 160
+        y: 1241
         width: 50
         height: 54
       alignment: 0
@@ -3216,8 +3216,8 @@ TextureImporter:
       name: Succubus-231
       rect:
         serializedVersion: 2
-        x: 409
-        y: 672
+        x: 1
+        y: 953
         width: 47
         height: 55
       alignment: 0
@@ -3237,8 +3237,8 @@ TextureImporter:
       name: Succubus-232
       rect:
         serializedVersion: 2
-        x: 258
-        y: 712
+        x: 980
+        y: 1458
         width: 43
         height: 54
       alignment: 0
@@ -3258,8 +3258,8 @@ TextureImporter:
       name: Succubus-233
       rect:
         serializedVersion: 2
-        x: 517
-        y: 860
+        x: 988
+        y: 1686
         width: 34
         height: 54
       alignment: 0
@@ -3279,8 +3279,8 @@ TextureImporter:
       name: Succubus-24
       rect:
         serializedVersion: 2
-        x: 725
-        y: 846
+        x: 615
+        y: 1507
         width: 83
         height: 58
       alignment: 0
@@ -3300,8 +3300,8 @@ TextureImporter:
       name: Succubus-25
       rect:
         serializedVersion: 2
-        x: 744
-        y: 906
+        x: 901
+        y: 1682
         width: 85
         height: 58
       alignment: 0
@@ -3321,8 +3321,8 @@ TextureImporter:
       name: Succubus-26
       rect:
         serializedVersion: 2
-        x: 356
-        y: 627
+        x: 112
+        y: 1339
         width: 51
         height: 49
       alignment: 0
@@ -3342,8 +3342,8 @@ TextureImporter:
       name: Succubus-27
       rect:
         serializedVersion: 2
-        x: 867
-        y: 448
+        x: 369
+        y: 1216
         width: 50
         height: 49
       alignment: 0
@@ -3363,8 +3363,8 @@ TextureImporter:
       name: Succubus-28
       rect:
         serializedVersion: 2
-        x: 53
-        y: 433
+        x: 210
+        y: 1124
         width: 49
         height: 50
       alignment: 0
@@ -3384,8 +3384,8 @@ TextureImporter:
       name: Succubus-29
       rect:
         serializedVersion: 2
-        x: 1
-        y: 471
+        x: 317
+        y: 1286
         width: 50
         height: 50
       alignment: 0
@@ -3405,8 +3405,8 @@ TextureImporter:
       name: Succubus-3
       rect:
         serializedVersion: 2
-        x: 355
-        y: 575
+        x: 265
+        y: 1235
         width: 50
         height: 50
       alignment: 0
@@ -3426,8 +3426,8 @@ TextureImporter:
       name: Succubus-30
       rect:
         serializedVersion: 2
-        x: 54
-        y: 537
+        x: 165
+        y: 1339
         width: 51
         height: 49
       alignment: 0
@@ -3447,8 +3447,8 @@ TextureImporter:
       name: Succubus-31
       rect:
         serializedVersion: 2
-        x: 919
-        y: 401
+        x: 264
+        y: 1184
         width: 50
         height: 49
       alignment: 0
@@ -3468,8 +3468,8 @@ TextureImporter:
       name: Succubus-32
       rect:
         serializedVersion: 2
-        x: 1
-        y: 419
+        x: 103
+        y: 1087
         width: 49
         height: 50
       alignment: 0
@@ -3489,8 +3489,8 @@ TextureImporter:
       name: Succubus-33
       rect:
         serializedVersion: 2
-        x: 458
-        y: 612
+        x: 212
+        y: 1227
         width: 50
         height: 50
       alignment: 0
@@ -3510,8 +3510,8 @@ TextureImporter:
       name: Succubus-34
       rect:
         serializedVersion: 2
-        x: 405
-        y: 461
+        x: 314
+        y: 1110
         width: 48
         height: 49
       alignment: 0
@@ -3531,8 +3531,8 @@ TextureImporter:
       name: Succubus-35
       rect:
         serializedVersion: 2
-        x: 504
-        y: 439
+        x: 560
+        y: 1159
         width: 47
         height: 49
       alignment: 0
@@ -3552,8 +3552,8 @@ TextureImporter:
       name: Succubus-36
       rect:
         serializedVersion: 2
-        x: 657
-        y: 490
+        x: 559
+        y: 1107
         width: 46
         height: 50
       alignment: 0
@@ -3573,8 +3573,8 @@ TextureImporter:
       name: Succubus-37
       rect:
         serializedVersion: 2
-        x: 103
-        y: 345
+        x: 255
+        y: 1029
         width: 47
         height: 50
       alignment: 0
@@ -3594,8 +3594,8 @@ TextureImporter:
       name: Succubus-38
       rect:
         serializedVersion: 2
-        x: 607
-        y: 510
+        x: 261
+        y: 1081
         width: 48
         height: 49
       alignment: 0
@@ -3615,8 +3615,8 @@ TextureImporter:
       name: Succubus-39
       rect:
         serializedVersion: 2
-        x: 402
-        y: 410
+        x: 510
+        y: 1109
         width: 47
         height: 49
       alignment: 0
@@ -3636,8 +3636,8 @@ TextureImporter:
       name: Succubus-4
       rect:
         serializedVersion: 2
-        x: 1
-        y: 523
+        x: 218
+        y: 1339
         width: 51
         height: 49
       alignment: 0
@@ -3657,8 +3657,8 @@ TextureImporter:
       name: Succubus-40
       rect:
         serializedVersion: 2
-        x: 605
-        y: 458
+        x: 510
+        y: 1057
         width: 46
         height: 50
       alignment: 0
@@ -3678,8 +3678,8 @@ TextureImporter:
       name: Succubus-41
       rect:
         serializedVersion: 2
-        x: 52
-        y: 329
+        x: 204
+        y: 1021
         width: 47
         height: 50
       alignment: 0
@@ -3699,8 +3699,8 @@ TextureImporter:
       name: Succubus-42
       rect:
         serializedVersion: 2
-        x: 1
-        y: 317
+        x: 153
+        y: 994
         width: 47
         height: 50
       alignment: 0
@@ -3720,8 +3720,8 @@ TextureImporter:
       name: Succubus-43
       rect:
         serializedVersion: 2
-        x: 553
-        y: 433
+        x: 461
+        y: 1026
         width: 46
         height: 50
       alignment: 0
@@ -3741,8 +3741,8 @@ TextureImporter:
       name: Succubus-44
       rect:
         serializedVersion: 2
-        x: 451
-        y: 395
+        x: 461
+        y: 1078
         width: 47
         height: 49
       alignment: 0
@@ -3762,8 +3762,8 @@ TextureImporter:
       name: Succubus-45
       rect:
         serializedVersion: 2
-        x: 302
-        y: 474
+        x: 205
+        y: 1073
         width: 48
         height: 49
       alignment: 0
@@ -3783,8 +3783,8 @@ TextureImporter:
       name: Succubus-46
       rect:
         serializedVersion: 2
-        x: 507
-        y: 490
+        x: 102
+        y: 967
         width: 47
         height: 50
       alignment: 0
@@ -3804,8 +3804,8 @@ TextureImporter:
       name: Succubus-47
       rect:
         serializedVersion: 2
-        x: 500
-        y: 387
+        x: 409
+        y: 1004
         width: 46
         height: 50
       alignment: 0
@@ -3825,8 +3825,8 @@ TextureImporter:
       name: Succubus-48
       rect:
         serializedVersion: 2
-        x: 348
-        y: 375
+        x: 360
+        y: 1027
         width: 47
         height: 49
       alignment: 0
@@ -3846,8 +3846,8 @@ TextureImporter:
       name: Succubus-49
       rect:
         serializedVersion: 2
-        x: 352
-        y: 426
+        x: 154
+        y: 1046
         width: 48
         height: 49
       alignment: 0
@@ -3867,8 +3867,8 @@ TextureImporter:
       name: Succubus-5
       rect:
         serializedVersion: 2
-        x: 458
-        y: 664
+        x: 271
+        y: 1339
         width: 51
         height: 49
       alignment: 0
@@ -3888,8 +3888,8 @@ TextureImporter:
       name: Succubus-50
       rect:
         serializedVersion: 2
-        x: 192
-        y: 268
+        x: 606
+        y: 1036
         width: 43
         height: 50
       alignment: 0
@@ -3909,8 +3909,8 @@ TextureImporter:
       name: Succubus-51
       rect:
         serializedVersion: 2
-        x: 96
-        y: 254
+        x: 558
+        y: 1026
         width: 43
         height: 50
       alignment: 0
@@ -3930,8 +3930,8 @@ TextureImporter:
       name: Succubus-52
       rect:
         serializedVersion: 2
-        x: 50
-        y: 278
+        x: 979
+        y: 1352
         width: 44
         height: 49
       alignment: 0
@@ -3951,8 +3951,8 @@ TextureImporter:
       name: Succubus-53
       rect:
         serializedVersion: 2
-        x: 1
-        y: 215
+        x: 457
+        y: 975
         width: 43
         height: 49
       alignment: 0
@@ -3972,8 +3972,8 @@ TextureImporter:
       name: Succubus-54
       rect:
         serializedVersion: 2
-        x: 47
-        y: 226
+        x: 509
+        y: 1005
         width: 43
         height: 50
       alignment: 0
@@ -3993,8 +3993,8 @@ TextureImporter:
       name: Succubus-55
       rect:
         serializedVersion: 2
-        x: 155
-        y: 469
+        x: 590
+        y: 933
         width: 41
         height: 50
       alignment: 0
@@ -4014,8 +4014,8 @@ TextureImporter:
       name: Succubus-56
       rect:
         serializedVersion: 2
-        x: 141
-        y: 222
+        x: 844
+        y: 1053
         width: 43
         height: 49
       alignment: 0
@@ -4035,8 +4035,8 @@ TextureImporter:
       name: Succubus-57
       rect:
         serializedVersion: 2
-        x: 92
-        y: 203
+        x: 700
+        y: 1030
         width: 43
         height: 49
       alignment: 0
@@ -4056,8 +4056,8 @@ TextureImporter:
       name: Succubus-58
       rect:
         serializedVersion: 2
-        x: 46
-        y: 175
+        x: 651
+        y: 1003
         width: 43
         height: 49
       alignment: 0
@@ -4077,8 +4077,8 @@ TextureImporter:
       name: Succubus-59
       rect:
         serializedVersion: 2
-        x: 1
-        y: 266
+        x: 415
+        y: 1108
         width: 44
         height: 49
       alignment: 0
@@ -4098,8 +4098,8 @@ TextureImporter:
       name: Succubus-6
       rect:
         serializedVersion: 2
-        x: 971
-        y: 367
+        x: 211
+        y: 1176
         width: 50
         height: 49
       alignment: 0
@@ -4119,8 +4119,8 @@ TextureImporter:
       name: Succubus-60
       rect:
         serializedVersion: 2
-        x: 155
-        y: 729
+        x: 502
+        y: 953
         width: 42
         height: 50
       alignment: 0
@@ -4140,8 +4140,8 @@ TextureImporter:
       name: Succubus-61
       rect:
         serializedVersion: 2
-        x: 155
-        y: 677
+        x: 546
+        y: 948
         width: 42
         height: 50
       alignment: 0
@@ -4161,8 +4161,8 @@ TextureImporter:
       name: Succubus-62
       rect:
         serializedVersion: 2
-        x: 1
-        y: 164
+        x: 603
+        y: 985
         width: 43
         height: 49
       alignment: 0
@@ -4182,8 +4182,8 @@ TextureImporter:
       name: Succubus-63
       rect:
         serializedVersion: 2
-        x: 511
-        y: 664
+        x: 54
+        y: 1288
         width: 51
         height: 49
       alignment: 0
@@ -4203,8 +4203,8 @@ TextureImporter:
       name: Succubus-64
       rect:
         serializedVersion: 2
-        x: 303
-        y: 525
+        x: 158
+        y: 1139
         width: 50
         height: 48
       alignment: 0
@@ -4224,8 +4224,8 @@ TextureImporter:
       name: Succubus-65
       rect:
         serializedVersion: 2
-        x: 458
-        y: 570
+        x: 154
+        y: 1097
         width: 49
         height: 40
       alignment: 0
@@ -4245,8 +4245,8 @@ TextureImporter:
       name: Succubus-66
       rect:
         serializedVersion: 2
-        x: 713
-        y: 566
+        x: 160
+        y: 1297
         width: 51
         height: 40
       alignment: 0
@@ -4266,8 +4266,8 @@ TextureImporter:
       name: Succubus-67
       rect:
         serializedVersion: 2
-        x: 823
-        y: 633
+        x: 742
+        y: 1216
         width: 52
         height: 40
       alignment: 0
@@ -4287,8 +4287,8 @@ TextureImporter:
       name: Succubus-68
       rect:
         serializedVersion: 2
-        x: 938
-        y: 610
+        x: 577
+        y: 1265
         width: 53
         height: 40
       alignment: 0
@@ -4308,8 +4308,8 @@ TextureImporter:
       name: Succubus-69
       rect:
         serializedVersion: 2
-        x: 715
-        y: 749
+        x: 759
+        y: 1301
         width: 55
         height: 40
       alignment: 0
@@ -4330,7 +4330,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 52
-        y: 381
+        y: 1039
         width: 49
         height: 50
       alignment: 0
@@ -4350,8 +4350,8 @@ TextureImporter:
       name: Succubus-70
       rect:
         serializedVersion: 2
-        x: 769
-        y: 605
+        x: 686
+        y: 1210
         width: 52
         height: 40
       alignment: 0
@@ -4371,8 +4371,8 @@ TextureImporter:
       name: Succubus-71
       rect:
         serializedVersion: 2
-        x: 877
-        y: 606
+        x: 850
+        y: 1206
         width: 52
         height: 40
       alignment: 0
@@ -4392,8 +4392,8 @@ TextureImporter:
       name: Succubus-72
       rect:
         serializedVersion: 2
-        x: 491
-        y: 805
+        x: 759
+        y: 1397
         width: 59
         height: 21
       alignment: 0
@@ -4413,8 +4413,8 @@ TextureImporter:
       name: Succubus-73
       rect:
         serializedVersion: 2
-        x: 893
-        y: 795
+        x: 349
+        y: 1391
         width: 56
         height: 14
       alignment: 0
@@ -4435,7 +4435,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 59
-        y: 639
+        y: 1390
         width: 56
         height: 15
       alignment: 0
@@ -4455,8 +4455,8 @@ TextureImporter:
       name: Succubus-75
       rect:
         serializedVersion: 2
-        x: 893
-        y: 828
+        x: 117
+        y: 1390
         width: 56
         height: 15
       alignment: 0
@@ -4476,8 +4476,8 @@ TextureImporter:
       name: Succubus-76
       rect:
         serializedVersion: 2
-        x: 951
-        y: 828
+        x: 175
+        y: 1390
         width: 56
         height: 15
       alignment: 0
@@ -4497,8 +4497,8 @@ TextureImporter:
       name: Succubus-77
       rect:
         serializedVersion: 2
-        x: 893
-        y: 811
+        x: 233
+        y: 1390
         width: 56
         height: 15
       alignment: 0
@@ -4518,8 +4518,8 @@ TextureImporter:
       name: Succubus-78
       rect:
         serializedVersion: 2
-        x: 951
-        y: 811
+        x: 291
+        y: 1390
         width: 56
         height: 15
       alignment: 0
@@ -4539,8 +4539,8 @@ TextureImporter:
       name: Succubus-79
       rect:
         serializedVersion: 2
-        x: 515
-        y: 715
+        x: 519
+        y: 1268
         width: 53
         height: 15
       alignment: 0
@@ -4560,8 +4560,8 @@ TextureImporter:
       name: Succubus-8
       rect:
         serializedVersion: 2
-        x: 510
-        y: 612
+        x: 159
+        y: 1189
         width: 50
         height: 50
       alignment: 0
@@ -4581,8 +4581,8 @@ TextureImporter:
       name: Succubus-80
       rect:
         serializedVersion: 2
-        x: 458
-        y: 548
+        x: 314
+        y: 1161
         width: 49
         height: 20
       alignment: 0
@@ -4602,8 +4602,8 @@ TextureImporter:
       name: Succubus-81
       rect:
         serializedVersion: 2
-        x: 445
-        y: 369
+        x: 554
+        y: 1000
         width: 43
         height: 24
       alignment: 0
@@ -4623,8 +4623,8 @@ TextureImporter:
       name: Succubus-82
       rect:
         serializedVersion: 2
-        x: 240
-        y: 315
+        x: 705
+        y: 1081
         width: 44
         height: 27
       alignment: 0
@@ -4644,8 +4644,8 @@ TextureImporter:
       name: Succubus-83
       rect:
         serializedVersion: 2
-        x: 851
-        y: 762
+        x: 421
+        y: 1287
         width: 40
         height: 29
       alignment: 0
@@ -4666,7 +4666,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 984
-        y: 578
+        y: 1568
         width: 39
         height: 30
       alignment: 0
@@ -4686,8 +4686,8 @@ TextureImporter:
       name: Succubus-85
       rect:
         serializedVersion: 2
-        x: 517
-        y: 828
+        x: 988
+        y: 1654
         width: 33
         height: 30
       alignment: 0
@@ -4707,8 +4707,8 @@ TextureImporter:
       name: Succubus-86
       rect:
         serializedVersion: 2
-        x: 199
-        y: 771
+        x: 578
+        y: 1377
         width: 26
         height: 28
       alignment: 0
@@ -4728,8 +4728,8 @@ TextureImporter:
       name: Succubus-87
       rect:
         serializedVersion: 2
-        x: 999
-        y: 876
+        x: 909
+        y: 1842
         width: 23
         height: 22
       alignment: 0
@@ -4749,8 +4749,8 @@ TextureImporter:
       name: Succubus-88
       rect:
         serializedVersion: 2
-        x: 950
-        y: 704
+        x: 464
+        y: 1355
         width: 55
         height: 50
       alignment: 0
@@ -4770,8 +4770,8 @@ TextureImporter:
       name: Succubus-89
       rect:
         serializedVersion: 2
-        x: 794
-        y: 741
+        x: 521
+        y: 1355
         width: 55
         height: 50
       alignment: 0
@@ -4791,8 +4791,8 @@ TextureImporter:
       name: Succubus-9
       rect:
         serializedVersion: 2
-        x: 607
-        y: 612
+        x: 1
+        y: 1272
         width: 51
         height: 49
       alignment: 0
@@ -4812,8 +4812,8 @@ TextureImporter:
       name: Succubus-90
       rect:
         serializedVersion: 2
-        x: 715
-        y: 696
+        x: 521
+        y: 1302
         width: 54
         height: 51
       alignment: 0
@@ -4833,8 +4833,8 @@ TextureImporter:
       name: Succubus-91
       rect:
         serializedVersion: 2
-        x: 893
-        y: 742
+        x: 349
+        y: 1338
         width: 55
         height: 51
       alignment: 0
@@ -4854,8 +4854,8 @@ TextureImporter:
       name: Succubus-92
       rect:
         serializedVersion: 2
-        x: 892
-        y: 690
+        x: 606
+        y: 1340
         width: 55
         height: 50
       alignment: 0
@@ -4875,8 +4875,8 @@ TextureImporter:
       name: Succubus-93
       rect:
         serializedVersion: 2
-        x: 949
-        y: 652
+        x: 663
+        y: 1308
         width: 55
         height: 50
       alignment: 0
@@ -4896,8 +4896,8 @@ TextureImporter:
       name: Succubus-94
       rect:
         serializedVersion: 2
-        x: 771
-        y: 690
+        x: 463
+        y: 1268
         width: 54
         height: 49
       alignment: 0
@@ -4917,8 +4917,8 @@ TextureImporter:
       name: Succubus-95
       rect:
         serializedVersion: 2
-        x: 252
-        y: 600
+        x: 1
+        y: 1112
         width: 49
         height: 55
       alignment: 0
@@ -4938,8 +4938,8 @@ TextureImporter:
       name: Succubus-96
       rect:
         serializedVersion: 2
-        x: 818
-        y: 518
+        x: 213
+        y: 1279
         width: 50
         height: 58
       alignment: 0
@@ -4959,12 +4959,12 @@ TextureImporter:
       name: Succubus-97
       rect:
         serializedVersion: 2
-        x: 560
-        y: 536
+        x: 978
+        y: 1293
         width: 45
         height: 57
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.6666667, y: 0.49122807}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4980,12 +4980,12 @@ TextureImporter:
       name: Succubus-98
       rect:
         serializedVersion: 2
-        x: 456
-        y: 916
+        x: 615
+        y: 1758
         width: 96
         height: 51
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.26041666, y: 0.49019608}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -5001,12 +5001,12 @@ TextureImporter:
       name: Succubus-99
       rect:
         serializedVersion: 2
-        x: 744
-        y: 966
+        x: 810
+        y: 1739
         width: 89
         height: 57
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.23595506, y: 0.45614034}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -5014,6 +5014,48 @@ TextureImporter:
       bones: []
       spriteID: a2a02ca8042a5714abad66798946553b
       internalID: 1294781912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Avatar_1
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1407
+        width: 612
+        height: 640
+      alignment: 9
+      pivot: {x: 0.49183005, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8742f4919d29f314dbd6c93bbcaafbae
+      internalID: 611224827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Avatar_2
+      rect:
+        serializedVersion: 2
+        x: 959
+        y: 1925
+        width: 63
+        height: 64
+      alignment: 9
+      pivot: {x: 0.4920635, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9614a035de8fd1b4587a3a66e5e5b19b
+      internalID: 167059559
       vertices: []
       indices: 
       edges: []
@@ -5029,6 +5071,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Avatar_1: 611224827
+      Avatar_2: 167059559
       Succubus-0: -105610682
       Succubus-1: -1308644881
       Succubus-10: -1473009820

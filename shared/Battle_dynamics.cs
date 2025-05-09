@@ -1816,8 +1816,7 @@ namespace shared {
                 if (i >= roomCapacity && TERMINATING_PLAYER_ID == currCharacterDownsync.Id) break;
                 var thatCharacterInNextFrame = getChdFromChdArrs(joinIndex, roomCapacity, nextRenderFramePlayers, nextRenderFrameNpcs);
                 var chConfig = characters[currCharacterDownsync.SpeciesId];
-
-                float characterVirtualGridTop = currCharacterDownsync.VirtualGridY + (chConfig.DefaultSizeY >> 1);
+                var characterVirtualGridTop = currCharacterDownsync.VirtualGridY + (chConfig.DefaultSizeY >> 1);
                 if (0 > characterVirtualGridTop && Dying != currCharacterDownsync.CharacterState) {
                     thatCharacterInNextFrame.Hp = 0;
                     thatCharacterInNextFrame.VelX = 0;
@@ -1830,7 +1829,7 @@ namespace shared {
             for (int i = 0; i < nextRenderFramePickables.Count; i++) {
                 var nextPickable = nextRenderFramePickables[i];
                 if (TERMINATING_PICKABLE_LOCAL_ID == nextPickable.PickableLocalId) break;
-                float pickableVirtualGridTop = nextPickable.VirtualGridY + (DEFAULT_PICKABLE_HITBOX_SIZE_Y >> 1);
+                var pickableVirtualGridTop = nextPickable.VirtualGridY + (DEFAULT_PICKABLE_HITBOX_SIZE_Y >> 1);
                 if (0 > pickableVirtualGridTop && PickableState.Pidle == nextPickable.PkState) {
                     nextPickable.PkState = PickableState.Pdisappearing;
                     nextPickable.FramesInPkState = 0;

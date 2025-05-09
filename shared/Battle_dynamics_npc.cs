@@ -270,6 +270,10 @@ namespace shared {
                     }
                 }
             }
+
+            if (TARGET_CH_REACTION_FLEE_OPPO == visionReaction && chConfig.NoFlee) {
+                visionReaction = TARGET_CH_REACTION_FOLLOW;
+            }
             
             if (TARGET_CH_REACTION_FOLLOW == visionReaction) {
                 bool opponentAboveMe = 0 < oppoChColliderDy && (oppoChCollider.H < (1.67f*oppoChColliderDy+aCollider.H)); // i.e. "0.6f * (oppoChCollider.H - aCollider.H) < oppoChColliderDy"
@@ -775,6 +779,17 @@ namespace shared {
                         }
                     } // Don't use DragonPunch otherwise
                     break;
+                case SPECIES_SUCCUBUS:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * SuccubusKickHit1.HitboxOffsetX, currCharacterDownsync.VirtualGridY + (chConfig.DefaultSizeY >> 1) + SuccubusKickHit1.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((SuccubusKickHit1.HitboxSizeX >> 1), SuccubusKickHit1.HitboxSizeY);
+                    if (0.1f*aCollider.H < colliderDy) {
+                        if (0 <= colliderDx) {
+                            closeEnough = (boxCx + boxCwHalf > opponentBoxLeft) && (boxCy + boxChHalf > opponentBoxBottom); 
+                        } else {
+                            closeEnough = (boxCx - boxCwHalf < opponentBoxRight) && (boxCy + boxChHalf > opponentBoxBottom); 
+                        }
+                    } // Don't use DragonPunch otherwise
+                    break;
                 case SPECIES_SKELEARCHER:
                     if (currCharacterDownsync.Mp < RisingPurpleArrowSkill.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;         
                     closeEnough = (0 < colliderDy && absColliderDy > 0.8f * (bCollider.H-aCollider.H)); // A special case
@@ -868,6 +883,10 @@ namespace shared {
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * FireSwordManMelee1PrimerBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + FireSwordManMelee1PrimerBullet.HitboxOffsetY);
                     (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((FireSwordManMelee1PrimerBullet.HitboxSizeX >> 1), (FireSwordManMelee1PrimerBullet.HitboxSizeY >> 1));
                     break;
+                case SPECIES_SUCCUBUS:
+                    (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * SuccubusWhip1Hit1.HitboxOffsetX, currCharacterDownsync.VirtualGridY + SuccubusWhip1Hit1.HitboxOffsetY);
+                    (boxCwHalf, boxChHalf) = VirtualGridToPolygonColliderCtr((SuccubusWhip1Hit1.HitboxSizeX >> 1), (SuccubusWhip1Hit1.HitboxSizeY >> 1));
+                    break;
                 case SPECIES_DEMON_FIRE_SLIME:
                     if (currCharacterDownsync.Mp < DemonFireSlimeMelee1PrimarySkill.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;         
                     (boxCx, boxCy) = VirtualGridToPolygonColliderCtr(currCharacterDownsync.VirtualGridX + xfac * DemonFireSlimeMelee1PrimaryBullet.HitboxOffsetX, currCharacterDownsync.VirtualGridY + DemonFireSlimeMelee1PrimaryBullet.HitboxOffsetY);
@@ -891,6 +910,13 @@ namespace shared {
                     break;
                 case SPECIES_SKELEARCHER:
                     if (currCharacterDownsync.Mp < PurpleArrowPrimarySkill.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;
+                    closeEnough = (absColliderDy < 1.2f * (bCollider.H - aCollider.H)); // A special case
+                    if (closeEnough) {
+                        return TARGET_CH_REACTION_USE_MELEE;
+                    } else {
+                        return TARGET_CH_REACTION_FLEE_OPPO;
+                    }
+                case SPECIES_ARCHERGUARD_RED:
                     closeEnough = (absColliderDy < 1.2f * (bCollider.H - aCollider.H)); // A special case
                     if (closeEnough) {
                         return TARGET_CH_REACTION_USE_MELEE;
@@ -1004,6 +1030,15 @@ namespace shared {
                         return TARGET_CH_REACTION_USE_FIREBALL;
                     } else {
                         return TARGET_CH_REACTION_UNKNOWN;
+                    }
+                case SPECIES_FLYING_DEMON:
+                    if (notRecovered) return TARGET_CH_REACTION_UNKNOWN;
+                    if (currCharacterDownsync.Mp < FlyingDemonFireball.MpDelta) return TARGET_CH_REACTION_NOT_ENOUGH_MP;
+                    closeEnough = (absColliderDy < 0.5f * aCollider.H); // A special case
+                    if (closeEnough) {
+                        return TARGET_CH_REACTION_USE_FIREBALL;
+                    } else {
+                        return TARGET_CH_REACTION_FOLLOW;
                     }
                 case SPECIES_FIRESWORDMAN:
                     if (notRecovered) return TARGET_CH_REACTION_UNKNOWN;
@@ -1283,7 +1318,15 @@ namespace shared {
                     thatCharacterInNextFrame.CachedCueCmd = newCachedCueCmd;
                 } else if (!chConfig.JumpHoldingToFly && (JUMP_HOLDING_RDF_CNT_THRESHOLD_1 <= currCharacterDownsync.JumpHoldingRdfCnt || JUMP_HOLDING_RDF_CNT_THRESHOLD_2 < currCharacterDownsync.FramesInChState || !inProactiveJumpOrJumpStartupOrJumpEnd)) {
                     if (0 > decodedInputHolder.Dy) {
-                        decodedInputHolder.Dy = 0;
+                        if (!isCharacterFlying) {
+                            decodedInputHolder.Dy = 0;
+                        } else {
+                            // Flying
+                            var characterVirtualGridBottom = currCharacterDownsync.VirtualGridY;
+                            if (0 >= characterVirtualGridBottom) {
+                                decodedInputHolder.Dy = +2;
+                            }
+                        }
                     }
                     decodedInputHolder.BtnALevel = 0;
                     ulong newCachedCueCmd = EncodeInput(decodedInputHolder);

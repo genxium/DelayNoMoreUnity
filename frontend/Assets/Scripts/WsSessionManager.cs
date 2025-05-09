@@ -136,13 +136,14 @@ public class WsSessionManager {
         return (null != playerId);
     }
 
-    public async Task ConnectWsAsync(string wsEndpoint, CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource, CancellationTokenSource guiCanProceedSignalSource) {
+    private string battlesrvEndpoint = Env.Instance.getWsEndpoint();
+    public async Task ConnectWsAsync(CancellationToken cancellationToken, CancellationTokenSource cancellationTokenSource, CancellationTokenSource guiCanProceedSignalSource) {
         if (null == authToken || null == playerId) {
             string errMsg = $"ConnectWs not having enough credentials, authToken={authToken}, playerId={playerId}, please go back to LoginPage!";
             throw new Exception(errMsg);
         }
         ++incCnt;
-        string fullUrl = wsEndpoint + $"?authToken={authToken}&playerId={playerId}&speciesId={speciesId}&roomId={roomId}&forReentry={forReentry}&&incCnt={incCnt}";
+        string fullUrl = battlesrvEndpoint + $"?authToken={authToken}&playerId={playerId}&speciesId={speciesId}&roomId={roomId}&forReentry={forReentry}&&incCnt={incCnt}";
         Debug.Log($"About to connect Ws to {fullUrl}, please wait...");
         using (ClientWebSocket ws = new ClientWebSocket()) {
             try {

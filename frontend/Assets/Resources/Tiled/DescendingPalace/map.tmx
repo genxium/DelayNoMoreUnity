@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="162" nextobjectid="549">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="162" nextobjectid="549">
  <properties>
   <property name="MatchInOrder" value="true"/>
   <property name="battleDurationSeconds" value="1600"/>
@@ -14,10 +14,9 @@
  <tileset firstgid="1046" source="../shared_comps/bkg-shrinked/colorpad-bkg.tsx"/>
  <tileset firstgid="1054" source="../shared_comps/bkg-shrinked/mountain2-bkg.tsx"/>
  <tileset firstgid="1070" source="../shared_comps/bkg-shrinked/mountain4-bkg.tsx"/>
- <tileset firstgid="1086" source="../shared_comps/tiles0.tsx"/>
- <tileset firstgid="1150" source="../shared_comps/deep_cave16.tsx"/>
- <tileset firstgid="1345" source="../shared_comps/pickable.tsx"/>
- <tileset firstgid="1777" source="../towers/towers.tsx"/>
+ <tileset firstgid="1086" source="../shared_comps/deep_cave16.tsx"/>
+ <tileset firstgid="1281" source="../shared_comps/pickable.tsx"/>
+ <tileset firstgid="1713" source="../towers/towers.tsx"/>
  <layer id="160" name="Background2" width="64" height="70">
   <properties>
    <property name="unity:SortingLayer" value="Background"/>
@@ -31,7 +30,7 @@
    <property name="unity:SortingLayer" value="Background"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt0bENwjAURVEXzgZhH0bzaNmE9JHoLRp+5yKRiCIHBJwj3caVn50SAAAAAAAAAAAAAPAtltyne/70kmNq7tuRd4qzsrS6/cmeeu9/1WNjf5yV2nr7nf59/y2n6xyNQ0pndxnW++OsjK3T7xBbp9g81Y2/AAAAAAD4FU/p7NRT
+   eJzt0bEJwzAQBVAVGiyjaZO4N6QXaTyEvU+uUyNIMHKMk/fgg7jqvi4lAAAAAAAAAAAAAOAq5jwmj3x2k31qHps9/xSzMrcMu8knGd3/XZ6d/jErteXrO/17/3tOtymyxvvobJ3+MStry+E7RNclOi+1swsAAAAAwK94AWuAyV0=
   </data>
  </layer>
  <layer id="33" name="setGround" width="64" height="70" visible="0">
@@ -47,7 +46,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztm8tKw0AUhseaLL2B7udRfJQ+iWav4lZEIRvvCuJdN1ZLceON4qaiGDeKCK6qom78Qw2MMaYTmkynmXPgJ5AxZL7p78mZSWbaYmwamjdEC9DiD7OoTUO0BW2H2Gcg02KK+Imf+NkY1G0z781iXrv7pCrqFuNdNuOTYF+zWNFUfrB7y+AvgP/VIH6wcjBzsHv/+b+G89cxummSM0bQ7iTUMVRWkItk/P+AtscYPTXppz+uEwl1AV0q5M/S/xs/tVYS+XXZjgJ+Gf/nOSj///X/IcaiFNJRTusi0f9zYMRYeKc4noV0nlN+eJ3D83wJfD02c5Hr3Xb3SXUE3L044vd3awaNAVh5wB0c6wbxB/kP7LwP7MgFrl93jGas2Zh84iq4fyCwOoUGO+9v/B94tzg/nqH8+g75lq1EjMFq4zmc6f3FfoDVAXMR7Fzl2ucutBfBv49zBwr7EV4DVbn2GLXWMqWwD+E1UKp/qf6Nmv9F1cMy9XGz63SoqWXmf1H1sEx93Ow6HWpqGf/Lztk7MWj9j9Y/KP+T//Pi/6TPXF39/4J5yTP6FKeXFJ65OvrfZ/+EPtDXOH2l8MzV0f/gcu4U8evo/wGbsUEJDdmt30tH/6sMHf2vMnT0v8og/5P/yf/kf/H9Z90gfvH9JwUFhbnhz6mqFhsuQ+3ui6oAawnMpWBOWQF7zaD8D9ZiReBPY07dafGe8ppCpwXxEz/xEz/xEz/xJ7s2vDcmai9M8E4u7huZpG1pRiv84b0xUXthgndycd/IJG1LM8j/8vzrXb+V9G+yaGs16PcnfmH+b1ycCPxVS82+S10CrM6VwH8HeVb8dyd5ks96L/CbrG8gkkPJ
+   eJztm8tKw0AUhkfIg8yTqHsVt1IUuvGuG++6MSrixhvFTUUxbhQRiouqqJuqa2+g+zyKf6iBYRzTxCbTaeYc+AlkGnq+6d/JmUmm4DBWgEYs0Sg09sMsatYSzUHzEvsgZFsMED/xEz/rgZ4d5t9Arc5JV1Qdxh+hfrBPO6xoKz/Y/QnwP+F4bRE/WDmYOdj9v/xfxvnDCB01GDM60d6dUOvQhoaxSOX/qw7GRJ2h7TxCFw3yDPq1L6H2oH2N/Fn6f+an1kqioC5b0MAfx/95Dhr/f/t/FX3hSlrLaV0k+n8YjOgLfxvHHUm7OeWH1zk8z8fB9+IwD2O91+qcdEfI/Qrh9/fKFvUBWHnIHR6rFvGH4x/Y+Ru4MRZ4Qd3RlbGGIsaToobvDwVW96nOzt/r/wP/GOd7M1RQ32G8ZZOKPpiq34cz/X4xD7C6YC6Cnetc+1yElhT8yzi3ojEPeQ1U59qjaq1lQGMO8hoo1b9U/6rmf6p6OE593Og6E2rqOPM/VT0cpz5udJ0JNXUc/8eds7dj0PofrX/Q+E/+z4v/k95zTfV/BfOSS+QUpco/77ny+r5p/g/Y76E75BqlhxTuuSb6H1zuiSZ+E/3/gVw+Y+grRX6T/K8zTPS/zjDR/zqD/E/+J/+T/8Xnn1WL+MXnnxQUFPZGMKcqOax7A2p1LroCrDUw18I55SbYyxaN/2Atbgr8acyp2y1uU15TaLcgfuInfuInfuIn/mTXyntjVHthwmdyUe/IJG1LM5rhl/fGqPbChM/kot6RSdqWZpD/4/PLz06TfiaLtmaDfn/iF+b/1sWWwF9y9Oy7NCXA6h4I/CeQ50S/d5InBaynAr/N+gb7uaT1
   </data>
  </layer>
  <layer id="64" name="Foreground" width="64" height="70">
@@ -55,7 +54,7 @@
    <property name="unity:SortingLayer" value="Ground"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmbtuwjAYhYOUwAM1fYjOtE8SvCNm2AkR7cRFwA5MXLpyG9p3ga0n1JF+fgJbVeGcT/pkBye2j20YQq3keQaGsAYjq7HXxl5nbaH4PBRlKJ4JRSn7NaofPY5ul/cYNX4kxpTtt8ap5cw7Kl1ni4Sy/1vPyD7l+Ebdk81br4VR9xg1dqj6D9VzRvUh90O239uLtP7led5rqRh+e5frk9afYVF4EvufnYki5a+KM1CzZ/+tQPlTquL7ULTshJBLXvxLCSFu8Ol79TVcwSVcwP+e01/zgYzvsAsPcA93cAs3DufPMk/gGI5gYu3AGLYdyy/3Oss8hzM4dTh/3l5nmWNVDh3Jn7fXLdiEJ3i0JqI+dCh/Q+11mrMcePVK8FsGOWb5B7APew+cnxBCCCGEEELIffh+nxByiwV+E5ZwBdf++T+DQrFB3i3cwT08wK5/fseavnN0njYyxrADE+sIjuFErIWr5OWfwhmci7Vw9UzI/EObPVblzOEzofOnHq2JqJ9gE7YcOxM9zL0PByJ/EFxbhhVbJupMNB44PyGEEEIIIYQQQgghhBBCiCv8AEeC7G8=
+   eJztmUtuwjAURY2UHTXdAGMY0UqEiHbER8AssYARgU75LQcWAGyg3U9vkCO9voYOKlUVzj3SkR2c2L62MwlpzRgLQ5jCxGndtXXXRVsofg9FGYpnQlHKfq3qR4+j2+U9Vo2fiDFl+61x0pJ5J7Xv2RKh7P/WM7JPOb5V9xTz1mth1T1WjR2q/kP1nFV9yP2Q7T/tRV5/N8Y81arhh/m6Pnn9EVaFB7H/xZmoUv6WOAOpO/vPFcqf0xLvQ9WyE0IIIVXgLTDZCi5hBhfwv+f017wi4wvswj3cwS3cwLXH+YvMEziGIxg7OzCCbc/yy70uMs/hDE49zl+210XmSJVDT/KX7XUTNuARHpyxqA89yl9Xe53nPMOLK08lFvkHsA97d5yfEEIIIYQQQgghhPyORWBMBpdwFVz/M6gUa+TdwC3cwT3sBtdvrPk3R+9pI2MEOzB2juAYTsRa+EpZ/imcwblYC1/PhMw/dNkjVc48PhM6f+7BGYv6ETZg07Mz0cPc+3Ag8p9KPMOLK2N1Jup3nJ8QQgghhBBCCCGEEEIIIcQXPgFh0M53
   </data>
  </layer>
  <objectgroup id="1" name="PlayerStartingPos">
@@ -261,7 +260,7 @@
    </properties>
    <point/>
   </object>
-  <object id="546" gid="2147485428" x="768" y="1072" width="18" height="27">
+  <object id="546" gid="2147485364" x="768" y="1072" width="18" height="27">
    <properties>
     <property name="dirX" value="-2"/>
     <property name="publishingEvtMaskUponKilled" value="1"/>
@@ -538,17 +537,17 @@
   </object>
  </objectgroup>
  <objectgroup id="161" name="Pickable">
-  <object id="535" gid="1524" x="464" y="144" width="32" height="32">
+  <object id="535" gid="1460" x="464" y="144" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>
   </object>
-  <object id="537" gid="1524" x="352" y="960" width="32" height="32">
+  <object id="537" gid="1460" x="352" y="960" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>
   </object>
-  <object id="538" gid="1524" x="48" y="608" width="32" height="32">
+  <object id="538" gid="1460" x="48" y="608" width="32" height="32">
    <properties>
     <property name="stockQuota" value="1"/>
    </properties>
