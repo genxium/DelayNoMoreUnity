@@ -489,7 +489,6 @@ public class OnlineMapController : AbstractMapController {
 
         using (var guiCanProceedSignalSource = new CancellationTokenSource()) {
             var guiCanProceedSignal = guiCanProceedSignalSource.Token;
-            var pseudoQ = new BlockingCollection<int>();
             Task guiWaitToProceedTask = Task.Run(async () => {
                 await Task.Delay(int.MaxValue, guiCanProceedSignal);
             });
