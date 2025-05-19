@@ -1788,15 +1788,11 @@ namespace shared {
                                 bool hasBeenOnWallCollisionResultForSameChState = (chConfig.OnWallEnabled && currCharacterDownsync.OnWall && MAGIC_FRAMES_TO_BE_ON_WALL <= thatCharacterInNextFrame.FramesInChState);
                                 if (!isInJumpStartup(thatCharacterInNextFrame, chConfig) && !isJumpStartupJustEnded(currCharacterDownsync, thatCharacterInNextFrame, chConfig) && (hasBeenOnWallChState || hasBeenOnWallCollisionResultForSameChState)) {
                                     thatCharacterInNextFrame.CharacterState = OnWallIdle1;
+                                    thatCharacterInNextFrame.RemainingAirJumpQuota = chConfig.DefaultAirJumpQuota;
+                                    thatCharacterInNextFrame.RemainingAirDashQuota = chConfig.DefaultAirDashQuota;
                                     resetJumpStartup(thatCharacterInNextFrame);
                                 }
                                 break;
-                        }
-
-                        if (!currCharacterDownsync.OnWall) {
-                            // [WARNING] Transition of "wall grabbing: false -> true" should also help reset these quotas!
-                            thatCharacterInNextFrame.RemainingAirJumpQuota = chConfig.DefaultAirJumpQuota;
-                            thatCharacterInNextFrame.RemainingAirDashQuota = chConfig.DefaultAirDashQuota;
                         }
                     }
                 }

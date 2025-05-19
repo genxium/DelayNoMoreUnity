@@ -18,7 +18,7 @@ public class StoryModeCharacterSelectPanel : MonoBehaviour {
     }
 
     public void toggleUIInteractability(bool val) {
-        characterSelectGroup.toggleUIInteractability(enabled);
+        characterSelectGroup.toggleUIInteractability(val);
     }
 
     public void ResetSelf() {

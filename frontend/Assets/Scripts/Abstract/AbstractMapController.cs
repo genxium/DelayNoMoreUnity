@@ -1068,6 +1068,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                 material.SetFloat("_Seed", Time.realtimeSinceStartup);
             }
         }
+        
+        if (skipInterpolation) {
+            skipInterpolation = false;
+        }
     }
 
     protected void preallocatePixelVfxNodes() {
@@ -3978,7 +3982,6 @@ public abstract class AbstractMapController : MonoBehaviour {
         float effZ = calcEffCharacterZ(currCharacterDownsync, chConfig);
         if (skipInterpolation) {
             newPosHolder.Set(newWx, newWy, effZ);
-            skipInterpolation = false;
             return;
         }
         bool justDead = (null != prevCharacterDownsync && (CharacterState.Dying == prevCharacterDownsync.CharacterState || 0 >= prevCharacterDownsync.Hp));
