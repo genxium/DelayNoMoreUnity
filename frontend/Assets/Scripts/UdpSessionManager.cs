@@ -43,10 +43,10 @@ public class UdpSessionManager {
     }
 
     public void ResetUdpClient(int roomCapacity, int selfJoinIndex, RepeatedField<PeerUdpAddr> initialPeerAddrList, WsReq theServerHolePuncher, WsReq thePeerHolePuncher, CancellationToken sessionCancellationToken) {
-        Debug.Log(String.Format("ResetUdpClient#1: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
+        Debug.Log($"ResetUdpClient#1: roomCapacity={roomCapacity}, thread id={Thread.CurrentThread.ManagedThreadId}.");
         serverHolePuncher = theServerHolePuncher;
         peerHolePuncher = thePeerHolePuncher;
-        Debug.Log(String.Format("ResetUdpClient#2: roomCapacity={0}, thread id={1}.", roomCapacity, Thread.CurrentThread.ManagedThreadId));
+        Debug.Log($"ResetUdpClient#2: roomCapacity={roomCapacity}, thread id={Thread.CurrentThread.ManagedThreadId}.");
         localSeqNo = 0;
         UpdatePeerAddr(roomCapacity, selfJoinIndex, initialPeerAddrList);
     }
@@ -78,7 +78,7 @@ public class UdpSessionManager {
 
     private async Task Send(UdpClient udpSession, int roomCapacity, int selfJoinIndex, CancellationToken sessionCancellationToken) {
         // TODO: Make this method thread-safe for "this.peerUdpAddrList"
-        Debug.Log(String.Format("Starts udpSession 'Send' loop, now senderBuffer.Count={0}", senderBuffer.Count));
+        Debug.Log($"Starts udpSession 'Send' loop, now senderBuffer.Count={senderBuffer.Count}");
         WsReq toSendObj;
         try {
             while (!sessionCancellationToken.IsCancellationRequested) {
@@ -150,13 +150,13 @@ public class UdpSessionManager {
                 WsReq req = WsReq.Parser.ParseFrom(recvResult.Buffer);
                 switch (req.Act) {
                     case Battle.UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR:
-                        Debug.Log(String.Format("Received direct holePuncher from joinIndex: {0}, from addr={1}", req.JoinIndex, recvResult.RemoteEndPoint));
+                        Debug.Log($"Received direct holePuncher from joinIndex: {req.JoinIndex}, from addr={recvResult.RemoteEndPoint}");
                         markPunched(req.JoinIndex, roomCapacity);
                         break;
                     case Battle.UPSYNC_MSG_ACT_PLAYER_CMD:
                         if (0 == Interlocked.Read(ref peerUdpEndPointPunched[req.JoinIndex]) && !recvResult.RemoteEndPoint.Address.Equals(peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL].Address)) {
                             // [WARNING] Any packet not from the backend udp tunnel can be effectively a holepunch!
-                            Debug.Log(String.Format("Received effective holePuncher from joinIndex: {0}, from addr={1}", req.JoinIndex, recvResult.RemoteEndPoint));
+                            Debug.Log($"Received effective holePuncher from joinIndex: {req.JoinIndex}, from addr={recvResult.RemoteEndPoint}");
                             markPunched(req.JoinIndex, roomCapacity);
                         }
                         recvBuffer.Enqueue(req);
@@ -185,7 +185,7 @@ public class UdpSessionManager {
         for (int i = 0; i <= roomCapacity; i++) {
             if (i == selfJoinIndex) continue;
             if (i > newPeerUdpAddrList.Count) {
-                Debug.LogWarning(String.Format("newPeerUdpAddrList {0} doesn't have i={1} indice; breaking", newPeerUdpAddrList, i));
+                Debug.LogWarning($"newPeerUdpAddrList {newPeerUdpAddrList} doesn't have i={i} indice; breaking");
                 break;
             }
             if (0 < i && String.IsNullOrEmpty(newPeerUdpAddrList[i].Ip)) continue;
@@ -204,7 +204,7 @@ public class UdpSessionManager {
                 peerUdpEndPointList[i] = new IPEndPoint(newEndpointIp, newPeerUdpAddrList[i].Port);
                 peerUdpAddrList[i] = new PeerUdpAddr(newPeerUdpAddrList[i]);
             } catch (Exception ex) {
-                Debug.LogError(String.Format("Error updating peerUdpEndPointList at i={0} indice with newPeerUdpAddrList={1}; ex={2} breaking", i, newPeerUdpAddrList, ex));
+                Debug.LogError($"Error updating peerUdpEndPointList at i={i} indice with newPeerUdpAddrList={newPeerUdpAddrList}; ex={ex} breaking");
                 break;
             }
             

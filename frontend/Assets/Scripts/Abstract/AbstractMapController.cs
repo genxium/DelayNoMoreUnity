@@ -1068,10 +1068,6 @@ public abstract class AbstractMapController : MonoBehaviour {
                 material.SetFloat("_Seed", Time.realtimeSinceStartup);
             }
         }
-        
-        if (skipInterpolation) {
-            skipInterpolation = false;
-        }
     }
 
     protected void preallocatePixelVfxNodes() {
@@ -1515,7 +1511,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         iptmgr.btnB.GetComponent<InventorySlot>().resumeRegularBtnB();
     }
 
-    public void onInputFrameDownsyncBatch(RepeatedField<InputFrameDownsync> batch) {
+    public void onInputFrameDownsyncBatch(RepeatedField<InputFrameDownsync> batch, int withPbRdfId = 0) {
         // This method is guaranteed to run in UIThread only.
         if (null == batch) {
             return;
@@ -1540,13 +1536,18 @@ public abstract class AbstractMapController : MonoBehaviour {
             if (inputFrameDownsyncId <= lastAllConfirmedInputFrameId) {
                 continue;
             }
+            var (res1, localInputFrame) = inputBuffer.GetByFrameId(inputFrameDownsyncId);
+            if (withPbRdfId < playerRdfId) {
+                if (null != localInputFrame && 0 < (localInputFrame.UdpConfirmedList & selfJoinIndexMask) && localInputFrame.InputList[selfJoinIndexArrIdx] != inputFrameDownsync.InputList[selfJoinIndexArrIdx]) {
+                    Debug.LogWarning($"withPbRdfId={withPbRdfId} < @playerRdfId={playerRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, overriding localSelfInput={localInputFrame.InputList[selfJoinIndexArrIdx]} by backend generated {inputFrameDownsync.InputList[selfJoinIndexArrIdx]} of ifdId={inputFrameDownsyncId}: inputBuffer={inputBuffer.toSimpleStat()}");
+                }
+            } else {
+                // Otherwise this is a valid "force-resync pump", no need to report local input overriding
+            }
+
             // [WARNING] Now that "inputFrameDownsyncId > self.lastAllConfirmedInputFrameId", we should make an update immediately because unlike its backend counterpart "Room.LastAllConfirmedInputFrameId", the frontend "mapIns.lastAllConfirmedInputFrameId" might inevitably get gaps among discrete values due to "either type#1 or type#2 forceConfirmation" -- and only "onInputFrameDownsyncBatch" can catch this! 
             lastAllConfirmedInputFrameId = inputFrameDownsyncId;
-            var (res1, localInputFrame) = inputBuffer.GetByFrameId(inputFrameDownsyncId);
             int playerRdfId2 = ConvertToLastUsedRenderFrameId(inputFrameDownsyncId);
-            if (null != localInputFrame && 0 < (localInputFrame.UdpConfirmedList & selfJoinIndexMask) && localInputFrame.InputList[selfJoinIndexArrIdx] != inputFrameDownsync.InputList[selfJoinIndexArrIdx]) {
-                Debug.LogWarning($"@playerRdfId={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, overriding localSelfInput={localInputFrame.InputList[selfJoinIndexArrIdx]} by backend generated {inputFrameDownsync.InputList[selfJoinIndexArrIdx]} of ifdId={inputFrameDownsyncId}: inputBuffer={inputBuffer.toSimpleStat()}");
-            }
 
             if (null != localInputFrame
               &&
@@ -1589,8 +1590,6 @@ public abstract class AbstractMapController : MonoBehaviour {
     }
 
     public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch, bool usingOthersForcedDownsyncRenderFrameDict = false) {
-        // This function is also applicable to "re-joining".
-        onInputFrameDownsyncBatch(accompaniedInputFrameDownsyncBatch); // Important to do this step before setting IN_BATTLE
         if (null == renderBuffer) {
             return;
         }
@@ -1620,6 +1619,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 othersForcedDownsyncRenderFrameDict[rdfId] = pbRdf;
             }
         }
+        onInputFrameDownsyncBatch(accompaniedInputFrameDownsyncBatch, pbRdf.Id); // Important to do this step before setting IN_BATTLE
 
         var (oldRdfExists, oldRdf) = renderBuffer.GetByFrameId(rdfId);
         var (dumpRenderCacheRet, oldStRenderFrameId, oldEdRenderFrameId) = (shouldForceDumping1 || shouldForceDumping2 || shouldForceResync) ? renderBuffer.SetByFrameId(pbRdf, rdfId) : (RingBuffer<RoomDownsyncFrame>.RING_BUFF_CONSECUTIVE_SET, TERMINATING_RENDER_FRAME_ID, TERMINATING_RENDER_FRAME_ID);
@@ -1835,6 +1835,9 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         applyRoomDownsyncFrameDynamics(rdf, prevRdf);
         cameraTrack(rdf, prevRdf, false);
+        if (skipInterpolation) {
+            skipInterpolation = false;
+        }
 
         bool battleResultIsSetAgain = isBattleResultSet(confirmedBattleResult);
         if (!battleResultIsSetAgain) {

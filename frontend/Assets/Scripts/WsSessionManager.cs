@@ -143,7 +143,7 @@ public class WsSessionManager {
             throw new Exception(errMsg);
         }
         ++incCnt;
-        string fullUrl = battlesrvEndpoint + $"?authToken={authToken}&playerId={playerId}&speciesId={speciesId}&roomId={roomId}&forReentry={forReentry}&&incCnt={incCnt}";
+        string fullUrl = battlesrvEndpoint + $"?authToken={Uri.EscapeDataString(authToken)}&playerId={playerId}&speciesId={speciesId}&roomId={roomId}&forReentry={forReentry}&&incCnt={incCnt}";
         Debug.Log($"About to connect Ws to {fullUrl}, please wait...");
         using (ClientWebSocket ws = new ClientWebSocket()) {
             try {
@@ -178,7 +178,7 @@ public class WsSessionManager {
             } catch (OperationCanceledException ocEx) {
                 Debug.LogWarning($"WsSession is cancelled for 'ConnectAsync' @incCnt={incCnt}; ocEx.Message={ocEx.Message}");
             } catch (Exception ex) {
-                Debug.LogWarningFormat("WsSession is stopped by exception; ex={0}", ex);
+                Debug.LogWarning($"WsSession is stopped by exception; ex={ex}");
                 // [WARNING] Edge case here, if by far we haven't signaled "guiCanProceedSignalSource", it means that the "characterSelectPanel" is still awaiting this signal to either proceed to battle or prompt an error message.  
                 if (!guiCanProceedSignalSource.IsCancellationRequested) {
                     string errMsg = ("ConnectWs failed before battle starts, authToken=" + authToken + " playerId=" + playerId + ", please go back to LoginPage!");
@@ -211,7 +211,7 @@ public class WsSessionManager {
                         Debug.LogError($"Error cancelling ws session token source as a safe wrapping while it was checked not cancelled by far @incCnt={incCnt}: {ex}");
                     }
                 }
-                Debug.LogWarningFormat("Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread @incCnt={incCnt}.");
+                Debug.LogWarning($"Enqueued DOWNSYNC_MSG_WS_CLOSED for main thread @incCnt={incCnt}.");
             }
         }
     }
@@ -225,10 +225,9 @@ public class WsSessionManager {
                     //Debug.Log("Ws session send: before");
                     var content = new ArraySegment<byte>(toSendObj.ToByteArray());
                     if (Battle.BACKEND_WS_RECV_BYTELENGTH < content.Count) {
-                        Debug.LogWarning(String.Format("[content too big!] contentByteLength={0} > BACKEND_WS_RECV_BYTELENGTH={1}", content, Battle.BACKEND_WS_RECV_BYTELENGTH));
+                        Debug.LogWarning($"[content too big!] contentByteLength={content.Count} > BACKEND_WS_RECV_BYTELENGTH={Battle.BACKEND_WS_RECV_BYTELENGTH}");
                     }
                     await ws.SendAsync(content, WebSocketMessageType.Binary, true, cancellationToken);
-                    //Debug.Log(String.Format("'Send' loop, sent {0} bytes", toSendObj.ToByteArray().Length));
                 }
             }
         } catch (OperationCanceledException ocEx) {
@@ -251,12 +250,12 @@ public class WsSessionManager {
                 // FIXME: Without a "read timeout" parameter, it's unable to detect slow or halted ws session here!
                 var result = await ws.ReceiveAsync(arrSegBytes, cancellationToken);
                 if (WebSocketMessageType.Close == result.MessageType) {
-                    Debug.Log(String.Format("WsSession is asked by remote to close in 'Receive'"));
+                    Debug.Log("WsSession is asked by remote to close in 'Receive'");
                     if (!cancellationToken.IsCancellationRequested) {
                         cancellationTokenSource.Cancel(); // To cancel the "Send" loop
                     }
                     await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-                    Debug.LogWarning(String.Format("WsSession is closed in 'Receive'#1, ws.State={0}", ws.State));
+                    Debug.LogWarning($"WsSession is closed in 'Receive'#1, ws.State={ws.State}");
                     return;
                 } else {
                     try {
@@ -287,7 +286,7 @@ public class WsSessionManager {
 #nullable enable
     public delegate void OnLoginResult(int retCode, string? uname, string? playerId, string? authToken);
     public IEnumerator doCachedAutoTokenLoginAction(string httpHost, OnLoginResult? onLoginCallback) {
-        string uri = httpHost + String.Format("/Auth/Token/Login");
+        string uri = httpHost + "/Auth/Token/Login";
         WWWForm form = new WWWForm();
         form.AddField("token", authToken); 
         form.AddField("playerId", playerId); 
@@ -311,12 +310,12 @@ public class WsSessionManager {
                     break;
                 case UnityWebRequest.Result.Success:
                     var res = JsonConvert.DeserializeObject<AuthResult>(webRequest.downloadHandler.text);
-                    Debug.Log(String.Format("Received: {0}", res));
+                    Debug.Log($"Received: {res}");
                     if (null != res) {
                         int retCode = res.RetCode;
                         if (ErrCode.Ok == retCode) {
                             var uname = res.Uname;
-                            Debug.Log(String.Format("Token/Login succeeded, uname: {0}", uname));
+                            Debug.Log($"Token/Login succeeded, uname: {uname}");
                             if (null != onLoginCallback) {
                                 onLoginCallback(ErrCode.Ok, uname, playerId, authToken);
                             }

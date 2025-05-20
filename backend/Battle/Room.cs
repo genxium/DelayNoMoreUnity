@@ -1086,9 +1086,9 @@ public class Room {
                         break;
                     }
                     if (isSlowTicker) {
-                        unconfirmedMask |= (1ul << j);
+                        _logger.LogInformation($"markConfirmationIfApplicable for roomId={id}, skipping UNCONFIRMED BUT INACTIVE player(id:{thatPlayer.Id}, battleState: {thatPlayerBattleState}, joinIndex:{thatPlayer.CharacterDownsync.JoinIndex}) while checking inputFrameId={inputFrameId}, inputFrameDownsync.ConfirmedList={inputFrameDownsync.ConfirmedList}");
+                        unconfirmedMask |= thatPlayerJoinMask;
                         inputFrameDownsync.InputList[j] = 0; // For UNCONFIRMED BUT INACTIVE player input, always predict it to zero.
-                                                             //_logger.LogInformation("markConfirmationIfApplicable for roomId={0}, skipping UNCONFIRMED BUT INACTIVE player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4})", id, thatPlayer.CharacterDownsync.Id, thatPlayer.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId);
                     }
                 }
             }
