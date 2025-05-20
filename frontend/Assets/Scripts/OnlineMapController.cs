@@ -328,7 +328,7 @@ public class OnlineMapController : AbstractMapController {
                                     ifdFrontShouldLockStep = (tooFastOrNot);
                                     
                                     if (ifdFrontShouldLockStep) {
-                                        Debug.LogWarning($"Force-resync pbRdfId={pbRdfId} cannot unfreeze the current player @battleState={battleState}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}, disconnectedPeerJoinIndices.Count={disconnectedPeerJoinIndices.Count}: calling cleanupNetworkSessions for manual rejoin");
+                                        Debug.LogWarning($"Force-resync pbRdfId={pbRdfId} cannot unfreeze the current player @battleState={battleState}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}, disconnectedPeerJoinIndices.Count={(null != disconnectedPeerJoinIndices ? disconnectedPeerJoinIndices.Count : 0)}: calling cleanupNetworkSessions for manual rejoin");
                                         autoRejoinQuota = 0;
                                         cleanupNetworkSessions();
                                         ifdFrontShouldLockStep = false;
@@ -597,7 +597,9 @@ public class OnlineMapController : AbstractMapController {
         }
         // [WARNING] No need to show SettlementPanel in this case, but instead we should show something meaningful to the player if it'd be better for bug reporting.
         playerWaitingPanel.gameObject.SetActive(false);
-        disconnectedPeerJoinIndices.Clear();
+        if (null != disconnectedPeerJoinIndices) {
+            disconnectedPeerJoinIndices.Clear();
+        } 
         cleanupNetworkSessions(); // Make sure that all resources are properly deallocated
         if (ROOM_ID_NONE != roomId && (ROOM_STATE_IN_BATTLE == battleState || ROOM_STATE_FRONTEND_REJOINING == battleState)) {
             if (0 < autoRejoinQuota) {

@@ -278,7 +278,7 @@ public class NetworkDoctor {
         for (int k = 0; k < roomCapacity; ++k) {
             if (k + 1 == selfJoinIndex) continue; // Don't count self in
             if (lastIndividuallyConfirmedInputFrameId[k] >= minInputFrameIdFront) continue;
-            if (disconnectedPeerJoinIndices.Contains(k + 1)) {
+            if (null != disconnectedPeerJoinIndices && disconnectedPeerJoinIndices.Contains(k + 1)) {
                 continue;
             }
             minInputFrameIdFront = lastIndividuallyConfirmedInputFrameId[k];

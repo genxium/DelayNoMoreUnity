@@ -1047,7 +1047,7 @@ public class Room {
         // I've been seeking a totally lock-free approach for this whole operation for a long time, but still it's safer to keep using "mutex inputBufferLock"... 
         inputBufferLock.WaitOne();
         try {
-            var inputBufferSnapshot = markConfirmationIfApplicable(inputFrameUpsyncBatch, playerId, player, fromUDP, fromReentryWsSession);
+            var inputBufferSnapshot = markConfirmationIfApplicable(inputFrameUpsyncBatch, playerId, player, fromUDP, "CmdRecv", fromReentryWsSession);
             if (null != inputBufferSnapshot) {
                 downsyncToAllPlayers(inputBufferSnapshot);
             }
@@ -1057,7 +1057,7 @@ public class Room {
         }
     }
 
-    private int _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(int proposedIfdEdFrameId, ref ulong unconfirmedMask) {
+    private int _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(int proposedIfdEdFrameId, ref ulong unconfirmedMask, string srcTag) {
         // [WARNING] This function MUST BE called while "inputBufferLock" is locked!
 
         int incCnt = 0;
@@ -1072,7 +1072,7 @@ public class Room {
                 throw new ArgumentException($"[_moveForwardLastAllConfirmedInputFrameIdWithoutForcing] inputFrameId={inputFrameId} doesn't exist for roomId={id}: lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, proposedIfdStFrameId={proposedIfdStFrameId}, proposedIfdEdFrameId={proposedIfdEdFrameId}, inputBuffer={inputBuffer.toSimpleStat()}");
             }
             bool shouldBreakConfirmation = false;
-
+            ulong potentiallySkippedJoinMask = 0;
             if (allConfirmedMask != inputFrameDownsync.ConfirmedList) {
                 //_logger.LogInformation("Found a non-all-confirmed inputFrame for roomId={0}, upsync player(id:{1}, joinIndex:{2}) while checking inputFrameId=[{3}, {4}) inputFrameId={5}, confirmedList={6}", id, playerId, player.CharacterDownsync.JoinIndex, inputFrameId1, inputBuffer.EdFrameId, inputFrameId, inputFrameDownsync.ConfirmedList);
                 foreach (var thatPlayer in playersArr) {
@@ -1086,15 +1086,18 @@ public class Room {
                         break;
                     }
                     if (isSlowTicker) {
-                        _logger.LogInformation($"markConfirmationIfApplicable for roomId={id}, skipping UNCONFIRMED BUT INACTIVE player(id:{thatPlayer.Id}, battleState: {thatPlayerBattleState}, joinIndex:{thatPlayer.CharacterDownsync.JoinIndex}) while checking inputFrameId={inputFrameId}, inputFrameDownsync.ConfirmedList={inputFrameDownsync.ConfirmedList}");
+                        potentiallySkippedJoinMask |= thatPlayerJoinMask;
                         unconfirmedMask |= thatPlayerJoinMask;
-                        inputFrameDownsync.InputList[j] = 0; // For UNCONFIRMED BUT INACTIVE player input, always predict it to zero.
                     }
-                }
+                }    
             }
 
             if (shouldBreakConfirmation) {
                 break;
+            }
+
+            if (0 < potentiallySkippedJoinMask) {
+                _logger.LogInformation($"_moveForwardLastAllConfirmedInputFrameIdWithoutForcing for roomId={id}, skipping UNCONFIRMED BUT INACTIVE players potentiallySkippedJoinMask={potentiallySkippedJoinMask} while checking inputFrameId={inputFrameId}, srcTag={srcTag}");
             }
             incCnt += 1;
             inputFrameDownsync.ConfirmedList = allConfirmedMask;
@@ -1103,7 +1106,7 @@ public class Room {
         return incCnt;
     }
 
-    private InputBufferSnapshot? markConfirmationIfApplicable(Pbc.RepeatedField<InputFrameUpsync> inputFrameUpsyncBatch, string playerId, Player player, bool fromUDP, bool fromReentryWsSession=false) {
+    private InputBufferSnapshot? markConfirmationIfApplicable(Pbc.RepeatedField<InputFrameUpsync> inputFrameUpsyncBatch, string playerId, Player player, bool fromUDP, string srcTag, bool fromReentryWsSession=false) {
         // [WARNING] This function MUST BE called while "inputBufferLock" is locked!
 
         int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
@@ -1236,7 +1239,7 @@ public class Room {
         }
 
         if (clientInputFrameIdEd > inputBuffer.EdFrameId) clientInputFrameIdEd = inputBuffer.EdFrameId;
-        newAllConfirmedCount += _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(clientInputFrameIdEd, ref unconfirmedMask);
+        newAllConfirmedCount += _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(clientInputFrameIdEd, ref unconfirmedMask, srcTag);
 
         if (0 < newAllConfirmedCount) {
             /**
@@ -1303,9 +1306,16 @@ public class Room {
                    , the backend might've been prefabbing TOO QUICKLY and thus still replicating "inputFrame#42" by now for this ActiveSlowTicker, making its graphics inconsistent upon "[type#1 forceConfirmation] at inputFrame#52-60", i.e. as if always dragged to the left while having been controlled to the right for a few frames -- what's worse, the same graphical inconsistence could even impact later "[type#1 forceConfirmation]s" if this ActiveSlowTicker doesn't catch up with the upsync pace!
                  */
                 for (int i = 0; i < capacity; i++) {
-                    // [WARNING] The use of "inputBufferLock" guarantees that by now "inputFrameId >= inputBuffer.EdFrameId >= latestPlayerUpsyncedInputFrameId", thus it's safe to use "lastIndividuallyConfirmedInputList" for prediction.
-                    ulong encodedIdx = lastIndividuallyConfirmedInputList[i];
-                    ifdHolder.InputList[i] = encodedIdx;
+                    var thatPlayer = playersArr[i];
+                    var thatPlayerBattleState = Interlocked.Read(ref thatPlayer.BattleState);
+                    if (PLAYER_BATTLE_STATE_ACTIVE == thatPlayerBattleState) {
+                        // [WARNING] The use of "inputBufferLock" guarantees that by now "inputFrameId >= inputBuffer.EdFrameId >= latestPlayerUpsyncedInputFrameId", thus it's safe to use "lastIndividuallyConfirmedInputList" for prediction.
+                        ulong encodedIdx = lastIndividuallyConfirmedInputList[i];
+                        ifdHolder.InputList[i] = encodedIdx;
+                    } else {
+                        // For INACTIVE player input, predict it to zero
+                        ifdHolder.InputList[i] = 0;
+                    }
                 }
                 ifdHolder.ConfirmedList = 0;
                 currInputFrameDownsync = ifdHolder; // make sure that we return a pointer inside the inputBuffer for later writing
@@ -1689,7 +1699,7 @@ public class Room {
             int oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
             // Confirming buffered inputFrames for inactive players.This step is necessary because in an extreme case where the BattleServer itself has a traffic jam such that no player input reaches it within each one's watchdog, the BattleServer will proactively disconnects everyone without calling "OnBattleCmdReceived > markConfirmationIfApplicable > _moveForwardLastAllConfirmedInputFrameIdWithoutForcing", leaving a DISCONTINUOUSLY CONFIRMED INPUTBUFFER AND NOT RECOVERABLE after any player rejoining.
             ulong unconfirmedMask = 0;
-            int newAllConfirmedCount1 = _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(inputBuffer.EdFrameId, ref unconfirmedMask);
+            int newAllConfirmedCount1 = _moveForwardLastAllConfirmedInputFrameIdWithoutForcing(inputBuffer.EdFrameId, ref unconfirmedMask, "battleMainLoop");
             // Force setting all-confirmed of buffered inputFrames periodically, kindly note that if "backendDynamicsEnabled", what we want to achieve is "recovery upon reconnection", which certainly requires "forceConfirmationIfApplicable" to move "lastAllConfirmedInputFrameId" forward as much as possible
             ulong forceUnconfirmedMask = forceConfirmationIfApplicable();
             unconfirmedMask |= forceUnconfirmedMask;
@@ -1808,12 +1818,12 @@ public class Room {
                 for (int j = lastAllConfirmedInputFrameId + 1; j <= latestPlayerUpsyncedInputFrameId; j++) {
                     var (res1, foo) = inputBuffer.GetByFrameId(j);
                     if (!res1 || null == foo) {
-                        throw new ArgumentNullException(String.Format("inputFrameId={0} doesn't exist for roomId={1}! Now inputBuffer: {2}", j, id, inputBuffer.ToString()));
+                        throw new ArgumentNullException(String.Format("inputFrameId={0} doesn't exist for roomId={1}! Now inputBuffer: {2}", j, id, inputBuffer.toSimpleStat()));
                     }
                     foo.ConfirmedList = allConfirmedMask;
                     onInputFrameDownsyncAllConfirmed(foo, INVALID_DEFAULT_PLAYER_ID);
                 }
-                //_logger.LogInformation(String.Format("[type#2 forceConfirmation] For roomId={0}@backendTimerRdfId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, lastForceResyncedRdfId={6}", id, backendTimerRdfId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, lastForceResyncedRdfId));
+                _logger.LogInformation(String.Format("[type#2 forceConfirmation] For roomId={0}@backendTimerRdfId={1}, curDynamicsRenderFrameId={2}, LatestPlayerUpsyncedInputFrameId:{3}, LastAllConfirmedInputFrameId:{4} -> {5}, lastForceResyncedRdfId={6}", id, backendTimerRdfId, curDynamicsRenderFrameId, latestPlayerUpsyncedInputFrameId, oldLastAllConfirmedInputFrameId, lastAllConfirmedInputFrameId, lastForceResyncedRdfId));
                 unconfirmedMask = allConfirmedMask;
                 lastForceResyncedRdfId = backendTimerRdfId;
             }
