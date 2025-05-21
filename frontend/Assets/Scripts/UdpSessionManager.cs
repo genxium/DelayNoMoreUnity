@@ -54,7 +54,7 @@ public class UdpSessionManager {
     public async Task OpenUdpSession(int roomCapacity, int selfJoinIndex, CancellationToken sessionCancellationToken) {
         try {
             ++localSeqNo;
-            Debug.Log($"OpenUdpSession#1: roomCapacity={roomCapacity}, thread id={Thread.CurrentThread.ManagedThreadId}...");
+            //Debug.Log($"OpenUdpSession#1: roomCapacity={roomCapacity}, thread id={Thread.CurrentThread.ManagedThreadId}...");
             peerHolePuncher.SeqNo = localSeqNo;
             serverHolePuncher.SeqNo = localSeqNo;
             udpSession = new UdpClient(port: 0);
@@ -78,7 +78,7 @@ public class UdpSessionManager {
 
     private async Task Send(UdpClient udpSession, int roomCapacity, int selfJoinIndex, CancellationToken sessionCancellationToken) {
         // TODO: Make this method thread-safe for "this.peerUdpAddrList"
-        Debug.Log($"Starts udpSession 'Send' loop, now senderBuffer.Count={senderBuffer.Count}");
+        //Debug.Log($"Starts udpSession 'Send' loop@localSeqNo={localSeqNo}, now senderBuffer.Count={senderBuffer.Count}");
         WsReq toSendObj;
         try {
             while (!sessionCancellationToken.IsCancellationRequested) {
@@ -89,7 +89,7 @@ public class UdpSessionManager {
                             Debug.LogWarning($"udpSession cannot punch SRV_UDP_TUNNEL#1 @localSeqNo={localSeqNo}: null endPoint");
                             continue;
                         }
-                        Debug.Log($"udpSession sending serverHolePuncher to endPoint={peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]} @localSeqNo={localSeqNo}");
+                        //Debug.Log($"udpSession sending serverHolePuncher to endPoint={peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]} @localSeqNo={localSeqNo}");
                         await udpSession.SendAsync(toSendBuffer, toSendBuffer.Length, peerUdpEndPointList[Battle.MAGIC_JOIN_INDEX_SRV_UDP_TUNNEL]);
                     } else if (toSendObj.Act == peerHolePuncher.Act) {
                         for (int otherJoinIndex = 1; otherJoinIndex <= roomCapacity; otherJoinIndex++) {
@@ -143,14 +143,14 @@ public class UdpSessionManager {
     }
 
     private async Task Receive(UdpClient udpSession, int roomCapacity, CancellationToken sessionCancellationToken) {
-        Debug.Log($"Starts udpSession 'Receive' loop @localSeqNo={localSeqNo}");
+        //Debug.Log($"Starts udpSession 'Receive' loop @localSeqNo={localSeqNo}");
         try {
             while (!sessionCancellationToken.IsCancellationRequested) {
                 var recvResult = await udpSession.ReceiveAsync(); // by experiment, "udpSession.Close()" would unblock it even at the absence of a cancellation token!
                 WsReq req = WsReq.Parser.ParseFrom(recvResult.Buffer);
                 switch (req.Act) {
                     case Battle.UPSYNC_MSG_ACT_HOLEPUNCH_PEER_UDP_ADDR:
-                        Debug.Log($"Received direct holePuncher from joinIndex: {req.JoinIndex}, from addr={recvResult.RemoteEndPoint}");
+                        //Debug.Log($"Received direct holePuncher from joinIndex: {req.JoinIndex}, from addr={recvResult.RemoteEndPoint}");
                         markPunched(req.JoinIndex, roomCapacity);
                         break;
                     case Battle.UPSYNC_MSG_ACT_PLAYER_CMD:

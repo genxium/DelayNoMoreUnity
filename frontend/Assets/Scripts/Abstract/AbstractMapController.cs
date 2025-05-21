@@ -1545,7 +1545,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                 // Otherwise this is a valid "force-resync pump", no need to report local input overriding
             }
 
-            // [WARNING] Now that "inputFrameDownsyncId > self.lastAllConfirmedInputFrameId", we should make an update immediately because unlike its backend counterpart "Room.LastAllConfirmedInputFrameId", the frontend "mapIns.lastAllConfirmedInputFrameId" might inevitably get gaps among discrete values due to "either type#1 or type#2 forceConfirmation" -- and only "onInputFrameDownsyncBatch" can catch this! 
+            // [WARNING] Now that "inputFrameDownsyncId > lastAllConfirmedInputFrameId" 
             lastAllConfirmedInputFrameId = inputFrameDownsyncId;
             int playerRdfId2 = ConvertToLastUsedRenderFrameId(inputFrameDownsyncId);
 

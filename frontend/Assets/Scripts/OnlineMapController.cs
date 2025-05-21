@@ -310,13 +310,13 @@ public class OnlineMapController : AbstractMapController {
                             frozenGracingRdfCnt = 0;
                             bool selfUnconfirmed = (0 < (pbRdf.BackendUnconfirmedMask & selfJoinIndexMask));
                             if (ROOM_STATE_FRONTEND_REJOINING == battleState) {
-                                Debug.LogWarning($"Got force-resync during battleState={battleState} @pbRdfId={pbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
+                                Debug.LogWarning($"Got force-resync during battleState={battleState} @pbRdfId={pbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @lastUpsyncInputFrameId={lastUpsyncInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
                                 rejoinPrompt.gameObject.SetActive(false);
                                 skipInterpolation = true;
                             }
                             onRoomDownsyncFrame(wsRespHolder.Rdf, wsRespHolder.InputFrameDownsyncBatch);
                             if (pbRdfId < chaserRenderFrameIdLowerBound) {
-                                Debug.LogWarning($"Got obsolete force-resync pbRdfId={pbRdfId} < chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @battleState={battleState}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: NOT SURE WHY THIS HAPPENS but calling cleanupNetworkSessions for manual rejoin");
+                                Debug.LogWarning($"Got obsolete force-resync pbRdfId={pbRdfId} < chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @battleState={battleState}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @lastUpsyncInputFrameId={lastUpsyncInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: NOT SURE WHY THIS HAPPENS but calling cleanupNetworkSessions for manual rejoin");
                                 autoRejoinQuota = 0;
                                 cleanupNetworkSessions();
                             } else {
@@ -328,7 +328,7 @@ public class OnlineMapController : AbstractMapController {
                                     ifdFrontShouldLockStep = (tooFastOrNot);
                                     
                                     if (ifdFrontShouldLockStep) {
-                                        Debug.LogWarning($"Force-resync pbRdfId={pbRdfId} cannot unfreeze the current player @battleState={battleState}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}, disconnectedPeerJoinIndices.Count={(null != disconnectedPeerJoinIndices ? disconnectedPeerJoinIndices.Count : 0)}: calling cleanupNetworkSessions for manual rejoin");
+                                        Debug.LogWarning($"Force-resync pbRdfId={pbRdfId} cannot unfreeze the current player @battleState={battleState}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @lastUpsyncInputFrameId={lastUpsyncInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}, disconnectedPeerJoinIndices.Count={(null != disconnectedPeerJoinIndices ? disconnectedPeerJoinIndices.Count : 0)}: calling cleanupNetworkSessions for manual rejoin");
                                         autoRejoinQuota = 0;
                                         cleanupNetworkSessions();
                                         ifdFrontShouldLockStep = false;
@@ -336,7 +336,7 @@ public class OnlineMapController : AbstractMapController {
                                         bool startedUdpTask = startUdpTaskIfNotYet();
                                         battleState = ROOM_STATE_IN_BATTLE;
                                         if (startedUdpTask) {
-                                            Debug.Log($"Started new udpTask upon force-resync pbRdfId={pbRdfId} @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: will re-punch server#1");
+                                            Debug.Log($"Started new udpTask upon force-resync pbRdfId={pbRdfId} @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @lastUpsyncInputFrameId={lastUpsyncInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: will re-punch server#1");
                                         }
                                         //Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#1");
                                     }
@@ -344,12 +344,11 @@ public class OnlineMapController : AbstractMapController {
                                     bool startedUdpTask = startUdpTaskIfNotYet();
                                     battleState = ROOM_STATE_IN_BATTLE;
                                     if (startedUdpTask) {
-                                        Debug.Log($"Started new udpTask upon force-resync pbRdfId={pbRdfId} @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: will re-punch server#2");
+                                        Debug.Log($"Started new udpTask upon force-resync pbRdfId={pbRdfId} @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @lastUpsyncInputFrameId={lastUpsyncInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: will re-punch server#2");
                                     }
-                                    //Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#2");
+                                    //Debug.LogWarning($"Per force-resync @pbRdfId={pbRdfId} is valid @battleState={battleState}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @lastUpsyncInputFrameId={lastUpsyncInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}: transited to ROOM_STATE_IN_BATTLE#2");
                                 }
                             }
-                            //Debug.LogFormat("Received a force-resync frame rdfId={0}, backendUnconfirmedMask={1}, selfJoinIndex={2} @playerRdfId(local)={3}, @lastAllConfirmedInputFrameId={4}, @chaserRenderFrameId={5}, @renderBuffer:{6}, @inputBuffer:{7}", wsRespHolder.Rdf.Id, wsRespHolder.Rdf.BackendUnconfirmedMask, selfJoinIndex, playerRdfId, lastAllConfirmedInputFrameId, chaserRenderFrameId, renderBuffer.toSimpleStat(), inputBuffer.toSimpleStat());
                             break;
                     }
                     break;
@@ -694,7 +693,6 @@ public class OnlineMapController : AbstractMapController {
             }
             */
 
-            // [WARNING] Whenever a "[type#1 forceConfirmation]" is about to occur, we want "lockstep" to prevent it as soon as possible, because "lockstep" provides better graphical consistency. 
             if (!WsSessionManager.Instance.getInArenaPracticeMode() && useFreezingLockStep && !acLagShouldLockStep && !ifdFrontShouldLockStep) {
                 var (tooFastOrNot, ifdLag, sendingFps, peerUpsyncFps, rollbackFrames, acLagLockedStepsCnt, ifdFrontLockedStepsCnt, udpPunchedCnt) = NetworkDoctor.Instance.IsTooFast(roomCapacity, selfJoinIndex, lastIndividuallyConfirmedInputFrameId, ifdLagTolerance: freezeIfdLagThresHold, disconnectedPeerJoinIndices);
                 int acIfdLag = (localRequiredIfdId - lastAllConfirmedInputFrameId);
@@ -819,6 +817,10 @@ public class OnlineMapController : AbstractMapController {
             batchInputFrameIdEdClosed = inputBuffer.EdFrameId - 1;
         }
 
+        if (batchInputFrameIdSt > batchInputFrameIdEdClosed) {
+            return;
+        }
+
         for (var i = batchInputFrameIdSt; i <= batchInputFrameIdEdClosed; i++) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(i);
             if (false == res1 || null == inputFrameDownsync) {
@@ -832,11 +834,6 @@ public class OnlineMapController : AbstractMapController {
                 // [WARNING] Once sent, we must prevent "getOrPrefabInputFrameUpsync" from changing "self input" of this InputFrameDownsync.
                 inputFrameDownsync.UdpConfirmedList |= selfJoinIndexMask;
             }
-        }
-
-        if (0 >= inputFrameUpsyncBatch.Count) {
-            //Debug.LogWarning($"sendInputFrameUpsyncBatch: empty inputFrameUpsyncBatch at playerRdfId={playerRdfId}, latestLocalInputFrameId={latestLocalInputFrameId}, batchInputFrameIdSt={batchInputFrameIdSt}, batchInputFrameIdEdClosed={batchInputFrameIdEdClosed}, inputBuffer:{inputBuffer.toSimpleStat()}");
-            return;
         }
 
         NetworkDoctor.Instance.LogSending(batchInputFrameIdSt, latestLocalInputFrameId);
@@ -927,8 +924,6 @@ public class OnlineMapController : AbstractMapController {
         [WARNING] 
 
         Deliberately NOT setting "existingInputFrame.ConfirmedList = (existingConfirmedList | peerJoinIndexMask)", thus NOT helping the move of "lastAllConfirmedInputFrameId" in "_markConfirmationIfApplicable()". 
-
-        The edge case of concern here is "type#1 forceConfirmation". Assume that there is a battle among [P_u, P_v, P_x, P_y] where [P_x] is being an "ActiveSlowerTicker", then for [P_u, P_v, P_y] there might've been some "inputFrameUpsync"s received from [P_x] by UDP peer-to-peer transmission EARLIER THAN BUT CONFLICTING WITH the "accompaniedInputFrameDownsyncBatch of type#1 forceConfirmation" -- in such case the latter should be respected -- by "conflicting", the backend actually ignores those "inputFrameUpsync"s from [P_x] by "forceConfirmation".
     
         However, we should still call "_handleIncorrectlyRenderedPrediction(...)" here to break rollbacks into smaller chunks, because even if not used for "inputFrameDownsync.ConfirmedList", a "UDP inputFrameUpsync" is still more accurate than the locally predicted inputs.
         */

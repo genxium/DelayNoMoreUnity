@@ -1,5 +1,5 @@
 # Latest tag change notes
-v2.3.3
+v2.3.4
 - Added basic cutscene support for StoryMode.
 - Added slide-dodge (at critical timing) and defence-dodge (cost 1 slot-C).
 - Added beam emitting trap (rotary since v2.2.6).
@@ -101,7 +101,7 @@ I should've provided an example of this type of test for the alleged good perfor
 `String.Format(...)` can be a serious performance issue when used too frequently. Please remove/comment them when you notice a lag or CPU spike possibly coupled with an intense logging period (it's always recommended to profile beforehand for proof).
 
 # Is it possible to remove all "forceConfirmation"s if player input overwriting is unwanted?  
-Yes it's possible to remove/disable both "type#1" and "type#3" in `backend/Battle/Room.cs`. However, it's highly recommended that you reserve the backend dynamics and downsync the RoomDownsyncFrame calculated by backend to all frontends periodically -- the frontend `AbstractMapController.onRoomDownsyncFrame` can handle correction of historic render frames without issue.
+Yes it's possible in `backend/Battle/Room.cs`. However, it's highly recommended that you reserve the backend dynamics and downsync the RoomDownsyncFrame calculated by backend to all frontends periodically -- the frontend `AbstractMapController.onRoomDownsyncFrame` can handle correction of historic render frames without issue.
 
 The root cause of the need for such periodic RoomDownsyncFrame downsync is that the physics engine uses floating point numbers, and I'm not a fan of determinisitc floating point approach (i.e. there're tradeoffs). If this project is an old style fighting game, then I can rewrite its physics to use rectilinear rectangles only, thus integer only (including snapping) -- yet I want slopes and rotations in the game :)
 

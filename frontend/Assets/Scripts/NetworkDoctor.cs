@@ -108,11 +108,6 @@ public class NetworkDoctor {
     }
 
     public void LogForceResyncedIfdId(int val, bool selfConfirmed, bool selfUnconfirmed, bool exclusivelySelfConfirmed, bool exclusivelySelfUnconfirmed, bool hasRollbackBurst, int inputFrameUpsyncDelayTolerance) {
-        /*
-        [WARNING] 
-        
-        In practice, after UDP contributes to backend inputBuffer confirmation, "type#1 forceConfirmation" is verified to be accurate (i.e. the slow peer appears laggy on the fast peer, while the fast peer appears smooth on the slow peer).
-        */
         lastForceResyncedIfdId = val;
         exclusivelySelfConfirmedAtLastForceResync = exclusivelySelfConfirmed;
         exclusivelySelfUnconfirmedAtLastForceResync = exclusivelySelfUnconfirmed;
@@ -309,28 +304,10 @@ public class NetworkDoctor {
 
             if (ifdLagSignificant) {
                 /*
-                [WARNING-DEPRECATED]
-
-                We shouldn't rely solely on "immediateRollbackFrames > renderFrameLagTolerance" for lockstep decision, because upon "type#X forceConfirmation" if history update occurs, the "immediateRollbackFrames" can surge abruptly while "minInputFrameIdFront" is advanced enough.
-
-                Similarly, "ifdLagSignificant" alone is not enough to assert the need of lockstep, because it could be a slow-ticker's slow network syndrome. 
-
-                I'm not quite sure whether or not "latestRecvMillisTooOld" should be taken into consideration when deciding "shouldLockStep", because when "ifdLagSignificant && sendingFpsNormal && true == latestRecvMillisTooOld", we know that during "[latestRecvMillis, nowMillis]" the receiving of both TCP(WebSocket) and UDP packets doesn't do well, yet the peer(s) could still be quite advanced at "noDelayInputFrameId" locally.
-
-                What about "ifdLagSignificant && sendingFpsNormal && false == latestRecvMillisTooOld", is it a good sign to lock step? Maybe.
-            
-                The bottom line is that we don't apply "lockstep" to a peer who's deemed "slow ticker" on the backend!
-                */
-
-                /*
                  [WARNING]
 
-                 The latest lockstep handling takes reference from `Street Fighter VI` experience, which sometimes locks the "slow ticker" as well due to the possibility that a "slow ticker" is cheating by the so called "lag switch". However, I HAVEN'T found any phenomenon like my "force confirmation" here, i.e. the "red light", so I couldn't just try to imitate its strategy completely.
+                 The latest lockstep handling takes reference from `Street Fighter VI` experience, which sometimes locks the "slow ticker" as well due to the possibility that a "slow ticker" is cheating by the so called "lag switch". However, I HAVEN'T found any phenomenon like my "force-resync" here, i.e. the "red light", so I couldn't just try to imitate its strategy completely.
 
-                 This new handling is considered better than the previous one using "exclusivelySelfConfirmedLockStepQuota", because it helps suppress many "(backend) type#1 forceConfirmations" by "(frontend) locksteps" in field tests, thus less graphical inconsistency.
-
-                 It's fine that we decide to lock step ONLY based on "ifdIdLag" (even though it could punish the "slow ticker" too), in practice most of the time "normal tickers" encounter large "ifdIdLag" more often, and "slow tickers" will eventually recover due to "type#1 forceConfirmation" -- as long as "locking the slow" isn't induced by a "type#1 forceConfirmation" and doesn't trigger another "type#1 forceConfirmation" as a result too frequently, it's acceptable (hence the use of "selfUnconfirmedLockStepSkipQuota").
-                
                  NOT every game netcode emphasizes "lockstep" so much, e.g. `KOF XV` doesn't seem to have a tangible lockstep even under terrible network (500ms+ ping) -- even if there was any lockstep applied it was much smaller than the obvious locksteps of `Street Fighter V/VI` under same network condition.
                  */
                 if (0 >= selfUnconfirmedLockStepSkipQuota) {
