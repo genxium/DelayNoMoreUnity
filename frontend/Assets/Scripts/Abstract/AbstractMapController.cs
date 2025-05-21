@@ -281,7 +281,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         triggerGameObjs[triggerLocalId] = newTriggerNode;
     }
 
-    protected (ulong, ulong) getOrPrefabInputFrameUpsync(int inputFrameId, bool canConfirmSelf, ulong[] prefabbedInputList) {
+    protected (ulong, ulong, ulong) getOrPrefabInputFrameUpsync(int inputFrameId, bool canConfirmSelf, ulong[] prefabbedInputList) {
         if (null == selfPlayerInfo) {
             string msg = String.Format("noDelayInputFrameId={0:D} couldn't be generated due to selfPlayerInfo being null", inputFrameId);
             throw new ArgumentException(msg);
@@ -302,14 +302,15 @@ public abstract class AbstractMapController : MonoBehaviour {
 
             The only possibility that "true == selfConfirmedInExistingInputFrame" is met here would be due to "putting `getOrPrefabInputFrameUpsync(..., canConfirmSelf=true, ...) > sendInputFrameUpsyncBatch(...)` before `lockstep`" by mistake -- in that case, "playerRdfId" is stuck at the same value thus we might be overwriting already confirmed input history for self (yet backend and other peers will certainly reject the overwrite!).
             */ 
-            return (previousSelfInput, existingInputFrame.InputList[selfJoinIndexArrIdx]);
+            return (previousSelfInput, existingInputFrame.InputList[selfJoinIndexArrIdx], selfJoinIndexMask);
         }
         if (
           null != existingInputFrame
           &&
           (true != canConfirmSelf)
         ) {
-            return (previousSelfInput, existingInputFrame.InputList[selfJoinIndexArrIdx]);
+            // By reaching here, it's implied that "false == selfConfirmedInExistingInputFrame" 
+            return (previousSelfInput, existingInputFrame.InputList[selfJoinIndexArrIdx], 0);
         }
 
         Array.Fill<ulong>(prefabbedInputList, 0);
@@ -351,8 +352,12 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         if (null != existingInputFrame) {
+            var existingSelfInputAtSameIfd = existingInputFrame.InputList[selfJoinIndexArrIdx];
             existingInputFrame.InputList[selfJoinIndexArrIdx] = currSelfInput;
             existingInputFrame.UdpConfirmedList |= initConfirmedList;
+            if (existingSelfInputAtSameIfd != currSelfInput) {
+                _handleIncorrectlyRenderedPrediction(inputFrameId, false);
+            }
         } else {
             while (inputBuffer.EdFrameId <= inputFrameId) {
                 // Fill the gap
@@ -371,7 +376,7 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
         }
 
-        return (previousSelfInput, currSelfInput);
+        return (previousSelfInput, currSelfInput, initConfirmedList);
     }
 
     protected (RoomDownsyncFrame, RoomDownsyncFrame) rollbackAndChase(int playerRdfIdSt, int playerRdfIdEd, CollisionSpace collisionSys, bool isChasing) {
@@ -1529,8 +1534,9 @@ public abstract class AbstractMapController : MonoBehaviour {
             return;
         }
     
+        var oldLastUpsyncInputFrameId = lastUpsyncInputFrameId;
+        var oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
         if (0 < withPbRdfId && withPbRdfId < playerRdfId) {
-            var oldLastUpsyncInputFrameId = lastUpsyncInputFrameId;
             if (lastAllConfirmedInputFrameId < lastInBatch.InputFrameId && lastInBatch.InputFrameId < oldLastUpsyncInputFrameId) {
                 lastUpsyncInputFrameId = lastInBatch.InputFrameId;
                 Debug.LogWarning($"Rewinded lastUpsyncInputFrameId:{oldLastUpsyncInputFrameId}->{lastUpsyncInputFrameId} during battleState={battleState} @withPbRdfId={withPbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
@@ -1538,6 +1544,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         }
 
         NetworkDoctor.Instance.LogInputFrameDownsync(firstInBatch.InputFrameId, lastInBatch.InputFrameId);
+        int lastUsedIfdId = ConvertToDelayedInputFrameId(playerRdfId);
         int firstPredictedYetIncorrectInputFrameId = TERMINATING_INPUT_FRAME_ID;
         foreach (var inputFrameDownsync in batch) {
             int inputFrameDownsyncId = inputFrameDownsync.InputFrameId;
@@ -1545,12 +1552,10 @@ public abstract class AbstractMapController : MonoBehaviour {
                 continue;
             }
             var (res1, localInputFrame) = inputBuffer.GetByFrameId(inputFrameDownsyncId);
-            if (withPbRdfId < playerRdfId) {
+            if (inputFrameDownsyncId < lastUsedIfdId) {
                 if (null != localInputFrame && 0 < (localInputFrame.UdpConfirmedList & selfJoinIndexMask) && localInputFrame.InputList[selfJoinIndexArrIdx] != inputFrameDownsync.InputList[selfJoinIndexArrIdx]) {
-                    Debug.LogWarning($"withPbRdfId={withPbRdfId} < @playerRdfId={playerRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, overriding localSelfInput={localInputFrame.InputList[selfJoinIndexArrIdx]} by backend generated {inputFrameDownsync.InputList[selfJoinIndexArrIdx]} of ifdId={inputFrameDownsyncId}: inputBuffer={inputBuffer.toSimpleStat()}");
+                    Debug.LogWarning($"withPbRdfId={withPbRdfId} < @playerRdfId(local)={playerRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, overriding localSelfInput={localInputFrame.InputList[selfJoinIndexArrIdx]} by backend generated {inputFrameDownsync.InputList[selfJoinIndexArrIdx]} of ifdId={inputFrameDownsyncId}: inputBuffer={inputBuffer.toSimpleStat()}");
                 }
-            } else {
-                // Otherwise this is a valid "force-resync pump", no need to report local input overriding
             }
 
             // [WARNING] Now that "inputFrameDownsyncId > lastAllConfirmedInputFrameId" 
@@ -1593,8 +1598,11 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
         }
         _markConfirmationIfApplicable();
+
         _handleIncorrectlyRenderedPrediction(firstPredictedYetIncorrectInputFrameId, false);
-        //Debug.Log($"[onInputFrameDownsyncBatch/end] batch=[St:{firstInBatch.InputFrameId}, EdClosed:{lastInBatch.InputFrameId}], @playerRdfId={playerRdfId}, @chaserRenderFrameId={chaserRenderFrameId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}: inputBuffer={inputBuffer.toSimpleStat()}");
+        if (frameLogEnabled) {
+            Debug.Log($"[onInputFrameDownsyncBatch/end] batch=[St:{firstInBatch.InputFrameId}, EdClosed:{lastInBatch.InputFrameId}], @playerRdfId(local)={playerRdfId}, @withPbRdfId={withPbRdfId}, @chaserRenderFrameId={chaserRenderFrameId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameId}, @lastAllConfirmedInputFrameId={oldLastAllConfirmedInputFrameId} -> {lastAllConfirmedInputFrameId}, lastUpsyncInputFrameId={oldLastUpsyncInputFrameId} -> {lastUpsyncInputFrameId}: inputBuffer={inputBuffer.toSimpleStat()}");
+        }
     }
 
     public void onRoomDownsyncFrame(RoomDownsyncFrame pbRdf, RepeatedField<InputFrameDownsync> accompaniedInputFrameDownsyncBatch, bool usingOthersForcedDownsyncRenderFrameDict = false) {
@@ -1781,8 +1789,8 @@ public abstract class AbstractMapController : MonoBehaviour {
     // Update is called once per frame
     protected void doUpdate() {
         int toGenerateInputFrameId = ConvertToDynamicallyGeneratedDelayInputFrameId(playerRdfId, localExtraInputDelayFrames);
-        ulong prevSelfInput = 0, currSelfInput = 0;
-        (prevSelfInput, currSelfInput) = getOrPrefabInputFrameUpsync(toGenerateInputFrameId, true, prefabbedInputListHolder);
+        ulong prevSelfInput = 0, currSelfInput = 0, currSelfInputConfirmList = 0;
+        (prevSelfInput, currSelfInput, currSelfInputConfirmList) = getOrPrefabInputFrameUpsync(toGenerateInputFrameId, true, prefabbedInputListHolder);
         /*
         if (inputBuffer.EdFrameId <= toGenerateInputFrameId) {
             Debug.LogWarningFormat("After getOrPrefabInputFrameUpsync at playerRdfId={0}, toGenerateInputFrameId={1}; inputBuffer={2}", playerRdfId, toGenerateInputFrameId, inputBuffer.toSimpleStat());
@@ -1798,7 +1806,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
         bool battleResultIsSet = isBattleResultSet(confirmedBattleResult);
 
-        if (isOnlineMode && (battleResultIsSet || shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, toGenerateInputFrameId))) {
+        if (isOnlineMode && (battleResultIsSet || shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, currSelfInputConfirmList, toGenerateInputFrameId))) {
             // [WARNING] If "true == battleResultIsSet", we MUST IMMEDIATELY flush the local inputs to our peers to favor the formation of all-confirmed inputFrameDownsync asap! 
             // TODO: Does the following statement run asynchronously in an implicit manner? Should I explicitly run it asynchronously?
             sendInputFrameUpsyncBatch(toGenerateInputFrameId);
@@ -1909,7 +1917,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected abstract IEnumerator delayToShowSettlementPanel();
 
-    protected abstract bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int currInputFrameId);
+    protected abstract bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, ulong currSelfInputConfirmList, int currInputFrameId);
 
     protected abstract void sendInputFrameUpsyncBatch(int latestLocalInputFrameId);
 

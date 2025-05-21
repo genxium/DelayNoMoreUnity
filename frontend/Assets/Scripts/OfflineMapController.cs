@@ -33,7 +33,7 @@ public class OfflineMapController : AbstractMapController {
         throw new NotImplementedException();
     }
 
-    protected override bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int currInputFrameId) {
+    protected override bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, ulong currSelfInputConfirmList, int currInputFrameId) {
         return false;
     }
 

@@ -551,7 +551,7 @@ public class OnlineMapController : AbstractMapController {
         Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Exception, StackTraceLogType.None);
-        renderBufferSize = 384;
+        renderBufferSize = 50*BATTLE_DYNAMICS_FPS;
         selfPlayerInfo = new PlayerMetaInfo();
         inputFrameUpsyncDelayTolerance = TERMINATING_INPUT_FRAME_ID;
         Application.targetFrameRate = Battle.BATTLE_DYNAMICS_FPS;
@@ -793,12 +793,13 @@ public class OnlineMapController : AbstractMapController {
         }
     }
 
-    protected override bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, int currInputFrameId) {
+    protected override bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, ulong currSelfInputConfirmList, int currInputFrameId) {
         /*
         For a 2-player-battle, this "shouldUpsyncForEarlyAllConfirmedOnBackend" can be omitted, however for more players in a same battle, to avoid a "long time non-moving player" jamming the downsync of other moving players, we should use this flag.
 
         When backend implements the "force confirmation" feature, we can have "false == shouldUpsyncForEarlyAllConfirmedOnBackend" all the time as well!
         */
+        if (0 == (selfJoinIndexMask & currSelfInputConfirmList)) return false;
         var shouldUpsyncForEarlyAllConfirmedOnBackend = (currInputFrameId - lastUpsyncInputFrameId >= inputFrameUpsyncDelayTolerance);
         return shouldUpsyncForEarlyAllConfirmedOnBackend || (prevSelfInput != currSelfInput);
     }

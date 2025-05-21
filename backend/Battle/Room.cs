@@ -12,8 +12,8 @@ namespace backend.Battle;
 public class Room {
     private readonly Random _randGenerator = new Random();
     //private String[] _availableStageNames = new String[] {"ForestVersus", "CaveVersus", "FlatVersus"};
-    private String[] _availableStageNames = new String[] {"FlatVersus"};
-    //private String[] _availableStageNames = new String[] {"FlatVersusTraining"};
+    //private String[] _availableStageNames = new String[] {"FlatVersus"};
+    private String[] _availableStageNames = new String[] {"FlatVersusTraining"};
 
     private TimeSpan DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT = TimeSpan.FromMilliseconds(5000);
     private bool insituForceConfirmationEnabled = true;
@@ -174,7 +174,7 @@ public class Room {
         stageName = _availableStageNames[_randGenerator.Next(_availableStageNames.Length)];
         curDynamicsRenderFrameId = 0;
         lastForceResyncedRdfId = 0;
-        frameLogEnabled = false;
+        frameLogEnabled = true;
         battleDurationFrames = 0;
         elongatedBattleDurationFrames = 0;
         elongatedBattleDurationFramesShortenedOnce = false;
@@ -1087,9 +1087,12 @@ public class Room {
             inputFrameDownsync.ConfirmedList = allConfirmedMask;
             onInputFrameDownsyncAllConfirmed(inputFrameDownsync, INVALID_DEFAULT_PLAYER_ID);
         }
+            
 
-        if (0 < incCnt && 0 < inactiveJoinMask) {
-            //_logger.LogInformation($"_moveForwardLastAllConfirmedInputFrameIdWithoutForcing for roomId={id}, backendTimerRdfId={backendTimerRdfId}, latestPlayerUpsyncedInputFrameId={latestPlayerUpsyncedInputFrameId}, newLastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, incCnt={incCnt}, inactiveJoinMask={inactiveJoinMask}, skippableJoinMask={skippableJoinMask} while checking [proposedIfdStFrameId={proposedIfdStFrameId}, proposedIfdEdFrameId={proposedIfdEdFrameId}), srcTag={srcTag}");
+        if (frameLogEnabled) {
+            if (0 < incCnt) {
+                _logger.LogInformation($"_moveForwardLastAllConfirmedInputFrameIdWithoutForcing for roomId={id}, backendTimerRdfId={backendTimerRdfId}, latestPlayerUpsyncedInputFrameId={latestPlayerUpsyncedInputFrameId}, newLastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, incCnt={incCnt}, inactiveJoinMask={inactiveJoinMask}, skippableJoinMask={skippableJoinMask} while checking [proposedIfdStFrameId={proposedIfdStFrameId}, proposedIfdEdFrameId={proposedIfdEdFrameId}), srcTag={srcTag}");
+            }
         }
 
         return incCnt;
@@ -1408,14 +1411,6 @@ public class Room {
 
             playerWsDownsyncQue.Add((content, inputBufferSnapshot));
         }
-
-        /*
-           if (backendDynamicsEnabled && shouldResync) {
-           _logger.LogInformation(String.Format("[resync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, backendTimerRdfId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, backendTimerRdfId, curDynamicsRenderFrameId, content.Count));
-           } else {
-           _logger.LogInformation(String.Format("[ipt-sync] Sent refRenderFrameId={0} & inputFrameIds [{1}, {2}), for roomId={3}, backendTimerRdfId={4}, curDynamicsRenderFrameId={5}: contentByteLength={6}", refRenderFrameId, toSendInputFrameIdSt, toSendInputFrameIdEd, id, backendTimerRdfId, curDynamicsRenderFrameId, content.Count));
-           }
-         */
     }
 
     private ArraySegment<byte> allocBytesFromInputBufferSnapshot(InputBufferSnapshot inputBufferSnapshot) {
