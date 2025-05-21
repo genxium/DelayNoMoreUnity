@@ -1528,6 +1528,14 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (lastInBatch.InputFrameId <= lastAllConfirmedInputFrameId) {
             return;
         }
+    
+        if (0 < withPbRdfId && withPbRdfId < playerRdfId) {
+            var oldLastUpsyncInputFrameId = lastUpsyncInputFrameId;
+            if (lastAllConfirmedInputFrameId < lastInBatch.InputFrameId && lastInBatch.InputFrameId < oldLastUpsyncInputFrameId) {
+                lastUpsyncInputFrameId = lastInBatch.InputFrameId;
+                Debug.LogWarning($"Rewinded lastUpsyncInputFrameId:{oldLastUpsyncInputFrameId}->{lastUpsyncInputFrameId} during battleState={battleState} @withPbRdfId={withPbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
+            } 
+        }
 
         NetworkDoctor.Instance.LogInputFrameDownsync(firstInBatch.InputFrameId, lastInBatch.InputFrameId);
         int firstPredictedYetIncorrectInputFrameId = TERMINATING_INPUT_FRAME_ID;

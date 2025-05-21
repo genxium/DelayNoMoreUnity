@@ -1089,7 +1089,7 @@ public class Room {
         }
 
         if (0 < incCnt && 0 < inactiveJoinMask) {
-            _logger.LogInformation($"_moveForwardLastAllConfirmedInputFrameIdWithoutForcing for roomId={id}, backendTimerRdfId={backendTimerRdfId}, latestPlayerUpsyncedInputFrameId={latestPlayerUpsyncedInputFrameId}, newLastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, incCnt={incCnt}, inactiveJoinMask={inactiveJoinMask}, skippableJoinMask={skippableJoinMask} while checking [proposedIfdStFrameId={proposedIfdStFrameId}, proposedIfdEdFrameId={proposedIfdEdFrameId}), srcTag={srcTag}");
+            //_logger.LogInformation($"_moveForwardLastAllConfirmedInputFrameIdWithoutForcing for roomId={id}, backendTimerRdfId={backendTimerRdfId}, latestPlayerUpsyncedInputFrameId={latestPlayerUpsyncedInputFrameId}, newLastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, incCnt={incCnt}, inactiveJoinMask={inactiveJoinMask}, skippableJoinMask={skippableJoinMask} while checking [proposedIfdStFrameId={proposedIfdStFrameId}, proposedIfdEdFrameId={proposedIfdEdFrameId}), srcTag={srcTag}");
         }
 
         return incCnt;
@@ -1680,7 +1680,7 @@ public class Room {
                     snapshotStFrameId = lastAllConfirmedInputFrameId;
                 }
                 var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef((unconfirmedMask | readdedJoinMask), snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
-                _logger.LogInformation($"[readded-resync] For roomId={id}, prepared inputBufferSnapshot for backendTimerRdfId={backendTimerRdfId}, lastForceResyncedRdfId={lastForceResyncedRdfId}, latestPlayerUpsyncedInputFrameId={latestPlayerUpsyncedInputFrameId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, @lastAllConfirmedInputFrameId={oldLastAllConfirmedInputFrameId} -> {lastAllConfirmedInputFrameId}, inputBuffer={inputBuffer.toSimpleStat()}");
+                //_logger.LogInformation($"[readded-resync] For roomId={id}, prepared inputBufferSnapshot for backendTimerRdfId={backendTimerRdfId}, lastForceResyncedRdfId={lastForceResyncedRdfId}, latestPlayerUpsyncedInputFrameId={latestPlayerUpsyncedInputFrameId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, @lastAllConfirmedInputFrameId={oldLastAllConfirmedInputFrameId} -> {lastAllConfirmedInputFrameId}, inputBuffer={inputBuffer.toSimpleStat()}");
                 downsyncToAllPlayers(inputBufferSnapshot);
                 lastForceResyncedRdfId = backendTimerRdfId;
             } else {
