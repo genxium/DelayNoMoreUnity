@@ -824,13 +824,13 @@ public class OnlineMapController : AbstractMapController {
                 Debug.LogError($"sendInputFrameUpsyncBatch: recentInputCache is NOT having i={i}, at playerRdfId={playerRdfId}, latestLocalInputFrameId={latestLocalInputFrameId}, inputBuffer:{inputBuffer.toSimpleStat()}");
             } else {
                 bool selfConfirmed = (0 < (selfJoinIndexMask & (inputFrameDownsync.ConfirmedList | inputFrameDownsync.UdpConfirmedList)));
-                //if (battleResultIsSet || selfConfirmed) {
+                if (battleResultIsSet || selfConfirmed) {
                     var inputFrameUpsync = new InputFrameUpsync {
                         InputFrameId = i,
                         Encoded = inputFrameDownsync.InputList[selfJoinIndexArrIdx]
                     };
                     inputFrameUpsyncBatch.Add(inputFrameUpsync);
-                //}
+                }
             }
         }
 

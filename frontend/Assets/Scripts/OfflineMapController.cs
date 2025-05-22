@@ -429,7 +429,7 @@ public class OfflineMapController : AbstractMapController {
             if (0 < remainingTriggerForceCtrlRdfCount) {
                 if (ok1 && null != delayedInputFrameDownsync) {
                     delayedInputFrameDownsync.InputList[0] = latestTriggerForceCtrlCmd;
-                    delayedInputFrameDownsync.ConfirmedList = ((1u << roomCapacity) - 1);
+                    delayedInputFrameDownsync.ConfirmedList = allConfirmedMask;
                 }
                 --remainingTriggerForceCtrlRdfCount;
             }

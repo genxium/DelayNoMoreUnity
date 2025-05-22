@@ -1537,9 +1537,11 @@ public abstract class AbstractMapController : MonoBehaviour {
         var oldLastUpsyncInputFrameId = lastUpsyncInputFrameId;
         var oldLastAllConfirmedInputFrameId = lastAllConfirmedInputFrameId;
         if (0 < withPbRdfId && withPbRdfId < playerRdfId) {
-            if (lastAllConfirmedInputFrameId < lastInBatch.InputFrameId && lastInBatch.InputFrameId < oldLastUpsyncInputFrameId) {
+            if (oldLastAllConfirmedInputFrameId <= lastInBatch.InputFrameId && lastInBatch.InputFrameId < oldLastUpsyncInputFrameId) {
                 lastUpsyncInputFrameId = lastInBatch.InputFrameId;
-                Debug.LogWarning($"Rewinded lastUpsyncInputFrameId:{oldLastUpsyncInputFrameId}->{lastUpsyncInputFrameId} during battleState={battleState} @withPbRdfId={withPbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
+                if (frameLogEnabled) {
+                    Debug.Log($"Rewinded lastUpsyncInputFrameId:{oldLastUpsyncInputFrameId}->{lastUpsyncInputFrameId} during battleState={battleState} @withPbRdfId={withPbRdfId}, @chaserRenderFrameIdLowerBound={chaserRenderFrameIdLowerBound}, @playerRdfId(local)={playerRdfId}, @lastAllConfirmedInputFrameId={lastAllConfirmedInputFrameId}, @chaserRenderFrameId={chaserRenderFrameId}, @inputBuffer={inputBuffer.toSimpleStat()}");
+                }
             } 
         }
 
@@ -1841,7 +1843,7 @@ public abstract class AbstractMapController : MonoBehaviour {
                     //Debug.LogWarningFormat("Mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}:\nrdf={2}\nothersForcedDownsyncRenderFrame={3}\nnow inputBuffer:{4}, renderBuffer:{5}", rdf.Id, delayedInputFrameId, stringifyRdf(rdf), stringifyRdf(othersForcedDownsyncRenderFrame), inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat());
                     // [WARNING] When this happens, something is intrinsically wrong -- to avoid having an inconsistent history in the "renderBuffer", thus a wrong prediction all the way from here on, clear the history!
                     othersForcedDownsyncRenderFrame.ShouldForceResync = true;
-                    othersForcedDownsyncRenderFrame.BackendUnconfirmedMask = ((1ul << roomCapacity) - 1);
+                    othersForcedDownsyncRenderFrame.BackendUnconfirmedMask = allConfirmedMask;
                     onRoomDownsyncFrame(othersForcedDownsyncRenderFrame, null, true); // [WARNING] Will set "chaserRenderFrameId" and "chaserRenderFrameIdLowerBound" respectively
                     //Debug.LogWarningFormat("Handled mismatched render frame@rdf.id={0} w/ delayedInputFrameId={1}, playerRdfId={2}:\nnow inputBuffer:{3}, renderBuffer:{4}", rdf.Id, delayedInputFrameId, playerRdfId, inputBuffer.toSimpleStat(), renderBuffer.toSimpleStat());
                 }
