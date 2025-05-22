@@ -804,7 +804,7 @@ public class OnlineMapController : AbstractMapController {
         return shouldUpsyncForEarlyAllConfirmedOnBackend || (prevSelfInput != currSelfInput);
     }
 
-    protected override void sendInputFrameUpsyncBatch(int latestLocalInputFrameId) {
+    protected override void sendInputFrameUpsyncBatch(int latestLocalInputFrameId, bool battleResultIsSet) {
         // [WARNING] Why not just send the latest input? Because different player would have a different "latestLocalInputFrameId" of changing its last input, and that could make the server not recognizing any "all-confirmed inputFrame"!
         var inputFrameUpsyncBatch = new RepeatedField<InputFrameUpsync>();
         var batchInputFrameIdSt = lastUpsyncInputFrameId + 1;
@@ -818,23 +818,24 @@ public class OnlineMapController : AbstractMapController {
             batchInputFrameIdEdClosed = inputBuffer.EdFrameId - 1;
         }
 
-        if (batchInputFrameIdSt > batchInputFrameIdEdClosed) {
-            return;
-        }
-
         for (var i = batchInputFrameIdSt; i <= batchInputFrameIdEdClosed; i++) {
             var (res1, inputFrameDownsync) = inputBuffer.GetByFrameId(i);
             if (false == res1 || null == inputFrameDownsync) {
                 Debug.LogError($"sendInputFrameUpsyncBatch: recentInputCache is NOT having i={i}, at playerRdfId={playerRdfId}, latestLocalInputFrameId={latestLocalInputFrameId}, inputBuffer:{inputBuffer.toSimpleStat()}");
             } else {
-                var inputFrameUpsync = new InputFrameUpsync {
-                    InputFrameId = i,
-                    Encoded = inputFrameDownsync.InputList[selfJoinIndexArrIdx]
-                };
-                inputFrameUpsyncBatch.Add(inputFrameUpsync);
-                // [WARNING] Once sent, we must prevent "getOrPrefabInputFrameUpsync" from changing "self input" of this InputFrameDownsync.
-                inputFrameDownsync.UdpConfirmedList |= selfJoinIndexMask;
+                bool selfConfirmed = (0 < (selfJoinIndexMask & (inputFrameDownsync.ConfirmedList | inputFrameDownsync.UdpConfirmedList)));
+                //if (battleResultIsSet || selfConfirmed) {
+                    var inputFrameUpsync = new InputFrameUpsync {
+                        InputFrameId = i,
+                        Encoded = inputFrameDownsync.InputList[selfJoinIndexArrIdx]
+                    };
+                    inputFrameUpsyncBatch.Add(inputFrameUpsync);
+                //}
             }
+        }
+
+        if (0 >= inputFrameUpsyncBatch.Count) {
+            return;
         }
 
         NetworkDoctor.Instance.LogSending(batchInputFrameIdSt, latestLocalInputFrameId);

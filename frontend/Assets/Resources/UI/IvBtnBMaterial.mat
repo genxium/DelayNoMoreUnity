@@ -51,7 +51,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _GrayOut: 0
+    - _GrayOut: 1
     - _ShiningOpacity: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using shared;
+using System;
 
 public class PlayerWaitingPanel : MonoBehaviour {
     private int lastParticipantChangeId = Battle.TERMINATING_RENDER_FRAME_ID;
@@ -39,13 +40,13 @@ public class PlayerWaitingPanel : MonoBehaviour {
         var playerSlots = participantSlots.GetComponentsInChildren<ParticipantSlot>();
         for (int i = 0; i < playerSlots.Length; i++) {
             playerSlots[i].SetAvatar(rdf.PlayersArr[i]);
-            if (null != rdf.PlayersArr[i] && Battle.TERMINATING_PLAYER_ID != rdf.PlayersArr[i].Id && 0 < (i & 1)) {
+            if (null != rdf.PlayersArr[i] && Battle.SPECIES_NONE_CH != rdf.PlayersArr[i].SpeciesId && 0 < (i & 1)) {
                 playerSlots[i].gameObject.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f); 
             } else {
                 playerSlots[i].gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             }
 
-            if (null != rdf.PlayersArr[i] && Battle.TERMINATING_PLAYER_ID != rdf.PlayersArr[i].Id) {
+            if (null != rdf.PlayersArr[i] && Battle.SPECIES_NONE_CH != rdf.PlayersArr[i].SpeciesId) {
                 ++nonEmptyCnt;
             }
         }

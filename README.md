@@ -13,6 +13,7 @@ v2.3.4
 - Added support for `rejoin after network switch`.
 - Added support for `configurable main tower in PvP`.
 - Added new NPCs `Succubus`, `ArcherGuardRed` and `FlyingDemon`.
+- Fix w.r.t. framelog feedback.
 
 Please checkout the demo videos on YouTube([basic ops](https://youtu.be/nMWBIFb9ZIA), [field tests](https://youtu.be/iOgqfatRcn8)) or BaiduNetDisk([basic ops](https://pan.baidu.com/s/12W4fta34x73c-7ctHGVaVw?pwd=rahg), [field tests](https://pan.baidu.com/s/1iVb2Pc7HHi9bbb3lYl3HrQ?pwd=nrn8)).
 

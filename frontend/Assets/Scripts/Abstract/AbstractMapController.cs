@@ -1809,7 +1809,7 @@ public abstract class AbstractMapController : MonoBehaviour {
         if (isOnlineMode && (battleResultIsSet || shouldSendInputFrameUpsyncBatch(prevSelfInput, currSelfInput, currSelfInputConfirmList, toGenerateInputFrameId))) {
             // [WARNING] If "true == battleResultIsSet", we MUST IMMEDIATELY flush the local inputs to our peers to favor the formation of all-confirmed inputFrameDownsync asap! 
             // TODO: Does the following statement run asynchronously in an implicit manner? Should I explicitly run it asynchronously?
-            sendInputFrameUpsyncBatch(toGenerateInputFrameId);
+            sendInputFrameUpsyncBatch(toGenerateInputFrameId, battleResultIsSet);
         }
 
         if (battleResultIsSet) {
@@ -1919,7 +1919,7 @@ public abstract class AbstractMapController : MonoBehaviour {
 
     protected abstract bool shouldSendInputFrameUpsyncBatch(ulong prevSelfInput, ulong currSelfInput, ulong currSelfInputConfirmList, int currInputFrameId);
 
-    protected abstract void sendInputFrameUpsyncBatch(int latestLocalInputFrameId);
+    protected abstract void sendInputFrameUpsyncBatch(int latestLocalInputFrameId, bool battleResultIsSet);
 
     protected void enableBattleInput(bool yesOrNo) {
         iptmgr.enable(yesOrNo);

@@ -12,8 +12,8 @@ namespace backend.Battle;
 public class Room {
     private readonly Random _randGenerator = new Random();
     //private String[] _availableStageNames = new String[] {"ForestVersus", "CaveVersus", "FlatVersus"};
-    //private String[] _availableStageNames = new String[] {"FlatVersus"};
-    private String[] _availableStageNames = new String[] {"FlatVersusTraining"};
+    private String[] _availableStageNames = new String[] {"FlatVersus"};
+    //private String[] _availableStageNames = new String[] {"FlatVersusTraining"};
 
     private TimeSpan DEFAULT_BACK_TO_FRONT_WS_WRITE_TIMEOUT = TimeSpan.FromMilliseconds(5000);
     private bool insituForceConfirmationEnabled = true;
@@ -174,7 +174,7 @@ public class Room {
         stageName = _availableStageNames[_randGenerator.Next(_availableStageNames.Length)];
         curDynamicsRenderFrameId = 0;
         lastForceResyncedRdfId = 0;
-        frameLogEnabled = true;
+        frameLogEnabled = false;
         battleDurationFrames = 0;
         elongatedBattleDurationFrames = 0;
         elongatedBattleDurationFramesShortenedOnce = false;

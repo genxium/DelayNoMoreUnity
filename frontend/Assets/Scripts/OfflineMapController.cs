@@ -29,7 +29,7 @@ public class OfflineMapController : AbstractMapController {
     private int initSeqNo = 0;
     private RoomDownsyncFrame cachedStartRdf = null;
 
-    protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId) {
+    protected override void sendInputFrameUpsyncBatch(int noDelayInputFrameId, bool battleResultIsSet) {
         throw new NotImplementedException();
     }
 
