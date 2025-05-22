@@ -281,12 +281,6 @@ namespace shared {
             DecodeInput(delayedInputList[j], decodedInputHolder);
             var joinIndexMask = (1u << j);
     
-            var delayedConfirmedList = delayedInputFrameDownsync.ConfirmedList;
-            var delayedUdpConfirmedList = delayedInputFrameDownsync.UdpConfirmedList; // [WARNING] Only used by frontend, see comment in proto file.
-            if (0 == (delayedConfirmedList & joinIndexMask) && 0 == (delayedUdpConfirmedList & joinIndexMask)) {
-                removePredictedRisingAndFallingEdgesOfPlayerInput(currCharacterDownsync, decodedInputHolder);
-            }
-
             updateBtnHoldingByInput(currCharacterDownsync, decodedInputHolder, thatCharacterInNextFrame);
 
             if (noOpSet.Contains(currCharacterDownsync.CharacterState)) {
@@ -2655,23 +2649,6 @@ namespace shared {
             if (0 < thatCharacterInNextFrame.BtnEHoldingRdfCount) { 
                 thatCharacterInNextFrame.BtnEHoldingRdfCount = JAMMED_BTN_HOLDING_RDF_CNT;
             }
-        }
-
-        public static void removePredictedRisingAndFallingEdgesOfPlayerInput(CharacterDownsync chDownsync, InputFrameDecoded decodedInputHolder) {
-            /*
-            [WARNING] Any "predicted rising/falling edge" is harmful -- even if in "frontend rollbackAndChase(..., isChasing: true)", i.e. a "false rising/falling edge" might trigger a "false start of a skill" in "historic renderBuffer" which in turn would be picked up by "front rollbackAndChase(..., isChasing: false)" to render "false bullets" as well as deal "false damage". 
-            */
-
-            bool shouldPredictBtnAHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.JumpHoldingRdfCnt) || (0 < chDownsync.JumpHoldingRdfCnt);
-            bool shouldPredictBtnBHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnBHoldingRdfCount) || (0 < chDownsync.BtnBHoldingRdfCount);
-            bool shouldPredictBtnCHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnCHoldingRdfCount) || (0 < chDownsync.BtnCHoldingRdfCount);
-            bool shouldPredictBtnDHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnDHoldingRdfCount) || (0 < chDownsync.BtnDHoldingRdfCount);
-            bool shouldPredictBtnEHold = (JAMMED_BTN_HOLDING_RDF_CNT == chDownsync.BtnEHoldingRdfCount) || (0 < chDownsync.BtnEHoldingRdfCount);
-            decodedInputHolder.BtnALevel = shouldPredictBtnAHold ? 1 : 0;  
-            decodedInputHolder.BtnBLevel = shouldPredictBtnBHold ? 1 : 0;
-            decodedInputHolder.BtnCLevel = shouldPredictBtnCHold ? 1 : 0;
-            decodedInputHolder.BtnDLevel = shouldPredictBtnDHold ? 1 : 0;
-            decodedInputHolder.BtnELevel = shouldPredictBtnEHold ? 1 : 0;
         }
 
         public static void updateBtnHoldingByInput(CharacterDownsync currCharacterDownsync, InputFrameDecoded decodedInputHolder, CharacterDownsync thatCharacterInNextFrame) {
