@@ -345,9 +345,6 @@ public abstract class AbstractMapController : MonoBehaviour {
             }
             if (shouldSetConfirmedMask) {
                 initConfirmedList = selfJoinIndexMask;
-                if (null != existingInputFrame) {
-                    initConfirmedList |= existingInputFrame.ConfirmedList;
-                }
             }
         }
 
