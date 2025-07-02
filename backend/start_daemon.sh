@@ -5,6 +5,11 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
+if [ "Debug" != $1 ] && [ "Release" != $1 ]; then 
+  echo "Usage: $0 [Debug|Release]"
+  exit 1
+fi
+
 basedir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 OS_USER=$USER

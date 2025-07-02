@@ -1663,42 +1663,32 @@ public class Room {
                It's critical to create the snapshot AFTER "multiStep" for `ACTIVE SLOW TICKER` to avoid lag avalanche (see `<proj-root>/ConcerningEdgeCases.md` for introduction).
              */
 
+            // As "curDynamicsRenderFrameId" was just incremented above, "refSnapshotStFrameId == lastAllConfirmedInputFrameId" now which is most possibly larger than "oldLastAllConfirmedInputFrameId + 1". Therefore this initial assignment is critical for `ACTIVE NORMAL TICKER`s to receive consecutive ids of inputFrameDownsync.
+            int snapshotStFrameId = oldLastAllConfirmedInputFrameId + 1;
+            int refSnapshotStFrameId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId - 1);
+            if (refSnapshotStFrameId < snapshotStFrameId) {
+                // Kindly note that "refSnapshotStFrameId == lastAllConfirmedInputFrameId" by now, so the following assignment guarantees "snapshotStFrameId < snapshotEdFrameId".
+                snapshotStFrameId = refSnapshotStFrameId;
+            }
+            int snapshotEdFrameId = lastAllConfirmedInputFrameId + 1;
+            bool isLastRenderFrame = (backendTimerRdfId >= battleDurationFrames && curDynamicsRenderFrameId >= battleDurationFrames);
+            bool shouldSendRegularForceResync = (0 <= lastAllConfirmedInputFrameId && 0 < curDynamicsRenderFrameId && (backendTimerRdfId - lastForceResyncedRdfId > FORCE_RESYNC_INTERVAL_THRESHOLD || isLastRenderFrame));
             if (0 < readdedJoinMask) {
-                // [WARNING] As "curDynamicsRenderFrameId" was just incremented above, "refSnapshotStFrameId" is most possibly larger than "oldLastAllConfirmedInputFrameId + 1", therefore this initial assignment is critical for `ACTIVE NORMAL TICKER`s to receive consecutive ids of inputFrameDownsync.
-                int snapshotStFrameId = oldLastAllConfirmedInputFrameId + 1;
-                int refSnapshotStFrameId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId - 1);
-                if (refSnapshotStFrameId < snapshotStFrameId) {
-                    snapshotStFrameId = refSnapshotStFrameId;
-                }
-                if (lastAllConfirmedInputFrameId < snapshotStFrameId) {
-                    // [WARNING] We have to downsync this "readded-resync" rdf anyway!
-                    snapshotStFrameId = lastAllConfirmedInputFrameId;
-                }
-                var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef((unconfirmedMask | readdedJoinMask), snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
+                var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef((unconfirmedMask | readdedJoinMask), snapshotStFrameId, snapshotEdFrameId);
                 //_logger.LogInformation($"[readded-resync] For roomId={id}, prepared inputBufferSnapshot for backendTimerRdfId={backendTimerRdfId}, lastForceResyncedRdfId={lastForceResyncedRdfId}, latestPlayerUpsyncedInputFrameId={latestPlayerUpsyncedInputFrameId}, curDynamicsRenderFrameId={curDynamicsRenderFrameId}, @lastAllConfirmedInputFrameId={oldLastAllConfirmedInputFrameId} -> {lastAllConfirmedInputFrameId}, inputBuffer={inputBuffer.toSimpleStat()}");
                 downsyncToAllPlayers(inputBufferSnapshot);
                 lastForceResyncedRdfId = backendTimerRdfId;
-            } else {
-                int snapshotStFrameId = oldLastAllConfirmedInputFrameId + 1;
-                int refSnapshotStFrameId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId - 1);
-                if (refSnapshotStFrameId < snapshotStFrameId) {
-                    snapshotStFrameId = refSnapshotStFrameId;
-                }
-                int snapshotEdFrameId = lastAllConfirmedInputFrameId + 1;
-                bool isLastRenderFrame = (backendTimerRdfId >= battleDurationFrames && curDynamicsRenderFrameId >= battleDurationFrames);
-                bool shouldSendRegularForceResync = (0 <= lastAllConfirmedInputFrameId && 0 < curDynamicsRenderFrameId && (backendTimerRdfId - lastForceResyncedRdfId > FORCE_RESYNC_INTERVAL_THRESHOLD || isLastRenderFrame));
-                if (shouldSendRegularForceResync) {
-                    unconfirmedMask = allConfirmedMask;
-                    var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, snapshotEdFrameId);
-                    downsyncToAllPlayers(inputBufferSnapshot);
-                    lastForceResyncedRdfId = backendTimerRdfId;
-                } else if (oldLastAllConfirmedInputFrameId < lastAllConfirmedInputFrameId) {
-                    // As "inputBufferLock" doesn't guard "player.BattleState", it's possible to reach here to just downsync some new all-confirmed "InputFrameDownsync"s for frontend reception continuity.
-                    // Kindly note that "oldLastAllConfirmedInputFrameId < lastAllConfirmedInputFrameId" implies "snapshotStFrameId < snapshotEdFrameId"
-                    unconfirmedMask = 0; // In this case we don't want to send "RefRenderFrame".
-                    var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, snapshotEdFrameId);
-                    downsyncToAllPlayers(inputBufferSnapshot);
-                }
+            } else if (shouldSendRegularForceResync) {
+                unconfirmedMask = allConfirmedMask;
+                var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, snapshotEdFrameId);
+                downsyncToAllPlayers(inputBufferSnapshot);
+                lastForceResyncedRdfId = backendTimerRdfId;
+            } else if (oldLastAllConfirmedInputFrameId < lastAllConfirmedInputFrameId) {
+                // As "inputBufferLock" doesn't guard "player.BattleState", it's possible to reach here to just downsync some new all-confirmed "InputFrameDownsync"s for frontend reception continuity.
+                // Kindly note that "oldLastAllConfirmedInputFrameId < lastAllConfirmedInputFrameId" also implies "snapshotStFrameId < snapshotEdFrameId".
+                unconfirmedMask = 0; // In this case we don't want to send "RefRenderFrame".
+                var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, snapshotEdFrameId);
+                downsyncToAllPlayers(inputBufferSnapshot);
             }
         } finally {
             inputBufferLock.ReleaseMutex();
