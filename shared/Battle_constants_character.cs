@@ -67,7 +67,7 @@ namespace shared {
         /**
          [WARNING] 
 
-         The "SizeY" component of "BlownUp/LayDown/Dying" MUST be smaller or equal to that of "Shrinked", such that when a character is blown up an falled onto a "slip-jump provider", it wouldn't trigger an unexpected slip-jump.
+         The "SizeY" component of "BlownUp/LayDown/Dying" MUST be smaller or equal to that of "Shrinked", such that when a character is blown up and falled onto a "slip-jump provider", it wouldn't trigger an unexpected slip-jump.
 
          Reference value for "ProactiveJumpStartupFrames" -- Ibuki in Street Figher IV/V has a pre-jump frame count of 4, according to https://streetfighter.fandom.com/wiki/Jump. I also counted that of Ken in Street Fighter VI by 60fps recording and got the same result.
          */

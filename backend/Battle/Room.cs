@@ -1679,19 +1679,25 @@ public class Room {
                 downsyncToAllPlayers(inputBufferSnapshot);
                 lastForceResyncedRdfId = backendTimerRdfId;
             } else {
+                int snapshotStFrameId = oldLastAllConfirmedInputFrameId + 1;
+                int refSnapshotStFrameId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId - 1);
+                if (refSnapshotStFrameId < snapshotStFrameId) {
+                    snapshotStFrameId = refSnapshotStFrameId;
+                }
+                int snapshotEdFrameId = lastAllConfirmedInputFrameId + 1;
                 bool isLastRenderFrame = (backendTimerRdfId >= battleDurationFrames && curDynamicsRenderFrameId >= battleDurationFrames);
-                if ((0 <= lastAllConfirmedInputFrameId && 0 < curDynamicsRenderFrameId && (backendTimerRdfId - lastForceResyncedRdfId > FORCE_RESYNC_INTERVAL_THRESHOLD || isLastRenderFrame))) {
-                    int snapshotStFrameId = oldLastAllConfirmedInputFrameId + 1;
-                    int refSnapshotStFrameId = ConvertToDelayedInputFrameId(curDynamicsRenderFrameId - 1);
-                    if (refSnapshotStFrameId < snapshotStFrameId) {
-                        snapshotStFrameId = refSnapshotStFrameId;
-                    }
-                    if (snapshotStFrameId < lastAllConfirmedInputFrameId + 1) {
-                        unconfirmedMask = allConfirmedMask;
-                        var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, lastAllConfirmedInputFrameId + 1);
-                        downsyncToAllPlayers(inputBufferSnapshot);
-                        lastForceResyncedRdfId = backendTimerRdfId;
-                    }
+                bool shouldSendRegularForceResync = (0 <= lastAllConfirmedInputFrameId && 0 < curDynamicsRenderFrameId && (backendTimerRdfId - lastForceResyncedRdfId > FORCE_RESYNC_INTERVAL_THRESHOLD || isLastRenderFrame));
+                if (shouldSendRegularForceResync) {
+                    unconfirmedMask = allConfirmedMask;
+                    var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, snapshotEdFrameId);
+                    downsyncToAllPlayers(inputBufferSnapshot);
+                    lastForceResyncedRdfId = backendTimerRdfId;
+                } else if (oldLastAllConfirmedInputFrameId < lastAllConfirmedInputFrameId) {
+                    // As "inputBufferLock" doesn't guard "player.BattleState", it's possible to reach here to just downsync some new all-confirmed "InputFrameDownsync"s for frontend reception continuity.
+                    // Kindly note that "oldLastAllConfirmedInputFrameId < lastAllConfirmedInputFrameId" implies "snapshotStFrameId < snapshotEdFrameId"
+                    unconfirmedMask = 0; // In this case we don't want to send "RefRenderFrame".
+                    var inputBufferSnapshot = produceInputBufferSnapshotWithCurDynamicsRenderFrameAsRef(unconfirmedMask, snapshotStFrameId, snapshotEdFrameId);
+                    downsyncToAllPlayers(inputBufferSnapshot);
                 }
             }
         } finally {
